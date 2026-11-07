@@ -1,11 +1,13 @@
 /* Normal demo captures observe completed real G_Ticker tics. The optional
  * voodoo experiment explicitly injects matched damage/rebirth API calls. */
 #include "dsda_voodoo_lifecycle_probe.inc"
+#include "dsda_coop_demo_probe.inc"
 static void GD_RNGDemoFrame(void)
 {
  static FILE *out;static int last_gametic=-1,summary_written,capture_tic,previous_leveltime,reloads,first_gametic=-1;
  const char *path=getenv("GD_DSDA_RNG_DEMO_OUT");thinker_t *th=NULL;int i;
  GD_VoodooLifecycle();
+ GD_CoopDemoFrame();
  if(!path||!demoplayback)return;
  if(out&&!summary_written&&gamestate==GS_INTERMISSION&&getenv("GD_RNG_FULL_MAP")) {
   const char *summary_path=getenv("GD_RNG_SUMMARY");FILE *summary=summary_path?fopen(summary_path,"w"):NULL;player_t *p=&players[displayplayer];

@@ -52,6 +52,8 @@ const (
 )
 
 type demoTraceMobj struct {
+	thingIndex   int
+	ownerSlot    int    // Derived player pointer for co-op observers; not a wire identity.
 	Type         int    `json:"type"`
 	X            int64  `json:"x"`
 	Y            int64  `json:"y"`
@@ -438,6 +440,8 @@ func (g *game) demoTraceMobjs() []demoTraceMobj {
 			idx:   i,
 			mobj: demoTraceMobj{
 				Type:         demoTraceThingType(th.Type),
+				ownerSlot:    voodooPlayerSlot(th.Type),
+				thingIndex:   i,
 				X:            x,
 				Y:            y,
 				Z:            z,
@@ -1144,7 +1148,7 @@ func demoTraceThingHealth(g *game, i int, typ int16) int {
 }
 
 func demoTraceThingTics(g *game, i int, typ int16) int {
-	if isVoodooDollType(typ) && i >= 0 {
+	if isPlayerBodyThingType(typ) && i >= 0 {
 		return g.thingStateTics[i]
 	}
 	if i < 0 {
@@ -1195,7 +1199,7 @@ func demoTraceThingTics(g *game, i int, typ int16) int {
 }
 
 func demoTraceThingState(g *game, i int, typ int16) int {
-	if isVoodooDollType(typ) && i >= 0 {
+	if isPlayerBodyThingType(typ) && i >= 0 {
 		if g.thingGibbed[i] {
 			return demoTraceStateGibs
 		}
@@ -1607,8 +1611,19 @@ func demoTraceThingMomZ(g *game, i int) int64 {
 }
 
 func demoTraceThingFlags(g *game, i int, th mapdata.Thing) int {
-	if isVoodooDollType(th.Type) {
+	if isPlayerBodyThingType(th.Type) {
 		flags := demoTraceFlagDropoff | 0x800 // MF_PICKUP
+		if th.Type == detachedPlayerBodyType {
+			if g.detachedPlayerBodySolid(i) {
+				flags |= demoTraceFlagSolid
+			}
+			if g.thingDead[i] {
+				flags |= demoTraceFlagCorpse
+			} else {
+				flags |= demoTraceFlagShootable
+			}
+			return flags
+		}
 		if g.thingDead[i] {
 			return flags | demoTraceFlagCorpse
 		}

@@ -57,24 +57,32 @@ func (g *game) authoritativeMonsterPlayerPos(i int) (x, y, z, height, radius int
 	return body.x, body.y, body.z, height, playerRadius, true
 }
 
-// authoritativeMonsterLookForPlayer scans the live roster in stable slot
-// order, starting at Doom's retained last-look index. At most two live players
-// receive sight tests per call; the cursor advances past rejected candidates.
+// P_LookForPlayers retains both its stop slot and count of active slots,
+// including dead ones. Skipping that stop changes a failed search into a
+// direct reacquire, omitting the nested A_Look see-sound RNG draw.
 func (g *game) authoritativeMonsterLookForPlayer(i int, allAround bool, tx, ty int64) bool {
 	look := 0
 	if i < len(g.thingLastLook) {
 		look = g.thingLastLook[i] & 3
 	}
+	stop := (look - 1) & 3
+	limit := 2
+	if g.boomRememberEnabled() {
+		limit = 4
+	}
 	tested := 0
-	for visited := 0; visited < 4; visited++ {
-		state := g.authoritativePlayerForSlot(look + 1)
-		if state != nil {
-			_, dead, _ := g.authoritativePlayerBody(state)
-			if !dead {
-				if tested == 2 {
-					break
-				}
-				tested++
+	for {
+		if state := g.authoritativePlayerForSlot(look + 1); state != nil {
+			if tested == limit || look == stop {
+				g.thingLastLook[i] = look
+				return g.recallBoomEnemy(i)
+			}
+			tested++
+			health := state.stats.Health
+			if state.localSlot == g.localSlot {
+				health = g.stats.Health
+			}
+			if health > 0 {
 				visible := false
 				g.withAuthoritativePlayer(state, func() {
 					visible = g.monsterHasLOSPlayerAt(i, g.m.Things[i].Type, tx, ty)
@@ -87,24 +95,25 @@ func (g *game) authoritativeMonsterLookForPlayer(i int, allAround bool, tx, ty i
 					}
 				})
 				if visible {
-					if i < len(g.thingLastLook) {
-						g.thingLastLook[i] = look
-					}
+					g.thingLastLook[i] = look
 					return true
 				}
 			}
 		}
 		look = (look + 1) & 3
 	}
-	if i < len(g.thingLastLook) {
-		g.thingLastLook[i] = look
-	}
-	return false
 }
 
 func (g *game) authoritativeMonsterSoundTarget(i, sector int, tx, ty int64) (bool, bool) {
 	if sector < 0 || sector >= len(g.sectorSoundPlayerSlot) {
 		return false, false
+	}
+	if g.sectorSoundPlayerSlot[sector] == 0 && g.coopDemoActive() {
+		if idx, ok := g.demoCoopSoundBodies[sector]; ok && g.thingHP[idx] > 0 && !g.thingCollected[idx] {
+			g.setMonsterTargetThing(i, idx)
+			wake := !g.thingAmbush[i] || g.monsterHasLOSTarget(i, g.m.Things[i].Type, tx, ty)
+			return true, wake
+		}
 	}
 	state := g.authoritativePlayerForSlot(g.sectorSoundPlayerSlot[sector])
 	if state == nil {

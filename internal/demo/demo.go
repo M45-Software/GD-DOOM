@@ -53,7 +53,18 @@ type Header struct {
 type Script struct {
 	Path   string
 	Header Header
-	Tics   []Tic
+	Tics   []Tic    // Console-player projection, one command per world tic.
+	Frames [][4]Tic // Multiplayer commands indexed by zero-based player slot.
+}
+
+func (h Header) PlayerCount() int {
+	n := 0
+	for _, on := range h.PlayerInGame {
+		if on {
+			n++
+		}
+	}
+	return n
 }
 
 type RecordingOptions struct {
@@ -106,8 +117,8 @@ func Parse(data []byte) (*Script, error) {
 				h.PlayerInGame[i] = b != 0
 			}
 		}
-		if players != 1 || h.ConsolePlayer >= 4 || !h.PlayerInGame[h.ConsolePlayer] {
-			return nil, fmt.Errorf("only single-player Boom demos are supported")
+		if players == 0 || h.ConsolePlayer >= 4 || !h.PlayerInGame[h.ConsolePlayer] {
+			return nil, fmt.Errorf("invalid Boom demo player roster")
 		}
 	} else {
 		h = Header{
@@ -131,23 +142,36 @@ func Parse(data []byte) (*Script, error) {
 			return nil, fmt.Errorf("unsupported demo version %d", h.Version)
 		}
 	}
-	tics := make([]Tic, 0, maxInt(1, (len(data)-headerSize-1)/4))
+
+	if h.PlayerCount() == 0 || h.ConsolePlayer >= 4 || !h.PlayerInGame[h.ConsolePlayer] {
+		return nil, fmt.Errorf("invalid demo player roster")
+	}
+	if h.PlayerCount() > 1 && h.Deathmatch {
+		return nil, fmt.Errorf("multiplayer deathmatch demos are unsupported")
+	}
+	tics := make([]Tic, 0)
+	var frames [][4]Tic
 	foundMarker := false
 	for i := headerSize; i < len(data); {
 		if data[i] == Marker {
 			foundMarker = true
 			break
 		}
-		if i+4 > len(data) {
-			return nil, fmt.Errorf("truncated demo tic")
+		var frame [4]Tic
+		for slot, on := range h.PlayerInGame {
+			if !on {
+				continue
+			}
+			if i+4 > len(data) || data[i] == Marker {
+				return nil, fmt.Errorf("truncated demo frame at player %d", slot+1)
+			}
+			frame[slot] = Tic{Forward: int8(data[i]), Side: int8(data[i+1]), AngleTurn: int16(uint16(data[i+2]) << 8), Buttons: data[i+3]}
+			i += 4
 		}
-		tics = append(tics, Tic{
-			Forward:   int8(data[i]),
-			Side:      int8(data[i+1]),
-			AngleTurn: int16(uint16(data[i+2]) << 8),
-			Buttons:   data[i+3],
-		})
-		i += 4
+		tics = append(tics, frame[h.ConsolePlayer])
+		if h.PlayerCount() > 1 {
+			frames = append(frames, frame)
+		}
 	}
 	if len(tics) == 0 {
 		return nil, fmt.Errorf("demo has no tics")
@@ -155,34 +179,68 @@ func Parse(data []byte) (*Script, error) {
 	if !foundMarker {
 		return nil, fmt.Errorf("missing demo marker")
 	}
-	return &Script{Header: h, Tics: tics}, nil
+	return &Script{Header: h, Tics: tics, Frames: frames}, nil
 }
 
 func Format(script *Script) ([]byte, error) {
 	if script == nil {
 		return nil, fmt.Errorf("demo is nil")
 	}
-	if len(script.Tics) == 0 {
+	count := len(script.Tics)
+	if len(script.Frames) > 0 {
+		count = len(script.Frames)
+	}
+	if count == 0 {
 		return nil, fmt.Errorf("demo has no tics")
 	}
 	h := script.Header
 	if h.Version == 0 {
 		h.Version = Version110
 	}
-	if h.Version != Version109 && h.Version != Version110 {
+	if h.PlayerCount() == 0 || h.ConsolePlayer >= 4 || !h.PlayerInGame[h.ConsolePlayer] {
+		return nil, fmt.Errorf("invalid demo player roster")
+	}
+	if h.PlayerCount() > 1 && (h.Deathmatch || len(script.Frames) == 0) {
+		return nil, fmt.Errorf("co-op recording requires complete command frames")
+	}
+
+	var buf []byte
+	switch h.Version {
+	case Version109, Version110:
+		buf = append(buf, h.Version, h.Skill, h.Episode, h.Map, boolByte(h.Deathmatch), boolByte(h.Respawn), boolByte(h.Fast), boolByte(h.NoMonsters), h.ConsolePlayer)
+		for _, on := range h.PlayerInGame {
+			buf = append(buf, boolByte(on))
+		}
+	case VersionBoom201, VersionBoom202:
+		buf = append(buf, h.Version, 0x1d, 'B', 'o', 'o', 'm', 0xe6, boolByte(h.BoomCompatibility), h.Skill, h.Episode, h.Map, boolByte(h.Deathmatch), h.ConsolePlayer)
+		block := h.BoomOptions
+		block[6], block[7], block[8] = boolByte(h.Respawn), boolByte(h.Fast), boolByte(h.NoMonsters)
+		buf = append(buf, block[:]...)
+		for _, on := range h.PlayerInGame {
+			buf = append(buf, boolByte(on))
+		}
+		buf = append(buf, make([]byte, 28)...)
+	default:
 		return nil, fmt.Errorf("unsupported demo version %d", h.Version)
 	}
-	buf := make([]byte, 0, HeaderSize+len(script.Tics)*4+1)
-	buf = append(buf, h.Version, h.Skill, h.Episode, h.Map)
-	buf = append(buf, boolByte(h.Deathmatch), boolByte(h.Respawn), boolByte(h.Fast), boolByte(h.NoMonsters), h.ConsolePlayer)
-	for _, v := range h.PlayerInGame {
-		buf = append(buf, boolByte(v))
+	for i := 0; i < count; i++ {
+		for slot, on := range h.PlayerInGame {
+			if !on {
+				continue
+			}
+			tc := Tic{}
+			if len(script.Frames) > 0 {
+				tc = script.Frames[i][slot]
+			} else {
+				tc = script.Tics[i]
+			}
+			if byte(tc.Forward) == Marker {
+				return nil, fmt.Errorf("demo command uses reserved end marker")
+			}
+			buf = append(buf, byte(tc.Forward), byte(tc.Side), byte((uint16(tc.AngleTurn)+128)>>8), tc.Buttons)
+		}
 	}
-	for _, tc := range script.Tics {
-		buf = append(buf, byte(tc.Forward), byte(tc.Side), byte((uint16(tc.AngleTurn)+128)>>8), tc.Buttons)
-	}
-	buf = append(buf, Marker)
-	return buf, nil
+	return append(buf, Marker), nil
 }
 
 func Save(path string, script *Script) error {

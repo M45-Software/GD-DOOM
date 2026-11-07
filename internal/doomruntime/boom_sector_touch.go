@@ -23,13 +23,30 @@ func (g *game) initBoomSectorTouches() {
 	g.boomTouchActors = make([][]*boomTouchNode, len(g.m.Things)+4)
 	// P_SpawnMapThing links the player at its place in the THINGS stream.
 	for i := range g.m.Things {
+		player := false
+		for _, p := range g.authorityPlayers {
+			if p.localPlayerThingIndex == i {
+				g.withAuthoritativePlayer(p, g.updateBoomPlayerTouch)
+				player = true
+				break
+			}
+		}
+		if player {
+			continue
+		}
 		if i == g.localPlayerThingIndex {
 			g.updateBoomPlayerTouch()
 		} else {
 			g.updateBoomThingTouch(i)
 		}
 	}
-	if g.localPlayerThingIndex < 0 {
+	if g.authorityPlayers != nil {
+		for _, p := range g.authorityPlayers {
+			if p.localPlayerThingIndex < 0 {
+				g.withAuthoritativePlayer(p, g.updateBoomPlayerTouch)
+			}
+		}
+	} else if g.localPlayerThingIndex < 0 {
 		g.updateBoomPlayerTouch()
 	}
 }

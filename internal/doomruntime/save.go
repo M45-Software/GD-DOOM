@@ -1067,6 +1067,9 @@ func (sg *sessionGame) marshalSaveGame(description string) ([]byte, error) {
 	if sg == nil || sg.g == nil || sg.g.m == nil {
 		return nil, errSaveGameUnavailable
 	}
+	if sg.g.coopDemoActive() {
+		return nil, fmt.Errorf("co-op demo checkpoints do not yet include the full player roster")
+	}
 	description = strings.TrimSpace(description)
 	if description == "" {
 		description = "Save Game"
@@ -1095,6 +1098,9 @@ func (sg *sessionGame) unmarshalSaveGame(data []byte) error {
 func (sg *sessionGame) marshalNetplayKeyframe() ([]byte, error) {
 	if sg == nil || sg.g == nil || sg.g.m == nil {
 		return nil, errSaveGameUnavailable
+	}
+	if sg.g.coopDemoActive() {
+		return nil, fmt.Errorf("co-op demo checkpoints do not yet include the full player roster")
 	}
 	rngState := doomrand.Capture()
 	file := saveFile{

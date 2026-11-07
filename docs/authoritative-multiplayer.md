@@ -790,4 +790,19 @@ experiment verifies damage/rebirth semantics; complete classic netdemo timing
 and RNG parity remain unverified. See [Boom co-op doll verification](boom-support.md#co-op-voodoo-dolls)
 for commands and limits. World saves/keyframes retain doll state but do not
 checkpoint the full authority roster. Matching clients and servers must use
-simulation ID `gd-doom-authority-dev-25`.
+simulation ID `gd-doom-authority-dev-26`.
+
+## Classic co-op demo playback
+
+Recorded co-op playback uses the same shared world/player thinker machinery,
+with a map-order startup roster and classic demo rules. The DSDA comparison
+now covers 40 generated single-map cases: 9,360 matching recorded frames across
+movement, player/monster combat, dolls, conveyors, crushers, death/rebirth,
+persistent pickups, sparse/four-slot rosters and pause commands. See
+[recorded co-op verification](boom-support.md#recorded-co-op-demo-parity) for
+commands and the compared fields.
+
+Late network joins, team-shared keys, respawn delays and prediction keep their
+native policy. Recorded co-op campaign transitions and full-roster checkpoints
+are explicitly unsupported; multiplayer deathmatch recordings are rejected.
+These checks do not establish universal classic netdemo or presentation parity.

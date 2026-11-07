@@ -453,7 +453,7 @@ func (g *game) tickStatusWidgets() {
 	if g.statusBonusCount > 0 {
 		g.statusBonusCount--
 	}
-	if g.statusDamageCount <= 0 && !g.isDead {
+	if g.statusDamageCount <= 0 && !g.isDead && !g.coopDemoActive() {
 		g.statusAttackerThing = -1
 		g.statusHasAttacker = false
 	}

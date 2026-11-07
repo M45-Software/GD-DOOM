@@ -217,9 +217,45 @@ func (g *game) processThingPickupAtIndex(i int, th mapdata.Thing, px, py, pz, pr
 	if !canTouchPickup(px, py, pz, pradius, pheight, tx, ty, tz, g.thingCurrentRadius(i, th)) {
 		return false
 	}
+	persistent, key := g.coopDemoPersistentPickup(th.Type, dropped)
+	if persistent {
+		if key {
+			cards := g.inventory.cardKeys()
+			owned := false
+			switch th.Type {
+			case 5:
+				owned = cards[0]
+			case 6:
+				owned = cards[1]
+			case 13:
+				owned = cards[2]
+			case 40:
+				owned = g.inventory.SkullKeys[0]
+			case 39:
+				owned = g.inventory.SkullKeys[1]
+			case 38:
+				owned = g.inventory.SkullKeys[2]
+			}
+			if owned {
+				return false
+			}
+		} else if g.inventory.Weapons[th.Type] {
+			return false
+		}
+	}
 	msg, ev, picked := g.applyPickup(th.Type, dropped)
 	if !picked {
 		return false
+	}
+	if persistent {
+		if key {
+			g.statusBonusCount = 6
+		} else {
+			g.statusBonusCount = min(100, g.statusBonusCount+6)
+			g.emitSoundEvent(ev)
+		}
+		g.bonusFlashTic = max(g.bonusFlashTic, 6)
+		return true
 	}
 	g.thingCollected[i] = true
 	g.updateBoomThingTouch(i)
@@ -666,4 +702,20 @@ func ammoCaps(backpack bool) (bullets int, shells int, rockets int, cells int) {
 		cells *= 2
 	}
 	return bullets, shells, rockets, cells
+}
+
+// Classic netgame keys and map-placed weapons remain for every player. Native
+// authority item/team-key rules are separate from recorded compatibility mode.
+func (g *game) coopDemoPersistentPickup(typ int16, dropped bool) (bool, bool) {
+	if !g.coopDemoActive() {
+		return false, false
+	}
+	switch typ {
+	case 5, 6, 13, 38, 39, 40:
+		return true, true
+	case 2001, 2002, 2003, 2004, 2005, 2006, 82:
+		return !dropped, false
+	default:
+		return false, false
+	}
 }

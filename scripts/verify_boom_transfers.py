@@ -57,7 +57,7 @@ def install_sector_sound_probe(target):
 
 
 def install_rng_probe(target):
-    for name in ["dsda_rng_vectors.inc", "dsda_rng_demo_probe.inc", "dsda_rng_lifts.inc", "dsda_voodoo_lifecycle_probe.inc"]:
+    for name in ["dsda_rng_vectors.inc", "dsda_rng_demo_probe.inc", "dsda_rng_lifts.inc", "dsda_voodoo_lifecycle_probe.inc", "dsda_coop_demo_probe.inc"]:
         shutil.copy(ROOT / "scripts/visual_compare" / name, target / "src")
     replace_once(target / "src/g_game.c", "void G_Ticker (void)",
                  '#include "dsda_rng_demo_probe.inc"\n\nvoid G_Ticker (void)')

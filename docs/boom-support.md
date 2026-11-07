@@ -1440,6 +1440,62 @@ health, player death state, and doll corpse height/solid/shootable flags. This
 does not establish multiplayer movement, RNG, retained camera corpses, or
 campaign-transition parity with classic netdemos.
 
+## Recorded co-op demo parity
+
+Boom co-op demos now retain a complete command frame for each world tic,
+including sparse slots and a console player other than slot 1. `Script.Tics`
+is the console-player projection; `Script.Frames` contains the commands for
+all active slots. Formatting writes complete frames and parsing rejects partial
+frames, missing/invalid rosters, unsupported slots and multiplayer deathmatch.
+
+Playback creates the recorded players during map setup. Each active start
+consumes spawn RNG in THINGS order; earlier starts become dolls and inactive
+slots do not spawn. Input runs in slot order and physical thinkers run in map
+order against the shared world. Recorded playback uses classic view bobbing,
+key/weapon persistence and respawn behavior, separately from native network
+join, prediction, team-key and respawn-delay policy.
+
+`verify_boom_coop.py` runs **40 cases / 9,360 recorded frames** against DSDA
+0.27.5: movement, mutual pistol combat, monster combat, floor deaths and Use
+rebirth, conveyors, crusher-driven doll deaths, persistent pickups, sparse slots
+3/4, four-player startup and pause/unpause from another player's slot. Each
+scenario uses seeds 0/1993 and RNG insurance off/on. Coverage assertions require
+actual movement, damage, mover activation, death/rebirth and retained bodies;
+loading a fixture without exercising its feature is not a pass.
+
+```sh
+python3 scripts/verify_boom_coop.py \
+  --iwad /usr/share/games/doom/freedoom2.wad \
+  --reference-source /path/to/pristine/dsda-doom-0.27.5 \
+  --out /tmp/boom-coop
+```
+
+The co-op observer is read-only: both engines consume the same real demo
+commands. Every frame compares all players' position, momentum, health, body
+health, armor, ammunition, keys, view height, weapon state/countdown, refiring
+boolean and attacker position. It also compares ordered non-camera actors,
+retained bodies, pickups, sectors and gameplay RNG streams (cosmetic `pr_misc`
+is excluded). Monster target identity/position, chase counters, last-look and
+attack flags are included. Reports retain input/source/reference hashes and
+first differences. Evidence: `/tmp/gddoom-coop-parity/results.json`.
+
+The recordings exposed Boom's sight bounding-box rejection, the retained
+player-search stop slot, non-solid corpse movement, zero-health weapon lowering,
+and attacker/target pointers that must keep referring to old bodies after
+rebirth. Respawn now retains the former camera actor in its original thinker
+position without consuming spawn RNG for the conversion. Sound targets and
+homing targets retain the same physical body; a replacement player receives
+fresh inventory. A living camera left after a doll death stays an independent,
+unowned body after respawn.
+
+This establishes the generated **single-map** recordings, not universal co-op
+or visual/audio parity. Co-op intermission/finale/campaign transitions and full
+co-op save/keyframe checkpoints are explicitly unsupported rather than silently
+advancing or restoring only the selected player. Those checkpoints need the
+whole roster plus retained references. Native authority replication baselines
+remain distinct from server rollback. Broader community recordings and
+multiplayer deathmatch remain follow-up work.
+
 ## Remaining work
 
 The next milestones are:
@@ -1450,10 +1506,10 @@ The next milestones are:
    lifecycle and mover matrices as regressions. Death/rebirth checkpoints and
    generated normal/secret transitions now have DSDA comparisons; MAP02 covers
    a complete crusher/resurrection route with binary checkpoint continuation.
-2. Extend multiplayer coverage from the controlled doll lifecycle experiment
-   to complete co-op recordings: movement, RNG ordering, retained camera corpses
-   and map transitions. Full authority save/rollback remains separate from
-   the verified world codecs and client replication baselines.
+2. Extend the recorded single-map co-op matrix to intermissions, finales and
+   campaign transitions, then add full-roster co-op checkpoints and community
+   recordings. Native authority save/rollback remains separate from client
+   replication baselines.
 3. Add custom weapon preferences, then broaden complex-map progression and
    large-fight performance coverage. GL nodes and mixer-wide sound parity
    remain separate follow-up work.
@@ -1466,7 +1522,7 @@ not full combat RNG parity, every map route, or large-fight performance. The map
 audit detects unknown specials; it does not detect every unsupported interaction.
 
 These changes advance the multiplayer simulation ID to
-`gd-doom-authority-dev-25`. Deploy matching clients and servers. Door lighting
+`gd-doom-authority-dev-26`. Deploy matching clients and servers. Door lighting
 adds the controlling line reference to owned and displaced door snapshots.
 Sector identities extend the sound-event schema. Explicit ceiling ownership
 and retained doors extend the mover schema; displaced ceilings remain in the

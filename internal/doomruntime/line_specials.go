@@ -374,7 +374,7 @@ func (g *game) heightClipAroundSectorWithCrush(sec int, oldPlayerFloor int64, cr
 			return
 		}
 		x, y := g.thingPosFixed(i, th)
-		if isVoodooDollType(th.Type) {
+		if isPlayerBodyThingType(th.Type) {
 			g.damageShootableThingFrom(i, 10, false, -1, 0, 0, false)
 		} else if isBarrelThingType(th.Type) {
 			g.damageBarrelFrom(i, 10, false, -1, 0, 0, false, 0, false)
@@ -1595,7 +1595,7 @@ func (g *game) teleportStompDestinationThings(x, y, radius int64, actorIdx int, 
 			return
 		}
 		switch {
-		case isVoodooDollType(th.Type):
+		case isPlayerBodyThingType(th.Type):
 			g.damageShootableThingFrom(i, 10000, isPlayer, actorIdx, inflictorX, inflictorY, true)
 		case isMonster(th.Type):
 			g.damageMonsterFrom(i, 10000, isPlayer, actorIdx, inflictorX, inflictorY, true)

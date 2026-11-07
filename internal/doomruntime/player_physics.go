@@ -21,11 +21,10 @@ func (g *game) tickDeadPlayerTurnTowardAttacker() {
 	if g == nil || !g.isDead || !g.statusHasAttacker {
 		return
 	}
-	attackerX := g.statusAttackerX
-	attackerY := g.statusAttackerY
-	if g.m != nil && g.statusAttackerThing >= 0 && g.statusAttackerThing < len(g.m.Things) {
-		attackerX, attackerY = g.thingPosFixed(g.statusAttackerThing, g.m.Things[g.statusAttackerThing])
+	if g.coopDemoActive() && g.demoCoopAttackers[g.localSlot] == -g.localSlot {
+		return
 	}
+	attackerX, attackerY := g.statusAttackerPosition()
 	angle := doomPointToAngle2(g.p.x, g.p.y, attackerX, attackerY)
 	delta := angle - g.p.angle
 	if delta < doomAng5 || delta > doomAngNeg5 {
@@ -104,6 +103,9 @@ func (g *game) updatePlayer(cmd moveCmd) {
 
 func (g *game) tickPlayerBody() {
 	g.p.teleportedThisTic = false
+	if g.coopDemoActive() {
+		defer g.tickCoopPlayerMobjState()
+	}
 	if g.isDead {
 		g.xyMovement()
 		g.zMovement()
@@ -307,7 +309,7 @@ func (g *game) thingHasWorldThinker(i int, th mapdata.Thing) bool {
 	if i < len(g.thingCollected) && g.thingCollected[i] {
 		return false
 	}
-	return isVoodooDollType(th.Type) || (i < len(g.thingMomX) && (g.thingMomX[i] != 0 || g.thingMomY[i] != 0 || g.thingMomZ[i] != 0)) || isBarrelThingType(th.Type) || isMonster(th.Type) || th.Type == 23 || th.Type == 88 || th.Type == 89
+	return isPlayerBodyThingType(th.Type) || (i < len(g.thingMomX) && (g.thingMomX[i] != 0 || g.thingMomY[i] != 0 || g.thingMomZ[i] != 0)) || isBarrelThingType(th.Type) || isMonster(th.Type) || th.Type == 23 || th.Type == 88 || th.Type == 89
 }
 
 func (g *game) tickWorldThinker(ref worldThinkerRef) {
@@ -392,6 +394,18 @@ func (g *game) runPlayerTic(cmd moveCmd, usePressed, fireHeld bool) {
 		g.p.justAttacked = false
 	}
 	g.currentMoveCmd = cmd
+	if g.coopDemoActive() && g.isDead {
+		g.tickWeaponFire()
+		g.updatePlayer(cmd)
+		g.tickPlayerViewHeight()
+		if usePressed {
+			g.playerReborn = true
+		}
+		return
+	}
+	if g.coopDemoActive() && g.p.reactionTime <= 0 && (g.boomMomentumDropoff || cmd.forward != 0 || cmd.side != 0) && g.playerMobjState == 149 {
+		g.setPlayerMobjState(150, 4)
+	}
 	g.setAttackHeld(fireHeld)
 	g.updatePlayer(cmd)
 	g.tickPlayerViewHeight()
@@ -439,7 +453,9 @@ func (g *game) tickPlayerCounters() {
 	if g == nil {
 		return
 	}
-	g.tickPlayerMobjState()
+	if !g.coopDemoActive() {
+		g.tickPlayerMobjState()
+	}
 	if g.inventory.InvulnTics > 0 {
 		g.inventory.InvulnTics--
 	}
@@ -460,6 +476,9 @@ func (g *game) tickPlayerCounters() {
 func (g *game) setPlayerMobjState(state, tics int) {
 	if g == nil {
 		return
+	}
+	if g.coopDemoActive() && state == 0 {
+		state, tics = 149, -1
 	}
 	g.playerMobjState = state
 	g.playerMobjTics = tics
@@ -827,6 +846,9 @@ func (g *game) xyMovement() {
 		g.currentMoveCmd.forward == 0 && g.currentMoveCmd.side == 0 {
 		g.p.momx = 0
 		g.p.momy = 0
+		if g.coopDemoActive() && g.playerMobjState >= 150 && g.playerMobjState <= 153 {
+			g.setPlayerMobjState(149, -1)
+		}
 	} else {
 		f := int64(friction)
 		if len(g.boomFrictions) > 0 {
@@ -959,7 +981,7 @@ func (g *game) checkPositionForWithPickupTouch(x, y int64, blockMonsterLines boo
 	if g.p.corpseGibbed {
 		radius = 0
 	}
-	return g.checkPositionForActorWithPickupTouch(x, y, radius, blockMonsterLines, -1, false, false, touchPickups)
+	return g.checkPositionForActorWithPickupTouch(x, y, radius, blockMonsterLines, -1, false, g.boomMomentumDropoff && g.playerBodyDead(), touchPickups)
 }
 
 func (g *game) checkPositionForActor(x, y, radius int64, blockMonsterLines bool, moverThingIdx int, moverIsMonster bool) (int64, int64, int64, bool) {
@@ -1294,7 +1316,7 @@ func (g *game) actorBlockedByThingsWithPickupTouch(x, y, radius int64, moverThin
 				return true
 			}
 		}
-		if !isVoodooDollType(th.Type) && !thingTypeBlocksActorMovement(th.Type, moverIsMonster) {
+		if !isPlayerBodyThingType(th.Type) && !thingTypeBlocksActorMovement(th.Type, moverIsMonster) {
 			return false
 		}
 		tx, ty = g.thingPosFixed(i, th)
@@ -1430,6 +1452,9 @@ func (g *game) monsterCorpseBlocksMovement(i int) bool {
 	}
 	// Barrels never run A_Fall. They stay solid until removal or a
 	// crusher replaces their death state with S_GIBS.
+	if g.m.Things[i].Type == detachedPlayerBodyType {
+		return g.detachedPlayerBodySolid(i)
+	}
 	if isBarrelThingType(g.m.Things[i].Type) {
 		return true
 	}

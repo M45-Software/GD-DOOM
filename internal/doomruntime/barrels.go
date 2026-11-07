@@ -31,7 +31,7 @@ func isBarrelThingType(typ int16) bool {
 }
 
 func thingTypeIsShootable(typ int16) bool {
-	return isVoodooDollType(typ) || isMonster(typ) || isBarrelThingType(typ) || typ == 88
+	return isPlayerBodyThingType(typ) || isMonster(typ) || isBarrelThingType(typ) || typ == 88
 }
 
 func thingTypeNoBlood(typ int16) bool {
@@ -53,7 +53,7 @@ func (g *game) thingCurrentHeight(i int, th mapdata.Thing) int64 {
 		return 0
 	}
 	if info, ok := demoTraceThingInfoForType(th.Type); ok && info.height > 0 {
-		if (isBarrelThingType(th.Type) || isVoodooDollType(th.Type)) && i >= 0 && i < len(g.thingDead) && g.thingDead[i] {
+		if (isBarrelThingType(th.Type) || isPlayerBodyThingType(th.Type)) && i >= 0 && i < len(g.thingDead) && g.thingDead[i] {
 			return info.height >> 2
 		}
 		if (isMonster(th.Type) || th.Type == 88) && i >= 0 && i < len(g.thingDead) && g.thingDead[i] && (monsterLeavesCorpse(th.Type) || th.Type == 3006 || th.Type == 88) {
@@ -228,6 +228,8 @@ func (g *game) damageShootableThingFromWithInflictorZ(thingIdx int, damage int, 
 	}
 	typ := g.m.Things[thingIdx].Type
 	switch {
+	case typ == detachedPlayerBodyType:
+		g.damageDetachedPlayerBody(thingIdx, damage, sourcePlayer, sourceThing, inflictorX, inflictorY, hasInflictor, inflictorZ, hasInflictorZ)
 	case isVoodooDollType(typ):
 		g.damageVoodooDoll(thingIdx, damage, inflictorX, inflictorY, inflictorZ, hasInflictor, sourceThing, sourcePlayer)
 	case typ == 88:

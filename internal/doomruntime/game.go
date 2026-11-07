@@ -769,6 +769,8 @@ type game struct {
 	secretsTotal                                  int
 	sectorSoundTarget                             []bool
 	sectorSoundPlayerSlot                         []int
+	demoCoopSoundBodies                           map[int]int
+	demoCoopAttackers                             map[int]int // Negative live slot or one-based detached thing.
 	isDead                                        bool
 	playerReborn                                  bool
 	playerMobjHealth                              int
@@ -1676,6 +1678,7 @@ func newGameWithRNG(m *mapdata.Map, opts Options, clearRNG bool) *game {
 		}
 	}
 	g.initBoomEnvironment()
+	g.initCoopDemoPlayers()
 	g.initBoomSectorTouches()
 	if g.bmapWidth > 0 && g.bmapHeight > 0 {
 		g.thingBlockCells = make([][]int, g.bmapWidth*g.bmapHeight)
@@ -2965,6 +2968,9 @@ func (g *game) advanceDemoTic() error {
 	if !g.demoRNGCaptured {
 		g.demoStartRnd, g.demoStartPRnd = doomrand.State()
 		g.demoRNGCaptured = true
+	}
+	if g.coopDemoActive() {
+		return g.advanceCoopDemoTic()
 	}
 	if g.demoTrace != nil && !g.demoTraceInitialWritten {
 		if g.demoTick >= len(script.Tics) {
@@ -11438,10 +11444,10 @@ func (g *game) appendMonsterCutoutItems(camX, camY, camAng, focal, focalV, near 
 		if i < 0 || i >= len(g.thingCollected) || g.thingCollected[i] {
 			continue
 		}
-		if !isMonster(th.Type) && !isVoodooDollType(th.Type) {
+		if !isMonster(th.Type) && !isPlayerBodyThingType(th.Type) {
 			continue
 		}
-		if !isVoodooDollType(th.Type) && !g.monsterVisibleAfterDeath(i, th.Type) {
+		if !isPlayerBodyThingType(th.Type) && !g.monsterVisibleAfterDeath(i, th.Type) {
 			continue
 		}
 		txFixed, tyFixed, baseZFixed := g.thingRenderPosFixed(i, th, alpha)
@@ -11625,7 +11631,7 @@ func (g *game) appendThingCutoutItems(camX, camY, camAng, focal, focalV, near fl
 		if i < 0 || i >= len(g.thingCollected) || g.thingCollected[i] {
 			continue
 		}
-		if isMonster(th.Type) || isPlayerStart(th.Type) {
+		if isMonster(th.Type) || isPlayerStart(th.Type) || isPlayerBodyThingType(th.Type) {
 			continue
 		}
 		sec := g.thingSectorCached(i, th)
@@ -11742,7 +11748,7 @@ func (g *game) worldThingSpriteName(typ int16, tic int) string {
 }
 
 func (g *game) worldThingSpriteNameScaled(typ int16, tickUnits, unitsPerTic int) string {
-	if isVoodooDollType(typ) {
+	if isPlayerBodyThingType(typ) {
 		return "PLAYA1"
 	}
 	pick := func(seq ...string) string {
@@ -13432,7 +13438,7 @@ func monsterDeathAnimTotalTicsForMode(typ int16, xdeath bool) int {
 }
 
 func (g *game) monsterFrameLetter(i int, th mapdata.Thing, tic int) byte {
-	if isVoodooDollType(th.Type) {
+	if isPlayerBodyThingType(th.Type) {
 		return g.voodooFrameLetter(i)
 	}
 	if i >= 0 && i < len(g.thingState) && i < len(g.thingStatePhase) {
@@ -13584,7 +13590,7 @@ func (g *game) monsterSpriteNameForView(i int, th mapdata.Thing, tic int, viewX,
 }
 
 func (g *game) monsterSpriteRefForView(i int, th mapdata.Thing, tic int, viewX, viewY float64) (*spriteRenderRef, bool, bool) {
-	if isVoodooDollType(th.Type) && g.thingGibbed[i] {
+	if isPlayerBodyThingType(th.Type) && g.thingGibbed[i] {
 		ref, ok := g.spriteRenderRef("POL5A0")
 		return ref, false, ok
 	}
@@ -13636,7 +13642,7 @@ func monsterUsesShadow(typ int16) bool {
 }
 
 func monsterSpritePrefix(typ int16) (string, bool) {
-	if isVoodooDollType(typ) {
+	if isPlayerBodyThingType(typ) {
 		return "PLAY", true
 	}
 	switch typ {

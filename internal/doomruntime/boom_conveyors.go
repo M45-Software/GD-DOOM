@@ -133,6 +133,20 @@ func (g *game) rebuildVoodooBodies() {
 }
 
 func (g *game) initVoodooDolls() {
+	if g.coopDemoActive() {
+		last := [5]int{-1, -1, -1, -1, -1}
+		for i, th := range g.m.Things {
+			if slot := playerSlotFromThingType(th.Type); slot != 0 {
+				last[slot] = i
+			}
+		}
+		for i, th := range g.m.Things {
+			if slot := playerSlotFromThingType(th.Type); slot != 0 && g.opts.DemoScript.Header.PlayerInGame[slot-1] && last[slot] != i {
+				g.m.Things[i].Type = voodooTypeForSlot(slot)
+			}
+		}
+		return
+	}
 	if g.opts.GameMode != gameModeSingle {
 		return
 	}
@@ -197,26 +211,11 @@ func (g *game) tickVoodooState(i int) {
 	if g.thingStateTics[i] != 0 {
 		return
 	}
-	state := g.thingDoomState[i]
-	switch {
-	case state == 156:
-		g.thingDoomState[i], g.thingStateTics[i] = 157, 4
+	state, tics := nextPlayerBodyState(g.thingDoomState[i])
+	g.thingDoomState[i], g.thingStateTics[i] = state, tics
+	if state == 157 {
 		x, y := g.thingPosFixed(i, g.m.Things[i])
 		g.emitSoundEventAt(soundEventPain, x, y)
-	case state == 157:
-		g.thingDoomState[i], g.thingStateTics[i] = 149, -1
-	case state >= 158 && state < 164:
-		g.thingDoomState[i], g.thingStateTics[i] = state+1, 10
-		if state+1 == 164 {
-			g.thingStateTics[i] = -1
-		}
-	case state >= 165 && state < 173:
-		g.thingDoomState[i], g.thingStateTics[i] = state+1, 5
-		if state+1 == 173 {
-			g.thingStateTics[i] = -1
-		}
-	default:
-		g.thingDoomState[i], g.thingStateTics[i] = 149, -1
 	}
 }
 

@@ -55,7 +55,7 @@ func TestParseDemoScriptAcceptsVersion109(t *testing.T) {
 func TestParseDemoScriptParsesAllHeaderFields(t *testing.T) {
 	src := []byte{
 		demoVersion110, 4, 3, 7, 1, 1, 1, 1, 2,
-		1, 1, 0, 1,
+		0, 0, 1, 0,
 		25, 0, 0, 0,
 		demoMarker,
 	}
@@ -73,7 +73,7 @@ func TestParseDemoScriptParsesAllHeaderFields(t *testing.T) {
 		Fast:          true,
 		NoMonsters:    true,
 		ConsolePlayer: 2,
-		PlayerInGame:  [4]bool{true, true, false, true},
+		PlayerInGame:  [4]bool{false, false, true, false},
 	}
 	if d.Header != want {
 		t.Fatalf("header=%+v want %+v", d.Header, want)

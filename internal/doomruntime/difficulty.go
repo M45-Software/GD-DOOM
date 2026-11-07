@@ -121,7 +121,7 @@ func (g *game) thingActiveInSession(i int) bool {
 	if i < len(g.thingDead) && g.thingDead[i] {
 		return false
 	}
-	if isVoodooDollType(g.m.Things[i].Type) {
+	if isPlayerBodyThingType(g.m.Things[i].Type) {
 		return true
 	}
 	// Runtime-spawned drops do not carry map spawn flags; they should remain
@@ -154,13 +154,16 @@ func (g *game) thingBlocksInSession(i int) bool {
 		// P_KillMobj leaves a barrel's MF_SOLID flag set throughout its BEXP
 		// death sequence. It is unlinked only after BEXP5 reaches S_NULL, at
 		// which point thingCollected is set above.
-		return isBarrelThingType(g.m.Things[i].Type) || g.m.Things[i].Type == 88
+		return isBarrelThingType(g.m.Things[i].Type) || g.m.Things[i].Type == 88 || g.m.Things[i].Type == detachedPlayerBodyType && g.detachedPlayerBodySolid(i)
 	}
 	if i < len(g.thingDropped) && g.thingDropped[i] {
 		return true
 	}
 	th := g.m.Things[i]
-	if isVoodooDollType(th.Type) {
+	if th.Type == detachedPlayerBodyType {
+		return g.detachedPlayerBodySolid(i)
+	}
+	if isPlayerBodyThingType(th.Type) {
 		return true
 	}
 	if isMonster(th.Type) && i < len(g.thingSpawnPoint) && g.thingSpawnPoint[i].Type == 0 {

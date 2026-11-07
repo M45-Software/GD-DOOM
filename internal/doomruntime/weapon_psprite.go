@@ -360,7 +360,7 @@ func (g *game) ensureWeaponPSprites() {
 	if g == nil {
 		return
 	}
-	if g.weaponState != weaponStateNone {
+	if g.weaponState != weaponStateNone || g.playerOwnsVoodooBody() && g.stats.Health <= 0 {
 		return
 	}
 	g.ensureWeaponDefaults()

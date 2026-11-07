@@ -1,6 +1,9 @@
 package demo
 
-import "testing"
+import (
+	"bytes"
+	"testing"
+)
 
 func boomDemoBytes() []byte {
 	b := make([]byte, 109)
@@ -28,7 +31,7 @@ func TestBoomDemoHeaderAndCommands(t *testing.T) {
 	}
 }
 
-func TestBoomDemoRejectsMalformedAndMultiplayerStreams(t *testing.T) {
+func TestBoomDemoRejectsMalformedAndIncompleteFrames(t *testing.T) {
 	for _, edit := range []func([]byte) []byte{
 		func(b []byte) []byte { return b[:108] },
 		func(b []byte) []byte { b[1] = 0; return b },
@@ -39,6 +42,28 @@ func TestBoomDemoRejectsMalformedAndMultiplayerStreams(t *testing.T) {
 	} {
 		if _, err := Parse(edit(boomDemoBytes())); err == nil {
 			t.Fatal("invalid Boom stream accepted")
+		}
+	}
+}
+
+func TestBoomCoopCommandsAreGroupedByWorldTic(t *testing.T) {
+	b := boomDemoBytes()[:109]
+	b[77], b[78], b[80], b[12] = 1, 1, 1, 1
+	b = append(b, 10, 1, 2, 3, 20, 4, 5, 6, 30, 7, 8, 9, 11, 2, 3, 4, 21, 5, 6, 7, 31, 8, 9, 10, Marker)
+	s, err := Parse(b)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(s.Frames) != 2 || len(s.Tics) != 2 || s.Tics[1].Forward != 21 || s.Frames[0][0].Forward != 10 || s.Frames[0][3].Forward != 30 || s.Frames[0][2] != (Tic{}) {
+		t.Fatalf("incorrect sparse frame grouping: %+v", s)
+	}
+	roundtrip, err := Format(s)
+	if err != nil || !bytes.Equal(roundtrip, b) {
+		t.Fatalf("multiplayer format lost frames: %v", err)
+	}
+	for _, end := range []int{113, 117, 118, 120} {
+		if _, err := Parse(append(append([]byte{}, b[:end]...), Marker)); err == nil {
+			t.Fatal("accepted partial multiplayer frame")
 		}
 	}
 }

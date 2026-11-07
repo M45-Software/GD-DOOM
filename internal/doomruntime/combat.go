@@ -90,7 +90,7 @@ func (g *game) initThingCombatState() {
 		if slot := playerSlotFromThingType(th.Type); slot != 0 {
 			// Doom spawns the active player inline during map thing iteration,
 			// and P_SpawnMobj consumes one P_Random() for its lastlook field.
-			if slot == g.localSlot {
+			if slot == g.localSlot || g.coopDemoActive() && g.opts.DemoScript.Header.PlayerInGame[slot-1] {
 				_ = doomrand.PRandom(doomrand.Lastlook) & 3
 			}
 			continue
@@ -247,8 +247,8 @@ func (g *game) tickWeaponFire() {
 }
 
 func (g *game) weaponActionReady(state weaponPspriteState) {
-	if g == nil || g.isDead {
-		if g != nil && g.isDead {
+	if g == nil || g.isDead || g.playerOwnsVoodooBody() && g.stats.Health <= 0 {
+		if g != nil {
 			g.setWeaponPSpriteState(weaponInfo(g.inventory.ReadyWeapon).downstate, false)
 		}
 		return
@@ -319,7 +319,7 @@ func (g *game) weaponActionRefire(_ weaponPspriteState) {
 	if g == nil {
 		return
 	}
-	if g.statusAttackDown && g.inventory.PendingWeapon == 0 && !g.isDead {
+	if g.statusAttackDown && g.inventory.PendingWeapon == 0 && !g.isDead && (!g.playerOwnsVoodooBody() || g.stats.Health > 0) {
 		g.weaponRefire = true
 		g.weaponAttackDown = true
 		g.fireWeaponStateSequence()
@@ -360,6 +360,12 @@ func (g *game) weaponActionLower(_ weaponPspriteState) {
 	if g.isDead {
 		g.weaponPSpriteY = weaponBottomY
 		g.weaponPose.FractionY, g.weaponPose.BobY = 0, 0
+		return
+	}
+	if g.playerOwnsVoodooBody() && g.stats.Health <= 0 {
+		tics := g.weaponStateTics
+		g.setWeaponPSpriteState(weaponStateNone, false)
+		g.weaponStateTics = tics
 		return
 	}
 	if g.inventory.PendingWeapon == 0 {
@@ -1942,6 +1948,10 @@ func monsterDropPickupType(typ int16) (int16, bool) {
 }
 
 func (g *game) appendRuntimeThing(th mapdata.Thing, dropped bool) int {
+	return g.appendRuntimeThingWithSpawnRNG(th, dropped, true)
+}
+
+func (g *game) appendRuntimeThingWithSpawnRNG(th mapdata.Thing, dropped, spawnRNG bool) int {
 	if g == nil || g.m == nil {
 		return -1
 	}
@@ -1956,6 +1966,10 @@ func (g *game) appendRuntimeThing(th mapdata.Thing, dropped bool) int {
 	g.m.Things = append(g.m.Things, th)
 	if len(g.boomLastEnemy) > 0 {
 		g.boomLastEnemy = append(g.boomLastEnemy, 0)
+	}
+	if len(g.thingFriction) > 0 {
+		g.thingFriction = append(g.thingFriction, 0)
+		g.thingMoveFactor = append(g.thingMoveFactor, 0)
 	}
 	g.thingCollected = append(g.thingCollected, false)
 	g.thingDropped = append(g.thingDropped, dropped)
@@ -1988,7 +2002,11 @@ func (g *game) appendRuntimeThing(th mapdata.Thing, dropped bool) int {
 		g.thingReactionTics[len(g.thingReactionTics)-1] = 0
 	}
 	g.thingWakeTics = append(g.thingWakeTics, 0)
-	g.thingLastLook = append(g.thingLastLook, doomrand.PRandom(doomrand.Lastlook)&3)
+	lastLook := 0
+	if spawnRNG {
+		lastLook = doomrand.PRandom(doomrand.Lastlook) & 3
+	}
+	g.thingLastLook = append(g.thingLastLook, lastLook)
 	g.thingDead = append(g.thingDead, false)
 	// Runtime spawns need the same crusher bookkeeping as map spawns.
 	// Fill any missing older entries too, preserving already-crushed bodies.

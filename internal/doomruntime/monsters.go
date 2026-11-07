@@ -666,6 +666,11 @@ func (g *game) tickMonsters() {
 }
 
 func (g *game) tickThingThinker(i int, th mapdata.Thing) {
+	if th.Type == detachedPlayerBodyType {
+		g.tickMonsterMomentum(i, th)
+		g.tickVoodooState(i)
+		return
+	}
 	if isVoodooDollType(th.Type) {
 		g.withVoodooOwner(i, func() { g.tickMonsterMomentum(i, th); g.tickVoodooState(i) })
 		return
@@ -4919,6 +4924,13 @@ func (g *game) crossSubsectorLOS(ss int, sight *losTrace) bool {
 		}
 		g.lineValid[lineIdx] = g.validCount
 		ld := g.lines[lineIdx]
+		// Boom rejects disjoint linedef bounds before P_DivlineSide. This
+		// matters at exact endpoints because its inherited horizontal-line
+		// equality test compares X to node.Y. Vanilla deliberately omits it.
+		if g.boomMomentumDropoff && (ld.bbox[3] > max64(sight.trace.x, sight.t2x) || ld.bbox[2] < min(sight.trace.x, sight.t2x) || ld.bbox[1] > max64(sight.trace.y, sight.t2y) || ld.bbox[0] < min(sight.trace.y, sight.t2y)) {
+			continue
+		}
+
 		s1 := doomSightDivlineSide(ld.x1, ld.y1, sight.trace)
 		s2 := doomSightDivlineSide(ld.x2, ld.y2, sight.trace)
 		if s1 == s2 {
@@ -5459,7 +5471,7 @@ func (g *game) probeMonsterMoveWithDropoff(i int, typ int16, x, y int64, allowDr
 	// Boom's PIT_CheckThing allows a non-solid mover through solid actors.
 	// A_Fall clears corpse solidity partway through the death animation;
 	// vanilla demos still use the original actor-blocking rule.
-	nonSolidCorpse := g.boomMomentumDropoff && i < len(g.thingDead) && g.thingDead[i] && !g.monsterCorpseBlocksMovement(i)
+	nonSolidCorpse := g.boomMomentumDropoff && (i < len(g.thingDead) && g.thingDead[i] && !g.monsterCorpseBlocksMovement(i) || typ == detachedPlayerBodyType && !g.detachedPlayerBodySolid(i))
 	tmfloor, tmceil, tmdrop, checkPosOK := g.checkPositionForActorWithPickupTouch(x, y, g.thingCurrentRadius(i, g.m.Things[i]), !isVoodooDollType(typ), i, true, nonSolidCorpse, isVoodooDollType(typ))
 	probeLines := make([]int, 0)
 	if base := g.probeSpecialLinesForMover(i); len(base) > 0 {
@@ -5485,7 +5497,7 @@ func (g *game) probeMonsterMoveWithDropoff(i int, typ int16, x, y int64, allowDr
 	if tmfloor-z > stepHeight {
 		return monsterMoveProbeResult{tmfloor: tmfloor, tmceil: tmceil, tmdrop: tmdrop, probeLines: probeLines, checkPosOK: true, floatOK: floatOK}
 	}
-	if !allowDropoff && !isVoodooDollType(typ) && !g.thingCanDropOff(i, typ) && !monsterCanFloat(typ) && tmfloor-tmdrop > stepHeight {
+	if !allowDropoff && !isPlayerBodyThingType(typ) && !g.thingCanDropOff(i, typ) && !monsterCanFloat(typ) && tmfloor-tmdrop > stepHeight {
 		return monsterMoveProbeResult{tmfloor: tmfloor, tmceil: tmceil, tmdrop: tmdrop, probeLines: probeLines, checkPosOK: true, floatOK: floatOK}
 	}
 	return monsterMoveProbeResult{tmfloor: tmfloor, tmceil: tmceil, tmdrop: tmdrop, probeLines: probeLines, checkPosOK: true, floatOK: floatOK, ok: true}

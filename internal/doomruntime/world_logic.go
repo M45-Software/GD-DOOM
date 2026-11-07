@@ -343,7 +343,7 @@ func (g *game) tickPlayerViewHeight() {
 	var bobAmplitude int64
 	// Authoritative prediction has a separate command clock; retain its
 	// existing bob-free eye so snapshots cannot introduce phase corrections.
-	if g.authorityRules == nil && !g.predictionMovement {
+	if (g.authorityRules == nil || g.coopDemoActive()) && !g.predictionMovement {
 		bob := int64(int32(fixedMul(g.p.momx, g.p.momx)+fixedMul(g.p.momy, g.p.momy))) >> 2
 		bob = min(bob, playerMaxBob)
 		if g.opts.BoomGameOptions != nil && !g.opts.BoomGameOptions.PlayerBobbing {
@@ -544,6 +544,16 @@ func (g *game) damagePlayerBody(amount int, msg string, attackerX, attackerY int
 	if g.statusDamageCount > 100 {
 		g.statusDamageCount = 100
 	}
+	if g.coopDemoActive() {
+		if g.authorityDamageSource > 0 && hasAttacker && attackerThing < 0 {
+			if g.demoCoopAttackers == nil {
+				g.demoCoopAttackers = make(map[int]int)
+			}
+			g.demoCoopAttackers[g.localSlot] = -g.authorityDamageSource
+		} else {
+			delete(g.demoCoopAttackers, g.localSlot)
+		}
+	}
 	g.statusHasAttacker = hasAttacker
 	if hasAttacker {
 		g.statusAttackerX = attackerX
@@ -563,13 +573,19 @@ func (g *game) damagePlayerBody(amount int, msg string, attackerX, attackerY int
 		// P_KillMobj shortens the death state's tics with P_Random & 3.
 		// Lower the weapon immediately, before another attack state can run.
 		shorten := doomrand.PRandom(doomrand.Killtics) & 3
-		if doll {
+		if doll || g.coopDemoActive() {
 			state, tics := 158, 10
 			if g.playerMobjHealth < -100 {
 				state, tics = 165, 5
-				g.thingXDeath[dollIndex] = true
+				if doll {
+					g.thingXDeath[dollIndex] = true
+				}
 			}
-			g.thingDoomState[dollIndex], g.thingStateTics[dollIndex] = state, max(1, tics-shorten)
+			if doll {
+				g.thingDoomState[dollIndex], g.thingStateTics[dollIndex] = state, max(1, tics-shorten)
+			} else {
+				g.setPlayerMobjState(state, max(1, tics-shorten))
+			}
 		}
 		g.setWeaponPSpriteState(weaponInfo(g.inventory.ReadyWeapon).downstate, false)
 		msg = "You Died"
