@@ -96,11 +96,11 @@ func TestBoomDisplacedCrusherAndEmptySlotCheckpoint(t *testing.T) {
 		if !g.activateGeneralizedCrusher(0, *mapdata.LookupLineSpecial(0x2f93).Ceiling) || len(g.ceilings) != 2 {
 			t.Fatal("new crusher lost the displaced thinker")
 		}
-		data, err := encodeSnapshot(saveGameMagic, saveFile{Version: version, Game: captureGameSaveState(g)})
+		data, err := encodeSnapshot(boomSnapshotMagic(version), saveFile{Version: version, Game: captureGameSaveState(g)})
 		if err != nil {
 			t.Fatal(err)
 		}
-		file, err := decodeSnapshot(data, saveGameMagic)
+		file, err := decodeBoomTestSnapshot(data)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -124,11 +124,11 @@ func TestBoomDisplacedDoorCheckpoint(t *testing.T) {
 		if !g.useSpecialLineForActor(0, 0, true) || len(g.extraDoors) != 1 {
 			t.Fatal("D1 discarded an existing door")
 		}
-		data, err := encodeSnapshot(saveGameMagic, saveFile{Version: version, Game: captureGameSaveState(g)})
+		data, err := encodeSnapshot(boomSnapshotMagic(version), saveFile{Version: version, Game: captureGameSaveState(g)})
 		if err != nil {
 			t.Fatal(err)
 		}
-		file, err := decodeSnapshot(data, saveGameMagic)
+		file, err := decodeBoomTestSnapshot(data)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -159,11 +159,11 @@ func TestBoomPreviousGeneralizedStateExtension(t *testing.T) {
 		g := sharedDoorGame(31)
 		g.p.corpseGibbed = true
 		g.activateGeneralizedCrusher(0, *mapdata.LookupLineSpecial(0x2f8b).Ceiling)
-		data, err := encodeSnapshot(saveGameMagic, saveFile{Version: version, Game: captureGameSaveState(g)})
+		data, err := encodeSnapshot(boomSnapshotMagic(version), saveFile{Version: version, Game: captureGameSaveState(g)})
 		if err != nil {
 			t.Fatal(err)
 		}
-		file, err := decodeSnapshot(data, saveGameMagic)
+		file, err := decodeBoomTestSnapshot(data)
 		if err != nil {
 			t.Fatal(err)
 		}

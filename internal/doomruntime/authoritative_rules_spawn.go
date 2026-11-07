@@ -116,6 +116,10 @@ func (a *Authority) spawnAuthoritativePlayer(id byte, respawn bool) error {
 		playerBlockOrder: g.allocBlockmapOrder(), authorityPlayerThinkerOrder: thinkerOrder,
 		autoWeaponSwitch: g.opts.AutoWeaponSwitch,
 	})
+	if g.boomTouchSectors != nil {
+		g.updateBoomActorTouch(-int(id), nil)
+		g.updateBoomPlayerTouch()
+	}
 	g.initPlayerState()
 	if g.opts.GameMode == gameModeDeathmatch {
 		g.inventory.CardKeys = [3]bool{true, true, true}

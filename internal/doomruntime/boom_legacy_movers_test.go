@@ -23,11 +23,11 @@ func TestBoomElevatorReservesBothSlotsAndSurvivesSnapshot(t *testing.T) {
 		for range 3 {
 			g.tickFloors()
 		}
-		data, err := encodeSnapshot(saveGameMagic, saveFile{Version: version, Game: captureGameSaveState(g)})
+		data, err := encodeSnapshot(boomSnapshotMagic(version), saveFile{Version: version, Game: captureGameSaveState(g)})
 		if err != nil {
 			t.Fatal(err)
 		}
-		file, err := decodeSnapshot(data, saveGameMagic)
+		file, err := decodeBoomTestSnapshot(data)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -85,7 +85,7 @@ func TestBoomToggleStasisCheckpointAndReverse(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	file, err := decodeSnapshot(data, saveGameMagic)
+	file, err := decodeBoomTestSnapshot(data)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -107,11 +107,11 @@ func TestBoomFloorCrushCheckpointAndPreviousCardExtension(t *testing.T) {
 	g.activateStairsLine(0, *mapdata.LookupLineSpecial(257).Stairs)
 	for _, version := range []int{saveGameVersion, keyframeVersion, 32, 19} {
 		g.inventory = lockInventory(63)
-		data, err := encodeSnapshot(saveGameMagic, saveFile{Version: version, Game: captureGameSaveState(g)})
+		data, err := encodeSnapshot(boomSnapshotMagic(version), saveFile{Version: version, Game: captureGameSaveState(g)})
 		if err != nil {
 			t.Fatal(err)
 		}
-		file, err := decodeSnapshot(data, saveGameMagic)
+		file, err := decodeBoomTestSnapshot(data)
 		if err != nil {
 			t.Fatal(err)
 		}

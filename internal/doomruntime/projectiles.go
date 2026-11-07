@@ -60,6 +60,7 @@ type projectile struct {
 }
 
 type projectileImpact struct {
+	momx, momy                 int64
 	x                          int64
 	y                          int64
 	z                          int64
@@ -73,7 +74,7 @@ type projectileImpact struct {
 	sourcePlayer               bool
 	sourcePlayerSlot           int
 	sourcePlayerGeneration     uint32
-	fireTargetThing            int // One-based thing index; zero means no thing target.
+	fireTargetThing            int // One-based fire or exploded homing-missile tracer target.
 	fireTargetPlayer           bool
 	fireTargetPlayerSlot       int
 	fireTargetPlayerGeneration uint32
@@ -267,7 +268,7 @@ func (g *game) spawnMonsterProjectile(thingIdx int, typ int16) bool {
 		sourceType:   typ,
 		tracerPlayer: typ == 66,
 		lastLook:     lastLook,
-		frameTics:    randomizedMissileSpawnTics(projectileSpawnStateTics(kind)),
+		frameTics:    randomizedMissileSpawnTics(projectileFlightStateTics(kind, typ)),
 		kind:         kind,
 		angle:        aimAngle,
 		order:        g.allocThinkerOrder(),
@@ -432,10 +433,9 @@ func (g *game) advanceProjectile(p projectile) (projectile, bool) {
 			return projectile{}, false
 		}
 		if blocked {
-			// P_XYMovement removes missiles that hit a line whose back ceiling is
-			// sky, instead of calling P_ExplodeMissile. This old vanilla special
-			// case is observable in demo sync because it avoids the death-state
-			// thinker and its associated random stream.
+			// P_XYMovement removes missiles above a blocking sky ceiling.
+			// Vanilla also removes missiles below it; Boom fixes that case.
+			// Removal avoids the explosion thinker and its RNG draw.
 			if skyBlocked {
 				return projectile{}, false
 			}
@@ -586,7 +586,9 @@ func (g *game) explodeProjectileDuringXY(p projectile, xmove, ymove int64) {
 				nx, ny = int64(int32(fx.x+xmove)), int64(int32(fx.y+ymove))
 				xmove, ymove = 0, 0
 			}
-			floor, ceil, _, ok := g.checkPositionForActor(nx, ny, p.radius, true, -1, true)
+			// P_ExplodeMissile clears MF_MISSILE; the death object is
+			// non-solid. Boom's PIT_CheckThing lets it pass solid actors.
+			floor, ceil, _, ok := g.checkPositionForActorWithThingPolicy(nx, ny, p.radius, true, -1, true, g.boomMomentumDropoff)
 			if !ok || ceil-floor < p.height || ceil-fx.z < p.height || floor-fx.z > 24*fracUnit {
 				continue
 			}
@@ -1011,6 +1013,7 @@ func (g *game) spawnProjectileImpactFrom(p projectile, x, y, z int64) {
 	fx.sourcePlayer = p.sourcePlayer
 	fx.sourcePlayerSlot = p.sourcePlayerSlot
 	fx.sourcePlayerGeneration = p.sourcePlayerGeneration
+	fx.retainMissileTracer(p)
 	fx.lastLook = p.lastLook
 	if p.kind == projectilePlasmaBall && p.sourceType == 68 {
 		// MT_ARACHPLAZ uses S_ARACH_PLEX through S_ARACH_PLEX5: five
@@ -1041,8 +1044,21 @@ func (g *game) spawnProjectileImpactFromDeferredRandom(p projectile, x, y, z int
 	fx.sourcePlayer = p.sourcePlayer
 	fx.sourcePlayerSlot = p.sourcePlayerSlot
 	fx.sourcePlayerGeneration = p.sourcePlayerGeneration
+	fx.retainMissileTracer(p)
 	fx.lastLook = p.lastLook
 	return idx
+}
+
+// P_ExplodeMissile changes the existing mobj's state without clearing tracer.
+// Reuse the effect's saved target fields, also used by arch-vile fire.
+func (fx *projectileImpact) retainMissileTracer(p projectile) {
+	if p.kind != projectileTracer {
+		return
+	}
+	fx.fireTargetThing = p.tracerThingTarget
+	fx.fireTargetPlayer = p.tracerPlayer
+	fx.fireTargetPlayerSlot = p.tracerPlayerSlot
+	fx.fireTargetPlayerGeneration = p.tracerPlayerGeneration
 }
 
 func (g *game) finalizeDeferredProjectileImpact(idx int) {
@@ -1084,14 +1100,22 @@ func (g *game) advanceProjectileImpactTic(fx *projectileImpact) bool {
 	if fx == nil {
 		return false
 	}
+	height := monsterProjectileHeight(fx.sourceType)
+	if fx.kind == projectileArchVileFire {
+		height = 16 * fracUnit
+	}
+	if fx.momx != 0 || fx.momy != 0 {
+		ox, oy := fx.x, fx.y
+		g.moveBoomEffectXY(&fx.x, &fx.y, fx.z, &fx.momx, &fx.momy, &fx.floorz, &fx.ceilz,
+			demoTraceProjectileImpactRadius(fx.kind, fx.sourceType), height)
+		if fx.x != ox || fx.y != oy {
+			fx.subsector = g.subSectorAtFixed(fx.x, fx.y) + 1
+		}
+	}
 	// P_XYMovement can enter the death state below the updated support floor.
 	// P_MobjThinker still runs P_ZMovement before decrementing that state.
 	if fx.z < fx.floorz {
 		fx.z = fx.floorz
-	}
-	height := monsterProjectileHeight(fx.sourceType)
-	if fx.kind == projectileArchVileFire {
-		height = 16 * fracUnit
 	}
 	if fx.z+height > fx.ceilz {
 		fx.z = fx.ceilz - height
@@ -1118,6 +1142,13 @@ func (g *game) advanceProjectileImpactTic(fx *projectileImpact) bool {
 		}
 	}
 	return fx.tics > 0
+}
+
+func projectileFlightStateTics(kind projectileKind, sourceType int16) int {
+	if kind == projectilePlasmaBall && sourceType == 68 {
+		return 5
+	}
+	return projectileSpawnStateTics(kind)
 }
 
 func projectileSpawnStateTics(kind projectileKind) int {
@@ -1212,7 +1243,7 @@ func (g *game) tickProjectileAnim(p *projectile) bool {
 	default:
 		p.frame ^= 1
 	}
-	p.frameTics = projectileSpawnStateTics(p.kind)
+	p.frameTics = projectileFlightStateTics(p.kind, p.sourceType)
 	return true
 }
 
@@ -1309,7 +1340,8 @@ func (g *game) projectileBlockedAt(p projectile, ox, oy, oz, nx, ny, nz int64) (
 		if opentop < tmceilingz {
 			tmceilingz = opentop
 			_, back := g.physLineSectors(ld)
-			skyBlocked = back >= 0 && back < len(g.m.Sectors) && isSkyFlatName(g.m.Sectors[back].CeilingPic)
+			skyBlocked = back >= 0 && back < len(g.m.Sectors) && isSkyFlatName(g.m.Sectors[back].CeilingPic) &&
+				(!g.boomMomentumDropoff || oz > g.sectorCeil[back])
 		}
 		if openbottom > tmfloorz {
 			tmfloorz = openbottom

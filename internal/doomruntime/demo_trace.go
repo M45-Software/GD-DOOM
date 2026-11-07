@@ -583,12 +583,11 @@ func (g *game) demoTraceMobjs() []demoTraceMobj {
 			target = 1
 			targetType = demoTraceThingType(g.m.Things[fx.sourceThing].Type)
 		}
-		if fx.kind == projectileTracer {
-			tracer = 1
-		}
 		height, flags := int64(8*fracUnit), 1552
 		if fx.kind == projectileArchVileFire {
 			height, flags = 16*fracUnit, 528
+		}
+		if fx.kind == projectileArchVileFire || fx.kind == projectileTracer {
 			if fx.fireTargetPlayer {
 				tracer = 1
 			} else if idx := fx.fireTargetThing - 1; idx >= 0 && idx < len(g.m.Things) {
@@ -605,8 +604,8 @@ func (g *game) demoTraceMobjs() []demoTraceMobj {
 				Y:            fx.y,
 				Z:            fx.z,
 				Angle:        fx.angle,
-				MomX:         0,
-				MomY:         0,
+				MomX:         fx.momx,
+				MomY:         fx.momy,
 				MomZ:         0,
 				FloorZ:       fx.floorz,
 				CeilingZ:     fx.ceilz,
@@ -1318,7 +1317,7 @@ func demoTraceMonsterDeathState(typ int16, phase int, xdeath bool) (int, bool) {
 		case 65:
 			base, count = 429, 6
 		case 84:
-			base, count = 750, 9
+			base, count = 749, 9
 		default:
 			return 0, false
 		}
@@ -1327,7 +1326,7 @@ func demoTraceMonsterDeathState(typ int16, phase int, xdeath bool) (int, bool) {
 		case 3004:
 			base, count = 189, 5
 		case 9:
-			base, count = 223, 5
+			base, count = 222, 5
 		case 65:
 			base, count = 422, 7
 		case 3001:
@@ -1349,15 +1348,15 @@ func demoTraceMonsterDeathState(typ int16, phase int, xdeath bool) (int, bool) {
 		case 67:
 			base, count = 388, 10
 		case 68:
-			base, count = 654, 7
+			base, count = 653, 7
 		case 71:
-			base, count = 715, 6
+			base, count = 714, 6
 		case 7:
 			base, count = 621, 11
 		case 16:
 			base, count = 691, 10
 		case 84:
-			base, count = 745, 5
+			base, count = 744, 5
 		default:
 			return 0, false
 		}
@@ -1395,17 +1394,17 @@ func demoTraceMonsterSpawnState(typ int16, phase int) (int, bool) {
 	case 66:
 		base, count = 321, 2
 	case 67:
-		base, count = 361, 2
+		base, count = 362, 2
 	case 68:
-		base, count = 632, 1
+		base, count = 632, 2
 	case 71:
-		base, count = 702, 1
+		base, count = 701, 1
 	case 16:
 		base, count = 674, 2
 	case 7:
-		base, count = 600, 2
+		base, count = 601, 2
 	case 84:
-		base, count = 727, 2
+		base, count = 726, 2
 	default:
 		return 0, false
 	}
@@ -1442,20 +1441,20 @@ func demoTraceMonsterSeeState(typ int16, phase int) (int, bool) {
 	case 66:
 		base, count = 323, 12
 	case 67:
-		base, count = 365, 12
+		base, count = 364, 12
 	case 68:
 		if phase < 0 {
-			return 636, true
+			return 634, true
 		}
-		base, count = 637, 12
+		base, count = 635, 12
 	case 71:
-		base, count = 703, 1
+		base, count = 702, 6
 	case 16:
 		base, count = 676, 8
 	case 7:
-		base, count = 604, 12
+		base, count = 603, 12
 	case 84:
-		base, count = 729, 8
+		base, count = 728, 8
 	default:
 		return 0, false
 	}
@@ -1495,17 +1494,17 @@ func demoTraceMonsterPainStateWithFrames(typ int16, remaining int, frameTics []i
 	case 66:
 		base = 343
 	case 67:
-		base = 387
+		base = 386
 	case 68:
-		base = 652
+		base = 651
 	case 71:
-		base = 713
+		base = 712
 	case 7:
-		base = 620
+		base = 619
 	case 16:
-		base = 688
+		base = 690
 	case 84:
-		base = 743
+		base = 742
 	default:
 		return 0, false
 	}

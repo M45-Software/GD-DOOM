@@ -14,6 +14,42 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
+func TestExplodedRevenantMissileRetainsTracerAcrossSave(t *testing.T) {
+	for _, deferred := range []bool{false, true} {
+		g := newGame(&mapdata.Map{Name: "MAP01", Sectors: []mapdata.Sector{{CeilingHeight: 128}}, Things: []mapdata.Thing{
+			{Type: 1, X: -256, Flags: 7}, {Type: 65, X: 256, Flags: 7},
+		}}, Options{Headless: true})
+		p := projectile{kind: projectileTracer, sourceThing: -1, tracerThingTarget: 2}
+		if deferred {
+			g.spawnProjectileImpactFromDeferredRandom(p, 0, 0, 32*fracUnit)
+		} else {
+			g.spawnProjectileImpactFrom(p, 0, 0, 32*fracUnit)
+		}
+		data, err := encodeSnapshot(saveGameMagic, saveFile{Version: saveGameVersion,
+			Game: gameSaveState{ProjectileImpacts: captureProjectileImpacts(g.projectileImpacts)}})
+		if err != nil {
+			t.Fatal(err)
+		}
+		file, err := decodeSnapshot(data, saveGameMagic)
+		if err != nil {
+			t.Fatal(err)
+		}
+		g.projectileImpacts = restoreProjectileImpacts(file.Game.ProjectileImpacts)
+		found := false
+		for _, m := range g.demoTraceMobjs() {
+			if m.Type == 6 {
+				found = true
+				if m.State != 318 || m.Tracer != 1 || m.TracerType != 10 {
+					t.Fatalf("explosion lost its chaingunner tracer: %+v", m)
+				}
+			}
+		}
+		if !found {
+			t.Fatal("missile explosion missing from trace")
+		}
+	}
+}
+
 func TestNightmareEffectTracesPreserveZeroSpawnReactionDelay(t *testing.T) {
 	for _, skill := range []int{4, 5} {
 		g := &game{m: &mapdata.Map{Sectors: []mapdata.Sector{{CeilingHeight: 128}}},

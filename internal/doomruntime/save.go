@@ -24,10 +24,10 @@ import (
 )
 
 const (
-	saveGameVersion     = 37
+	saveGameVersion     = 39
 	saveGamePrefix      = "dsg"
 	saveGameQuickPrefix = "quicksave"
-	keyframeVersion     = 24
+	keyframeVersion     = 26
 	saveGameDirName     = "saves"
 )
 
@@ -95,6 +95,7 @@ type saveSlotInfo struct {
 }
 
 type gameSaveState struct {
+	BoomSectorTouches    []boomSectorTouchState
 	BoomLastEnemy        []int
 	CeilingOwners        map[int]int64
 	ExtraDoors           map[int]doorThinkerSaveState
@@ -273,6 +274,7 @@ type playerInventorySaveState struct {
 }
 
 type doorThinkerSaveState struct {
+	LightLine    int
 	Order        int64
 	Sector       int
 	Type         int
@@ -395,6 +397,7 @@ type projectileSaveState struct {
 }
 
 type projectileImpactSaveState struct {
+	MomX, MomY       int64
 	Subsector        int
 	Order            int64
 	Phase            int
@@ -1192,7 +1195,10 @@ func (sg *sessionGame) applyLoadedSnapshot(file saveFile, warning string) error 
 	if !validBoomFrictionState(&file.Game, len(g.m.Things)) {
 		return fmt.Errorf("save friction state does not match loaded map")
 	}
-	if !validManualDoorState(file.Game, len(g.m.Sectors)) {
+	if !validBoomSectorTouches(file.Game, len(g.m.Sectors)) {
+		return fmt.Errorf("save has invalid Boom sector membership")
+	}
+	if !validManualDoorState(file.Game, len(g.m.Sectors)) || !validDoorLightingState(file.Game, len(g.m.Linedefs)) {
 		return fmt.Errorf("save manual-door state does not match loaded map")
 	}
 	if !validBoomEnemyMemory(file.Game.BoomLastEnemy, len(file.Game.Things)) {
@@ -1376,6 +1382,7 @@ func captureGameSaveState(g *game) gameSaveState {
 		Stats:                g.stats,
 		WorldTic:             g.worldTic,
 		BoomScrollers:        append([]boomScrollerState(nil), g.boomScrollers...),
+		BoomSectorTouches:    g.captureBoomSectorTouches(),
 		BoomStairs:           append([]boomStairState(nil), g.boomStairs...),
 		CeilingOwners:        cloneCeilingOwners(g.ceilingOwners), ExtraDoors: captureExtraDoors(g.extraDoors),
 		LevelKillsTotal:      g.levelKillsTotal,
@@ -1580,6 +1587,7 @@ func restoreGameSaveState(g *game, s gameSaveState) {
 	}
 	g.State.SyncRender()
 	g.rebuildThingBlockmap()
+	g.restoreBoomSectorTouches(s.BoomSectorTouches)
 	g.ensureWeaponDefaults()
 	g.runtimeSettingsSeen = true
 	g.runtimeSettingsLast = g.runtimeSettingsSnapshot()
@@ -1727,6 +1735,7 @@ func captureDoorThinkers(src map[int]*doorThinker) map[int]doorThinkerSaveState 
 			continue
 		}
 		dst[key] = doorThinkerSaveState{
+			LightLine:    thinker.lightLine,
 			Order:        thinker.order,
 			Sector:       thinker.sector,
 			Type:         int(thinker.typ),
@@ -1747,6 +1756,7 @@ func restoreDoorThinkers(src map[int]doorThinkerSaveState) map[int]*doorThinker 
 	dst := make(map[int]*doorThinker, len(src))
 	for key, thinker := range src {
 		dst[key] = &doorThinker{
+			lightLine:    thinker.LightLine,
 			order:        thinker.Order,
 			sector:       thinker.Sector,
 			typ:          doorType(thinker.Type),
@@ -2070,6 +2080,7 @@ func captureProjectileImpacts(src []projectileImpact) []projectileImpactSaveStat
 	dst := make([]projectileImpactSaveState, len(src))
 	for i, p := range src {
 		dst[i] = projectileImpactSaveState{
+			MomX: p.momx, MomY: p.momy,
 			Subsector:        p.subsector,
 			Order:            p.order,
 			Phase:            p.phase,
@@ -2102,6 +2113,7 @@ func restoreProjectileImpacts(src []projectileImpactSaveState) []projectileImpac
 	dst := make([]projectileImpact, len(src))
 	for i, p := range src {
 		dst[i] = projectileImpact{
+			momx: p.MomX, momy: p.MomY,
 			subsector:        p.Subsector,
 			order:            p.Order,
 			phase:            p.Phase,

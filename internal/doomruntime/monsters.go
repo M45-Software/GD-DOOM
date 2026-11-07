@@ -703,6 +703,7 @@ func (g *game) tickThingThinker(i int, th mapdata.Thing) {
 			g.thingStateTics[i]--
 			if g.thingStateTics[i] == 0 {
 				g.thingCollected[i] = true
+				g.updateBoomThingTouch(i)
 				g.updateThingBlockmapIndex(i)
 			}
 		}
@@ -770,6 +771,7 @@ func (g *game) tickThingThinker(i int, th mapdata.Thing) {
 				} else if !monsterLeavesCorpse(th.Type) || th.Type == 71 {
 					g.thingDeathTics[i] = 0
 					g.thingCollected[i] = true
+					g.updateBoomThingTouch(i)
 					g.debugThingState(i, th, "dead-removed")
 					return
 				}
@@ -1849,6 +1851,7 @@ func (g *game) tickNightmareRespawn(i int, th mapdata.Thing) {
 		g.thingDoomState[idx] = monsterInitialDoomState(th.Type)
 	}
 	g.thingCollected[i] = true
+	g.updateBoomThingTouch(i)
 	g.updateThingBlockmapIndex(i)
 }
 
@@ -3532,15 +3535,15 @@ func demoTraceMonsterAttackState(typ int16, phase int) (int, bool) {
 		}
 	case 67:
 		if phase >= 0 && phase <= 9 {
-			return 377 + phase, true
+			return 376 + phase, true
 		}
 	case 68:
 		if phase >= 0 && phase <= 3 {
-			return 648 + phase, true
+			return 647 + phase, true
 		}
 	case 71:
 		if phase >= 0 && phase <= 3 {
-			return 709 + phase, true
+			return 708 + phase, true
 		}
 	case 16:
 		if phase >= 0 && phase <= 5 {
@@ -3548,11 +3551,11 @@ func demoTraceMonsterAttackState(typ int16, phase int) (int, bool) {
 		}
 	case 7:
 		if phase >= 0 && phase <= 3 {
-			return 616 + phase, true
+			return 615 + phase, true
 		}
 	case 84:
 		if phase >= 0 && phase <= 5 {
-			return 737 + phase, true
+			return 736 + phase, true
 		}
 	}
 	return 0, false
@@ -4346,7 +4349,7 @@ func (g *game) spawnPainLostSoul(sourceIdx int, angle uint32) bool {
 	if g == nil || g.m == nil || sourceIdx < 0 || sourceIdx >= len(g.m.Things) {
 		return false
 	}
-	if g.countActiveThingType(3006) > 20 {
+	if !g.boomMomentumDropoff && g.countActiveThingType(3006) > 20 {
 		return false
 	}
 	src := g.m.Things[sourceIdx]
@@ -4356,6 +4359,9 @@ func (g *game) spawnPainLostSoul(sourceIdx int, angle uint32) bool {
 	x := sx + fixedMul(prestep, doomFineCosine(angle))
 	y := sy + fixedMul(prestep, doomFineSineAtAngle(angle))
 	z := sz + 8*fracUnit
+	if g.boomMomentumDropoff && g.painSkullPathBlocked(sx, sy, x, y) {
+		return false
+	}
 	sec := g.sectorAt(x, y)
 	if sec < 0 || sec >= len(g.sectorFloor) || sec >= len(g.sectorCeil) {
 		return false
@@ -4375,6 +4381,10 @@ func (g *game) spawnPainLostSoul(sourceIdx int, angle uint32) bool {
 	g.thingState[idx] = monsterStateSpawn
 	g.thingStatePhase[idx] = 0
 	g.thingStateTics[idx] = monsterSpawnStateTics(3006)
+	if g.boomMomentumDropoff && (z < tmfloor || z > tmceil-monsterHeight(3006)) {
+		g.damageMonsterFrom(idx, 10000, false, sourceIdx, sx, sy, true)
+		return false
+	}
 	// A_PainShootSkull immediately calls P_TryMove after P_SpawnMobj. If the
 	// spawn point is blocked, vanilla kills the new skull in place.
 	probe := g.probeMonsterMove(idx, 3006, x, y)
@@ -5442,7 +5452,11 @@ func (g *game) probeMonsterMoveWithDropoff(i int, typ int16, x, y int64, allowDr
 			return result
 		}
 	}
-	tmfloor, tmceil, tmdrop, checkPosOK := g.checkPositionForActorWithPickupTouch(x, y, g.thingCurrentRadius(i, g.m.Things[i]), !isVoodooDollType(typ), i, true, false, isVoodooDollType(typ))
+	// Boom's PIT_CheckThing allows a non-solid mover through solid actors.
+	// A_Fall clears corpse solidity partway through the death animation;
+	// vanilla demos still use the original actor-blocking rule.
+	nonSolidCorpse := g.boomMomentumDropoff && i < len(g.thingDead) && g.thingDead[i] && !g.monsterCorpseBlocksMovement(i)
+	tmfloor, tmceil, tmdrop, checkPosOK := g.checkPositionForActorWithPickupTouch(x, y, g.thingCurrentRadius(i, g.m.Things[i]), !isVoodooDollType(typ), i, true, nonSolidCorpse, isVoodooDollType(typ))
 	probeLines := make([]int, 0)
 	if base := g.probeSpecialLinesForMover(i); len(base) > 0 {
 		probeLines = append(probeLines, base...)

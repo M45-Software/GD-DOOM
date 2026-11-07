@@ -99,11 +99,11 @@ func TestBoomFrictionBinarySnapshotRoundTrip(t *testing.T) {
 	state := captureGameSaveState(g)
 	for _, version := range []int{saveGameVersion, keyframeVersion, 30, 17} {
 		file := saveFile{Version: version, Game: state}
-		data, err := encodeSnapshot(saveGameMagic, file)
+		data, err := encodeSnapshot(boomSnapshotMagic(file.Version), file)
 		if err != nil {
 			t.Fatal(err)
 		}
-		loaded, err := decodeSnapshot(data, saveGameMagic)
+		loaded, err := decodeBoomTestSnapshot(data)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -135,7 +135,7 @@ func TestBoomFrictionCheckpointContinuation(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	file, err := decodeSnapshot(data, saveGameMagic)
+	file, err := decodeBoomTestSnapshot(data)
 	if err != nil {
 		t.Fatal(err)
 	}

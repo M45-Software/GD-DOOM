@@ -197,3 +197,17 @@ func TestBoomSectorInitialization(t *testing.T) {
 		}
 	}
 }
+
+// Use the real format magic: keyframe 26 overlaps historical save 26.
+func boomSnapshotMagic(version int) []byte {
+	if version <= keyframeVersion {
+		return keyframeMagic
+	}
+	return saveGameMagic
+}
+func decodeBoomTestSnapshot(data []byte) (saveFile, error) {
+	if bytes.HasPrefix(data, keyframeMagic) {
+		return decodeSnapshot(data, keyframeMagic)
+	}
+	return decodeSnapshot(data, saveGameMagic)
+}

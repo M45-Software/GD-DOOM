@@ -16,16 +16,25 @@ def main():
     ref=p.add_mutually_exclusive_group(required=True);ref.add_argument('--reference',type=Path);ref.add_argument('--reference-source',type=Path)
     p.add_argument('--cmake-arg',action='append',default=[]);p.add_argument('--out',type=Path,default=ROOT/'tmp/boom-manual')
     p.add_argument('--sector-sounds',action='store_true',help='additional sound matrix with translated map geometry')
+    p.add_argument('--door-lighting',action='store_true',help='manual-door endpoint lighting matrix')
     p.add_argument('--sector-sound-trace',action='store_true',help='write ordered per-frame sector sound requests')
     args=p.parse_args();out=args.out.resolve();out.mkdir(parents=True,exist_ok=True)
     fixture_build,fixture_cases=build,cases
     if args.sector_sounds:
         from make_boom_sector_sound_cases import build as fixture_build,cases as fixture_cases
+    if args.door_lighting:
+        if args.sector_sounds:p.error('--door-lighting and --sector-sounds use different fixtures')
+        from make_boom_door_lighting_wad import build as fixture_build,cases as fixture_cases
     pwad=out/'manual.wad';fixture_build(pwad);manifest=out/'cases.json';inputs=fixture_cases();manifest.write_text(json.dumps(inputs,indent=2)+'\n')
     (out/'cases.tsv').write_text(''.join(' '.join(map(str,[c['name']]+[c[k] for k in ['special','second','kind','age','actor','activator','side','secret','keys','tics','at2','at3','late']]+c['floors']+c['ceilings']))+'\n' for c in inputs))
+    if args.door_lighting:
+        rows=(out/'cases.tsv').read_text().splitlines()
+        (out/'cases.tsv').write_text(''.join(row+' '+' '.join(map(str,[c['lighttag'],c['lightmask'],*c['lights'],c['neighborat'],c['neighborlight']]))+'\n' for row,c in zip(rows,inputs)))
     executable=args.reference.resolve() if args.reference else build_reference(args.reference_source,out,args.cmake_arg)
     merged=out/'merged.wad';merge_wads([args.iwad.resolve(),pwad],merged)
     env=dict(os.environ,SDL_AUDIODRIVER='dummy',GD_MANUAL_WAD=str(merged),GD_MANUAL_CASES=str(manifest),GD_MANUAL_OUT=str(out/'gd.csv'))
+    env.pop('GD_MANUAL_LIGHTING',None)
+    if args.door_lighting:env['GD_MANUAL_LIGHTING']='1'
     if args.sector_sound_trace:env['GD_SECTOR_SOUND_OUT']=str(out/'gd-sounds.csv')
     run(['xvfb-run','-a','go','test','-tags','integration','./internal/doomruntime','-run','^TestBoomManualDoorCapture$','-count=1'],out/'gd.log',env)
     for key in ['GD_DSDA_ENV_CASES','GD_DSDA_TELEPORT_CASES','GD_DSDA_VISUAL_SCENES','GD_DSDA_LOCK_OUT','GD_DSDA_LEGACY_CASES','GD_DSDA_GEN_CASES']:env.pop(key,None)
@@ -48,6 +57,17 @@ def main():
     metadata={label:digest(path) for label,path in dict(iwad=args.iwad,pwad=pwad,cases=manifest,reference=executable,probe=ROOT/'scripts/visual_compare/dsda_manual_probe.inc',verifier=Path(__file__)).items()}
     metadata['gd_source']=source_hash.hexdigest()
     result=dict(passed=matched==count,specials=len({c['special'] for c in inputs}),cases=len(inputs),rows=count,matched=matched,differing_fields=dict(fields),failures=failures,metadata=metadata,scope='Real manual-door dispatchers and ordered mover ticks, stationary players and actual imps; actor AI and horizontal movement are not stepped.')
+    if args.door_lighting:
+        result['scope']+=' Boom complevel 9 endpoint lights, including adjacent tagged sectors and changing neighbors; MBF gradual lighting is excluded.'
+        result['metadata']['fixture_generator']=digest(ROOT/'scripts/make_boom_door_lighting_wad.py')
+        profiles={}
+        with (out/'dsda.csv').open() as f:
+            for row in csv.DictReader(f):profiles.setdefault(row['name'],set()).add(tuple(row[f'light{i}'] for i in range(4)))
+        result['cases_with_light_changes']=sum(len(values)>1 for values in profiles.values())
+        for name in ['legacy_1','gen_15367','locked_14343']:
+            if len(profiles[name])<2:raise ValueError(f'lighting coverage never changed: {name}')
+        for name in ['tagzero_1','missingtag_1','back_1','tagged_29']:
+            if len(profiles[name])!=1:raise ValueError(f'negative lighting control changed: {name}')
     (out/'results.json').write_text(json.dumps(result,indent=2)+'\n');print(f'{matched}/{count} rows match across {len(inputs)} cases; differing fields {dict(fields)}')
     if failures:print(json.dumps(failures[:8],indent=2));raise SystemExit(1)
 

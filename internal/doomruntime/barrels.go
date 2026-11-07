@@ -8,13 +8,13 @@ import (
 
 const (
 	barrelThingType  int16 = 2035
-	barrelStateBAR1        = 944
-	barrelStateBAR2        = 945
-	barrelStateBEXP        = 946
-	barrelStateBEXP2       = 947
-	barrelStateBEXP3       = 948
-	barrelStateBEXP4       = 949
-	barrelStateBEXP5       = 950
+	barrelStateBAR1        = 806
+	barrelStateBAR2        = 807
+	barrelStateBEXP        = 808
+	barrelStateBEXP2       = 809
+	barrelStateBEXP3       = 810
+	barrelStateBEXP4       = 811
+	barrelStateBEXP5       = 812
 )
 
 var (
@@ -203,6 +203,7 @@ func (g *game) tickBarrelDeathState(i int, th mapdata.Thing) {
 		if i >= 0 && i < len(g.thingSupportValid) {
 			g.thingSupportValid[i] = false
 		}
+		g.updateBoomThingTouch(i)
 	}
 }
 

@@ -75,6 +75,20 @@ func (g *game) tickBoomCarry(c boomCarryThinker) {
 		}
 	}
 
+	for i := range g.projectileImpacts {
+		fx := &g.projectileImpacts[i]
+		if fx.z < water && g.boomActorTouchesSector(fx.x, fx.y, demoTraceProjectileImpactRadius(fx.kind, fx.sourceType), c.sector) {
+			fx.momx = boomFixed(fx.momx + c.vector.x)
+			fx.momy = boomFixed(fx.momy + c.vector.y)
+		}
+	}
+	for i := range g.hitscanPuffs {
+		p := &g.hitscanPuffs[i]
+		if ((p.kind == hitscanFxBlood && p.z <= floor) || p.z < water) && g.boomActorTouchesSector(p.x, p.y, 20*fracUnit, c.sector) {
+			p.momx = boomFixed(p.momx + c.vector.x)
+			p.momy = boomFixed(p.momy + c.vector.y)
+		}
+	}
 }
 
 // Earlier starts become physical actors; the last start retains the camera.

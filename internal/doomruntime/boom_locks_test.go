@@ -67,11 +67,11 @@ func TestBoomKeyPickupsAndSnapshotVariants(t *testing.T) {
 		}
 		for _, version := range []int{saveGameVersion, keyframeVersion} {
 			file := saveFile{Version: version, Game: captureGameSaveState(g)}
-			data, err := encodeSnapshot(saveGameMagic, file)
+			data, err := encodeSnapshot(boomSnapshotMagic(file.Version), file)
 			if err != nil {
 				t.Fatal(err)
 			}
-			decoded, err := decodeSnapshot(data, saveGameMagic)
+			decoded, err := decodeBoomTestSnapshot(data)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -122,11 +122,11 @@ func TestBoomPreviousSnapshotKeepsFrictionExtension(t *testing.T) {
 		g := boomCeilingGame(0x39c6)
 		g.p.friction = 1234
 		g.p.movefactor = 5678
-		data, err := encodeSnapshot(saveGameMagic, saveFile{Version: version, Game: captureGameSaveState(g)})
+		data, err := encodeSnapshot(boomSnapshotMagic(version), saveFile{Version: version, Game: captureGameSaveState(g)})
 		if err != nil {
 			t.Fatal(err)
 		}
-		file, err := decodeSnapshot(data, saveGameMagic)
+		file, err := decodeBoomTestSnapshot(data)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -147,11 +147,11 @@ func TestBoomLegacySnapshotReconstructsCollectedCards(t *testing.T) {
 					g.thingCollected[bit+1] = true
 				}
 			}
-			data, err := encodeSnapshot(saveGameMagic, saveFile{Version: version, Current: base.Name, Game: captureGameSaveState(g)})
+			data, err := encodeSnapshot(boomSnapshotMagic(version), saveFile{Version: version, Current: base.Name, Game: captureGameSaveState(g)})
 			if err != nil {
 				t.Fatal(err)
 			}
-			file, err := decodeSnapshot(data, saveGameMagic)
+			file, err := decodeBoomTestSnapshot(data)
 			if err != nil {
 				t.Fatal(err)
 			}

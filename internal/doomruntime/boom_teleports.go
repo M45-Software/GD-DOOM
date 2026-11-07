@@ -135,6 +135,11 @@ func boomMomentumDropoffEnabled(m *mapdata.Map, opts Options) bool {
 		return v == 201 || v == 202
 	}
 	for _, l := range m.Linedefs {
+		if l.Tag != 0 {
+			if info := mapdata.LookupLineSpecial(l.Special); info.Door != nil && !info.Door.UsesTag {
+				return true
+			}
+		}
 		if l.Special == 78 || l.Special == 85 || l.Special >= 142 {
 			return true
 		}

@@ -1,0 +1,9522 @@
+[
+  {
+    "name": "legacy_1",
+    "special": 1,
+    "second": 1,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "legacy_26",
+    "special": 26,
+    "second": 26,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "legacy_27",
+    "special": 27,
+    "second": 27,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "legacy_28",
+    "special": 28,
+    "second": 28,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "legacy_31",
+    "special": 31,
+    "second": 31,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "legacy_32",
+    "special": 32,
+    "second": 32,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "legacy_33",
+    "special": 33,
+    "second": 33,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "legacy_34",
+    "special": 34,
+    "second": 34,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "legacy_117",
+    "special": 117,
+    "second": 117,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "legacy_118",
+    "special": 118,
+    "second": 118,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15366",
+    "special": 15366,
+    "second": 15366,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15367",
+    "special": 15367,
+    "second": 15367,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15622",
+    "special": 15622,
+    "second": 15622,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15623",
+    "special": 15623,
+    "second": 15623,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15878",
+    "special": 15878,
+    "second": 15878,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15879",
+    "special": 15879,
+    "second": 15879,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16134",
+    "special": 16134,
+    "second": 16134,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16135",
+    "special": 16135,
+    "second": 16135,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15398",
+    "special": 15398,
+    "second": 15398,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15399",
+    "special": 15399,
+    "second": 15399,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15654",
+    "special": 15654,
+    "second": 15654,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15655",
+    "special": 15655,
+    "second": 15655,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15910",
+    "special": 15910,
+    "second": 15910,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15911",
+    "special": 15911,
+    "second": 15911,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16166",
+    "special": 16166,
+    "second": 16166,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16167",
+    "special": 16167,
+    "second": 16167,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15430",
+    "special": 15430,
+    "second": 15430,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15431",
+    "special": 15431,
+    "second": 15431,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15686",
+    "special": 15686,
+    "second": 15686,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15687",
+    "special": 15687,
+    "second": 15687,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15942",
+    "special": 15942,
+    "second": 15942,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15943",
+    "special": 15943,
+    "second": 15943,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16198",
+    "special": 16198,
+    "second": 16198,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16199",
+    "special": 16199,
+    "second": 16199,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15462",
+    "special": 15462,
+    "second": 15462,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15463",
+    "special": 15463,
+    "second": 15463,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15718",
+    "special": 15718,
+    "second": 15718,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15719",
+    "special": 15719,
+    "second": 15719,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15974",
+    "special": 15974,
+    "second": 15974,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15975",
+    "special": 15975,
+    "second": 15975,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16230",
+    "special": 16230,
+    "second": 16230,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16231",
+    "special": 16231,
+    "second": 16231,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "locked_14342",
+    "special": 14342,
+    "second": 14342,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "locked_14343",
+    "special": 14343,
+    "second": 14343,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "locked_14374",
+    "special": 14374,
+    "second": 14374,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "locked_14375",
+    "special": 14375,
+    "second": 14375,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15374",
+    "special": 15374,
+    "second": 15374,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15375",
+    "special": 15375,
+    "second": 15375,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15630",
+    "special": 15630,
+    "second": 15630,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15631",
+    "special": 15631,
+    "second": 15631,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15886",
+    "special": 15886,
+    "second": 15886,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15887",
+    "special": 15887,
+    "second": 15887,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16142",
+    "special": 16142,
+    "second": 16142,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16143",
+    "special": 16143,
+    "second": 16143,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15406",
+    "special": 15406,
+    "second": 15406,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15407",
+    "special": 15407,
+    "second": 15407,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15662",
+    "special": 15662,
+    "second": 15662,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15663",
+    "special": 15663,
+    "second": 15663,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15918",
+    "special": 15918,
+    "second": 15918,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15919",
+    "special": 15919,
+    "second": 15919,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16174",
+    "special": 16174,
+    "second": 16174,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16175",
+    "special": 16175,
+    "second": 16175,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15438",
+    "special": 15438,
+    "second": 15438,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15439",
+    "special": 15439,
+    "second": 15439,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15694",
+    "special": 15694,
+    "second": 15694,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15695",
+    "special": 15695,
+    "second": 15695,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15950",
+    "special": 15950,
+    "second": 15950,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15951",
+    "special": 15951,
+    "second": 15951,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16206",
+    "special": 16206,
+    "second": 16206,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16207",
+    "special": 16207,
+    "second": 16207,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15470",
+    "special": 15470,
+    "second": 15470,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15471",
+    "special": 15471,
+    "second": 15471,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15726",
+    "special": 15726,
+    "second": 15726,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15727",
+    "special": 15727,
+    "second": 15727,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15982",
+    "special": 15982,
+    "second": 15982,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15983",
+    "special": 15983,
+    "second": 15983,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16238",
+    "special": 16238,
+    "second": 16238,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16239",
+    "special": 16239,
+    "second": 16239,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "locked_14350",
+    "special": 14350,
+    "second": 14350,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "locked_14351",
+    "special": 14351,
+    "second": 14351,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "locked_14382",
+    "special": 14382,
+    "second": 14382,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "locked_14383",
+    "special": 14383,
+    "second": 14383,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15382",
+    "special": 15382,
+    "second": 15382,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15383",
+    "special": 15383,
+    "second": 15383,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15638",
+    "special": 15638,
+    "second": 15638,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15639",
+    "special": 15639,
+    "second": 15639,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15894",
+    "special": 15894,
+    "second": 15894,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15895",
+    "special": 15895,
+    "second": 15895,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16150",
+    "special": 16150,
+    "second": 16150,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16151",
+    "special": 16151,
+    "second": 16151,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15414",
+    "special": 15414,
+    "second": 15414,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15415",
+    "special": 15415,
+    "second": 15415,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15670",
+    "special": 15670,
+    "second": 15670,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15671",
+    "special": 15671,
+    "second": 15671,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15926",
+    "special": 15926,
+    "second": 15926,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15927",
+    "special": 15927,
+    "second": 15927,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16182",
+    "special": 16182,
+    "second": 16182,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16183",
+    "special": 16183,
+    "second": 16183,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15446",
+    "special": 15446,
+    "second": 15446,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15447",
+    "special": 15447,
+    "second": 15447,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15702",
+    "special": 15702,
+    "second": 15702,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15703",
+    "special": 15703,
+    "second": 15703,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15958",
+    "special": 15958,
+    "second": 15958,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15959",
+    "special": 15959,
+    "second": 15959,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16214",
+    "special": 16214,
+    "second": 16214,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16215",
+    "special": 16215,
+    "second": 16215,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15478",
+    "special": 15478,
+    "second": 15478,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15479",
+    "special": 15479,
+    "second": 15479,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15734",
+    "special": 15734,
+    "second": 15734,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15735",
+    "special": 15735,
+    "second": 15735,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15990",
+    "special": 15990,
+    "second": 15990,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15991",
+    "special": 15991,
+    "second": 15991,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16246",
+    "special": 16246,
+    "second": 16246,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16247",
+    "special": 16247,
+    "second": 16247,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "locked_14358",
+    "special": 14358,
+    "second": 14358,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "locked_14359",
+    "special": 14359,
+    "second": 14359,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "locked_14390",
+    "special": 14390,
+    "second": 14390,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "locked_14391",
+    "special": 14391,
+    "second": 14391,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15390",
+    "special": 15390,
+    "second": 15390,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15391",
+    "special": 15391,
+    "second": 15391,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15646",
+    "special": 15646,
+    "second": 15646,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15647",
+    "special": 15647,
+    "second": 15647,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15902",
+    "special": 15902,
+    "second": 15902,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15903",
+    "special": 15903,
+    "second": 15903,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16158",
+    "special": 16158,
+    "second": 16158,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16159",
+    "special": 16159,
+    "second": 16159,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15422",
+    "special": 15422,
+    "second": 15422,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15423",
+    "special": 15423,
+    "second": 15423,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15678",
+    "special": 15678,
+    "second": 15678,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15679",
+    "special": 15679,
+    "second": 15679,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15934",
+    "special": 15934,
+    "second": 15934,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15935",
+    "special": 15935,
+    "second": 15935,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16190",
+    "special": 16190,
+    "second": 16190,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16191",
+    "special": 16191,
+    "second": 16191,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15454",
+    "special": 15454,
+    "second": 15454,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15455",
+    "special": 15455,
+    "second": 15455,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15710",
+    "special": 15710,
+    "second": 15710,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15711",
+    "special": 15711,
+    "second": 15711,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15966",
+    "special": 15966,
+    "second": 15966,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15967",
+    "special": 15967,
+    "second": 15967,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16222",
+    "special": 16222,
+    "second": 16222,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16223",
+    "special": 16223,
+    "second": 16223,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15486",
+    "special": 15486,
+    "second": 15486,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15487",
+    "special": 15487,
+    "second": 15487,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15742",
+    "special": 15742,
+    "second": 15742,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15743",
+    "special": 15743,
+    "second": 15743,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15998",
+    "special": 15998,
+    "second": 15998,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_15999",
+    "special": 15999,
+    "second": 15999,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16254",
+    "special": 16254,
+    "second": 16254,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "gen_16255",
+    "special": 16255,
+    "second": 16255,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "locked_14366",
+    "special": 14366,
+    "second": 14366,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "locked_14367",
+    "special": 14367,
+    "second": 14367,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "locked_14398",
+    "special": 14398,
+    "second": 14398,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "locked_14399",
+    "special": 14399,
+    "second": 14399,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_1_2",
+    "special": 1,
+    "second": 1,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 2,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_1_3",
+    "special": 1,
+    "second": 1,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 3,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_1_5",
+    "special": 1,
+    "second": 1,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 5,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_1_7",
+    "special": 1,
+    "second": 1,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 7,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "tagzero_1",
+    "special": 1,
+    "second": 1,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 0,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "missingtag_1",
+    "special": 1,
+    "second": 1,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 99,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "back_1",
+    "special": 1,
+    "second": 1,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 1,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "nokey_1",
+    "special": 1,
+    "second": 1,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 0,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "retrigger_1",
+    "special": 1,
+    "second": 1,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": 20,
+    "at3": 100,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "changed_neighbor_1",
+    "special": 1,
+    "second": 1,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": 100,
+    "neighborlight": 16
+  },
+  {
+    "name": "blocked_1",
+    "special": 1,
+    "second": 1,
+    "kind": 0,
+    "age": 0,
+    "actor": 2,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "zero_range_1",
+    "special": 1,
+    "second": 1,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      8126464,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_31_2",
+    "special": 31,
+    "second": 31,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 2,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_31_3",
+    "special": 31,
+    "second": 31,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 3,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_31_5",
+    "special": 31,
+    "second": 31,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 5,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_31_7",
+    "special": 31,
+    "second": 31,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 7,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "tagzero_31",
+    "special": 31,
+    "second": 31,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 0,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "missingtag_31",
+    "special": 31,
+    "second": 31,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 99,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "back_31",
+    "special": 31,
+    "second": 31,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 1,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "nokey_31",
+    "special": 31,
+    "second": 31,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 0,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "retrigger_31",
+    "special": 31,
+    "second": 31,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": 20,
+    "at3": 100,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "changed_neighbor_31",
+    "special": 31,
+    "second": 31,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": 100,
+    "neighborlight": 16
+  },
+  {
+    "name": "blocked_31",
+    "special": 31,
+    "second": 31,
+    "kind": 0,
+    "age": 0,
+    "actor": 2,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "zero_range_31",
+    "special": 31,
+    "second": 31,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      8126464,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_117_2",
+    "special": 117,
+    "second": 117,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 2,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_117_3",
+    "special": 117,
+    "second": 117,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 3,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_117_5",
+    "special": 117,
+    "second": 117,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 5,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_117_7",
+    "special": 117,
+    "second": 117,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 7,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "tagzero_117",
+    "special": 117,
+    "second": 117,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 0,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "missingtag_117",
+    "special": 117,
+    "second": 117,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 99,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "back_117",
+    "special": 117,
+    "second": 117,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 1,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "nokey_117",
+    "special": 117,
+    "second": 117,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 0,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "retrigger_117",
+    "special": 117,
+    "second": 117,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": 20,
+    "at3": 100,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "changed_neighbor_117",
+    "special": 117,
+    "second": 117,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": 100,
+    "neighborlight": 16
+  },
+  {
+    "name": "blocked_117",
+    "special": 117,
+    "second": 117,
+    "kind": 0,
+    "age": 0,
+    "actor": 2,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "zero_range_117",
+    "special": 117,
+    "second": 117,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      8126464,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_118_2",
+    "special": 118,
+    "second": 118,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 2,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_118_3",
+    "special": 118,
+    "second": 118,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 3,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_118_5",
+    "special": 118,
+    "second": 118,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 5,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_118_7",
+    "special": 118,
+    "second": 118,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 7,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "tagzero_118",
+    "special": 118,
+    "second": 118,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 0,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "missingtag_118",
+    "special": 118,
+    "second": 118,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 99,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "back_118",
+    "special": 118,
+    "second": 118,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 1,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "nokey_118",
+    "special": 118,
+    "second": 118,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 0,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "retrigger_118",
+    "special": 118,
+    "second": 118,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": 20,
+    "at3": 100,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "changed_neighbor_118",
+    "special": 118,
+    "second": 118,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": 100,
+    "neighborlight": 16
+  },
+  {
+    "name": "blocked_118",
+    "special": 118,
+    "second": 118,
+    "kind": 0,
+    "age": 0,
+    "actor": 2,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "zero_range_118",
+    "special": 118,
+    "second": 118,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      8126464,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_15367_2",
+    "special": 15367,
+    "second": 15367,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 2,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_15367_3",
+    "special": 15367,
+    "second": 15367,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 3,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_15367_5",
+    "special": 15367,
+    "second": 15367,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 5,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_15367_7",
+    "special": 15367,
+    "second": 15367,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 7,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "tagzero_15367",
+    "special": 15367,
+    "second": 15367,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 0,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "missingtag_15367",
+    "special": 15367,
+    "second": 15367,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 99,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "back_15367",
+    "special": 15367,
+    "second": 15367,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 1,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "nokey_15367",
+    "special": 15367,
+    "second": 15367,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 0,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "retrigger_15367",
+    "special": 15367,
+    "second": 15367,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": 20,
+    "at3": 100,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "changed_neighbor_15367",
+    "special": 15367,
+    "second": 15367,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": 100,
+    "neighborlight": 16
+  },
+  {
+    "name": "blocked_15367",
+    "special": 15367,
+    "second": 15367,
+    "kind": 0,
+    "age": 0,
+    "actor": 2,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "zero_range_15367",
+    "special": 15367,
+    "second": 15367,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      8126464,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_15399_2",
+    "special": 15399,
+    "second": 15399,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 2,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_15399_3",
+    "special": 15399,
+    "second": 15399,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 3,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_15399_5",
+    "special": 15399,
+    "second": 15399,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 5,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_15399_7",
+    "special": 15399,
+    "second": 15399,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 7,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "tagzero_15399",
+    "special": 15399,
+    "second": 15399,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 0,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "missingtag_15399",
+    "special": 15399,
+    "second": 15399,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 99,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "back_15399",
+    "special": 15399,
+    "second": 15399,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 1,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "nokey_15399",
+    "special": 15399,
+    "second": 15399,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 0,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "retrigger_15399",
+    "special": 15399,
+    "second": 15399,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": 20,
+    "at3": 100,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "changed_neighbor_15399",
+    "special": 15399,
+    "second": 15399,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": 100,
+    "neighborlight": 16
+  },
+  {
+    "name": "blocked_15399",
+    "special": 15399,
+    "second": 15399,
+    "kind": 0,
+    "age": 0,
+    "actor": 2,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "zero_range_15399",
+    "special": 15399,
+    "second": 15399,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      8126464,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_15431_2",
+    "special": 15431,
+    "second": 15431,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 2,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_15431_3",
+    "special": 15431,
+    "second": 15431,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 3,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_15431_5",
+    "special": 15431,
+    "second": 15431,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 5,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_15431_7",
+    "special": 15431,
+    "second": 15431,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 7,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "tagzero_15431",
+    "special": 15431,
+    "second": 15431,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 0,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "missingtag_15431",
+    "special": 15431,
+    "second": 15431,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 99,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "back_15431",
+    "special": 15431,
+    "second": 15431,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 1,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "nokey_15431",
+    "special": 15431,
+    "second": 15431,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 0,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "retrigger_15431",
+    "special": 15431,
+    "second": 15431,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": 20,
+    "at3": 100,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "changed_neighbor_15431",
+    "special": 15431,
+    "second": 15431,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": 100,
+    "neighborlight": 16
+  },
+  {
+    "name": "blocked_15431",
+    "special": 15431,
+    "second": 15431,
+    "kind": 0,
+    "age": 0,
+    "actor": 2,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "zero_range_15431",
+    "special": 15431,
+    "second": 15431,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      8126464,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_15463_2",
+    "special": 15463,
+    "second": 15463,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 2,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_15463_3",
+    "special": 15463,
+    "second": 15463,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 3,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_15463_5",
+    "special": 15463,
+    "second": 15463,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 5,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_15463_7",
+    "special": 15463,
+    "second": 15463,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 7,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "tagzero_15463",
+    "special": 15463,
+    "second": 15463,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 0,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "missingtag_15463",
+    "special": 15463,
+    "second": 15463,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 99,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "back_15463",
+    "special": 15463,
+    "second": 15463,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 1,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "nokey_15463",
+    "special": 15463,
+    "second": 15463,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 0,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "retrigger_15463",
+    "special": 15463,
+    "second": 15463,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": 20,
+    "at3": 100,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "changed_neighbor_15463",
+    "special": 15463,
+    "second": 15463,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": 100,
+    "neighborlight": 16
+  },
+  {
+    "name": "blocked_15463",
+    "special": 15463,
+    "second": 15463,
+    "kind": 0,
+    "age": 0,
+    "actor": 2,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "zero_range_15463",
+    "special": 15463,
+    "second": 15463,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      8126464,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_14343_2",
+    "special": 14343,
+    "second": 14343,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 2,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_14343_3",
+    "special": 14343,
+    "second": 14343,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 3,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_14343_5",
+    "special": 14343,
+    "second": 14343,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 5,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "adjacent_14343_7",
+    "special": 14343,
+    "second": 14343,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 7,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "tagzero_14343",
+    "special": 14343,
+    "second": 14343,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 0,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "missingtag_14343",
+    "special": 14343,
+    "second": 14343,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 99,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "back_14343",
+    "special": 14343,
+    "second": 14343,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 1,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "nokey_14343",
+    "special": 14343,
+    "second": 14343,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 0,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "retrigger_14343",
+    "special": 14343,
+    "second": 14343,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": 20,
+    "at3": 100,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "changed_neighbor_14343",
+    "special": 14343,
+    "second": 14343,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": 100,
+    "neighborlight": 16
+  },
+  {
+    "name": "blocked_14343",
+    "special": 14343,
+    "second": 14343,
+    "kind": 0,
+    "age": 0,
+    "actor": 2,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "zero_range_14343",
+    "special": 14343,
+    "second": 14343,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      8126464,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      8126464,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 1,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "tagged_29",
+    "special": 29,
+    "second": 29,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 2,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "tagged_63",
+    "special": 63,
+    "second": 63,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 2,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "tagged_111",
+    "special": 111,
+    "second": 111,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 2,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "tagged_114",
+    "special": 114,
+    "second": 114,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 2,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "tagged_15362",
+    "special": 15362,
+    "second": 15362,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 2,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "tagged_15363",
+    "special": 15363,
+    "second": 15363,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 2,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "tagged_14338",
+    "special": 14338,
+    "second": 14338,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 2,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "tagged_14339",
+    "special": 14339,
+    "second": 14339,
+    "kind": 0,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 2,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "displaced_door",
+    "special": 31,
+    "second": 31,
+    "kind": 14,
+    "age": 20,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      0,
+      0,
+      0
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 2,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  },
+  {
+    "name": "overlapping_floor",
+    "special": 1,
+    "second": 1,
+    "kind": 12,
+    "age": 0,
+    "actor": 0,
+    "activator": 0,
+    "side": 0,
+    "secret": 0,
+    "keys": 1,
+    "tics": 1400,
+    "at2": -1,
+    "at3": -1,
+    "late": -1,
+    "floors": [
+      -2097152,
+      0,
+      -4194304
+    ],
+    "ceilings": [
+      8388608,
+      0,
+      8388608
+    ],
+    "lighttag": 7,
+    "lightmask": 3,
+    "lights": [
+      96,
+      224,
+      160
+    ],
+    "neighborat": -1,
+    "neighborlight": 16
+  }
+]

@@ -32,7 +32,7 @@ func restoreBoomOptions(opts *Options, raw []byte) {
 	}
 }
 func restoreSavedRNG(file saveFile) {
-	if file.Version == saveGameVersion || file.Version == keyframeVersion {
+	if (file.Version >= 36 && file.Version <= saveGameVersion) || (file.Version >= 23 && file.Version <= keyframeVersion) {
 		doomrand.Restore(file.RNG.Extended)
 	} else {
 		doomrand.Clear()

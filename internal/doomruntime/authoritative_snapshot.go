@@ -140,7 +140,10 @@ func validateAuthorityReplica(g *game, r authorityReplica) error {
 		return fmt.Errorf("authority baseline static map mismatch")
 	}
 	s := r.Game
-	if !validManualDoorState(s, len(g.m.Sectors)) {
+	if !validBoomSectorTouches(s, len(g.m.Sectors)) {
+		return fmt.Errorf("authority has invalid Boom sector membership")
+	}
+	if !validManualDoorState(s, len(g.m.Sectors)) || !validDoorLightingState(s, len(g.m.Linedefs)) {
 		return fmt.Errorf("authority manual-door state does not match loaded map")
 	}
 	if !validBoomStairs(s.BoomStairs, len(g.m.Sectors)) {

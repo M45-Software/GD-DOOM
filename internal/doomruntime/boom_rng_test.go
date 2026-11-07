@@ -84,6 +84,55 @@ func TestBoomLegacySaveDoesNotInventStreams(t *testing.T) {
 		}
 	}
 }
+
+func TestBoomPreviousFormatsRetainSeededStreams(t *testing.T) {
+	before := doomrand.Capture()
+	defer doomrand.Restore(before)
+	doomrand.ConfigureBoom(1993, true)
+	for range 17 {
+		doomrand.PRandom(doomrand.Genlift)
+		doomrand.AdvanceLogicTic()
+	}
+	want := doomrand.Capture()
+	for _, version := range []int{36, 37, 23, 24} {
+		file := saveFile{Version: version, RNG: saveRNGState{Extended: want, MenuIndex: want.MenuIndex, PlayIndex: want.PlayIndex}}
+		data, err := encodeSnapshot(saveGameMagic, file)
+		if err != nil {
+			t.Fatal(err)
+		}
+		decoded, err := decodeSnapshot(data, saveGameMagic)
+		if err != nil {
+			t.Fatal(err)
+		}
+		doomrand.Clear()
+		restoreSavedRNG(decoded)
+		if doomrand.Capture() != want {
+			t.Fatalf("snapshot version %d lost its seeded RNG state", version)
+		}
+	}
+}
+
+func TestBoomRebirthKeepsStreamsAndResetsLevelPhase(t *testing.T) {
+	before := doomrand.Capture()
+	defer doomrand.Restore(before)
+	for _, insurance := range []bool{false, true} {
+		settings := demo.GameOptions{Seed: 1993, Insurance: insurance}
+		g := newGame(&mapdata.Map{Name: "MAP01", Sectors: []mapdata.Sector{{CeilingHeight: 128}}}, Options{Headless: true, BoomGameOptions: &settings})
+		doomrand.PRandom(doomrand.Spawnthing)
+		doomrand.PRandom(doomrand.Lastlook)
+		doomrand.SetLogicTic(199)
+		want := doomrand.Capture()
+		want.LogicTic = 0
+		g.demoTick, g.worldTic, g.playerReborn, g.isDead = 400, 199, true, true
+		g.respawnDemoPlayer()
+		if got := doomrand.Capture(); got != want {
+			t.Fatalf("insurance=%t: rebirth lost RNG streams or retained the old level phase", insurance)
+		}
+		if g.demoTick != 400 || g.worldTic != 0 || g.isDead || g.playerReborn || g.stats.Health != 100 {
+			t.Fatal("rebirth did not reset the level while preserving demo playback")
+		}
+	}
+}
 func TestBoomMonsterMemoryRetainsLivingPlayer(t *testing.T) {
 	g := newGame(&mapdata.Map{Name: "MAP01", Things: []mapdata.Thing{{Type: 1}, {Type: 3001, X: 64}, {Type: 3004, X: 128}}, Sectors: []mapdata.Sector{{CeilingHeight: 128}}, Linedefs: []mapdata.Linedef{{Special: 227}}}, Options{Headless: true})
 	g.setMonsterTargetPlayer(1)

@@ -20,6 +20,9 @@ type manualDoorCase struct {
 	Special, Second                                                       uint16
 	Kind, Age, Actor, Activator, Side, Secret, Keys, Tics, At2, At3, Late int
 	Floors, Ceilings                                                      [3]int64
+	LightTag                                                              uint16
+	LightMask, NeighborAt, NeighborLight                                  int
+	Lights                                                                [3]int16
 }
 
 func tickManualProbeMovers(g *game) {
@@ -141,7 +144,12 @@ func TestBoomManualDoorCapture(t *testing.T) {
 	soundTrace := newSectorSoundTrace(t)
 	out := bufio.NewWriter(f)
 	defer out.Flush()
-	fmt.Fprintln(out, "name,tic,line1,line2,f0,c0,f1,c1,f2,c2,fowner,cowner,doors,ceilings,floors,plats,elevators,z,health,lock0,lock1,lock2")
+	lighting := os.Getenv("GD_MANUAL_LIGHTING") == "1"
+	fmt.Fprint(out, "name,tic,line1,line2,f0,c0,f1,c1,f2,c2,fowner,cowner,doors,ceilings,floors,plats,elevators,z,health,lock0,lock1,lock2")
+	if lighting {
+		fmt.Fprint(out, ",light0,light1,light2,light3")
+	}
+	fmt.Fprintln(out)
 	for _, c := range cases {
 		m, err := mapdata.LoadMap(wf, "MAP01")
 		if err != nil {
@@ -153,7 +161,7 @@ func TestBoomManualDoorCapture(t *testing.T) {
 			opts.BoomGameOptions = &settings
 		}
 		g := newGame(m, opts)
-		for i := range m.Sectors {
+		for i := 0; i < 3; i++ {
 			g.sectorFloor[i] = c.Floors[i]
 			g.sectorCeil[i] = c.Ceilings[i]
 			m.Sectors[i].FloorHeight = int16(c.Floors[i] >> fracBits)
@@ -162,6 +170,16 @@ func TestBoomManualDoorCapture(t *testing.T) {
 			m.Sectors[i].Tag = 0
 		}
 		m.Sectors[1].Tag = 7
+		if lighting {
+			for i := 0; i < 3; i++ {
+				m.Sectors[i].Tag = 0
+				if c.LightMask&(1<<i) != 0 {
+					m.Sectors[i].Tag = 7
+				}
+				m.Sectors[i].Light = c.Lights[i]
+			}
+			m.Linedefs[2].Tag, m.Linedefs[10].Tag = c.LightTag, c.LightTag
+		}
 		if c.Keys != 0 {
 			g.inventory = lockInventory(63)
 		}
@@ -234,6 +252,9 @@ func TestBoomManualDoorCapture(t *testing.T) {
 			m.Linedefs[10].Flags |= mlSecret
 		}
 		for tic := 0; tic <= c.Tics; tic++ {
+			if lighting && tic == c.NeighborAt {
+				m.Sectors[3].Light = int16(c.NeighborLight)
+			}
 			if tic == c.Late {
 				g.activateGeneralizedCrusher(2, *mapdata.LookupLineSpecial(0x2f93).Ceiling)
 			}
@@ -270,7 +291,13 @@ func TestBoomManualDoorCapture(t *testing.T) {
 					locks[i] = g.boomStairs[i].Lock
 				}
 			}
-			fmt.Fprintf(out, ",%d,%d,%d,%d,%d\n", z, health, locks[0], locks[1], locks[2])
+			fmt.Fprintf(out, ",%d,%d,%d,%d,%d", z, health, locks[0], locks[1], locks[2])
+			if lighting {
+				for i := 0; i < 4; i++ {
+					fmt.Fprintf(out, ",%d", m.Sectors[i].Light)
+				}
+			}
+			fmt.Fprintln(out)
 		}
 	}
 }

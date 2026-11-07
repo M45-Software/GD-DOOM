@@ -30,6 +30,7 @@ func TestDamageWakeHandlesDeadProjectileShooterBeforeChasing(t *testing.T) {
 		g.thingStateTics[0] = 4
 		g.thingMoveCount[0] = 5
 		g.thingMoveDir[0] = monsterDirEast
+		doomrand.Clear()          // This fixture needs vanilla RNG even after Boom tests.
 		doomrand.SetState(0, 140) // The E2M4 pain roll does not enter pain state.
 		g.damageMonsterFrom(0, 24, false, 1, 0, 0, false)
 		if g.thingHP[0] != 820 || g.thingThreshold[0] != 0 || g.thingMoveCount[0] != 5 {

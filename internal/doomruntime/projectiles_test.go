@@ -24,31 +24,34 @@ func TestDoomProjectileShouldSplitMove_MatchesVanillaSignedComparison(t *testing
 }
 
 func TestSplitMissileDeathContinuesRemainingStepWithOrdinaryCollisions(t *testing.T) {
-	for _, health := range []int{1, 100} {
-		t.Run(fmt.Sprint(health), func(t *testing.T) {
-			g := &game{m: &mapdata.Map{Sectors: []mapdata.Sector{{CeilingHeight: 128}}},
-				p: player{x: 16 * fracUnit, ceilz: 128 * fracUnit}, stats: playerStats{Health: health}, playerMobjHealth: health,
-				sectorFloor: []int64{0}, sectorCeil: []int64{128 * fracUnit}}
-			p := projectile{z: 32 * fracUnit, vx: 20 * fracUnit,
-				radius: 6 * fracUnit, height: 8 * fracUnit, kind: projectileFatShot,
-				sourceType: 67, sourceThing: -1, order: 42, frameTics: 4, ceilz: 128 * fracUnit}
-			doomrand.Clear()
-			defer doomrand.Clear()
-			if _, keep := g.advanceProjectile(p); keep || len(g.projectileImpacts) != 1 {
-				t.Fatal("missile should explode on the first split-step collision")
-			}
-			wantX := int64(0)
-			if health == 1 {
-				wantX = 10 * fracUnit
-				if !g.isDead {
+	for _, boom := range []bool{false, true} {
+		for _, health := range []int{1, 100} {
+			t.Run(fmt.Sprintf("boom=%t/health=%d", boom, health), func(t *testing.T) {
+				g := &game{m: &mapdata.Map{Sectors: []mapdata.Sector{{CeilingHeight: 128}}},
+					p: player{x: 16 * fracUnit, ceilz: 128 * fracUnit}, stats: playerStats{Health: health}, playerMobjHealth: health,
+					boomMomentumDropoff: boom,
+					sectorFloor:         []int64{0}, sectorCeil: []int64{128 * fracUnit}}
+				p := projectile{z: 32 * fracUnit, vx: 20 * fracUnit,
+					radius: 6 * fracUnit, height: 8 * fracUnit, kind: projectileFatShot,
+					sourceType: 67, sourceThing: -1, order: 42, frameTics: 4, ceilz: 128 * fracUnit}
+				doomrand.Clear()
+				defer doomrand.Clear()
+				if _, keep := g.advanceProjectile(p); keep || len(g.projectileImpacts) != 1 {
+					t.Fatal("missile should explode on the first split-step collision")
+				}
+				wantX := int64(0)
+				if health == 1 || boom {
+					wantX = 10 * fracUnit
+				}
+				if health == 1 && !g.isDead {
 					t.Fatal("fixture missile should kill the player and clear player solidity")
 				}
-			}
-			fx := g.projectileImpacts[0]
-			if fx.x != wantX || fx.y != 0 || fx.z != 32*fracUnit {
-				t.Fatalf("impact=(%d,%d,%d), want (%d,0,32 units)", fx.x, fx.y, fx.z, wantX)
-			}
-		})
+				fx := g.projectileImpacts[0]
+				if fx.x != wantX || fx.y != 0 || fx.z != 32*fracUnit {
+					t.Fatalf("impact=(%d,%d,%d), want (%d,0,32 units)", fx.x, fx.y, fx.z, wantX)
+				}
+			})
+		}
 	}
 }
 
@@ -1426,5 +1429,43 @@ func TestPlayerRocketSplashCanDamagePlayer(t *testing.T) {
 	}
 	if got := len(g.projectiles); got != 0 {
 		t.Fatalf("projectiles remaining=%d want=0", got)
+	}
+}
+
+func TestBoomMissileSkyRemovalRequiresAboveBackCeiling(t *testing.T) {
+	before := doomrand.Capture()
+	defer doomrand.Restore(before)
+	for _, boom := range []bool{false, true} {
+		for _, z := range []int64{20, 64, 65} {
+			t.Run(fmt.Sprintf("boom=%t/z=%d", boom, z), func(t *testing.T) {
+				doomrand.Clear()
+				g := &game{
+					m: &mapdata.Map{
+						Sectors:  []mapdata.Sector{{CeilingHeight: 128}, {CeilingHeight: 64, CeilingPic: "F_SKY1"}},
+						Sidedefs: []mapdata.Sidedef{{Sector: 0}, {Sector: 1}},
+					},
+					boomMomentumDropoff: boom,
+					sectorFloor:         []int64{0, 64 * fracUnit},
+					sectorCeil:          []int64{128 * fracUnit, 64 * fracUnit},
+					lines: []physLine{{x1: 0, y1: -64 * fracUnit, x2: 0, y2: 64 * fracUnit,
+						dx: 0, dy: 128 * fracUnit, slope: slopeVertical, bbox: [4]int64{64 * fracUnit, -64 * fracUnit, 0, 0},
+						flags: mlTwoSided, sideNum0: 0, sideNum1: 1}},
+				}
+				p := projectile{x: -8 * fracUnit, z: z * fracUnit, vx: 8 * fracUnit,
+					radius: 6 * fracUnit, height: 8 * fracUnit, kind: projectileFatShot,
+					order: 7, sourceThing: -1}
+				_, keep := g.advanceProjectile(p)
+				if keep {
+					t.Fatal("missile passed through the closed sky boundary")
+				}
+				wantExplosion := boom && z <= 64
+				if got := len(g.projectileImpacts) == 1; got != wantExplosion {
+					t.Fatalf("explosion=%t want=%t", got, wantExplosion)
+				}
+				if got := doomrand.Capture().PlayIndex; got != boolToInt(wantExplosion) {
+					t.Fatalf("explosion RNG draws=%d want=%d", got, boolToInt(wantExplosion))
+				}
+			})
+		}
 	}
 }

@@ -15,7 +15,7 @@ func TestBoomGeneralizedDoorParameters(t *testing.T) {
 					t.Fatalf("door %x did not activate", special)
 				}
 				d := g.doors[1]
-				if d.speed != vDoorSpeed<<speed || d.topWait != [...]int{35, 140, 315, 1050}[delay] {
+				if d.speed != vDoorSpeed<<speed || d.topWait != [...]int{35, 150, 300, 1050}[delay] {
 					t.Fatalf("door %x parameters=%+v", special, d)
 				}
 				if kind == 2 && d.typ != doorGenCloseWaitOpen {

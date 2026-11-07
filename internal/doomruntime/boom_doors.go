@@ -20,5 +20,13 @@ func (g *game) activateGeneralizedDoor(line int, info mapdata.LineSpecialInfo, i
 		}
 		targets = filtered
 	}
-	return g.activateDoorSectorsConfigured(targets, info.Door.Action, true, gen)
+	if !g.activateDoorSectorsConfigured(targets, info.Door.Action, true, gen) {
+		return false
+	}
+	if !info.Door.UsesTag {
+		for _, sec := range targets {
+			g.doors[sec].lightLine = g.boomDoorLightLine(line)
+		}
+	}
+	return true
 }

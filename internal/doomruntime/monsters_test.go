@@ -1994,12 +1994,12 @@ func TestDemoTraceMonsterAttackStateMatchesDoomStateNumbers(t *testing.T) {
 		{69, 566, 3},
 		{3006, 589, 4},
 		{64, 255, 11},
-		{67, 377, 10},
-		{68, 648, 4},
-		{71, 709, 4},
+		{67, 376, 10},
+		{68, 647, 4},
+		{71, 708, 4},
 		{16, 684, 6},
-		{7, 616, 4},
-		{84, 737, 3},
+		{7, 615, 4},
+		{84, 736, 6},
 	}
 	for _, tt := range tests {
 		for phase := 0; phase < tt.len; phase++ {
@@ -2040,12 +2040,12 @@ func TestDemoTraceMonsterSpawnAndSeeStatesMatchDoomStateNumbers(t *testing.T) {
 		{3006, 585, 2},
 		{64, 241, 2},
 		{66, 321, 2},
-		{67, 361, 2},
-		{68, 632, 1},
-		{71, 702, 1},
+		{67, 362, 2},
+		{68, 632, 2},
+		{71, 701, 1},
 		{16, 674, 2},
-		{7, 600, 2},
-		{84, 727, 2},
+		{7, 601, 2},
+		{84, 726, 2},
 	}
 	for _, tt := range spawnTests {
 		for phase := 0; phase < tt.len; phase++ {
@@ -2076,12 +2076,12 @@ func TestDemoTraceMonsterSpawnAndSeeStatesMatchDoomStateNumbers(t *testing.T) {
 		{3006, 587, 2},
 		{64, 243, 12},
 		{66, 323, 12},
-		{67, 365, 12},
-		{68, 637, 12},
-		{71, 703, 1},
+		{67, 364, 12},
+		{68, 635, 12},
+		{71, 702, 6},
 		{16, 676, 8},
-		{7, 604, 12},
-		{84, 729, 8},
+		{7, 603, 12},
+		{84, 728, 8},
 	}
 	for _, tt := range seeTests {
 		for phase := 0; phase < tt.len; phase++ {
@@ -2094,8 +2094,8 @@ func TestDemoTraceMonsterSpawnAndSeeStatesMatchDoomStateNumbers(t *testing.T) {
 			}
 		}
 	}
-	if got, ok := demoTraceMonsterSeeState(68, -1); !ok || got != 636 {
-		t.Fatalf("type 68 see phase -1 state=%d ok=%t want=636,true", got, ok)
+	if got, ok := demoTraceMonsterSeeState(68, -1); !ok || got != 634 {
+		t.Fatalf("type 68 see phase -1 state=%d ok=%t want=634,true", got, ok)
 	}
 }
 
@@ -2142,7 +2142,7 @@ func TestDemoTraceMonsterDeathState_ArachnotronMatchesDoomStateNumbers(t *testin
 		if !ok {
 			t.Fatalf("type 68 death phase %d returned no state", phase)
 		}
-		if want := 654 + phase; got != want {
+		if want := 653 + phase; got != want {
 			t.Fatalf("type 68 death phase %d state=%d want=%d", phase, got, want)
 		}
 	}
@@ -2174,16 +2174,16 @@ func TestDemoTraceMonsterPainStateMatchesDoomStateNumbers(t *testing.T) {
 		{64, 5, 270},
 		{66, 10, 343},
 		{66, 5, 344},
-		{67, 6, 387},
-		{67, 2, 388},
-		{68, 10, 652},
-		{68, 2, 653},
-		{71, 12, 713},
-		{71, 6, 714},
-		{7, 6, 620},
-		{16, 10, 688},
-		{84, 6, 743},
-		{84, 3, 744},
+		{67, 6, 386},
+		{67, 2, 387},
+		{68, 10, 651},
+		{68, 2, 652},
+		{71, 12, 712},
+		{71, 6, 713},
+		{7, 6, 619},
+		{16, 10, 690},
+		{84, 6, 742},
+		{84, 3, 743},
 	}
 	for _, tt := range tests {
 		got, ok := demoTraceMonsterPainState(tt.typ, tt.remaining)

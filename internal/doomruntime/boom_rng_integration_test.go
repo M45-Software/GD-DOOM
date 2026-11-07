@@ -11,6 +11,8 @@ import (
 	"gddoom/internal/mapdata"
 	"gddoom/internal/wad"
 	"os"
+	"strconv"
+	"strings"
 	"testing"
 )
 
@@ -73,7 +75,14 @@ func TestBoomRNGDemoCapture(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	m, err := mapdata.LoadMap(wf, "MAP01")
+	fullMap := os.Getenv("GD_RNG_FULL_MAP") == "1"
+	rebirth := os.Getenv("GD_RNG_REBIRTH") == "1"
+	extended := fullMap || rebirth
+	mapName := mapdata.MapName("MAP01")
+	if extended {
+		mapName = mapdata.MapName(fmt.Sprintf("MAP%02d", script.Header.Map))
+	}
+	m, err := mapdata.LoadMap(wf, mapName)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -85,10 +94,55 @@ func TestBoomRNGDemoCapture(t *testing.T) {
 	defer f.Close()
 	out := bufio.NewWriter(f)
 	defer out.Flush()
-	fmt.Fprintln(out, "tic,x,y,z,angle,momx,momy,momz,health,armor,ammo,viewz,playindex,mobjs,seeds")
+	fmt.Fprint(out, "tic,x,y,z,angle,momx,momy,momz,health,armor,ammo,viewz,playindex,mobjs,seeds")
+	if extended {
+		fmt.Fprint(out, ",shells,cells,rockets,ready,pending,weaponstate,weapontics,flash,flashtics,attackdown,refire,kills,secrets,sectors")
+	}
+	if rebirth {
+		fmt.Fprint(out, ",leveltime,playerstate,viewheight,deltaviewheight,reloads,logictic")
+	}
+	fmt.Fprintln(out)
+	checkpoints := make(map[int]bool)
+	for _, value := range strings.Split(os.Getenv("GD_RNG_CHECKPOINT_TICS"), ",") {
+		if value == "" {
+			continue
+		}
+		tic, err := strconv.Atoi(value)
+		if err != nil || tic < 0 || tic >= len(script.Tics) {
+			t.Fatalf("invalid checkpoint tic %q", value)
+		}
+		checkpoints[tic] = true
+	}
+	appliedCheckpoints := make([]int, 0)
+	previousLevelTime, reloads := 0, 0
 	for tic := range script.Tics {
 		if err := g.advanceDemoTic(); err != nil {
 			t.Fatal(err)
+		}
+		if checkpoints[tic] {
+			magic, version := saveGameMagic, saveGameVersion
+			if os.Getenv("GD_RNG_CHECKPOINT_FORMAT") == "keyframe" {
+				magic, version = keyframeMagic, keyframeVersion
+			}
+			state := captureGameSaveState(g)
+			if !validBoomSectorTouches(state, len(g.m.Sectors)) {
+				t.Fatalf("invalid membership before checkpoint %d", tic)
+			}
+			rng := doomrand.Capture()
+			blob, err := encodeSnapshot(magic, saveFile{Version: version, Game: state, RNG: saveRNGState{Extended: rng, MenuIndex: rng.MenuIndex, PlayIndex: rng.PlayIndex}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			file, err := decodeSnapshot(blob, magic)
+			if err != nil {
+				t.Fatal(err)
+			}
+			loaded := newGame(cloneMapForRestart(g.restartTemplate), g.opts)
+			restoreGameSaveState(loaded, file.Game)
+			loaded.inheritDemoPlayback(g)
+			restoreSavedRNG(file)
+			g = loaded
+			appliedCheckpoints = append(appliedCheckpoints, tic)
 		}
 		if tic == 0 && os.Getenv("GD_RNG_CRUSHED_CORPSE") != "" {
 			// Controlled crushed-corpse setup; subsequent resurrection is
@@ -105,7 +159,7 @@ func TestBoomRNGDemoCapture(t *testing.T) {
 		s := doomrand.Capture()
 		fmt.Fprintf(out, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,", tic, g.p.x, g.p.y, g.p.z, g.p.angle, g.p.momx, g.p.momy, g.p.momz, g.stats.Health, g.stats.Armor, g.stats.Bullets, g.playerViewZ, s.PlayIndex)
 		for _, m := range g.demoTraceMobjs() {
-			if os.Getenv("GD_RNG_COMBAT_ONLY") != "" && (m.Kind == "thing" || m.Kind == "pickup" || m.Kind == "barrel") {
+			if os.Getenv("GD_RNG_COMBAT_ONLY") != "" && (m.Kind == "thing" || m.Kind == "pickup" || m.Kind == "barrel" && !fullMap) {
 				continue
 			}
 			if m.Player != 0 || m.Flags&1 != 0 {
@@ -123,7 +177,55 @@ func TestBoomRNGDemoCapture(t *testing.T) {
 				fmt.Fprintf(out, "%d;", seed)
 			}
 		}
+		if extended {
+			pending := 10
+			if g.inventory.PendingWeapon != 0 {
+				pending = demoTraceWeaponID(g.inventory.PendingWeapon)
+			}
+			fmt.Fprintf(out, ",%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,", g.stats.Shells, g.stats.Cells, g.stats.Rockets,
+				demoTraceWeaponID(g.inventory.ReadyWeapon), pending, weaponDoomStateID(g.weaponState), g.weaponStateTics,
+				weaponDoomStateID(g.weaponFlashState), g.weaponFlashTics, boolToInt(g.weaponAttackDown), boolToInt(g.weaponRefire), g.playerKillCount, g.secretsFound)
+			for i, sector := range g.m.Sectors {
+				fmt.Fprintf(out, "%d:%d:%d;", g.sectorFloor[i], g.sectorCeil[i], sector.Light)
+			}
+		}
+		if rebirth {
+			if g.worldTic < previousLevelTime {
+				reloads++
+			}
+			state := 0
+			if g.playerReborn {
+				state = 2
+			} else if g.isDead {
+				state = 1
+			}
+			fmt.Fprintf(out, ",%d,%d,%d,%d,%d,%d", g.worldTic, state, g.p.viewHeight, g.p.deltaViewHeight, reloads, s.LogicTic)
+			previousLevelTime = g.worldTic
+		}
 		fmt.Fprintln(out)
+		if fullMap && g.levelExitRequested {
+			break
+		}
+	}
+	if path := os.Getenv("GD_RNG_CHECKPOINT_LOG"); path != "" {
+		data, err := json.Marshal(appliedCheckpoints)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(path, data, 0644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if fullMap {
+		summary := map[string]any{"completed": g.levelExitRequested, "leveltime": g.worldTic, "kills": g.playerKillCount,
+			"total_kills": g.levelKillsTotal, "secrets": g.secretsFound, "total_secrets": g.secretsTotal, "health": g.stats.Health}
+		data, err := json.MarshalIndent(summary, "", "  ")
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(os.Getenv("GD_RNG_SUMMARY"), append(data, '\n'), 0644); err != nil {
+			t.Fatal(err)
+		}
 	}
 }
 

@@ -1,6 +1,7 @@
 package doomruntime
 
 import (
+	"bytes"
 	"math"
 	"reflect"
 	"testing"
@@ -116,7 +117,7 @@ func TestWeaponPoseSnapshotAndPreviousVersionCompatibility(t *testing.T) {
 				t.Fatal(err)
 			}
 			want := pose
-			if version == 26 || version == 13 {
+			if (bytes.Equal(item.magic, saveGameMagic) && version == 26) || version == 13 {
 				want = weaponPresentationPose{}
 			}
 			if !reflect.DeepEqual(got.Game.WeaponPose, want) {

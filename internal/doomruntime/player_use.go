@@ -806,6 +806,7 @@ func (g *game) evVerticalDoor(lineIdx int, isPlayer bool) bool {
 		g.trackCeilingSlot(sec)
 	}
 	d := g.allocDoorThinker(sec)
+	d.lightLine = g.boomDoorLightLine(lineIdx)
 	d.direction = 1
 	d.speed = vDoorSpeed
 	d.topWait = vDoorWaitTic
@@ -919,7 +920,7 @@ func (g *game) activateDoorSectorsConfigured(targets []int, action mapdata.DoorA
 				d.typ = doorGenCloseWaitOpen
 			}
 			d.speed = vDoorSpeed << gen.Speed
-			d.topWait = [...]int{1, 4, 9, 30}[gen.Delay] * doomTicsPerSecond
+			d.topWait = [...]int{35, 150, 300, 1050}[gen.Delay]
 			if gen.Locked {
 				d.topWait = 150
 			}
@@ -952,6 +953,9 @@ func doorMoveEvent(typ doorType, direction int) soundEvent {
 }
 
 func (g *game) lowestSurroundingCeiling(sector int) int64 {
+	if g.boomMomentumDropoff {
+		return g.findLowestCeilingSurrounding(sector)
+	}
 	lowest := int64(1<<62 - 1)
 	for _, ld := range g.lines {
 		if ld.sideNum0 < 0 || ld.sideNum1 < 0 {

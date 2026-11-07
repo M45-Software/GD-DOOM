@@ -26,14 +26,17 @@ static void GD_ManualProbe(void)
 {
  const char *inpath=getenv("GD_DSDA_MANUAL_CASES"),*outpath=getenv("GD_DSDA_MANUAL_OUT");FILE *input,*out;char name[128];
  int special,second,kind,age,actor,activator,side,secret,keys,tics,at2,at3,late,fs[3],cs[3];
+ int lighting=getenv("GD_MANUAL_LIGHTING")!=NULL,lighttag=0,lightmask=0,lights[3],neighborat=-1,neighborlight=0;
  if(!inpath)return;input=fopen(inpath,"r");out=outpath?fopen(outpath,"w"):NULL;if(!input||!out)I_Error("manual probe files");
- fprintf(out,"name,tic,line1,line2,f0,c0,f1,c1,f2,c2,fowner,cowner,doors,ceilings,floors,plats,elevators,z,health,lock0,lock1,lock2\n");
+ fprintf(out,"name,tic,line1,line2,f0,c0,f1,c1,f2,c2,fowner,cowner,doors,ceilings,floors,plats,elevators,z,health,lock0,lock1,lock2");if(lighting)fprintf(out,",light0,light1,light2,light3");fputc('\n',out);
  while(fscanf(input,"%127s %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d",name,&special,&second,&kind,&age,&actor,&activator,&side,&secret,&keys,&tics,&at2,&at3,&late,&fs[0],&fs[1],&fs[2],&cs[0],&cs[1],&cs[2])==20){
+  if(lighting&&fscanf(input,"%d %d %d %d %d %d %d",&lighttag,&lightmask,&lights[0],&lights[1],&lights[2],&neighborat,&neighborlight)!=7)I_Error("bad door lighting fields");
   player_t *p;mobj_t *imp=NULL,*body;thinker_t *th=NULL;int i,tic,old;line_t *line;
   rngseed=!strncmp(name,"rng1_lift_",10)?1:1993;demo_insurance=0;G_InitNew(2,1,1,true);GD_SectorSoundBegin();gametic=1;menuactive=false;p=&players[displayplayer];p->cheats=0;GD_ManualCount=0;line=&lines[2];
   while((th=P_NextThinker(th,th_all)))if(th->function==P_MobjThinker&&((mobj_t*)th)->type==MT_TROOP)imp=(mobj_t*)th;
   if(!imp)I_Error("manual probe needs actual imp");
   for(i=0;i<3;++i){sectors[i].floorheight=fs[i];sectors[i].ceilingheight=cs[i];sectors[i].floorpic=R_FlatNumForName("FLOOR0_1");sectors[i].tag=i==1?7:0;}
+  if(lighting){for(i=0;i<3;++i){sectors[i].tag=(lightmask&(1<<i))?7:0;sectors[i].lightlevel=lights[i];}line->tag=lines[10].tag=lighttag;}
   dsda_ResetSectorIDList(numsectors);for(i=0;i<numsectors;++i)dsda_AddSectorID(sectors[i].tag,i);
   for(i=0;i<6;++i)p->cards[i]=keys;
   for(i=0;i<2;++i){mobj_t *mo=i?imp:p->mo;int selected=actor==(i?2:1);if(!selected)mo->flags&=~MF_SHOOTABLE;
@@ -51,6 +54,7 @@ static void GD_ManualProbe(void)
   for(i=0;i<age;++i){leveltime=i;GD_ManualTick();}
   line->special=special;lines[10].special=second;if(secret){line->flags|=ML_SECRET;lines[10].flags|=ML_SECRET;}leveltime=age;
   for(tic=0;tic<=tics;++tic){
+   if(lighting&&tic==neighborat)sectors[3].lightlevel=neighborlight;
    if(tic==late){old=line->special;line->special=0x2f93;EV_DoGenCrusher(line);line->special=old;}
    if(tic==0&&(!(!activator&&p->health<=0)))P_UseSpecialLine(activator?imp:p->mo,line,side,false);
    if((tic==at2||tic==at3)&&lines[10].special&&(activator||p->health>0))P_UseSpecialLine(activator?imp:p->mo,&lines[10],side,false);
@@ -65,7 +69,8 @@ static void GD_ManualProbe(void)
     if(k==4){plat_t *p=(plat_t*)th;fprintf(out,"%d:%d:%d:%d:%d:%d:%d:%d;",p->sector->iSectorID,p->status,p->speed,p->low,p->high,p->wait,p->count,p->status==in_stasis?p->oldstatus:0);}
     if(k==5){elevator_t *e=(elevator_t*)th;fprintf(out,"%d:%d:%d:%d:%d;",e->sector->iSectorID,e->direction,e->speed,e->floordestheight,e->ceilingdestheight);}
    }}
-   fprintf(out,",%d,%d,%d,%d,%d\n",actor?body->z:0,actor?body->health:0,sectors[0].stairlock,sectors[1].stairlock,sectors[2].stairlock);
+   fprintf(out,",%d,%d,%d,%d,%d",actor?body->z:0,actor?body->health:0,sectors[0].stairlock,sectors[1].stairlock,sectors[2].stairlock);
+   if(lighting)for(i=0;i<4;++i)fprintf(out,",%d",sectors[i].lightlevel);fputc('\n',out);
   }P_MapEnd();
  }
  if(!feof(input))I_Error("bad manual manifest");fclose(input);fclose(out);exit(0);

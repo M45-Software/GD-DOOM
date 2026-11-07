@@ -16,9 +16,19 @@ import (
 
 const snapshotChecksumSize = 32
 
+// Save and keyframe feature versions have a constant offset. Keyframe 26
+// overlaps historical save 26: consult the magic instead of guessing by range.
+// The legacy <=25 inference retains the old low-level codec's behavior.
+func snapshotFeatureVersion(version int, keyframe bool) int {
+	if keyframe || version <= 25 {
+		return version + 13
+	}
+	return version
+}
+
 func encodeSnapshot(magic []byte, file saveFile) ([]byte, error) {
 	body := bytes.NewBuffer(make([]byte, 0, 4096))
-	w := saveBinaryWriter{buf: body}
+	w := saveBinaryWriter{buf: body, keyframe: bytes.Equal(magic, keyframeMagic)}
 	if err := w.saveFile(file); err != nil {
 		return nil, err
 	}
@@ -46,7 +56,7 @@ func decodeSnapshot(data []byte, magic []byte) (saveFile, error) {
 	if !bytes.Equal(got[:], want) {
 		return saveFile{}, errBadSaveChecksum
 	}
-	r := saveBinaryReader{r: bytes.NewReader(data[len(magic):checksumStart])}
+	r := saveBinaryReader{r: bytes.NewReader(data[len(magic):checksumStart]), keyframe: bytes.Equal(magic, keyframeMagic)}
 	file, err := r.saveFile()
 	if err != nil {
 		return saveFile{}, err
@@ -58,7 +68,8 @@ func decodeSnapshot(data []byte, magic []byte) (saveFile, error) {
 }
 
 type saveBinaryWriter struct {
-	buf *bytes.Buffer
+	keyframe bool
+	buf      *bytes.Buffer
 }
 
 func (w saveBinaryWriter) bytes(v []byte) error {
@@ -735,6 +746,7 @@ func (w saveBinaryWriter) gameSaveState(v gameSaveState) error {
 }
 
 func (w saveBinaryWriter) saveFile(v saveFile) error {
+	version := snapshotFeatureVersion(v.Version, w.keyframe)
 	if err := w.int(v.Version); err != nil {
 		return err
 	}
@@ -756,7 +768,7 @@ func (w saveBinaryWriter) saveFile(v saveFile) error {
 	if err := w.gameSaveState(v.Game); err != nil {
 		return err
 	}
-	if (v.Version >= 27 && v.Version <= saveGameVersion) || (v.Version >= 14 && v.Version <= keyframeVersion) {
+	if version >= 27 && version <= saveGameVersion {
 		for _, n := range []int64{v.Game.WeaponPose.X, v.Game.WeaponPose.FractionY, v.Game.WeaponPose.BobY} {
 			if err := w.i64(n); err != nil {
 				return err
@@ -766,14 +778,14 @@ func (w saveBinaryWriter) saveFile(v saveFile) error {
 			return err
 		}
 	}
-	if (v.Version >= 28 && v.Version <= saveGameVersion) || (v.Version >= 15 && v.Version <= keyframeVersion) {
+	if version >= 28 && version <= saveGameVersion {
 		for _, b := range v.Game.Inventory.SkullKeys {
 			if err := w.bool(b); err != nil {
 				return err
 			}
 		}
 	}
-	if (v.Version >= 29 && v.Version <= saveGameVersion) || (v.Version >= 16 && v.Version <= keyframeVersion) {
+	if version >= 29 && version <= saveGameVersion {
 		for _, key := range sortedSaveIntKeys(v.Game.Plats) {
 			it := v.Game.Plats[key]
 			if err := w.u16(it.TriggerTag); err != nil {
@@ -797,12 +809,12 @@ func (w saveBinaryWriter) saveFile(v saveFile) error {
 			}
 		}
 	}
-	if (v.Version >= 30 && v.Version <= saveGameVersion) || (v.Version >= 17 && v.Version <= keyframeVersion) {
+	if version >= 30 && version <= saveGameVersion {
 		if err := w.boomScrollerSlice(v.Game.BoomScrollers); err != nil {
 			return err
 		}
 	}
-	if (v.Version >= 31 && v.Version <= saveGameVersion) || (v.Version >= 18 && v.Version <= keyframeVersion) {
+	if version >= 31 && version <= saveGameVersion {
 		for _, value := range []int64{v.Game.Player.Friction, v.Game.Player.MoveFactor} {
 			if err := w.i64(value); err != nil {
 				return err
@@ -815,14 +827,14 @@ func (w saveBinaryWriter) saveFile(v saveFile) error {
 			return err
 		}
 	}
-	if (v.Version >= 32 && v.Version <= saveGameVersion) || (v.Version >= 19 && v.Version <= keyframeVersion) {
+	if version >= 32 && version <= saveGameVersion {
 		for _, b := range v.Game.Inventory.CardKeys {
 			if err := w.bool(b); err != nil {
 				return err
 			}
 		}
 	}
-	if (v.Version >= 33 && v.Version <= saveGameVersion) || (v.Version >= 20 && v.Version <= keyframeVersion) {
+	if version >= 33 && version <= saveGameVersion {
 		for _, key := range sortedSaveIntKeys(v.Game.Floors) {
 			it := v.Game.Floors[key]
 			if err := w.bool(it.Crush); err != nil {
@@ -836,7 +848,7 @@ func (w saveBinaryWriter) saveFile(v saveFile) error {
 			}
 		}
 	}
-	if (v.Version >= 34 && v.Version <= saveGameVersion) || (v.Version >= 21 && v.Version <= keyframeVersion) {
+	if version >= 34 && version <= saveGameVersion {
 		flat := make([]int, 0, len(v.Game.BoomStairs)*3)
 		for _, st := range v.Game.BoomStairs {
 			flat = append(flat, st.Lock, st.Prev, st.Next)
@@ -857,12 +869,12 @@ func (w saveBinaryWriter) saveFile(v saveFile) error {
 			}
 		}
 	}
-	if (v.Version >= 34 && v.Version <= saveGameVersion) || (v.Version >= 21 && v.Version <= keyframeVersion) {
+	if version >= 34 && version <= saveGameVersion {
 		if err := w.bool(v.Game.Player.CorpseGibbed); err != nil {
 			return err
 		}
 	}
-	if (v.Version >= 35 && v.Version <= saveGameVersion) || (v.Version >= 22 && v.Version <= keyframeVersion) {
+	if version >= 35 && version <= saveGameVersion {
 		if err := w.doorThinkerMap(v.Game.ExtraDoors); err != nil {
 			return err
 		}
@@ -874,7 +886,7 @@ func (w saveBinaryWriter) saveFile(v saveFile) error {
 			return err
 		}
 	}
-	if (v.Version >= 36 && v.Version <= saveGameVersion) || (v.Version >= 23 && v.Version <= keyframeVersion) {
+	if version >= 36 && version <= saveGameVersion {
 		state := v.RNG.Extended
 		if err := w.bool(state.Boom); err != nil {
 			return err
@@ -901,12 +913,33 @@ func (w saveBinaryWriter) saveFile(v saveFile) error {
 		}
 	}
 
-	if v.Version == saveGameVersion || v.Version == keyframeVersion {
+	if version >= 37 && version <= saveGameVersion {
 		if err := w.int(v.Game.Player.ViewGroundState); err != nil {
 			return err
 		}
 	}
 
+	if version >= 38 && version <= saveGameVersion {
+		for _, doors := range []map[int]doorThinkerSaveState{v.Game.Doors, v.Game.ExtraDoors} {
+			if err := w.intSlice(doorLightingLines(doors)); err != nil {
+				return err
+			}
+		}
+	}
+
+	if version == saveGameVersion {
+		if err := w.boomSectorTouchSlice(v.Game.BoomSectorTouches); err != nil {
+			return err
+		}
+		for _, fx := range v.Game.ProjectileImpacts {
+			if err := w.i64(fx.MomX); err != nil {
+				return err
+			}
+			if err := w.i64(fx.MomY); err != nil {
+				return err
+			}
+		}
+	}
 	return nil
 }
 
@@ -1304,7 +1337,8 @@ func sortedSaveIntKeys[T any](m map[int]T) []int {
 }
 
 type saveBinaryReader struct {
-	r *bytes.Reader
+	keyframe bool
+	r        *bytes.Reader
 }
 
 func (r saveBinaryReader) remaining() int { return r.r.Len() }
@@ -1758,6 +1792,7 @@ func (r saveBinaryReader) saveFile() (saveFile, error) {
 	if v.Version, err = r.int(); err != nil {
 		return v, err
 	}
+	version := snapshotFeatureVersion(v.Version, r.keyframe)
 	if v.Description, err = r.str(); err != nil {
 		return v, err
 	}
@@ -1776,7 +1811,7 @@ func (r saveBinaryReader) saveFile() (saveFile, error) {
 	if v.Game, err = r.gameSaveState(); err != nil {
 		return v, err
 	}
-	if (v.Version >= 27 && v.Version <= saveGameVersion) || (v.Version >= 14 && v.Version <= keyframeVersion) {
+	if version >= 27 && version <= saveGameVersion {
 		for _, dst := range []*int64{&v.Game.WeaponPose.X, &v.Game.WeaponPose.FractionY, &v.Game.WeaponPose.BobY} {
 			if *dst, err = r.i64(); err != nil {
 				return v, err
@@ -1786,7 +1821,7 @@ func (r saveBinaryReader) saveFile() (saveFile, error) {
 			return v, err
 		}
 	}
-	if (v.Version >= 28 && v.Version <= saveGameVersion) || (v.Version >= 15 && v.Version <= keyframeVersion) {
+	if version >= 28 && version <= saveGameVersion {
 		for i := range v.Game.Inventory.SkullKeys {
 			if v.Game.Inventory.SkullKeys[i], err = r.bool(); err != nil {
 				return v, err
@@ -1794,7 +1829,7 @@ func (r saveBinaryReader) saveFile() (saveFile, error) {
 		}
 	}
 
-	if (v.Version >= 29 && v.Version <= saveGameVersion) || (v.Version >= 16 && v.Version <= keyframeVersion) {
+	if version >= 29 && version <= saveGameVersion {
 		for _, key := range sortedSaveIntKeys(v.Game.Plats) {
 			it := v.Game.Plats[key]
 			if it.TriggerTag, err = r.u16(); err != nil {
@@ -1822,12 +1857,12 @@ func (r saveBinaryReader) saveFile() (saveFile, error) {
 			v.Game.Ceilings[key] = it
 		}
 	}
-	if (v.Version >= 30 && v.Version <= saveGameVersion) || (v.Version >= 17 && v.Version <= keyframeVersion) {
+	if version >= 30 && version <= saveGameVersion {
 		if v.Game.BoomScrollers, err = r.boomScrollerSlice(); err != nil {
 			return v, err
 		}
 	}
-	if (v.Version >= 31 && v.Version <= saveGameVersion) || (v.Version >= 18 && v.Version <= keyframeVersion) {
+	if version >= 31 && version <= saveGameVersion {
 		if v.Game.Player.Friction, err = r.i64(); err != nil {
 			return v, err
 		}
@@ -1841,14 +1876,14 @@ func (r saveBinaryReader) saveFile() (saveFile, error) {
 			return v, err
 		}
 	}
-	if (v.Version >= 32 && v.Version <= saveGameVersion) || (v.Version >= 19 && v.Version <= keyframeVersion) {
+	if version >= 32 && version <= saveGameVersion {
 		for i := range v.Game.Inventory.CardKeys {
 			if v.Game.Inventory.CardKeys[i], err = r.bool(); err != nil {
 				return v, err
 			}
 		}
 	}
-	if (v.Version >= 33 && v.Version <= saveGameVersion) || (v.Version >= 20 && v.Version <= keyframeVersion) {
+	if version >= 33 && version <= saveGameVersion {
 		for _, key := range sortedSaveIntKeys(v.Game.Floors) {
 			it := v.Game.Floors[key]
 			if it.Crush, err = r.bool(); err != nil {
@@ -1863,7 +1898,7 @@ func (r saveBinaryReader) saveFile() (saveFile, error) {
 			v.Game.Floors[key] = it
 		}
 	}
-	if (v.Version >= 34 && v.Version <= saveGameVersion) || (v.Version >= 21 && v.Version <= keyframeVersion) {
+	if version >= 34 && version <= saveGameVersion {
 		flat, e := readSlice(r, r.int)
 		if e != nil {
 			return v, e
@@ -1891,12 +1926,12 @@ func (r saveBinaryReader) saveFile() (saveFile, error) {
 			v.Game.Ceilings[key] = it
 		}
 	}
-	if (v.Version >= 34 && v.Version <= saveGameVersion) || (v.Version >= 21 && v.Version <= keyframeVersion) {
+	if version >= 34 && version <= saveGameVersion {
 		if v.Game.Player.CorpseGibbed, err = r.bool(); err != nil {
 			return v, err
 		}
 	}
-	if (v.Version >= 35 && v.Version <= saveGameVersion) || (v.Version >= 22 && v.Version <= keyframeVersion) {
+	if version >= 35 && version <= saveGameVersion {
 		if v.Game.ExtraDoors, err = r.doorThinkerMap(); err != nil {
 			return v, err
 		}
@@ -1914,7 +1949,7 @@ func (r saveBinaryReader) saveFile() (saveFile, error) {
 			}
 		}
 	}
-	if (v.Version >= 36 && v.Version <= saveGameVersion) || (v.Version >= 23 && v.Version <= keyframeVersion) {
+	if version >= 36 && version <= saveGameVersion {
 		state := &v.RNG.Extended
 		state.MenuIndex = v.RNG.MenuIndex
 		state.PlayIndex = v.RNG.PlayIndex
@@ -1949,7 +1984,7 @@ func (r saveBinaryReader) saveFile() (saveFile, error) {
 		}
 	}
 
-	if v.Version == saveGameVersion || v.Version == keyframeVersion {
+	if version >= 37 && version <= saveGameVersion {
 		if v.Game.Player.ViewGroundState, err = r.int(); err != nil {
 			return v, err
 		}
@@ -1958,6 +1993,32 @@ func (r saveBinaryReader) saveFile() (saveFile, error) {
 		}
 	}
 
+	if version >= 38 && version <= saveGameVersion {
+		for _, doors := range []map[int]doorThinkerSaveState{v.Game.Doors, v.Game.ExtraDoors} {
+			pairs, err := readIntSlice(r)
+			if err != nil {
+				return v, err
+			}
+			if err := restoreDoorLightingLines(doors, pairs); err != nil {
+				return v, err
+			}
+		}
+	}
+
+	if version == saveGameVersion {
+		if v.Game.BoomSectorTouches, err = r.boomSectorTouchSlice(); err != nil {
+			return v, err
+		}
+		for i := range v.Game.ProjectileImpacts {
+			fx := &v.Game.ProjectileImpacts[i]
+			if fx.MomX, err = r.i64(); err != nil {
+				return v, err
+			}
+			if fx.MomY, err = r.i64(); err != nil {
+				return v, err
+			}
+		}
+	}
 	return v, nil
 }
 

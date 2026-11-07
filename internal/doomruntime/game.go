@@ -443,6 +443,8 @@ type game struct {
 	boomLastEnemy                      []int
 	boomAutoSwitchDone                 bool
 	boomMomentumDropoff                bool
+	boomTouchSectors                   [][]*boomTouchNode
+	boomTouchActors                    [][]*boomTouchNode
 	textureAnimCachePeriod             int
 	boomCarries                        []boomCarryThinker
 	boomFloorScroll, boomCeilingScroll []boomScrollVector
@@ -1375,6 +1377,11 @@ func newGameWithRNG(m *mapdata.Map, opts Options, clearRNG bool) *game {
 		if settings, ok := demoRNGOptions(m, opts); ok {
 			doomrand.ConfigureBoom(settings.Seed, settings.Insurance)
 		}
+	} else if doomrand.Capture().Boom {
+		// Boom G_DoLoadLevel resets boom_basetic before map things spawn.
+		// Keep the streams and indices, but restart their per-level shuffle
+		// and revenant-tracer phase on rebirth and map transitions.
+		doomrand.SetLogicTic(0)
 	}
 	if opts.DemoScript != nil {
 		opts = runtimecfg.PrepareDemoPlaybackOptions(opts, opts.DemoScript)
@@ -1669,6 +1676,7 @@ func newGameWithRNG(m *mapdata.Map, opts Options, clearRNG bool) *game {
 		}
 	}
 	g.initBoomEnvironment()
+	g.initBoomSectorTouches()
 	if g.bmapWidth > 0 && g.bmapHeight > 0 {
 		g.thingBlockCells = make([][]int, g.bmapWidth*g.bmapHeight)
 		g.rebuildThingBlockmap()
@@ -11182,23 +11190,7 @@ func (g *game) tickHitscanPuff(p *hitscanPuff) bool {
 		return false
 	}
 	if p.momx != 0 || p.momy != 0 {
-		x, y := p.x+p.momx, p.y+p.momy
-		// MF_NOBLOCKMAP excludes blood from blocklinks but does not bypass
-		// P_TryMove's collision walk. Like other non-player movers, it must
-		// also test the player's solid body, without touching pickups.
-		floor, ceil, drop, ok := g.checkPositionForActorWithThingPolicy(x, y, 20*fracUnit, true, -1, true, false)
-		if ok && ceil-floor >= 16*fracUnit && ceil-p.z >= 16*fracUnit && floor-p.z <= stepHeight && floor-drop <= stepHeight {
-			p.x, p.y, p.floorz, p.ceilz = x, y, floor, ceil
-		} else {
-			p.momx, p.momy = 0, 0
-		}
-		if p.z <= p.floorz {
-			if abs(p.momx) < stopSpeed && abs(p.momy) < stopSpeed {
-				p.momx, p.momy = 0, 0
-			} else {
-				p.momx, p.momy = fixedMul(p.momx, friction), fixedMul(p.momy, friction)
-			}
-		}
+		g.moveBoomEffectXY(&p.x, &p.y, p.z, &p.momx, &p.momy, &p.floorz, &p.ceilz, 20*fracUnit, 16*fracUnit)
 	}
 	// P_MobjThinker skips Z movement for stationary effects on their floor,
 	// even when a closed sector leaves less room than their height.
@@ -20908,6 +20900,7 @@ func (g *game) setPlayerPosFixed(x, y int64) {
 		g.playerBlockOrder = g.allocBlockmapOrder()
 	}
 	g.refreshPlayerSubsectorCache(x, y)
+	g.updateBoomPlayerTouch()
 }
 
 func (g *game) thingBlockmapCellFor(x, y int64) int {
@@ -21039,6 +21032,9 @@ func (g *game) setThingWorldAngle(i int, angle uint32) {
 }
 
 func (g *game) updateThingBlockmapIndex(i int) {
+	if g != nil {
+		g.updateBoomThingTouch(i)
+	}
 	if g == nil || i < 0 || g.m == nil || i >= len(g.m.Things) || g.bmapWidth <= 0 || g.bmapHeight <= 0 {
 		return
 	}

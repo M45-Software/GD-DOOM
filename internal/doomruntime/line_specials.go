@@ -359,16 +359,13 @@ func (g *game) heightClipAroundSector(sec int, oldPlayerFloor int64) {
 }
 
 func (g *game) heightClipAroundSectorWithCrush(sec int, oldPlayerFloor int64, crush bool) bool {
-	if g == nil || g.m == nil || sec < 0 {
+	if g == nil || g.m == nil || sec < 0 || sec >= len(g.m.Sectors) {
 		return false
 	}
 	nofit := false
 	damagePulse := crush && (max(g.worldTic-1, 0)&3) == 0
 	clipThing := func(i int) {
 		th := g.m.Things[i]
-		if g.boomMomentumDropoff && !g.thingTouchesSector(sec, i, th) {
-			return
-		}
 		if g.heightClipThing(i, th) {
 			return
 		}
@@ -404,9 +401,6 @@ func (g *game) heightClipAroundSectorWithCrush(sec int, oldPlayerFloor int64, cr
 		playerTouches = g.actorTouchesSector(sec, g.p.x, g.p.y, playerRadius)
 	}
 	clipPlayer := func() {
-		if g.boomMomentumDropoff && !g.actorTouchesSector(sec, g.p.x, g.p.y, playerRadius) {
-			return
-		}
 		floor := oldPlayerFloor
 		if g.authorityPlayers != nil {
 			// Each player's cached floor belongs to its own pre-move body.
@@ -422,7 +416,9 @@ func (g *game) heightClipAroundSectorWithCrush(sec int, oldPlayerFloor int64, cr
 			}
 		}
 	}
-	if ok && g.bmapWidth > 0 && g.bmapHeight > 0 && len(g.thingBlockCells) == g.bmapWidth*g.bmapHeight {
+	if g.boomMomentumDropoff {
+		g.walkBoomSectorTouches(sec, clipThing, clipPlayer)
+	} else if ok && g.bmapWidth > 0 && g.bmapHeight > 0 && len(g.thingBlockCells) == g.bmapWidth*g.bmapHeight {
 		for bx := left; bx <= right; bx++ {
 			for by := bottom; by <= top; by++ {
 				if g.authorityPlayers != nil {
@@ -771,24 +767,33 @@ func (g *game) findHighestFloorSurrounding(sec int) int64 {
 
 func (g *game) findLowestCeilingSurrounding(sec int) int64 {
 	lowest := int64(1<<62 - 1)
+	if g.boomMomentumDropoff {
+		lowest = 32000 * fracUnit
+	}
 	found := false
 	for _, ld := range g.m.Linedefs {
 		s0, ok0 := g.sectorIndexFromSidedef(ld.SideNum[0])
 		s1, ok1 := g.sectorIndexFromSidedef(ld.SideNum[1])
+		if g.boomMomentumDropoff && s0 == s1 {
+			continue
+		}
 		switch {
 		case ok0 && ok1 && s0 == sec:
-			if !found || g.sectorCeil[s1] < lowest {
+			if (!found && !g.boomMomentumDropoff) || g.sectorCeil[s1] < lowest {
 				lowest = g.sectorCeil[s1]
 			}
 			found = true
 		case ok0 && ok1 && s1 == sec:
-			if !found || g.sectorCeil[s0] < lowest {
+			if (!found && !g.boomMomentumDropoff) || g.sectorCeil[s0] < lowest {
 				lowest = g.sectorCeil[s0]
 			}
 			found = true
 		}
 	}
 	if !found {
+		if g.boomMomentumDropoff {
+			return 32000 * fracUnit
+		}
 		return g.sectorCeil[sec]
 	}
 	return lowest

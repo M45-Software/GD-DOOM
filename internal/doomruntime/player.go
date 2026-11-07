@@ -130,6 +130,7 @@ type doorThinker struct {
 	topWait           int
 	topCountdown      int
 	speed             int64
+	lightLine         int // controlling linedef + 1; zero means no door lighting
 	traceTopCountdown int
 	pendingRemove     bool
 }

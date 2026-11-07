@@ -40,11 +40,11 @@ func TestGeneralizedStairChainLockCheckpoint(t *testing.T) {
 		if g.useSpecialLineForActor(0, 0, true) {
 			t.Fatal("partially complete staircase retriggered")
 		}
-		data, err := encodeSnapshot(saveGameMagic, saveFile{Version: version, Game: captureGameSaveState(g)})
+		data, err := encodeSnapshot(boomSnapshotMagic(version), saveFile{Version: version, Game: captureGameSaveState(g)})
 		if err != nil {
 			t.Fatal(err)
 		}
-		file, err := decodeSnapshot(data, saveGameMagic)
+		file, err := decodeBoomTestSnapshot(data)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -102,11 +102,11 @@ func TestGeneralizedCrusherStasisCheckpointAndOriginalSpeed(t *testing.T) {
 			t.Fatal("crusher did not stop")
 		}
 		g.m.Sectors[1].Tag = 9
-		data, err := encodeSnapshot(saveGameMagic, saveFile{Version: version, Game: captureGameSaveState(g)})
+		data, err := encodeSnapshot(boomSnapshotMagic(version), saveFile{Version: version, Game: captureGameSaveState(g)})
 		if err != nil {
 			t.Fatal(err)
 		}
-		file, err := decodeSnapshot(data, saveGameMagic)
+		file, err := decodeBoomTestSnapshot(data)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -135,7 +135,7 @@ func TestPlayerCrushedCorpseCheckpoint(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	file, err := decodeSnapshot(data, saveGameMagic)
+	file, err := decodeBoomTestSnapshot(data)
 	if err != nil {
 		t.Fatal(err)
 	}

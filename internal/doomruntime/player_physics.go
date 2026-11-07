@@ -578,6 +578,7 @@ func (g *game) tickDoor(sec int, d *doorThinker) {
 			if g.setSectorCeilingHeightWithCrush(sec, g.sectorFloor[sec], false) {
 				g.setDoorCeiling(sec, oldCeil)
 			}
+			g.finishBoomDoorLighting(d, false)
 			switch d.typ {
 			case doorBlazeRaise, doorBlazeClose:
 				g.removeDoorThinkerInstance(sec, d)
@@ -625,6 +626,7 @@ func (g *game) tickDoor(sec int, d *doorThinker) {
 			if g.setSectorCeilingHeightWithCrush(sec, d.topHeight, false) {
 				g.setDoorCeiling(sec, oldCeil)
 			}
+			g.finishBoomDoorLighting(d, true)
 			switch d.typ {
 			case doorBlazeRaise, doorNormal:
 				d.direction = 0
@@ -1423,6 +1425,11 @@ func (g *game) monsterCorpseBlocksMovement(i int) bool {
 	// retains zero bounds but regains solidity, so test the current state.
 	if i < len(g.thingState) && g.thingState[i] == monsterStateGibs {
 		return false
+	}
+	// Barrels never run A_Fall. They stay solid until removal or a
+	// crusher replaces their death state with S_GIBS.
+	if isBarrelThingType(g.m.Things[i].Type) {
+		return true
 	}
 	phase := 0
 	if i < len(g.thingStatePhase) {

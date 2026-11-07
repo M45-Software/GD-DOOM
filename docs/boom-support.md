@@ -17,6 +17,14 @@ recorded paths below are verified; complete Boom compatibility is not claimed.
   demos keep their original table RNG. Full seeded state and options survive
   saves/keyframes; demo and authority map transitions continue their streams.
 
+- Boom corpse movement: after the death animation clears solidity, a sliding
+  corpse can pass through solid players, monsters and decorations. Walls still
+  block it. Early solid death frames and vanilla demos keep actor blocking.
+- Boom Pain Elementals: no vanilla 21-skull population cap; the PE-to-skull
+  path rejects one-sided, blocking and monster-blocking lines before allocating
+  a skull or consuming RNG. Spawned skulls outside their sector's vertical
+  bounds are killed in place. Vanilla demos retain the original spawn rules.
+
 - Boom variable friction (223, sector bit 256): controller-derived mud/ice
   friction, inertia, speed-dependent mud acceleration, overlapping-floor
   selection, one-tic friction thinker state and icy wall bounces. Normal maps
@@ -119,9 +127,15 @@ recorded paths below are verified; complete Boom compatibility is not claimed.
 - Generalized floors (`0x6000`–`0x7fff`): all eight trigger modes, four speeds,
   up/down targets, crushing, and trigger/numeric model texture/type changes.
   Generalized floors use the floor mover slot independently of ceiling motion.
-- Basic generalized doors (`0x3c00`–`0x3fff`): triggers, speeds, waits and
-  open/close variants used by the recorded paths below. Door lighting
-  transfers remain unsupported.
+- Generalized doors (`0x3c00`–`0x3fff`): triggers, speeds, waits and
+  open/close variants used by the recorded paths below. Wait selections use
+  exactly 35, 150, 300 and 1050 tics.
+- Manual door lighting: regular and generalized push doors, including locked
+  doors, use their nonzero line tag to change tagged sectors' light levels
+  when opening or closing finishes. Boom 2.02 endpoint timing, current neighbor
+  levels, ordered updates and blocked final snaps are preserved. Switched and
+  other tag-operated doors do not gain this effect; vanilla demos retain their
+  original behavior. MBF's gradual lighting is not implemented.
 - Static ceiling/floor scrollers (250–251), carry-only conveyors (252), and
   combined floor scrolling/carrying (253). Carry impulses participate in the
   ordered thinker loop; CPU/GPU plane sampling includes the texture offsets.
@@ -1081,23 +1095,280 @@ keyframe and authority-codec round trips. The multiplayer simulation ID is now
 retain the teleport camera's cached onground state. The previous Boom formats
 retain their RNG streams when loaded and default the new camera cache.
 
+## Manual door lighting verification
+
+`scripts/verify_boom_manual.py --door-lighting` compares the real door
+dispatchers and mover ticks with DSDA-Doom 0.27.5 at Boom complevel 9.
+All **381,072/381,072 rows across 272 cases** match using Freedoom 2 as the
+base IWAD; **220 cases** change one or more light levels. The matrix covers
+regular/keyed/blazing manual doors, both generalized push triggers, all four
+generalized speeds/kinds/delays, generalized locks, adjacent tagged sectors,
+changing neighboring lights, retriggers, actor obstruction, zero movement
+ranges, missing/zero tags, back-side use, tag-operated negative controls,
+and overlapping movers. Actor AI and approach movement are outside that matrix.
+The original manual-door regression also matches **500,346/500,346 rows across
+2,042 cases**.
+
+The wider delay matrix caught an existing generalized-door timing error:
+the middle waits were 140 and 315 tics. They now match the reference's 150
+and 300 tics. Lighting uses the controlling line retained when the thinker
+was created; retriggering it does not replace that line. Open completion takes
+the brightest neighboring light (starting at zero); close completion takes
+the minimum of the sector's current light and its neighbors. Self-referencing
+lines are ignored, and adjacent tagged sectors observe earlier updates in
+map order. A zero top-minus-floor range suppresses lighting changes.
+
+```sh
+python3 scripts/verify_boom_manual.py --door-lighting \
+  --iwad /usr/share/games/doom/freedoom2.wad \
+  --reference-source /path/to/pristine/dsda-doom-0.27.5 \
+  --out /tmp/gddoom-door-lighting
+
+# Press Use at the starting door. The room brightens when the door finishes
+# opening and darkens when it finishes closing.
+go run . -wad /usr/share/games/doom/freedoom2.wad \
+  -file testdata/boom/door-lighting.wad -map MAP01 -no-monsters \
+  -sourceport-mode=true -mouselook=true
+```
+
+An owned Doom II IWAD can be substituted. Regenerate the original fixture and
+case manifest with `python3 scripts/make_boom_door_lighting_wad.py`.
+The comparison retains both CSVs, the generated WAD, manifests, logs, hashes
+and `results.json`; this session's evidence is in
+`/tmp/gddoom-door-lighting/comparison` and `manual-regression`.
+Focused tests cover binary save/keyframe continuation, displaced thinkers,
+authority snapshot round trips, invalid lighting references, render-cache
+refreshes, vanilla-demo gating and previous-format camera/RNG preservation.
+
+A separate no-monsters preview exercises actual player Use input and renders
+initial, opening, open and reclosed views at tics 0, 32, 64 and 280. Its player,
+sector, light and resource states match DSDA; CPU/GPU images are identical
+in both Faithful and Source Port modes.
+Exact DSDA screenshot parity remains outside this change: whole-image
+pixel differences range from 0.51% to 18.45% in these views. The local visual
+comparison is `/tmp/gddoom-door-lighting/visual`.
+
+## Full-map combat demo verification
+
+`scripts/verify_boom_full_combat.py` replays unchanged Sunlust UV-Max
+recordings. The original WAD and recording archives come from
+[DSDA](https://dsdarchive.com/wads/sunlust) and are pinned by SHA-256.
+Every active map tic matches DSDA-Doom 0.27.5:
+
+| Recording / `--case` | Map | Matching active tics | Exit kills | Secrets | Health |
+| --- | --- | ---: | ---: | ---: | ---: |
+| `sl01-124` (default) | MAP01 | 2,972/2,972 | 77/77 | 2/2 | 28 |
+| `sl01-126` | MAP01 | 3,024/3,024 | 77/77 | 2/2 | 69 |
+| `sl02m225` | MAP02 | 5,086/5,086 | 94/89 | 3/3 | 50 |
+
+The MAP01 routes are mhrz's DSDA-Doom 0.24.3 recordings; MAP02 is Kinetic's
+DSDA-Doom 0.29.4 recording. All use Boom complevel 9. Independent completion
+summaries agree, including leveltime. Final traces contain no surviving counted
+monsters; kill totals alone would not establish that after resurrection.
+MAP02's extra kills come from arch-vile resurrection, which the verifier
+requires the trace to actually exercise. The recordings contain 3,194, 3,135
+and 5,101 commands respectively; following intermission commands are outside
+the active-map comparison.
+
+Every active tic compares player position, facing, momentum, health, armor,
+all four ammo types, ready/pending weapon, weapon and flash state/timing,
+attack/refire flags, kills, secrets, every sector's physical floor/ceiling and
+light level, ordered combat actors, barrels and effects, and all gameplay RNG
+seeds.
+The existing combat trace's target/tracer type, chase memory and actor
+bounds/support checks are retained. Static decorations, player/pickup animation,
+cosmetic misc RNG and identity among same-type targets remain excluded.
+
+The MAP01 routes exposed and now cover these corrections:
+
+- A non-solid Imp corpse stopped against an actor at tic 315. Boom permits
+  non-solid movers through solid actors; vanilla demos retain their old rule.
+- A Pain Elemental created a skull across a blocking line at tic 1,140.
+  Boom rejects the path before spawning, avoiding the extra corpse and RNG
+  draws. The implementation also applies Boom's removed population cap and
+  pre-move vertical spawn checks.
+- Canonical trace labels for several monster states were off by one or two,
+  and the Pain Elemental walk cycle was exported as a single state. Labels
+  now follow the original state table. These exporter corrections do not
+  change the monsters' animation timing or AI.
+- Exploded Revenant missiles lost their original tracer type in the trace.
+  The existing saved effect-target fields now retain it through normal and
+  deferred impacts, binary saves and snapshots.
+- The alternate route's Mancubus shot disappeared below a sky ceiling at
+  tic 605. Boom removes shots only above the back sector's sky ceiling;
+  lower shots explode, including the explosion RNG draw. Vanilla retains
+  its unconditional sky-removal behavior.
+- A rocket explosion stopped its remaining half-step against a solid actor
+  at tic 1,867. Boom permits the non-solid death object through actors while
+  retaining line and height checks. Vanilla keeps its original actor collision.
+
+```sh
+python3 scripts/verify_boom_full_combat.py \
+  --iwad /usr/share/games/doom/freedoom2.wad \
+  --reference-source /path/to/pristine/dsda-doom-0.27.5 \
+  --out /tmp/gddoom-full-combat
+```
+
+An owned Doom II IWAD can be substituted. DSDA runs with `-nodeh` to preserve
+the original Doom gameplay definitions when using Freedoom assets (whose patch
+changes SSG flash timing). Sunlust's pinned gameplay patch affects Commander
+Keen and its states; the verifier checks the patch hash and verifies that the
+selected map contains no Keen. This exclusion applies to these maps and does
+not establish support for Sunlust's custom actor on other maps.
+
+Select another recording with `--case sl01-126` or `--case sl02m225`.
+Both CSVs, completion summaries, input archives, logs and input/source/reference
+hashes are retained in `results.json`. Session evidence is in
+`/tmp/gddoom-full-combat/results.json`, `/tmp/gddoom-rebirth/map01-alt/results.json`
+and `/tmp/gddoom-rebirth/map02/results.json`. These complete surviving
+routes do not verify intermission animation, following maps, arbitrary combat
+demos or death/rebirth (covered separately below). The previous **17,100**
+revenant/arch-vile/Ancient Aliens combat tics remain regression coverage.
+Focused tests cover vanilla gating, sky-ceiling equality, explosion RNG draws,
+corpse solidity, blocked skull paths without allocation/RNG draws, population
+limits, vertical rejection and exploded-missile tracer preservation in saves.
+
+### MAP02 crushers, conveyors and checkpoint continuation
+
+`sl02m225` now completes with **5,086/5,086 matching active tics**, including
+barrels' positions, momentum, health, death states/timing, body bounds and
+support. Coverage assertions require barrel deaths and explosions, moving
+blood and arch-vile resurrection. The previously failing replay is now a
+permanent passing regression. The verifier also retains first differences
+and row counts if a future change prevents either engine from exiting.
+
+The route exposed these additional corrections:
+
+- Crusher processing now follows Boom's persistent sector touching-actor
+  lists, rather than blockmap-cell order. Movement within a sector retains
+  the existing node; leaving removes it and re-entering prepends a new one.
+  Player bodies, runtime spawns, pickups and removals update membership.
+  The height-clip walk restarts after each callback so moving skulls and
+  newly linked nodes are handled like `P_CheckSector`.
+- Conveyors now carry floor blood and submerged puffs, smoke, teleport/BFG
+  effects and missile death effects. Effects retain horizontal momentum.
+  Their XY movement clamps and splits steps like Doom, retaining a successful
+  half-step even if the remainder is blocked. Boom's non-solid actor collision
+  and allowed-dropoff rules apply; wall and height checks remain active.
+- Exploding barrels remain solid until removal or crusher gibbing. They do
+  not run the monsters' `A_Fall` action. Canonical barrel trace states were
+  also corrected to 806–812; that label correction does not alter timing.
+- Isolated/self-referencing door sectors now use Boom's lowest-surrounding-
+  ceiling rules: exclude self-references and use the 32,000-unit sentinel
+  when no lower neighbor exists. The MAP02 machinery's doors therefore open
+  instead of snapping down four units at tic 504. Vanilla keeps its previous
+  neighbor handling.
+- Arachnotron plasma flight states use five tics, including the randomized
+  spawn duration. Cacodemon shots retain their four-tic states. This removes
+  the final 19 actor-animation differences starting at tic 1,315.
+
+The same full route also matches after **eight binary save/restores** and,
+separately, **eight binary keyframe/restores**, at zero-based demo tics 47, 48,
+49, 60, 504, 1,315, 2,400 and 4,800. Each checkpoint encodes/decodes the real
+binary format, constructs a fresh level, restores state and RNG, and resumes
+the original recording. Both traces and the final exit summary still match
+DSDA. The reports require every requested checkpoint to have executed.
+
+```sh
+python3 scripts/verify_boom_full_combat.py --case sl02m225 \
+  --checkpoint-format keyframe \
+  --checkpoint-tic 47 --checkpoint-tic 48 --checkpoint-tic 49 \
+  --checkpoint-tic 60 --checkpoint-tic 504 --checkpoint-tic 1315 \
+  --checkpoint-tic 2400 --checkpoint-tic 4800 \
+  --iwad /usr/share/games/doom/freedoom2.wad \
+  --reference-source /path/to/pristine/dsda-doom-0.27.5 \
+  --out /tmp/gddoom-rebirth/map02-keyframe
+```
+
+Use `--checkpoint-format save` for the save-format run. Evidence is in
+`/tmp/gddoom-rebirth/map02-save/results.json` and
+`/tmp/gddoom-rebirth/map02-keyframe/results.json`, including `checkpoints.json`
+with the actual reload tics. Focused tests cover persistent node order versus
+block relinking, mutable traversal, leave/re-entry, actor spawn/removal,
+independent restored worlds, malformed membership rejection, authority baseline
+ownership, conveyor eligibility, blocked split steps, barrel solidity and
+neighbor/flight-state rules.
+
+This verifies this MAP02 route and its binary state continuation. It does not
+establish arbitrary-map parity, multiplayer voodoo-doll death behavior or
+checkpointing in the middle of a simulation tic.
+
+## Death and same-map rebirth verification
+
+`scripts/verify_boom_rebirth.py` compares **11,800/11,800 tics across 11 cases**,
+including **44 real level reloads**, against DSDA-Doom 0.27.5. It exercises:
+
+- Close shotgun combat plus a damaging floor, seeds 0/1993 and RNG insurance
+  off/on, with four separate Use/reload cycles per case.
+- Held Use through repeated deaths, and Use on the lethal floor-damage tic.
+  The latter waits for the next death thinker before requesting rebirth;
+  the actual reload follows one tic later.
+- Natural Revenant combat deaths without a damaging floor, with insurance
+  off/on, and a low-ceiling variant of the shotgun/floor fixture.
+
+The observer does not inject damage, death, inventory changes or reloads.
+Alongside the full-map trace fields, every tic compares player lifecycle state,
+local leveltime, reload count, view height and its delta, and completed RNG
+phase. Coverage assertions require actual deaths and reloads, restored inventory
+and health, continuous RNG streams and reset local time/phase; a quiet matching
+fixture cannot pass without exercising rebirth.
+
+The comparison exposed a gameplay bug at the first restart: RNG streams were
+preserved correctly, but their shuffle/Revenant homing phase carried into the
+new level. Boom's `G_DoLoadLevel` resets `boom_basetic` before spawning things.
+Fresh level construction now resets only that phase, preserving seeds and
+indices; saved snapshots still restore their exact phase. A focused regression
+checks stream preservation and phase reset with insurance off/on.
+
+```sh
+python3 scripts/verify_boom_rebirth.py \
+  --iwad /usr/share/games/doom/freedoom2.wad \
+  --reference-source /path/to/pristine/dsda-doom-0.27.5 \
+  --out /tmp/gddoom-rebirth/matrix
+```
+
+Raw demos/WADs, both traces, coverage counts, logs and hashes remain alongside
+`results.json`. This covers live single-player same-map rebirth. Save/keyframe
+boundaries during death, transitions to following maps, intermission animation
+and multiplayer death/rebirth remain unverified by this matrix.
+
 ## Remaining work
 
-GL nodes, unusual interactions beyond the fixtures, custom weapon preferences,
-broader combat-demo parity, and mixer-wide sound parity remain outside this
-verified scope.
-Maps may load while unsupported actions behave incorrectly.
+The next milestones are:
+
+1. Expand complete-map combat coverage beyond the two verified Sunlust maps
+   and their recorded routes. Add save/keyframe boundaries during death/rebirth
+   and transitions, keeping the movement, combat, lifecycle and mover matrices
+   as regressions. MAP02 now covers a complete crusher/resurrection route with
+   binary checkpoint continuation.
+2. Verify multiplayer voodoo-doll ownership, shared damage and death behavior,
+   including save/keyframe continuation and matching client/server state.
+3. Add custom weapon preferences, then broaden complex-map progression and
+   large-fight performance coverage. GL nodes and mixer-wide sound parity
+   remain separate follow-up work.
+
+Unusual interactions beyond the fixtures remain unverified. Maps may load
+while unsupported actions behave incorrectly.
 
 The no-monsters comparisons establish the recorded movement/progression paths,
 not full combat RNG parity, every map route, or large-fight performance. The map
 audit detects unknown specials; it does not detect every unsupported interaction.
 
 These changes advance the multiplayer simulation ID to
-`gd-doom-authority-dev-19`. Deploy matching clients and servers. Sector identities
-extend the sound-event schema. Explicit ceiling ownership and retained doors extend the mover schema; displaced ceilings
-remain in the ordered mover state. Save version 37 reads versions 34–36;
-keyframe version 24 reads versions 21–23. Older formats cannot preserve the
-previously unsupported overlapping manual-door state. Generalized mover,
+`gd-doom-authority-dev-23`. Deploy matching clients and servers. Door lighting
+adds the controlling line reference to owned and displaced door snapshots.
+Sector identities extend the sound-event schema. Explicit ceiling ownership
+and retained doors extend the mover schema; displaced ceilings remain in the
+ordered mover state. Save version 39 reads versions 36–38;
+keyframe version 26 reads versions 23–25. The new formats retain ordered sector
+membership and horizontal momentum on missile death effects. Older formats
+reconstruct sector membership and default that effect momentum to zero; they
+cannot recover historical sector-list ordering for exact continuation of
+crusher-sensitive maps. Save/keyframe magic now disambiguates their overlapping
+version numbers (notably historical save 26 versus current keyframe 26).
+Formats before save 38/keyframe 25 default door-lighting references to disabled,
+since the activation line was not saved. Formats before
+save 35/keyframe 22 cannot preserve overlapping manual-door state. Generalized mover,
 elevator, card-key and actor friction extensions retain their older layouts.
 Older snapshots initialize previously unsupported friction state to defaults.
 Scroller data from version 30/keyframe 17 remains readable; earlier snapshots
