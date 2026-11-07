@@ -146,6 +146,9 @@ func (g *game) initThingCombatState() {
 			continue
 		}
 		g.thingHP[i] = shootableThingSpawnHealth(th.Type)
+		if isVoodooDollType(th.Type) {
+			g.thingDoomState[i], g.thingStateTics[i] = 149, -1
+		}
 		if i >= 0 && i < len(g.thingState) && i < len(g.thingStateTics) {
 			g.thingState[i] = monsterStateSpawn
 			if g.thingStateTics[i] == 0 {

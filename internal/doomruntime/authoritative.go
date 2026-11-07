@@ -92,6 +92,7 @@ func (a *Authority) AddPlayer(id byte) error {
 func (a *Authority) RemovePlayer(id byte) {
 	if id >= 1 && id <= 4 {
 		a.g.clearAuthoritativePlayerTargets(int(id))
+		a.removeVoodooDolls(int(id))
 		if a.g.boomTouchSectors != nil {
 			a.g.updateBoomActorTouch(-int(id), nil)
 		}

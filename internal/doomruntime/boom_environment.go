@@ -77,13 +77,7 @@ func (g *game) initBoomEnvironment() {
 			g.boomPushers = append(g.boomPushers, p)
 		}
 	}
-	if len(g.boomFrictions) > 0 || len(g.boomPushers) > 0 {
-		for i, th := range g.m.Things {
-			if isVoodooDollType(th.Type) {
-				g.boomVoodooBodies = append(g.boomVoodooBodies, i)
-			}
-		}
-	}
+	g.rebuildVoodooBodies()
 
 }
 
@@ -228,9 +222,11 @@ func (g *game) tickBoomPusher(p boomPusherThinker) {
 		x, y := g.thingPosFixed(i, th)
 		z, floor, _ := g.thingSupportState(i, th)
 		// Boom tests the shared player's viewz even for a voodoo body.
-		mx, my := force(x, y, z, floor, g.playerViewZ, g.thingCurrentHeight(i, th), playerRadius)
-		g.thingMomX[i] = boomFixed(g.thingMomX[i] + mx)
-		g.thingMomY[i] = boomFixed(g.thingMomY[i] + my)
+		g.withVoodooOwner(i, func() {
+			mx, my := force(x, y, z, floor, g.playerViewZ, g.thingCurrentHeight(i, th), playerRadius)
+			g.thingMomX[i] = boomFixed(g.thingMomX[i] + mx)
+			g.thingMomY[i] = boomFixed(g.thingMomY[i] + my)
+		})
 	}
 }
 

@@ -258,9 +258,9 @@ func (g *game) authoritativePlayerForSlot(slot int) *authoritativePlayerState {
 // changed since the last checkpoint of its roster entry.
 func (g *game) authoritativePlayerBody(state *authoritativePlayerState) (player, bool, int64) {
 	if state.localSlot == g.localSlot {
-		return g.p, g.isDead, g.playerBlockOrder
+		return g.p, g.playerBodyDead(), g.playerBlockOrder
 	}
-	return state.p, state.isDead, state.playerBlockOrder
+	return state.p, state.isDead && state.playerMobjHealth <= 0, state.playerBlockOrder
 }
 
 // runAuthoritativePlayersTic consumes one command per player in slot order,

@@ -292,7 +292,7 @@ func (g *game) authoritativePlayerFrame(slot int) (byte, bool) {
 	if p == nil {
 		return 0, false
 	}
-	if p.isDead {
+	if p.isDead && p.playerMobjHealth <= 0 {
 		return 'N', true
 	}
 	switch p.playerMobjState {

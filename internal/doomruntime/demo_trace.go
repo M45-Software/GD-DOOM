@@ -1144,6 +1144,9 @@ func demoTraceThingHealth(g *game, i int, typ int16) int {
 }
 
 func demoTraceThingTics(g *game, i int, typ int16) int {
+	if isVoodooDollType(typ) && i >= 0 {
+		return g.thingStateTics[i]
+	}
 	if i < 0 {
 		return 0
 	}
@@ -1192,6 +1195,12 @@ func demoTraceThingTics(g *game, i int, typ int16) int {
 }
 
 func demoTraceThingState(g *game, i int, typ int16) int {
+	if isVoodooDollType(typ) && i >= 0 {
+		if g.thingGibbed[i] {
+			return demoTraceStateGibs
+		}
+		return g.thingDoomState[i]
+	}
 	if i >= 0 && i < len(g.thingState) {
 		switch g.thingState[i] {
 		case monsterStateGibs:
@@ -1598,6 +1607,13 @@ func demoTraceThingMomZ(g *game, i int) int64 {
 }
 
 func demoTraceThingFlags(g *game, i int, th mapdata.Thing) int {
+	if isVoodooDollType(th.Type) {
+		flags := demoTraceFlagDropoff | 0x800 // MF_PICKUP
+		if g.thingDead[i] {
+			return flags | demoTraceFlagCorpse
+		}
+		return flags | demoTraceFlagSolid | demoTraceFlagShootable
+	}
 	if th.Type == 89 {
 		return 24
 	}

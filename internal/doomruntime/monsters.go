@@ -666,7 +666,11 @@ func (g *game) tickMonsters() {
 }
 
 func (g *game) tickThingThinker(i int, th mapdata.Thing) {
-	if isVoodooDollType(th.Type) || (!isMonster(th.Type) && !isBarrelThingType(th.Type) && th.Type != 88 && th.Type != 89 && th.Type != 23) {
+	if isVoodooDollType(th.Type) {
+		g.withVoodooOwner(i, func() { g.tickMonsterMomentum(i, th); g.tickVoodooState(i) })
+		return
+	}
+	if !isMonster(th.Type) && !isBarrelThingType(th.Type) && th.Type != 88 && th.Type != 89 && th.Type != 23 {
 		g.tickMonsterMomentum(i, th)
 		return
 	}

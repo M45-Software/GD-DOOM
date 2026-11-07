@@ -472,9 +472,15 @@ func (g *game) damagePlayerFrom(amount int, msg string, attackerX, attackerY int
 }
 
 func (g *game) damagePlayerFromWithInflictorZ(amount int, msg string, attackerX, attackerY int64, hasAttacker bool, attackerThing int, inflictorZ int64) {
+	g.damagePlayerBody(amount, msg, attackerX, attackerY, hasAttacker, attackerThing, inflictorZ, -1)
+}
+
+func (g *game) damagePlayerBody(amount int, msg string, attackerX, attackerY int64, hasAttacker bool, attackerThing int, inflictorZ int64, dollIndex int) {
+	doll := dollIndex >= 0
+	independentBody := doll || g.playerOwnsVoodooBody()
 	const playerPainChance = 255
 
-	if amount <= 0 || g.stats.Health <= 0 || g.isDead {
+	if amount <= 0 || (independentBody && g.playerMobjHealth <= 0) || (!independentBody && (g.stats.Health <= 0 || g.isDead)) {
 		return
 	}
 	if want := runtimeDebugEnv("GD_DEBUG_PLAYER_DAMAGE_TIC"); want != "" {
@@ -487,7 +493,11 @@ func (g *game) damagePlayerFromWithInflictorZ(amount int, msg string, attackerX,
 		}
 	}
 	if hasAttacker {
-		g.applyPlayerDamageThrust(amount, attackerX, attackerY, inflictorZ)
+		health := g.stats.Health
+		if independentBody {
+			health = g.playerMobjHealth
+		}
+		g.applyPlayerDamageThrustWithHealth(amount, attackerX, attackerY, inflictorZ, health)
 	}
 	// Doom's episode-ending hell sector cannot kill the player, including
 	// damage from monsters received while standing in that sector.
@@ -545,26 +555,42 @@ func (g *game) damagePlayerFromWithInflictorZ(amount int, msg string, attackerX,
 	if g.stats.Health < 0 {
 		g.stats.Health = 0
 	}
-	if g.stats.Health == 0 {
+	if (independentBody && g.playerMobjHealth <= 0) || (!independentBody && g.stats.Health == 0) {
 		g.isDead = true
 		if len(g.authorityPlayers) != 0 {
 			g.authorityPlayerKilled(g.localSlot, g.authorityDamageSource)
 		}
 		// P_KillMobj shortens the death state's tics with P_Random & 3.
 		// Lower the weapon immediately, before another attack state can run.
-		_ = doomrand.PRandom(doomrand.Killtics) & 3
+		shorten := doomrand.PRandom(doomrand.Killtics) & 3
+		if doll {
+			state, tics := 158, 10
+			if g.playerMobjHealth < -100 {
+				state, tics = 165, 5
+				g.thingXDeath[dollIndex] = true
+			}
+			g.thingDoomState[dollIndex], g.thingStateTics[dollIndex] = state, max(1, tics-shorten)
+		}
 		g.setWeaponPSpriteState(weaponInfo(g.inventory.ReadyWeapon).downstate, false)
 		msg = "You Died"
 		g.emitSoundEvent(soundEventPlayerDeath)
 	} else {
 		if doomrand.PRandom(doomrand.Painchance) < playerPainChance {
-			g.setPlayerMobjState(doomStatePlayerPain1, 4)
+			if doll {
+				g.thingDoomState[dollIndex], g.thingStateTics[dollIndex] = doomStatePlayerPain1, 4
+			} else {
+				g.setPlayerMobjState(doomStatePlayerPain1, 4)
+			}
 		}
 	}
 	g.setHUDMessage(msg, 20)
 }
 
 func (g *game) applyPlayerDamageThrust(amount int, attackerX, attackerY, inflictorZ int64) {
+	g.applyPlayerDamageThrustWithHealth(amount, attackerX, attackerY, inflictorZ, g.stats.Health)
+}
+
+func (g *game) applyPlayerDamageThrustWithHealth(amount int, attackerX, attackerY, inflictorZ int64, health int) {
 	if g == nil || amount <= 0 {
 		return
 	}
@@ -573,7 +599,7 @@ func (g *game) applyPlayerDamageThrust(amount int, attackerX, attackerY, inflict
 	worldAng := doomPointToAngle2(attackerX, attackerY, g.p.x, g.p.y)
 	// P_DamageMobj may throw a fatally hit victim toward an inflictor far
 	// below it. The random draw happens before armor and death-state handling.
-	if amount < 40 && amount > g.stats.Health && g.p.z-inflictorZ > 64*fracUnit && doomrand.PRandom(doomrand.Damagemobj)&1 != 0 {
+	if amount < 40 && amount > health && g.p.z-inflictorZ > 64*fracUnit && doomrand.PRandom(doomrand.Damagemobj)&1 != 0 {
 		worldAng += doomAng180
 		thrust *= 4
 	}

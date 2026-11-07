@@ -281,6 +281,20 @@ func validateAuthorityReplica(g *game, r authorityReplica) error {
 			}
 		}
 	}
+	for i, th := range s.Things {
+		if slot := voodooPlayerSlot(th.Type); slot != 0 && !s.ThingCollected[i] {
+			active := false
+			for _, p := range r.Players {
+				if p.LocalSlot == slot {
+					active = true
+					break
+				}
+			}
+			if !active {
+				return fmt.Errorf("authority baseline doll has no active owner")
+			}
+		}
+	}
 	if !found {
 		return fmt.Errorf("authority baseline viewer is not in roster")
 	}

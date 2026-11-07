@@ -1165,7 +1165,7 @@ func (g *game) playerMobjHeight() int64 {
 	if g.p.corpseGibbed {
 		return 0
 	}
-	if g.isDead {
+	if g.playerBodyDead() {
 		// P_KillMobj quarters the target mobj's height immediately, including
 		// on a tic when a later monster still executes its pending attack.
 		return playerHeight >> 2
@@ -11438,10 +11438,10 @@ func (g *game) appendMonsterCutoutItems(camX, camY, camAng, focal, focalV, near 
 		if i < 0 || i >= len(g.thingCollected) || g.thingCollected[i] {
 			continue
 		}
-		if !isMonster(th.Type) {
+		if !isMonster(th.Type) && !isVoodooDollType(th.Type) {
 			continue
 		}
-		if !g.monsterVisibleAfterDeath(i, th.Type) {
+		if !isVoodooDollType(th.Type) && !g.monsterVisibleAfterDeath(i, th.Type) {
 			continue
 		}
 		txFixed, tyFixed, baseZFixed := g.thingRenderPosFixed(i, th, alpha)
@@ -13432,6 +13432,9 @@ func monsterDeathAnimTotalTicsForMode(typ int16, xdeath bool) int {
 }
 
 func (g *game) monsterFrameLetter(i int, th mapdata.Thing, tic int) byte {
+	if isVoodooDollType(th.Type) {
+		return g.voodooFrameLetter(i)
+	}
 	if i >= 0 && i < len(g.thingState) && i < len(g.thingStatePhase) {
 		phase := g.thingStatePhase[i]
 		if g.thingState[i] == monsterStateHeal && phase >= 0 && phase < 3 {
@@ -13581,6 +13584,10 @@ func (g *game) monsterSpriteNameForView(i int, th mapdata.Thing, tic int, viewX,
 }
 
 func (g *game) monsterSpriteRefForView(i int, th mapdata.Thing, tic int, viewX, viewY float64) (*spriteRenderRef, bool, bool) {
+	if isVoodooDollType(th.Type) && g.thingGibbed[i] {
+		ref, ok := g.spriteRenderRef("POL5A0")
+		return ref, false, ok
+	}
 	if g.possession != nil && g.possession.thing == i {
 		return nil, false, false
 	}
@@ -13629,6 +13636,9 @@ func monsterUsesShadow(typ int16) bool {
 }
 
 func monsterSpritePrefix(typ int16) (string, bool) {
+	if isVoodooDollType(typ) {
+		return "PLAY", true
+	}
 	switch typ {
 	case 72:
 		return "KEEN", true

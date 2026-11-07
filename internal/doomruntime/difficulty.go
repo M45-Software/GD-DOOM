@@ -121,6 +121,9 @@ func (g *game) thingActiveInSession(i int) bool {
 	if i < len(g.thingDead) && g.thingDead[i] {
 		return false
 	}
+	if isVoodooDollType(g.m.Things[i].Type) {
+		return true
+	}
 	// Runtime-spawned drops do not carry map spawn flags; they should remain
 	// active regardless of skill/game-mode filtering.
 	if i < len(g.thingDropped) && g.thingDropped[i] {
@@ -157,6 +160,9 @@ func (g *game) thingBlocksInSession(i int) bool {
 		return true
 	}
 	th := g.m.Things[i]
+	if isVoodooDollType(th.Type) {
+		return true
+	}
 	if isMonster(th.Type) && i < len(g.thingSpawnPoint) && g.thingSpawnPoint[i].Type == 0 {
 		return true
 	}

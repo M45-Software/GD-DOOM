@@ -20,11 +20,22 @@ func (a *Authority) authoritativeSpawnStarts(id byte) []playerStart {
 		}
 		return starts
 	}
-	starts := collectPlayerStarts(a.g.m)
-	for i, p := range starts {
-		if p.slot == int(id) {
-			starts[0], starts[i] = starts[i], starts[0]
-			break
+	source := a.g.m
+	if a.g.restartTemplate != nil {
+		source = a.g.restartTemplate
+	}
+	// Earlier numbered starts are dolls. Only the last start of each slot
+	// can host a camera body, including fallback spawns.
+	all := collectPlayerStarts(source)
+	last := [5]int{-1, -1, -1, -1, -1}
+	for i, p := range all {
+		last[p.slot] = i
+	}
+	starts := make([]playerStart, 0, 4)
+	for _, slot := range []int{int(id), 1, 2, 3, 4} {
+		if last[slot] >= 0 {
+			starts = append(starts, all[last[slot]])
+			last[slot] = -1
 		}
 	}
 	return starts
@@ -170,6 +181,9 @@ func (a *Authority) spawnAuthoritativePlayer(id byte, respawn bool) error {
 	score.DeathTic = 0
 	rules.SpawnCursor = (spawnIndex + 1) % len(a.authoritativeSpawnStarts(id))
 	a.selectAnchor()
+	if !respawn {
+		a.spawnVoodooDolls(int(id))
+	}
 	if respawn {
 		g.spawnTeleportFog(p.x, p.y, p.z)
 	}

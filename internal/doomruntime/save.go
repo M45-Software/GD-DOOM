@@ -1602,7 +1602,20 @@ func restoreGameSaveState(g *game, s gameSaveState) {
 		g.thingSectorCache[i] = g.sectorAt(x, y)
 	}
 	g.State.SyncRender()
+	// Older single-player saves used the slot-1 internal type for every
+	// local slot. Original numbered starts recover ownership unambiguously;
+	// dynamically appended co-op bodies already carry their owner in Type.
+	if g.restartTemplate != nil {
+		for i, th := range g.m.Things {
+			if i < len(g.restartTemplate.Things) && isVoodooDollType(th.Type) {
+				if slot := playerSlotFromThingType(g.restartTemplate.Things[i].Type); slot != 0 {
+					g.m.Things[i].Type = voodooTypeForSlot(slot)
+				}
+			}
+		}
+	}
 	g.rebuildThingBlockmap()
+	g.rebuildVoodooBodies()
 	g.restoreBoomSectorTouches(s.BoomSectorTouches)
 	g.ensureWeaponDefaults()
 	g.runtimeSettingsSeen = true

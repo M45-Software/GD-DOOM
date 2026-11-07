@@ -1220,7 +1220,7 @@ func (g *game) actorBlockedByThingsWithPickupTouch(x, y, radius int64, moverThin
 				return true
 			}
 		}
-	} else if moverIsMonster && !g.isDead && actorsOverlapXY(x, y, radius, g.p.x, g.p.y, playerRadius) {
+	} else if moverIsMonster && !g.playerBodyDead() && actorsOverlapXY(x, y, radius, g.p.x, g.p.y, playerRadius) {
 		if probeEnabled {
 			g.debugPlayerProbe(fmt.Sprintf("block thing=player type=player pos=(%d,%d) radius=%d", g.p.x, g.p.y, playerRadius), x, y)
 		}
@@ -1239,12 +1239,14 @@ func (g *game) actorBlockedByThingsWithPickupTouch(x, y, radius int64, moverThin
 		}
 		// Doom's PIT_CheckThing touches MF_SPECIAL items during the thing
 		// blockmap walk, before a later solid/corpse can reject the move.
-		if touchPickups && ((moverThingIdx < 0 && !moverIsMonster) || moverThingIdx >= 0 && isVoodooDollType(g.m.Things[moverThingIdx].Type)) && !g.isDead {
-			pickupZ := g.p.z
-			if moverThingIdx >= 0 {
+		doll := moverThingIdx >= 0 && moverThingIdx < len(g.m.Things) && isVoodooDollType(g.m.Things[moverThingIdx].Type)
+		if touchPickups && ((!doll && moverThingIdx < 0 && !moverIsMonster && !g.playerBodyDead()) || (doll && g.thingHP[moverThingIdx] > 0)) {
+			pickupZ, height := g.p.z, g.playerMobjHeight()
+			if doll {
 				pickupZ, _, _ = g.thingSupportState(moverThingIdx, g.m.Things[moverThingIdx])
+				height = g.thingCurrentHeight(moverThingIdx, g.m.Things[moverThingIdx])
 			}
-			g.processThingPickupAtIndex(i, th, x, y, pickupZ, playerRadius, g.playerMobjHeight(), false)
+			g.processThingPickupAtIndex(i, th, x, y, pickupZ, playerRadius, height, false)
 			if i < len(g.thingCollected) && g.thingCollected[i] {
 				return false
 			}

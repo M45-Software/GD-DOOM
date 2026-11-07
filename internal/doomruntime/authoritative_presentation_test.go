@@ -380,12 +380,14 @@ func TestAuthorityRemotePlayersRenderMirroredAndCorpseSprites(t *testing.T) {
 		t.Fatal("paired mirrored remote sprite was invisible or unflipped")
 	}
 	state.isDead = true
+	state.playerMobjHealth = 0
 	g.billboardQueueScratch = nil
 	g.appendRemotePlayerCutoutItems(0, 0, 0, 32, 32, 1)
 	if len(g.billboardQueueScratch) != 1 || g.billboardQueueScratch[0].flip {
 		t.Fatal("remote corpse did not use nonrotating death sprite")
 	}
 	state.isDead = false
+	state.playerMobjHealth = 100
 	for _, test := range []struct {
 		state int
 		frame byte

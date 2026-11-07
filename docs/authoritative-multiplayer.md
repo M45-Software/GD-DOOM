@@ -775,3 +775,19 @@ WS endpoint above and allow that page's exact origin with `-web-origins`.
 
 * [quic-go WebTransport server and origin validation](https://quic-go.net/docs/webtransport/server/)
 * [WebTransport Go releases and supported protocol revisions](https://github.com/quic-go/webtransport-go/releases)
+
+## Co-op duplicate player starts
+
+Earlier starts for an active numbered slot become voodoo dolls; the last start
+is its camera spawn. Dolls share the owner's inventory and player health while
+retaining independent body health and momentum. Respawn preserves them;
+explicit slot removal retires them, and rejoining creates new actor identities.
+Damage, pickups, crushers and telefrags use the owner rather than the current
+simulation anchor. Co-op friendly-fire protection also applies to dolls.
+
+Four-slot tests cover lifecycle and client replication. A controlled DSDA
+experiment verifies damage/rebirth semantics; complete classic netdemo timing
+and RNG parity remain unverified. See [Boom co-op doll verification](boom-support.md#co-op-voodoo-dolls)
+for commands and limits. World saves/keyframes retain doll state but do not
+checkpoint the full authority roster. Matching clients and servers must use
+simulation ID `gd-doom-authority-dev-25`.

@@ -53,7 +53,7 @@ func (g *game) thingCurrentHeight(i int, th mapdata.Thing) int64 {
 		return 0
 	}
 	if info, ok := demoTraceThingInfoForType(th.Type); ok && info.height > 0 {
-		if isBarrelThingType(th.Type) && i >= 0 && i < len(g.thingDead) && g.thingDead[i] {
+		if (isBarrelThingType(th.Type) || isVoodooDollType(th.Type)) && i >= 0 && i < len(g.thingDead) && g.thingDead[i] {
 			return info.height >> 2
 		}
 		if (isMonster(th.Type) || th.Type == 88) && i >= 0 && i < len(g.thingDead) && g.thingDead[i] && (monsterLeavesCorpse(th.Type) || th.Type == 3006 || th.Type == 88) {
@@ -229,7 +229,7 @@ func (g *game) damageShootableThingFromWithInflictorZ(thingIdx int, damage int, 
 	typ := g.m.Things[thingIdx].Type
 	switch {
 	case isVoodooDollType(typ):
-		g.damageVoodooDoll(thingIdx, damage, inflictorX, inflictorY, inflictorZ, hasInflictor, sourceThing)
+		g.damageVoodooDoll(thingIdx, damage, inflictorX, inflictorY, inflictorZ, hasInflictor, sourceThing, sourcePlayer)
 	case typ == 88:
 		g.damageBossBrain(thingIdx, damage, sourcePlayer, sourceThing, inflictorX, inflictorY, hasInflictor, inflictorZ, hasInflictorZ)
 	case isMonster(typ):
@@ -358,7 +358,7 @@ func (g *game) radiusAttackAt(sx, sy, sz, sheight int64, ignoreThing int, damage
 	// preserving that bug determines which blockmap columns are visited.
 	dist := int64(int32((int32(damage) + int32(doomMaxThingRadius)) << fracBits))
 	visitPlayer := func() {
-		if g.isDead || playerHeight <= 0 || g.stats.Health <= 0 {
+		if (!g.playerOwnsVoodooBody() && (g.isDead || g.stats.Health <= 0)) || (g.playerOwnsVoodooBody() && g.playerMobjHealth <= 0) {
 			return
 		}
 		dx := abs(g.p.x - sx)

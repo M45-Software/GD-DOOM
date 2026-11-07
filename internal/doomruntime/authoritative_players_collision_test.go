@@ -27,6 +27,7 @@ func TestAuthoritativePlayerCollisionUsesOnlyLiveBodies(t *testing.T) {
 		t.Fatal("monster collision used a stale anchor body")
 	}
 	second.isDead = true
+	second.playerMobjHealth = 0
 	if g.actorBlockedByThings(64*fracUnit, 0, playerRadius, -1, false) {
 		t.Fatal("dead player is still solid")
 	}

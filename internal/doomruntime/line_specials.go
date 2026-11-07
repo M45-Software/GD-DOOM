@@ -374,7 +374,9 @@ func (g *game) heightClipAroundSectorWithCrush(sec int, oldPlayerFloor int64, cr
 			return
 		}
 		x, y := g.thingPosFixed(i, th)
-		if isBarrelThingType(th.Type) {
+		if isVoodooDollType(th.Type) {
+			g.damageShootableThingFrom(i, 10, false, -1, 0, 0, false)
+		} else if isBarrelThingType(th.Type) {
 			g.damageBarrelFrom(i, 10, false, -1, 0, 0, false, 0, false)
 		} else {
 			g.damageMonsterFrom(i, 10, false, -1, 0, 0, false)
@@ -406,7 +408,7 @@ func (g *game) heightClipAroundSectorWithCrush(sec int, oldPlayerFloor int64, cr
 			// Each player's cached floor belongs to its own pre-move body.
 			floor = g.p.floorz
 		}
-		if !g.heightClipPlayer(floor) && g.stats.Health > 0 {
+		if !g.heightClipPlayer(floor) && (g.stats.Health > 0 || g.playerOwnsVoodooBody() && g.playerMobjHealth > 0) {
 			nofit = true
 			if damagePulse {
 				g.damagePlayer(10, "Crushed")
@@ -574,7 +576,7 @@ func (g *game) heightClipPlayer(oldFloorz int64) bool {
 		g.p.z = g.p.ceilz - g.playerMobjHeight()
 	}
 	if g.p.ceilz-g.p.floorz < g.playerMobjHeight() {
-		if g.isDead {
+		if g.playerBodyDead() {
 			g.p.corpseGibbed = true
 			return true
 		}
@@ -1518,28 +1520,40 @@ func (g *game) teleportStompDestinationThings(x, y, radius int64, actorIdx int, 
 	}
 	allowStomp := isPlayer || g.currentMapName() == "MAP30" || actorIdx >= 0 && actorIdx < len(g.m.Things) && isVoodooDollType(g.m.Things[actorIdx].Type)
 	sourceSlot := 0
-	if isPlayer && len(g.authorityPlayers) != 0 {
-		sourceSlot = g.localSlot
+	if len(g.authorityPlayers) != 0 {
+		if isPlayer {
+			sourceSlot = g.localSlot
+		} else if actorIdx >= 0 && actorIdx < len(g.m.Things) {
+			sourceSlot = voodooPlayerSlot(g.m.Things[actorIdx].Type)
+		}
 	}
 	// In co-op, a protected teammate blocks a destination. Check all player
 	// bodies before doing any damage so rejection cannot partially telefrag a
 	// different actor. Start markers alone never count as occupants.
 	for _, state := range g.authorityPlayers {
 		p, dead, _ := g.authoritativePlayerBody(state)
-		if state.localSlot == sourceSlot || dead || !actorsOverlapXY(x, y, radius, p.x, p.y, playerRadius) {
+		if (isPlayer && state.localSlot == sourceSlot) || dead || !actorsOverlapXY(x, y, radius, p.x, p.y, playerRadius) {
 			continue
 		}
 		if !allowStomp || !g.authorityPlayerDamageAllowed(sourceSlot, state.localSlot) {
 			return false
 		}
 	}
+	for i, th := range g.m.Things {
+		if slot := voodooPlayerSlot(th.Type); slot != 0 && i != actorIdx && !g.thingCollected[i] && g.thingHP[i] > 0 {
+			tx, ty := g.thingPosFixed(i, th)
+			if actorsOverlapXY(x, y, radius, tx, ty, playerRadius) && (!allowStomp || !g.authorityPlayerDamageAllowed(sourceSlot, slot)) {
+				return false
+			}
+		}
+	}
 	blocked := false
 	visitPlayer := func() {
 		self := isPlayer
 		if len(g.authorityPlayers) != 0 {
-			self = sourceSlot != 0 && g.localSlot == sourceSlot
+			self = isPlayer && sourceSlot != 0 && g.localSlot == sourceSlot
 		}
-		if blocked || self || g.stats.Health <= 0 || g.isDead ||
+		if blocked || self || g.playerBodyDead() ||
 			!actorsOverlapXY(x, y, radius, g.p.x, g.p.y, playerRadius) {
 			return
 		}
@@ -1581,6 +1595,8 @@ func (g *game) teleportStompDestinationThings(x, y, radius int64, actorIdx int, 
 			return
 		}
 		switch {
+		case isVoodooDollType(th.Type):
+			g.damageShootableThingFrom(i, 10000, isPlayer, actorIdx, inflictorX, inflictorY, true)
 		case isMonster(th.Type):
 			g.damageMonsterFrom(i, 10000, isPlayer, actorIdx, inflictorX, inflictorY, true)
 		case isBarrelThingType(th.Type):

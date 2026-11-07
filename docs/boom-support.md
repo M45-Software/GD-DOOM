@@ -1393,6 +1393,53 @@ does not verify intermission/finale graphics or sounds, saves during those
 screens, episode-ending finales, arbitrary campaign recordings or multiplayer
 map transitions.
 
+## Co-op voodoo dolls
+
+Native `Authority` co-op joins now create the earlier numbered starts as
+physical dolls for the joining slot; the last numbered start is the camera
+spawn. Inactive slots and deathmatch do not create dolls. Doll thinkers use
+that owner's inventory, keys, view height and player state, including when a
+different player is the simulation anchor. Damage honors co-op friendly-fire
+policy and retained projectile source generations. Crusher and telefrag damage
+also use this routing; protected teammate dolls block a teleport destination.
+
+Each body keeps independent health and momentum. Damage subtracts from the
+shared player's health and the struck body's health, without changing another
+body's health or momentum. A shared health value of zero does not by itself
+kill a surviving body. Killing a doll sets the owner's death state and lowers
+the weapon, while the separate camera body can remain physically alive. Dolls
+retain health and corpse state across respawns. Explicit slot removal retires
+them; a later join creates new actor identities. Native authority scoring still
+records one death per incarnation.
+
+`authoritative_voodoo_test.go` covers all four slots, non-anchor damage and
+pickups, friendly fire and stale projectile sources, independent health,
+respawn, disconnect/rejoin, crusher damage, telefrags, friction array growth,
+and four viewer baselines. Save/keyframe world codecs preserve owner types,
+body health, momentum and animation countdowns; restore rebuilds the doll
+cache. Historical single-player owner types are recovered from original starts.
+These world formats do not save the full authority roster, and replication
+baselines are not server rollback checkpoints.
+
+A reproducible controlled experiment compares seven damage/rebirth events for
+two players against DSDA 0.27.5:
+
+```sh
+python3 scripts/verify_boom_voodoo.py \
+  --iwad /usr/share/games/doom/freedoom2.wad \
+  --reference /path/to/instrumented/dsda-doom \
+  --out /tmp/boom-voodoo
+```
+
+Use `--reference-source` with pristine DSDA source to build an instrumented
+reference, or supply a binary with the current probes installed. The optional
+`GD_DSDA_VOODOO_OUT` probe explicitly injects the matched damage and rebirth API
+calls after the first real two-player demo tic. It is not an observational
+netdemo capture. All **14 player records match**, including shared and body
+health, player death state, and doll corpse height/solid/shootable flags. This
+does not establish multiplayer movement, RNG, retained camera corpses, or
+campaign-transition parity with classic netdemos.
+
 ## Remaining work
 
 The next milestones are:
@@ -1403,8 +1450,10 @@ The next milestones are:
    lifecycle and mover matrices as regressions. Death/rebirth checkpoints and
    generated normal/secret transitions now have DSDA comparisons; MAP02 covers
    a complete crusher/resurrection route with binary checkpoint continuation.
-2. Verify multiplayer voodoo-doll ownership, shared damage and death behavior,
-   including save/keyframe continuation and matching client/server state.
+2. Extend multiplayer coverage from the controlled doll lifecycle experiment
+   to complete co-op recordings: movement, RNG ordering, retained camera corpses
+   and map transitions. Full authority save/rollback remains separate from
+   the verified world codecs and client replication baselines.
 3. Add custom weapon preferences, then broaden complex-map progression and
    large-fight performance coverage. GL nodes and mixer-wide sound parity
    remain separate follow-up work.
@@ -1417,7 +1466,7 @@ not full combat RNG parity, every map route, or large-fight performance. The map
 audit detects unknown specials; it does not detect every unsupported interaction.
 
 These changes advance the multiplayer simulation ID to
-`gd-doom-authority-dev-24`. Deploy matching clients and servers. Door lighting
+`gd-doom-authority-dev-25`. Deploy matching clients and servers. Door lighting
 adds the controlling line reference to owned and displaced door snapshots.
 Sector identities extend the sound-event schema. Explicit ceiling ownership
 and retained doors extend the mover schema; displaced ceilings remain in the
@@ -1438,4 +1487,6 @@ elevator, card-key and actor friction extensions retain their older layouts.
 Older snapshots initialize previously unsupported friction state to defaults.
 Scroller data from version 30/keyframe 17 remains readable; earlier snapshots
 cannot reconstruct the preceding acceleration history of unsupported scrollers.
-Voodoo-doll conversion remains limited to single-player sessions.
+Co-op doll ownership is encoded in internal actor types and existing body
+arrays, so this change keeps save 40/keyframe 27. The simulation ID changes
+because joins, damage routing and actor lifecycle behavior change.
