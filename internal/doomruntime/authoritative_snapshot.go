@@ -140,6 +140,12 @@ func validateAuthorityReplica(g *game, r authorityReplica) error {
 		return fmt.Errorf("authority baseline static map mismatch")
 	}
 	s := r.Game
+	if s.PlayerReborn && !s.IsDead {
+		return fmt.Errorf("authority has pending rebirth for a living player")
+	}
+	if s.StatusHasAttacker && (s.StatusAttackerThing < -1 || s.StatusAttackerThing >= len(s.Things)) {
+		return fmt.Errorf("authority has invalid death attacker")
+	}
 	if !validBoomSectorTouches(s, len(g.m.Sectors)) {
 		return fmt.Errorf("authority has invalid Boom sector membership")
 	}
@@ -251,6 +257,9 @@ func validateAuthorityReplica(g *game, r authorityReplica) error {
 		if p.LocalSlot <= last || p.LocalSlot > 4 || p.LocalPlayerThingIndex < -1 || p.LocalPlayerThingIndex >= n || p.P.Sector < -1 || p.P.Sector >= sectors || p.P.Subsector < -1 || p.P.Subsector >= len(g.m.SubSectors) {
 			return fmt.Errorf("authority baseline player identity/sector is invalid")
 		}
+		if p.PlayerReborn && !p.IsDead {
+			return fmt.Errorf("authority player has invalid pending rebirth")
+		}
 		_, validWeapon := weaponPspriteDefs[p.WeaponState]
 		_, validFlash := weaponPspriteDefs[p.WeaponFlashState]
 		if p.CheatLevel != 0 || p.Invulnerable || p.NoClip || p.Inventory.ReadyWeapon < int(weaponFist) || p.Inventory.ReadyWeapon > int(weaponChainsaw) || (!validWeapon && p.WeaponState != weaponStateNone) || (!validFlash && p.WeaponFlashState != weaponStateNone) {
@@ -267,7 +276,7 @@ func validateAuthorityReplica(g *game, r authorityReplica) error {
 		}
 		if p.LocalSlot == int(r.Viewer) {
 			found = true
-			if s.Player != p.P || s.Stats != p.Stats || !equalAuthorityInventory(s.Inventory, p.Inventory) || s.WeaponState != int(p.WeaponState) || s.WeaponFlashState != int(p.WeaponFlashState) || s.CheatLevel != p.CheatLevel || s.Invulnerable != p.Invulnerable || s.NoClip != p.NoClip {
+			if s.PlayerReborn != p.PlayerReborn || s.IsDead != p.IsDead || s.Player != p.P || s.Stats != p.Stats || !equalAuthorityInventory(s.Inventory, p.Inventory) || s.WeaponState != int(p.WeaponState) || s.WeaponFlashState != int(p.WeaponFlashState) || s.CheatLevel != p.CheatLevel || s.Invulnerable != p.Invulnerable || s.NoClip != p.NoClip {
 				return fmt.Errorf("authority baseline viewer state is inconsistent")
 			}
 		}

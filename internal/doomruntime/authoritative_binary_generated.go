@@ -10,7 +10,7 @@ import (
 	"strconv"
 )
 
-var authorityBinarySchemaFingerprint = [16]byte{0x74, 0x28, 0x59, 0x65, 0x3a, 0x97, 0x6d, 0xac, 0xae, 0x88, 0x33, 0x79, 0xb9, 0x0f, 0x38, 0x29}
+var authorityBinarySchemaFingerprint = [16]byte{0x6d, 0x83, 0x2c, 0x1d, 0x99, 0xc5, 0xd6, 0x83, 0xf0, 0xe0, 0x8d, 0x57, 0x7b, 0xa2, 0x51, 0x8e}
 
 func (w *authorityBinaryWriter) writedoomruntime_AuthorityRules(v *AuthorityRules) {
 	if w.err != nil {
@@ -1408,6 +1408,11 @@ func (w *authorityBinaryWriter) writedoomruntime_gameSaveState(v *gameSaveState)
 		w.boolean(bool(v.SectorSoundTarget[tmp112]))
 	}
 	w.boolean(bool(v.IsDead))
+	w.boolean(bool(v.PlayerReborn))
+	w.boolean(bool(v.StatusHasAttacker))
+	w.signed(int64(v.StatusAttackerX))
+	w.signed(int64(v.StatusAttackerY))
+	w.signed(int64(v.StatusAttackerThing))
 	w.signed(int64(v.PlayerMobjHealth))
 	w.signed(int64(v.DamageFlashTic))
 	w.signed(int64(v.BonusFlashTic))
@@ -2403,6 +2408,11 @@ func (r *authorityBinaryReader) readdoomruntime_gameSaveState(v *gameSaveState) 
 		}
 	}
 	v.IsDead = bool(r.boolean())
+	v.PlayerReborn = bool(r.boolean())
+	v.StatusHasAttacker = bool(r.boolean())
+	v.StatusAttackerX = int64(r.signed(64))
+	v.StatusAttackerY = int64(r.signed(64))
+	v.StatusAttackerThing = int(r.signed(strconv.IntSize))
 	v.PlayerMobjHealth = int(r.signed(strconv.IntSize))
 	v.DamageFlashTic = int(r.signed(strconv.IntSize))
 	v.BonusFlashTic = int(r.signed(strconv.IntSize))

@@ -927,7 +927,7 @@ func (w saveBinaryWriter) saveFile(v saveFile) error {
 		}
 	}
 
-	if version == saveGameVersion {
+	if version >= 39 && version <= saveGameVersion {
 		if err := w.boomSectorTouchSlice(v.Game.BoomSectorTouches); err != nil {
 			return err
 		}
@@ -938,6 +938,23 @@ func (w saveBinaryWriter) saveFile(v saveFile) error {
 			if err := w.i64(fx.MomY); err != nil {
 				return err
 			}
+		}
+	}
+	if version >= 40 && version <= saveGameVersion {
+		if err := w.bool(v.Game.PlayerReborn); err != nil {
+			return err
+		}
+		if err := w.bool(v.Game.StatusHasAttacker); err != nil {
+			return err
+		}
+		if err := w.i64(v.Game.StatusAttackerX); err != nil {
+			return err
+		}
+		if err := w.i64(v.Game.StatusAttackerY); err != nil {
+			return err
+		}
+		if err := w.int(v.Game.StatusAttackerThing); err != nil {
+			return err
 		}
 	}
 	return nil
@@ -2005,7 +2022,7 @@ func (r saveBinaryReader) saveFile() (saveFile, error) {
 		}
 	}
 
-	if version == saveGameVersion {
+	if version >= 39 && version <= saveGameVersion {
 		if v.Game.BoomSectorTouches, err = r.boomSectorTouchSlice(); err != nil {
 			return v, err
 		}
@@ -2017,6 +2034,30 @@ func (r saveBinaryReader) saveFile() (saveFile, error) {
 			if fx.MomY, err = r.i64(); err != nil {
 				return v, err
 			}
+		}
+	}
+	v.Game.StatusAttackerThing = -1
+	if version >= 40 && version <= saveGameVersion {
+		if v.Game.PlayerReborn, err = r.bool(); err != nil {
+			return v, err
+		}
+		if v.Game.PlayerReborn && !v.Game.IsDead {
+			return v, fmt.Errorf("pending rebirth for a living player")
+		}
+		if v.Game.StatusHasAttacker, err = r.bool(); err != nil {
+			return v, err
+		}
+		if v.Game.StatusAttackerX, err = r.i64(); err != nil {
+			return v, err
+		}
+		if v.Game.StatusAttackerY, err = r.i64(); err != nil {
+			return v, err
+		}
+		if v.Game.StatusAttackerThing, err = r.int(); err != nil {
+			return v, err
+		}
+		if v.Game.StatusHasAttacker && (v.Game.StatusAttackerThing < -1 || v.Game.StatusAttackerThing >= len(v.Game.Things)) {
+			return v, fmt.Errorf("invalid saved death attacker")
 		}
 	}
 	return v, nil

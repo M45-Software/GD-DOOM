@@ -74,6 +74,34 @@ def coverage(path, held, lethal_use):
     return dict(passed=all(checks.values()), checks=checks, deaths=deaths, reload_tics=reloads)
 
 
+def checkpoint_boundaries(path):
+    """Save before, on and after each death and each queued/completed reload."""
+    with path.open() as f:
+        rows = list(csv.DictReader(f))
+    boundaries = set()
+    for i, row in enumerate(rows):
+        previous = rows[i - 1] if i else None
+        death = row['playerstate'] == '1' and (previous is None or previous['playerstate'] == '0')
+        queued = row['playerstate'] == '2'
+        reloaded = previous is not None and int(row['reloads']) > int(previous['reloads'])
+        if death or queued or reloaded:
+            boundaries.update(t for t in [i - 1, i, i + 1] if 0 <= t < len(rows))
+    return sorted(boundaries)
+
+
+def capture_gd(folder, env, lmp, merged, label='', checkpoints=(), fmt='save'):
+    csv_path = folder / f'gd{label}.csv'
+    log_path = folder / f'checkpoints{label}.json'
+    csv_path.unlink(missing_ok=True)
+    log_path.unlink(missing_ok=True)
+    run(['xvfb-run', '-a', 'go', 'test', '-tags', 'integration', './internal/doomruntime',
+         '-run', '^TestBoomRNGDemoCapture$', '-count=1'], folder / f'gd{label}.log',
+        dict(env, GD_RNG_DEMO=str(lmp), GD_RNG_WAD=str(merged), GD_RNG_OUT=str(csv_path),
+             GD_RNG_CHECKPOINT_TICS=','.join(map(str, checkpoints)), GD_RNG_CHECKPOINT_FORMAT=fmt,
+             GD_RNG_CHECKPOINT_LOG=str(log_path)))
+    return json.loads(log_path.read_text())
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--iwad', required=True, type=Path)
@@ -83,6 +111,7 @@ def main():
     parser.add_argument('--cmake-arg', action='append', default=[])
     parser.add_argument('--out', type=Path, default=ROOT / 'tmp/boom-rebirth')
     parser.add_argument('--case', action='append')
+    parser.add_argument('--no-checkpoints', action='store_true', help='only compare continuous playback')
     args = parser.parse_args()
     cases = {}
     for insurance in [0, 1]:
@@ -100,7 +129,7 @@ def main():
     exe = args.reference.resolve() if args.reference else build_reference(args.reference_source, out, args.cmake_arg)
     env = dict(os.environ, SDL_AUDIODRIVER='dummy', GD_RNG_COMBAT_ONLY='1', GD_RNG_REBIRTH='1')
     for key in list(env):
-        if key.startswith('GD_DSDA_') or key in ['GD_RNG_FULL_MAP', 'GD_RNG_CRUSHED_CORPSE']:
+        if key.startswith(('GD_DSDA_', 'GD_RNG_CHECKPOINT_')) or key in ['GD_RNG_FULL_MAP', 'GD_RNG_CRUSHED_CORPSE', 'GD_RNG_CAMPAIGN']:
             env.pop(key)
     results = {}
     for name, settings in cases.items():
@@ -127,15 +156,31 @@ def main():
         lmp.write_bytes(data)
         for file in ['gd.csv', 'dsda.csv']:
             (folder / file).unlink(missing_ok=True)
-        run(['xvfb-run', '-a', 'go', 'test', '-tags', 'integration', './internal/doomruntime',
-             '-run', '^TestBoomRNGDemoCapture$', '-count=1'], folder / 'gd.log',
-            dict(env, GD_RNG_DEMO=str(lmp), GD_RNG_WAD=str(merged), GD_RNG_OUT=str(folder / 'gd.csv')))
+        capture_gd(folder, env, lmp, merged)
         run(['xvfb-run', '-a', exe, '-iwad', iwad, '-file', pwad, '-timedemo', lmp,
              '-nodeh', '-nosound', '-nodraw', '-config', out / 'dsda.cfg'], folder / 'dsda.log',
             dict(env, GD_DSDA_RNG_DEMO_OUT=str(folder / 'dsda.csv')))
         result = compare(folder / 'gd.csv', folder / 'dsda.csv', tics)
         result['coverage'] = coverage(folder / 'dsda.csv', settings.get('held'), settings.get('lethal'))
         result['passed'] &= result['coverage']['passed']
+        result['checkpoint_runs'] = {}
+        if not args.no_checkpoints:
+            boundaries = checkpoint_boundaries(folder / 'dsda.csv')
+            with (folder / 'dsda.csv').open() as f:
+                reference_rows = list(csv.DictReader(f))
+            states = {reference_rows[t]['playerstate'] for t in boundaries}
+            for fmt in ['save', 'keyframe']:
+                applied = capture_gd(folder, env, lmp, merged, '-' + fmt, boundaries, fmt)
+                check = compare(folder / f'gd-{fmt}.csv', folder / 'dsda.csv', tics)
+                check.update(checkpoint_tics=boundaries, applied=applied,
+                             coverage=dict(all_requested_applied=applied == boundaries,
+                                           living_dead_reborn={'0', '1', '2'} <= states))
+                check['passed'] &= all(check['coverage'].values())
+                result['checkpoint_runs'][fmt] = check
+                result['passed'] &= check['passed']
+                print(name, fmt, check['matched'], '/', check['rows'], 'checkpoints', len(applied), flush=True)
+                if check['failures']:
+                    print('first mismatch:', check['failures'][0]['row'], list(check['failures'][0]['diff']), flush=True)
         result['settings'] = settings
         result['inputs'] = {file.name: digest(file) for file in [pwad, lmp]}
         results[name] = result
@@ -151,9 +196,13 @@ def main():
                   metadata=dict(iwad=digest(iwad), reference=digest(exe), gd_source=source.hexdigest(),
                                 verifier=digest(Path(__file__)),
                                 observer=digest(ROOT / 'scripts/visual_compare/dsda_rng_demo_probe.inc')),
+                  compared_tics=sum(r['rows'] + sum(c['rows'] for c in r['checkpoint_runs'].values()) for r in results.values()),
+                  binary_restores=sum(len(c['applied']) for r in results.values() for c in r['checkpoint_runs'].values()),
                   scope='Live single-player Boom death and same-map rebirth, including player physics, '
                         'inventory, weapons, actors, sectors, RNG streams and per-level phase. '
-                        'No save/keyframe boundary, intermission, map transition or multiplayer rebirth coverage.')
+                        'Binary save/keyframe continuation at death and pending/completed rebirth boundaries is '
+                        'included unless --no-checkpoints is selected. Intermission, map transition and '
+                        'multiplayer rebirth are outside this matrix.')
     core = exe.parent.parent / 'reference-source/src'
     for name in ['g_game.c', 'p_enemy.c', 'p_mobj.c', 'p_inter.c', 'p_map.c', 'p_user.c', 'p_pspr.c', 'm_random.c']:
         if (core / name).exists():

@@ -24,10 +24,10 @@ import (
 )
 
 const (
-	saveGameVersion     = 39
+	saveGameVersion     = 40
 	saveGamePrefix      = "dsg"
 	saveGameQuickPrefix = "quicksave"
-	keyframeVersion     = 26
+	keyframeVersion     = 27
 	saveGameDirName     = "saves"
 )
 
@@ -204,6 +204,11 @@ type gameSaveState struct {
 	SecretsTotal         int
 	SectorSoundTarget    []bool
 	IsDead               bool
+	PlayerReborn         bool
+	StatusHasAttacker    bool
+	StatusAttackerX      int64
+	StatusAttackerY      int64
+	StatusAttackerThing  int
 	PlayerMobjHealth     int
 	DamageFlashTic       int
 	BonusFlashTic        int
@@ -1195,6 +1200,9 @@ func (sg *sessionGame) applyLoadedSnapshot(file saveFile, warning string) error 
 	if !validBoomFrictionState(&file.Game, len(g.m.Things)) {
 		return fmt.Errorf("save friction state does not match loaded map")
 	}
+	if file.Game.PlayerReborn && !file.Game.IsDead {
+		return fmt.Errorf("save has a pending rebirth for a living player")
+	}
 	if !validBoomSectorTouches(file.Game, len(g.m.Sectors)) {
 		return fmt.Errorf("save has invalid Boom sector membership")
 	}
@@ -1397,6 +1405,11 @@ func captureGameSaveState(g *game) gameSaveState {
 		SecretsTotal:         g.secretsTotal,
 		SectorSoundTarget:    append([]bool(nil), g.sectorSoundTarget...),
 		IsDead:               g.isDead,
+		PlayerReborn:         g.playerReborn,
+		StatusHasAttacker:    g.statusHasAttacker,
+		StatusAttackerX:      g.statusAttackerX,
+		StatusAttackerY:      g.statusAttackerY,
+		StatusAttackerThing:  g.statusAttackerThing,
 		PlayerMobjHealth:     g.playerMobjHealth,
 		DamageFlashTic:       g.damageFlashTic,
 		BonusFlashTic:        g.bonusFlashTic,
@@ -1545,6 +1558,9 @@ func restoreGameSaveState(g *game, s gameSaveState) {
 	g.secretsTotal = s.SecretsTotal
 	g.sectorSoundTarget = restoreSaveSlice(g.sectorSoundTarget, s.SectorSoundTarget)
 	g.isDead = s.IsDead
+	g.playerReborn = s.PlayerReborn
+	g.statusHasAttacker = s.StatusHasAttacker
+	g.statusAttackerX, g.statusAttackerY, g.statusAttackerThing = s.StatusAttackerX, s.StatusAttackerY, s.StatusAttackerThing
 	g.playerMobjHealth = s.PlayerMobjHealth
 	if g.playerMobjHealth == 0 && g.stats.Health != 0 {
 		g.playerMobjHealth = g.stats.Health

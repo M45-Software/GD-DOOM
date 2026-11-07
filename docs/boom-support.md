@@ -1295,8 +1295,12 @@ checkpointing in the middle of a simulation tic.
 
 ## Death and same-map rebirth verification
 
-`scripts/verify_boom_rebirth.py` compares **11,800/11,800 tics across 11 cases**,
-including **44 real level reloads**, against DSDA-Doom 0.27.5. It exercises:
+`scripts/verify_boom_rebirth.py` compares **35,400/35,400 tics across 33 replays**
+against DSDA-Doom 0.27.5: 11 fixtures run continuously, then with binary save
+and keyframe restores. The continuous runs include **44 real level reloads**;
+the checkpointed variants perform **610 binary restores** at available tics
+before, on and after deaths, pending rebirth requests and completed reloads.
+It exercises:
 
 - Close shotgun combat plus a damaging floor, seeds 0/1993 and RNG insurance
   off/on, with four separate Use/reload cycles per case.
@@ -1320,6 +1324,21 @@ Fresh level construction now resets only that phase, preserving seeds and
 indices; saved snapshots still restore their exact phase. A focused regression
 checks stream preservation and phase reset with insurance off/on.
 
+Boundary checkpoints exposed two more missing pieces of saved state. A save
+on the tic when Use requests rebirth lost `playerReborn`, leaving the restored
+player dead instead of restarting on the next tic. Saves during Revenant
+combat deaths also lost the attacker reference used by the death camera.
+The new formats preserve both the queued request and the attacker's thing
+index/position; the camera continues tracking a moving attacker. Restore also
+clears stale requests when the saved player has none. Authority baselines keep
+the viewer's request separate from other players and reject living-player
+rebirth requests and invalid attacker references.
+
+Every fixture now compares uninterrupted DSDA playback with uninterrupted
+GD-DOOM, save-restored GD-DOOM and keyframe-restored GD-DOOM. Assertions require
+all requested checkpoints to execute and to include living, dead and reborn
+states. Use `--no-checkpoints` to run only the original continuous comparisons.
+
 ```sh
 python3 scripts/verify_boom_rebirth.py \
   --iwad /usr/share/games/doom/freedoom2.wad \
@@ -1328,19 +1347,62 @@ python3 scripts/verify_boom_rebirth.py \
 ```
 
 Raw demos/WADs, both traces, coverage counts, logs and hashes remain alongside
-`results.json`. This covers live single-player same-map rebirth. Save/keyframe
-boundaries during death, transitions to following maps, intermission animation
-and multiplayer death/rebirth remain unverified by this matrix.
+`results.json`. Current evidence is in
+`/tmp/gddoom-next-rebirth-checkpoint/matrix/results.json`. This covers live
+single-player same-map rebirth and binary checkpoint continuation. Intermission
+animation and multiplayer death/rebirth remain outside this matrix.
+
+## Normal and secret map-transition verification
+
+`scripts/verify_boom_transitions.py` runs real session/intermission/finale
+logic for **9 cases and 4,755/4,755 matching active level tics**:
+
+- MAP01 -> MAP02 normal exits, with RNG insurance off/on and seeds 0/1993.
+- MAP15 -> MAP31 secret exits with the same RNG combinations.
+- A held-attack secret exit that waits for the accelerated finale timeout.
+
+Both engines consume the same recorded commands. Each active-level row also
+records its original demo-command index and map, so a different intermission
+or finale duration cannot be hidden by aligning only active level rows.
+The fixtures verify damaged health and ammo carryover, cleared keys, preserved
+weapon ownership by switching away and reselecting the shotgun in the next map,
+continued RNG streams and reset per-level RNG phase. Each destination runs for
+more than 100 live tics with a monster. No observer forces an exit or map load.
+
+Normal exits reach MAP02 on zero-based command **72**. Secret exits exposed
+an existing compatibility bug: GD-DOOM applied vanilla's delayed held-button
+skip rule to Boom finales, reaching MAP31 on command 142 instead of 102.
+Boom now uses attack/use edges: the first edge accelerates the text, another
+edge advances, and accelerated text can time out without another edge. Input
+latches carry into the next level. The secret route now reaches MAP31 on
+command **102**, while held attack waits until command **1,074**, matching
+DSDA. Vanilla's original finale timing remains covered by its existing tests.
+Accelerated text presentation follows the faster reveal rate as well.
+
+```sh
+python3 scripts/verify_boom_transitions.py \
+  --iwad /usr/share/games/doom/freedoom2.wad \
+  --reference-source /path/to/pristine/dsda-doom-0.27.5 \
+  --out /tmp/gddoom-next-rebirth-checkpoint/transitions
+```
+
+The WADs, demos, traces, coverage assertions, logs and hashes are retained in
+that directory alongside `results.json`. This verifies these generated normal
+and secret routes, including transition timing and destination gameplay. It
+does not verify intermission/finale graphics or sounds, saves during those
+screens, episode-ending finales, arbitrary campaign recordings or multiplayer
+map transitions.
 
 ## Remaining work
 
 The next milestones are:
 
 1. Expand complete-map combat coverage beyond the two verified Sunlust maps
-   and their recorded routes. Add save/keyframe boundaries during death/rebirth
-   and transitions, keeping the movement, combat, lifecycle and mover matrices
-   as regressions. MAP02 now covers a complete crusher/resurrection route with
-   binary checkpoint continuation.
+   and their recorded routes. Add actual campaign recordings and save/keyframe
+   boundaries during intermission/finale screens, keeping the movement, combat,
+   lifecycle and mover matrices as regressions. Death/rebirth checkpoints and
+   generated normal/secret transitions now have DSDA comparisons; MAP02 covers
+   a complete crusher/resurrection route with binary checkpoint continuation.
 2. Verify multiplayer voodoo-doll ownership, shared damage and death behavior,
    including save/keyframe continuation and matching client/server state.
 3. Add custom weapon preferences, then broaden complex-map progression and
@@ -1355,17 +1417,20 @@ not full combat RNG parity, every map route, or large-fight performance. The map
 audit detects unknown specials; it does not detect every unsupported interaction.
 
 These changes advance the multiplayer simulation ID to
-`gd-doom-authority-dev-23`. Deploy matching clients and servers. Door lighting
+`gd-doom-authority-dev-24`. Deploy matching clients and servers. Door lighting
 adds the controlling line reference to owned and displaced door snapshots.
 Sector identities extend the sound-event schema. Explicit ceiling ownership
 and retained doors extend the mover schema; displaced ceilings remain in the
-ordered mover state. Save version 39 reads versions 36–38;
-keyframe version 26 reads versions 23–25. The new formats retain ordered sector
-membership and horizontal momentum on missile death effects. Older formats
-reconstruct sector membership and default that effect momentum to zero; they
-cannot recover historical sector-list ordering for exact continuation of
-crusher-sensitive maps. Save/keyframe magic now disambiguates their overlapping
-version numbers (notably historical save 26 versus current keyframe 26).
+ordered mover state. Save version 40 reads versions 37–39;
+keyframe version 27 reads versions 24–26. Save 40/keyframe 27 add the pending
+rebirth request and death-camera attacker. Previous formats default those to
+no request/no attacker; they cannot reconstruct them for exact death-boundary
+continuation. Save 39/keyframe 26 introduced ordered sector membership and
+horizontal momentum on missile death effects. Formats before those reconstruct
+membership and default that effect momentum to zero, so historical ordering on
+crusher-sensitive maps cannot be recovered. Save/keyframe magic disambiguates
+their overlapping version numbers, including historical save 27 versus
+keyframe 27.
 Formats before save 38/keyframe 25 default door-lighting references to disabled,
 since the activation line was not saved. Formats before
 save 35/keyframe 22 cannot preserve overlapping manual-door state. Generalized mover,

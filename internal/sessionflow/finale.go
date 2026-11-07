@@ -18,15 +18,17 @@ const (
 )
 
 type Finale struct {
-	Active     bool
-	Commercial bool
-	Tic        int
-	MapName    mapdata.MapName
-	Stage      FinaleStage
-	Flat       string
-	Text       string
-	Screen     string
-	WaitTic    int
+	Active      bool
+	Commercial  bool
+	Boom        bool
+	Accelerated bool
+	Tic         int
+	MapName     mapdata.MapName
+	Stage       FinaleStage
+	Flat        string
+	Text        string
+	Screen      string
+	WaitTic     int
 }
 
 func StartFinale(current mapdata.MapName, secret bool) (Finale, bool) {
@@ -78,6 +80,26 @@ func TickFinale(state Finale, skipPressed bool) (Finale, bool) {
 	if !state.Active {
 		return state, false
 	}
+	if state.Commercial && state.Boom {
+		state.Tic++
+		if state.Stage != FinaleStageText {
+			return state, false
+		}
+		wasAccelerated := state.Accelerated
+		if skipPressed {
+			state.Accelerated = true
+		}
+		// Boom's Get_TextSpeed consumes the first acceleration request.
+		// Another attack/use edge, or the accelerated text timeout, advances.
+		if state.Accelerated && ((wasAccelerated && skipPressed) || float32(state.Tic) > float32(len(state.Text))*0.01+1000) {
+			if state.MapName == "MAP30" {
+				state.Stage = FinaleStageCast
+			} else {
+				return state, true
+			}
+		}
+		return state, false
+	}
 	if state.Commercial {
 		// F_Ticker checks the previous finalecount and any held command
 		// button before incrementing it. Commercial text never times out.
@@ -127,6 +149,21 @@ func TickFinale(state Finale, skipPressed bool) (Finale, bool) {
 func EpisodeFinaleScreen(current mapdata.MapName, secret bool) (string, bool) {
 	spec, ok := episodeFinaleSpec(current, secret)
 	return spec.screen, ok
+}
+
+// VisibleText uses Boom's accelerated speed after the first skip request.
+func (state Finale) VisibleText() string {
+	if state.Boom && state.Accelerated {
+		count := (state.Tic - finaleTextStartDelay) * 100
+		if count < 0 {
+			count = 0
+		}
+		if count > len(state.Text) {
+			count = len(state.Text)
+		}
+		return state.Text[:count]
+	}
+	return FinaleVisibleText(state.Text, state.Tic)
 }
 
 func FinaleVisibleText(text string, tic int) string {

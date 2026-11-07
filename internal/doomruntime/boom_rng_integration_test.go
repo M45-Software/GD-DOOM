@@ -77,7 +77,8 @@ func TestBoomRNGDemoCapture(t *testing.T) {
 	}
 	fullMap := os.Getenv("GD_RNG_FULL_MAP") == "1"
 	rebirth := os.Getenv("GD_RNG_REBIRTH") == "1"
-	extended := fullMap || rebirth
+	campaign := os.Getenv("GD_RNG_CAMPAIGN") == "1"
+	extended := fullMap || rebirth || campaign
 	mapName := mapdata.MapName("MAP01")
 	if extended {
 		mapName = mapdata.MapName(fmt.Sprintf("MAP%02d", script.Header.Map))
@@ -86,7 +87,24 @@ func TestBoomRNGDemoCapture(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	g := newGame(m, Options{Headless: true, DemoScript: script})
+	var sg *sessionGame
+	var g *game
+	if campaign {
+		next := func(current mapdata.MapName, secret bool) (*mapdata.Map, mapdata.MapName, error) {
+			name, err := mapdata.NextMapName(wf, current, secret)
+			if err != nil {
+				return nil, "", err
+			}
+			next, err := mapdata.LoadMap(wf, name)
+			return next, name, err
+		}
+		rt, meta := NewRuntime(m, Options{Headless: true, DemoScript: script, DemoQuitOnComplete: true}, next)
+		defer meta.Close()
+		sg = rt.(*sessionGame)
+		g = sg.g
+	} else {
+		g = newGame(m, Options{Headless: true, DemoScript: script})
+	}
 	f, err := os.Create(os.Getenv("GD_RNG_OUT"))
 	if err != nil {
 		t.Fatal(err)
@@ -101,6 +119,9 @@ func TestBoomRNGDemoCapture(t *testing.T) {
 	if rebirth {
 		fmt.Fprint(out, ",leveltime,playerstate,viewheight,deltaviewheight,reloads,logictic")
 	}
+	if campaign {
+		fmt.Fprint(out, ",demotic,map,cards")
+	}
 	fmt.Fprintln(out)
 	checkpoints := make(map[int]bool)
 	for _, value := range strings.Split(os.Getenv("GD_RNG_CHECKPOINT_TICS"), ",") {
@@ -114,9 +135,29 @@ func TestBoomRNGDemoCapture(t *testing.T) {
 		checkpoints[tic] = true
 	}
 	appliedCheckpoints := make([]int, 0)
-	previousLevelTime, reloads := 0, 0
+	previousLevelTime, reloads, captured := 0, 0, 0
 	for tic := range script.Tics {
-		if err := g.advanceDemoTic(); err != nil {
+		if campaign {
+			oldMap, oldWorldTic := g.m.Name, g.worldTic
+			for updates := 0; ; updates++ {
+				if err := sg.Update(); err != nil {
+					t.Fatal(err)
+				}
+				g = sg.g
+				if g.demoTick >= tic+1 {
+					break
+				}
+				if updates >= 8 {
+					t.Fatal("campaign stopped consuming demo commands")
+				}
+			}
+			if g.demoTick != tic+1 {
+				t.Fatalf("campaign consumed %d commands at tic %d", g.demoTick, tic)
+			}
+			if g.m.Name == oldMap && g.worldTic == oldWorldTic {
+				continue
+			}
+		} else if err := g.advanceDemoTic(); err != nil {
 			t.Fatal(err)
 		}
 		if checkpoints[tic] {
@@ -142,6 +183,9 @@ func TestBoomRNGDemoCapture(t *testing.T) {
 			loaded.inheritDemoPlayback(g)
 			restoreSavedRNG(file)
 			g = loaded
+			if campaign {
+				sg.g, sg.rt = loaded, loaded
+			}
 			appliedCheckpoints = append(appliedCheckpoints, tic)
 		}
 		if tic == 0 && os.Getenv("GD_RNG_CRUSHED_CORPSE") != "" {
@@ -157,7 +201,12 @@ func TestBoomRNGDemoCapture(t *testing.T) {
 			}
 		}
 		s := doomrand.Capture()
-		fmt.Fprintf(out, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,", tic, g.p.x, g.p.y, g.p.z, g.p.angle, g.p.momx, g.p.momy, g.p.momz, g.stats.Health, g.stats.Armor, g.stats.Bullets, g.playerViewZ, s.PlayIndex)
+		traceTic := tic
+		if campaign {
+			traceTic = captured
+			captured++
+		}
+		fmt.Fprintf(out, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,", traceTic, g.p.x, g.p.y, g.p.z, g.p.angle, g.p.momx, g.p.momy, g.p.momz, g.stats.Health, g.stats.Armor, g.stats.Bullets, g.playerViewZ, s.PlayIndex)
 		for _, m := range g.demoTraceMobjs() {
 			if os.Getenv("GD_RNG_COMBAT_ONLY") != "" && (m.Kind == "thing" || m.Kind == "pickup" || m.Kind == "barrel" && !fullMap) {
 				continue
@@ -201,6 +250,20 @@ func TestBoomRNGDemoCapture(t *testing.T) {
 			}
 			fmt.Fprintf(out, ",%d,%d,%d,%d,%d,%d", g.worldTic, state, g.p.viewHeight, g.p.deltaViewHeight, reloads, s.LogicTic)
 			previousLevelTime = g.worldTic
+		}
+		if campaign {
+			cards := 0
+			for i, owned := range g.inventory.cardKeys() {
+				if owned {
+					cards |= 1 << i
+				}
+			}
+			for i, owned := range g.inventory.SkullKeys {
+				if owned {
+					cards |= 1 << (i + 3)
+				}
+			}
+			fmt.Fprintf(out, ",%d,%s,%d", tic, g.m.Name, cards)
 		}
 		fmt.Fprintln(out)
 		if fullMap && g.levelExitRequested {

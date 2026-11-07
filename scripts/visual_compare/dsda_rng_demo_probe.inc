@@ -1,7 +1,7 @@
 /* Observe completed real G_Ticker demo tics. Gameplay code is unchanged. */
 static void GD_RNGDemoFrame(void)
 {
- static FILE *out;static int last_gametic=-1,summary_written,capture_tic,previous_leveltime,reloads;
+ static FILE *out;static int last_gametic=-1,summary_written,capture_tic,previous_leveltime,reloads,first_gametic=-1;
  const char *path=getenv("GD_DSDA_RNG_DEMO_OUT");thinker_t *th=NULL;int i;
  if(!path||!demoplayback)return;
  if(out&&!summary_written&&gamestate==GS_INTERMISSION&&getenv("GD_RNG_FULL_MAP")) {
@@ -12,6 +12,7 @@ static void GD_RNGDemoFrame(void)
  }
  if(gamestate!=GS_LEVEL||leveltime<=0||last_gametic==gametic)return;
  last_gametic=gametic;
+ if(first_gametic<0)first_gametic=gametic;
  if(getenv("GD_RNG_REBIRTH")&&leveltime<previous_leveltime)reloads++;
  previous_leveltime=leveltime;
  /* Controlled initial corpse, not a replacement resurrection implementation. */
@@ -32,6 +33,7 @@ static void GD_RNGDemoFrame(void)
   if(getenv("GD_RNG_REBIRTH")) {
    fprintf(out,",leveltime,playerstate,viewheight,deltaviewheight,reloads,logictic");
   }
+  if(getenv("GD_RNG_CAMPAIGN"))fprintf(out,",demotic,map,cards");
   fputc('\n',out);
  }
  {player_t *p=&players[displayplayer];mobj_t *m=p->mo;
@@ -51,5 +53,6 @@ static void GD_RNGDemoFrame(void)
  /* Export the completed-tic phase; boom_logictic is still the current tic
     until the outer main loop advances gametic. */
  if(getenv("GD_RNG_REBIRTH")){player_t *p=&players[displayplayer];fprintf(out,",%d,%d,%d,%d,%d,%u",leveltime,p->playerstate,p->viewheight,p->deltaviewheight,reloads,boom_logictic+1);}
+ if(getenv("GD_RNG_CAMPAIGN")){int cards=0;for(i=0;i<NUMCARDS;++i)if(players[displayplayer].cards[i])cards|=1<<i;fprintf(out,",%d,MAP%02d,%d",gametic-first_gametic,gamemap,cards);}
  fputc('\n',out);fflush(out);
 }

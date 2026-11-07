@@ -472,6 +472,7 @@ func (sg *sessionGame) startCommercialFinale() bool {
 	// Carryover and the intermission's nextMap are still needed when the
 	// commercial finale queues G_DoWorldDone on a later command tic.
 	sg.intermission.state.Active = false
+	state.Boom = sg.g != nil && sg.g.boomMomentumDropoff
 	sg.finale = state
 	if sg.g != nil {
 		sg.g.demoFinaleActive = sg.g.opts.DemoScript != nil
@@ -488,7 +489,12 @@ func (sg *sessionGame) tickFinale() bool {
 		if script := g.opts.DemoScript; script != nil && g.demoTick > 0 && g.demoTick <= len(script.Tics) {
 			buttons = script.Tics[g.demoTick-1].Buttons
 		}
-		g.demoWorldDone = sg.tickFinaleAdvance(buttons != 0)
+		skip := buttons != 0
+		if g.boomMomentumDropoff {
+			skip = g.demoIntermissionSkip
+			g.demoIntermissionSkip = false
+		}
+		g.demoWorldDone = sg.tickFinaleAdvance(skip)
 		g.writeDemoTraceTic(g.demoTick - 1)
 		return false
 	}
@@ -670,7 +676,7 @@ func (sg *sessionGame) drawFinaleContents(screen *ebiten.Image, scale, ox, oy fl
 	switch f.Stage {
 	case sessionflow.FinaleStageText:
 		sg.drawFinaleFlatBackdrop(screen, f.Flat, scale, ox, oy)
-		sg.drawFinaleTextBlock(screen, sessionflow.FinaleVisibleText(f.Text, f.Tic), scale, ox, oy)
+		sg.drawFinaleTextBlock(screen, f.VisibleText(), scale, ox, oy)
 	case sessionflow.FinaleStagePicture:
 		if strings.TrimSpace(f.Screen) != "" {
 			_ = sg.drawIntermissionPatch(screen, f.Screen, 0, 0, scale, ox, oy, false)
@@ -1177,8 +1183,8 @@ func (sg *sessionGame) anyIntermissionSkipInput() bool {
 	watchMode := sg.opts.LiveTicSource != nil && sg.opts.LiveTicSink == nil
 	if !watchMode {
 		local := sg.skipInputTriggered()
-		if local && sg.intermission.state.Active {
-			if sink, ok := sg.opts.LiveTicSink.(runtimecfg.LiveIntermissionAdvanceSink); ok && sink != nil {
+		if local && (sg.intermission.state.Active || sg.finale.Active) {
+			if sink, ok := sg.opts.LiveTicSink.(runtimecfg.LiveIntermissionAdvanceSink); ok && sink != nil && sg.intermission.state.Active {
 				_ = sink.BroadcastIntermissionAdvance()
 			}
 			return true

@@ -3055,7 +3055,7 @@ func (g *game) updateDemoIntermission(script *DemoScript) error {
 	tc := script.Tics[g.demoTick]
 	g.demoTick++
 	g.applyRecordedDemoPause(tc)
-	if g.demoIntermissionActive {
+	if g.demoIntermissionActive || (g.demoFinaleCommercial && g.boomMomentumDropoff) {
 		// WI_checkForAccelerate uses attack/use edges and updates the same
 		// latches that the player thinker used in the completed level.
 		_, useHeld, attackHeld := demoTicCommand(tc)

@@ -95,3 +95,40 @@ func TestCommercialFinaleSelectionAndHeldButtonTiming(t *testing.T) {
 		}
 	}
 }
+
+func TestBoomCommercialFinaleAccelerationAndTimeout(t *testing.T) {
+	state, _ := StartCommercialFinale("MAP15", true)
+	state.Boom = true
+	state.Tic = 20
+	state, done := TickFinale(state, true)
+	if done || !state.Accelerated || state.VisibleText() != state.Text {
+		t.Fatal("first edge should accelerate early text without leaving")
+	}
+	if _, done := TickFinale(state, false); done {
+		t.Fatal("held button was treated as another edge")
+	}
+	if _, done := TickFinale(state, true); !done {
+		t.Fatal("second edge did not queue worlddone")
+	}
+	cast, _ := StartCommercialFinale("MAP30", false)
+	cast.Boom, cast.Accelerated = true, true
+	if next, done := TickFinale(cast, true); done || next.Stage != FinaleStageCast {
+		t.Fatal("MAP30 skipped its cast")
+	}
+	state, _ = StartCommercialFinale("MAP15", true)
+	state.Boom, state.Text = true, "TEST"
+	state, _ = TickFinale(state, true)
+	for state.Tic < 1000 {
+		state, done = TickFinale(state, false)
+		if done {
+			t.Fatal("accelerated finale timed out too early")
+		}
+	}
+	if _, done := TickFinale(state, false); !done {
+		t.Fatal("accelerated text did not time out")
+	}
+	state.Accelerated, state.Tic = false, 100000
+	if _, done := TickFinale(state, false); done {
+		t.Fatal("unaccelerated commercial text should wait for input")
+	}
+}

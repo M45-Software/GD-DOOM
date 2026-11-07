@@ -120,7 +120,7 @@ def main():
                GD_RNG_CHECKPOINT_LOG=str(out / 'checkpoints.json'))
     # A controlled corpse fixture or another probe must not affect this replay.
     for key in list(env):
-        if key.startswith('GD_DSDA_') or key in ['GD_RNG_CRUSHED_CORPSE', 'GD_RNG_REBIRTH']:
+        if key.startswith('GD_DSDA_') or key in ['GD_RNG_CRUSHED_CORPSE', 'GD_RNG_REBIRTH', 'GD_RNG_CAMPAIGN']:
             env.pop(key)
     run(['xvfb-run', '-a', 'go', 'test', '-tags', 'integration', './internal/doomruntime',
          '-run', '^TestBoomRNGDemoCapture$', '-count=1'], out / 'gd.log',

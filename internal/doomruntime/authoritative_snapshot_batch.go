@@ -102,5 +102,8 @@ func applyReplicaViewerToSave(s *gameSaveState, p authorityReplicaPlayer) {
 	s.PlayerBlockOrder = p.PlayerBlockOrder
 	s.SecretsFound = p.SecretsFound
 	s.IsDead, s.PlayerMobjHealth = p.IsDead, p.PlayerMobjHealth
+	s.PlayerReborn = p.PlayerReborn
+	s.StatusHasAttacker = p.StatusHasAttacker
+	s.StatusAttackerX, s.StatusAttackerY, s.StatusAttackerThing = p.StatusAttackerX, p.StatusAttackerY, p.StatusAttackerThing
 	s.DamageFlashTic, s.BonusFlashTic = p.DamageFlashTic, p.BonusFlashTic
 }
