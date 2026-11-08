@@ -25,7 +25,11 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def digest(path):
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    result = hashlib.sha256()
+    with path.open('rb') as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b''):
+            result.update(chunk)
+    return result.hexdigest()
 
 
 def run(command, log, env=None, cwd=ROOT, timeout=300):
@@ -56,7 +60,27 @@ def install_sector_sound_probe(target):
     path.write_text(data)
 
 
+def install_coop_attacker_probe(target):
+    """Observe attacker lifetimes without dereferencing freed/reused actors."""
+    inter = target / "src/p_inter.c"
+    data = inter.read_text()
+    assignment = "    player->attacker = source;"
+    if data.count(assignment) != 2:
+        raise ValueError("attacker observer requires pristine damage assignments")
+    data = data.replace(assignment, assignment + "\n    GD_CoopAttackerAssigned(player);")
+    # Both Doom and Raven damage functions share this source file.
+    anchor = 'int initial_health = 100;'
+    if data.count(anchor) != 1:
+        raise ValueError("missing damage observer declaration anchor")
+    inter.write_text(data.replace(anchor, 'void GD_CoopAttackerAssigned(player_t *);\n' + anchor))
+    replace_once(target / "src/p_mobj.c", "void P_RemoveMobj (mobj_t* mobj)\n{",
+                 "void GD_CoopAttackerRemoved(mobj_t *);\nvoid P_RemoveMobj (mobj_t* mobj)\n{\n  GD_CoopAttackerRemoved(mobj);")
+    replace_once(target / "src/p_setup.c", "void P_SetupLevel(int episode, int map, int playermask, int skill)\n{",
+                 "void GD_CoopAttackerRemoved(mobj_t *);\nvoid P_SetupLevel(int episode, int map, int playermask, int skill)\n{\n  GD_CoopAttackerRemoved(NULL);")
+
+
 def install_rng_probe(target):
+    install_coop_attacker_probe(target)
     intermission = target / "src/wi_stuff.c"
     intermission.write_text(intermission.read_text()+'\n#include "dsda_intermission_probe.inc"\n')
     shutil.copy(ROOT / "scripts/visual_compare/dsda_intermission_probe.inc", target / "src")

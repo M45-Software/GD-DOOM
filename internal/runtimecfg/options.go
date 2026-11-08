@@ -335,6 +335,7 @@ type Options struct {
 	FlatBankIndexed              map[string][]byte
 	WallTexBank                  map[string]media.WallTexture
 	WallTextureHeights           map[string]int
+	WallTextureZeroName          string
 	Shareware                    bool
 	WallTextureAnimSpeeds        map[string]int
 	FlatTextureAnimSpeeds        map[string]int

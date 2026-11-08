@@ -35,7 +35,7 @@ func TestBoomLivingDollCanExitAfterCameraDeath(t *testing.T) {
 	g.lineSpecial = []uint16{52}
 	g.lines = []physLine{{idx: 0, x1: 0, y1: 100, x2: 0, y2: -100, dx: 0, dy: -200, slope: slopeVertical, sideNum0: -1, sideNum1: -1}}
 	g.checkWalkSpecialLinesForActor(-10, 0, 10, 0, 0, false)
-	if !g.levelExitRequested || g.lineSpecial[0] != 0 {
+	if !g.levelExitRequested || g.lineSpecial[0] != 52 {
 		t.Fatal("living doll did not activate exit for dead owner")
 	}
 }

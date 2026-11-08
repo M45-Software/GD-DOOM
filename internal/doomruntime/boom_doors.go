@@ -1,6 +1,19 @@
 package doomruntime
 
-import "gddoom/internal/mapdata"
+import (
+	"gddoom/internal/demo"
+	"gddoom/internal/mapdata"
+)
+
+func (g *game) boomDoorUnstickEnabled() bool {
+	if !g.boomMomentumDropoff {
+		return false
+	}
+	if script := g.opts.DemoScript; script != nil {
+		return script.Header.Version == demo.VersionBoom202 && !script.Header.BoomCompatibility
+	}
+	return true
+}
 
 func (g *game) activateGeneralizedDoor(line int, info mapdata.LineSpecialInfo, isPlayer bool) bool {
 	targets, err := g.m.DoorTargetSectors(line)

@@ -4,9 +4,12 @@ package doomruntime
 
 import (
 	"bufio"
+	"bytes"
+	"crypto/md5"
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"testing"
@@ -14,6 +17,7 @@ import (
 	"gddoom/internal/demo"
 	"gddoom/internal/doomrand"
 	"gddoom/internal/mapdata"
+	"gddoom/internal/render/doomtex"
 	"gddoom/internal/wad"
 )
 
@@ -39,6 +43,24 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 		t.Fatal(err)
 	}
 	opts := Options{Headless: true, DemoScript: script, DemoQuitOnComplete: true, NewGameLoader: func(name string) (*mapdata.Map, error) { return mapdata.LoadMap(wf, mapdata.MapName(name)) }}
+	// Texture dimensions affect simulation even without a renderer: Boom
+	// movers can use the shortest adjacent lower or upper texture as a target.
+	// Generated geometry-only fixtures deliberately have no texture lumps.
+	if _, present := wf.LumpByName("TEXTURE1"); present {
+		textures, err := doomtex.LoadFromWAD(wf)
+		if err != nil {
+			t.Fatal(err)
+		}
+		opts.WallTextureHeights = make(map[string]int)
+		for i, name := range textures.TextureNames() {
+			tex, _ := textures.Texture(name)
+			opts.WallTextureHeights[name] = tex.Height
+			if i == 0 {
+				opts.WallTextureHeights["-"] = tex.Height
+				opts.WallTextureZeroName = name
+			}
+		}
+	}
 	var g *game
 	var sg *sessionGame
 	campaign := os.Getenv("GD_COOP_CAMPAIGN") != ""
@@ -57,6 +79,35 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 	} else {
 		g = newGame(m, opts)
 		sg = &sessionGame{g: g, rt: g, opts: opts, current: m.Name}
+	}
+	start := 0
+	if path := os.Getenv("GD_COOP_LOAD_SAVE"); path != "" {
+		data, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		fresh := &sessionGame{opts: opts, nextMap: sg.nextMap, gameFactory: sg.gameFactory}
+		fresh.opts.DemoScript = nil
+		if err := fresh.unmarshalSaveGame(data); err != nil {
+			t.Fatal(err)
+		}
+		sg, g = fresh, fresh.g
+		original, err := demo.Format(script)
+		if err != nil {
+			t.Fatal(err)
+		}
+		restored, err := demo.Format(g.opts.DemoScript)
+		if err != nil || !bytes.Equal(original, restored) {
+			t.Fatal("diagnostic checkpoint contains a different command stream")
+		}
+		start = g.demoTick
+	}
+	dumpCommand := 0
+	if value := os.Getenv("GD_COOP_DUMP_COMMAND"); value != "" {
+		dumpCommand, err = strconv.Atoi(value)
+		if err != nil || dumpCommand <= start {
+			t.Fatal("diagnostic save command must follow the replay start")
+		}
 	}
 	checkpoints := map[int]bool{}
 	for _, v := range strings.Split(os.Getenv("GD_COOP_CHECKPOINT_TICS"), ",") {
@@ -88,13 +139,31 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 	defer f.Close()
 	out := bufio.NewWriter(f)
 	defer out.Flush()
+	compact := os.Getenv("GD_COOP_COMPACT") != "" && !finaleMode
+	lineStateEnabled := os.Getenv("GD_COOP_LINES") != ""
+	var lineState []byte
+	detailCommand := 0
+	if value := os.Getenv("GD_COOP_DETAIL_COMMAND"); value != "" {
+		detailCommand, err = strconv.Atoi(value)
+		if err != nil || detailCommand < 1 || !compact {
+			t.Fatal("GD_COOP_DETAIL_COMMAND requires compact mode and a positive command number")
+		}
+	}
+	var row bytes.Buffer
+	rowOut := bufio.NewWriter(&row)
 	if campaign {
 		fmt.Fprint(out, "demotic,map,")
 	}
 	if finaleMode {
 		fmt.Fprintln(out, "phase,count,stage,accelerated,castnum,caststate,casttics,castframes,melee,attacking,death,players,playindex,seeds")
+	} else if compact {
+		fmt.Fprintln(out, "tic,state_md5")
 	} else {
-		fmt.Fprintln(out, "tic,players,bodies,items,sectors,playindex,seeds")
+		fmt.Fprint(out, "tic,players,bodies,items,sectors")
+		if lineStateEnabled {
+			fmt.Fprint(out, ",line_md5")
+		}
+		fmt.Fprintln(out, ",playindex,seeds")
 	}
 	var phases *bufio.Writer
 	if path := os.Getenv("GD_COOP_PHASE_OUT"); path != "" {
@@ -108,10 +177,27 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 		fmt.Fprintln(phases, "demotic,map,phase,count,stage,accelerated,castnum,caststate,casttics,castframes,melee,attacking,death,players,playindex,seeds,wi_screen,wi_bcnt,wi_cnt,wi_state,wi_pause,wi_accelerate,wi_counts,wi_time,wi_par")
 	}
 	frames := len(script.Frames)
+	exportDir := os.Getenv("GD_COOP_EXPORT_SAVES")
+	if exportDir != "" {
+		if err := os.MkdirAll(exportDir, 0700); err != nil {
+			t.Fatal(err)
+		}
+	}
+	lastPhase := -1
 	if script.Header.PlayerCount() == 1 {
 		frames = len(script.Tics)
 	}
-	for tic := 0; tic < frames; tic++ {
+	if value := os.Getenv("GD_COOP_CAPTURE_COMMANDS"); value != "" {
+		limit, err := strconv.Atoi(value)
+		if err != nil || limit <= start || limit > frames {
+			t.Fatal("invalid diagnostic command limit")
+		}
+		frames = limit
+	}
+	if dumpCommand > frames {
+		t.Fatal("diagnostic save command exceeds the capture limit")
+	}
+	for tic := start; tic < frames; tic++ {
 		oldMap, oldWorld := g.m.Name, g.worldTic
 		if campaign {
 			for updates := 0; ; updates++ {
@@ -128,6 +214,15 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 			}
 		} else if err := g.advanceDemoTic(); err != nil {
 			t.Fatal(err)
+		}
+		if tic+1 == dumpCommand {
+			data, err := sg.marshalSaveGame("diagnostic")
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := os.WriteFile(path+".save", data, 0600); err != nil {
+				t.Fatal(err)
+			}
 		}
 		if !summaryWritten && g.levelExitRequested && os.Getenv("GD_COOP_SUMMARY") != "" {
 			summary := struct {
@@ -191,9 +286,25 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 				phase = 1
 			}
 		}
+		if exportDir != "" && (g.m.Name != oldMap || phase != lastPhase) {
+			data, err := sg.marshalSaveGame("campaign diagnostic")
+			if err != nil {
+				t.Fatal(err)
+			}
+			name := fmt.Sprintf("%08d-%s-phase%d.save", tic+1, g.m.Name, phase)
+			if err := os.WriteFile(filepath.Join(exportDir, name), data, 0600); err != nil {
+				t.Fatal(err)
+			}
+		}
+		lastPhase = phase
 		if phases != nil {
 			fmt.Fprintf(phases, "%d,%s,%d,", tic+1, g.m.Name, phase)
 			writeRecordedPhaseFields(phases, sg, phase, true)
+			if compact {
+				if err := phases.Flush(); err != nil {
+					t.Fatal(err)
+				}
+			}
 		}
 		if finaleMode {
 			phase := 0
@@ -211,12 +322,21 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 		if campaign && g.m.Name == oldMap && g.worldTic == oldWorld {
 			continue
 		}
+		destination := out
+		if compact {
+			row.Reset()
+			rowOut.Reset(&row)
+			out = rowOut
+		}
 		if campaign {
 			fmt.Fprintf(out, "%d,%s,", tic+1, g.m.Name)
 		}
 		fmt.Fprintf(out, "%d,", g.worldTic-1)
 		for _, p := range coopProbePlayers(g) {
 			g.withAuthoritativePlayer(p, func() {
+				if tic+1 == detailCommand {
+					fmt.Printf("co-op attacker slot=%d has=%v thing=%d roster_ref=%d cached=(%d,%d) damage=%d\n", g.localSlot, g.statusHasAttacker, g.statusAttackerThing, g.demoCoopAttackers[g.localSlot], g.statusAttackerX, g.statusAttackerY, g.statusDamageCount)
+				}
 				state := 0
 				if g.playerReborn {
 					state = 2
@@ -241,15 +361,27 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 				fmt.Fprintf(out, "%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d", g.localSlot, g.p.x, g.p.y, g.p.z, g.p.angle, g.p.momx, g.p.momy, g.p.momz, g.stats.Health, g.playerMobjHealth, g.stats.Armor, g.stats.Bullets, g.stats.Shells, g.stats.Cells, g.stats.Rockets, state, g.p.viewHeight, g.playerViewZ, demoTraceWeaponID(g.inventory.ReadyWeapon), pending, weaponDoomStateID(g.weaponState), g.weaponStateTics, boolToInt(g.weaponAttackDown), boolToInt(g.weaponRefire), cards)
 				ax, ay := int64(0), int64(0)
 				if g.statusHasAttacker {
-					ax, ay = g.statusAttackerPosition()
+					ax, ay = coopProbeAttackerPosition(g)
 				}
 				fmt.Fprintf(out, ":%d:%d;", ax, ay)
 			})
 		}
 		fmt.Fprint(out, ",")
-		for _, m := range g.demoTraceMobjs() {
+		mobjs := g.demoTraceMobjs()
+		var bodyIndices map[int]int
+		bodyNumber := 0
+		if tic+1 == detailCommand {
+			bodyIndices = make(map[int]int)
+		}
+		for _, m := range mobjs {
 			if m.Player != 0 || m.Flags&1 != 0 || os.Getenv("GD_COOP_COMBAT_ONLY") != "" && (m.Type > 42 || m.Type == 41) {
 				continue
+			}
+			if bodyIndices != nil {
+				if m.Kind == "monster" {
+					bodyIndices[bodyNumber] = m.thingIndex
+				}
+				bodyNumber++
 			}
 			owner := m.ownerSlot
 			fmt.Fprintf(out, "%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d", m.Type, m.X, m.Y, m.Z, m.Angle, m.MomX, m.MomY, m.MomZ, m.Health, m.Tics, m.State, m.Radius, m.Height, m.FloorZ, m.CeilingZ, owner)
@@ -265,7 +397,7 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 			fmt.Fprint(out, ";")
 		}
 		fmt.Fprint(out, ",")
-		for _, m := range g.demoTraceMobjs() {
+		for _, m := range mobjs {
 			if m.Flags&1 != 0 {
 				fmt.Fprintf(out, "%d:%d:%d:%d;", m.Type, m.X, m.Y, m.Z)
 			}
@@ -273,6 +405,15 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 		fmt.Fprint(out, ",")
 		for i, s := range g.m.Sectors {
 			fmt.Fprintf(out, "%d:%d:%d;", g.sectorFloor[i], g.sectorCeil[i], s.Light)
+		}
+		if lineStateEnabled {
+			if len(lineState) != len(g.lineSpecial)*2 {
+				lineState = make([]byte, len(g.lineSpecial)*2)
+			}
+			for i, special := range g.lineSpecial {
+				lineState[i*2], lineState[i*2+1] = byte(special), byte(special>>8)
+			}
+			fmt.Fprintf(out, ",%x", md5.Sum(lineState))
 		}
 		r := doomrand.Capture()
 		fmt.Fprintf(out, ",%d,", r.PlayIndex)
@@ -282,9 +423,86 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 			}
 		}
 		fmt.Fprintln(out)
+		if compact {
+			if err := out.Flush(); err != nil {
+				t.Fatal(err)
+			}
+			out = destination
+			if tic+1 == detailCommand {
+				if err := os.WriteFile(path+".detail.csv", row.Bytes(), 0600); err != nil {
+					t.Fatal(err)
+				}
+				indices, err := json.Marshal(bodyIndices)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if err := os.WriteFile(path+".bodies.json", indices, 0600); err != nil {
+					t.Fatal(err)
+				}
+				if lineStateEnabled {
+					lines, err := json.Marshal(g.lineSpecial)
+					if err != nil {
+						t.Fatal(err)
+					}
+					if err := os.WriteFile(path+".lines.json", lines, 0600); err != nil {
+						t.Fatal(err)
+					}
+				}
+			}
+			if campaign {
+				fmt.Fprintf(out, "%d,%s,", tic+1, g.m.Name)
+			}
+			// Hash the complete existing CSV row, including its newline. This
+			// reduces campaign trace storage without sampling world state.
+			fmt.Fprintf(out, "%d,%x\n", g.worldTic-1, md5.Sum(row.Bytes()))
+			if err := out.Flush(); err != nil {
+				t.Fatal(err)
+			}
+		}
 	}
 	if restored != len(checkpoints) {
 		t.Fatal("not all checkpoints restored")
+	}
+}
+
+func coopProbeAttackerPosition(g *game) (int64, int64) {
+	// GD_LiveAttacker in the reference observes only current live thinkers.
+	// Removed barrels can leave a dangling player->attacker pointer in Boom;
+	// its freed coordinates are deliberately outside this comparison profile.
+	if g.statusAttackerThing == selfAttackerThing {
+		return g.statusAttackerPosition()
+	}
+	thing := g.statusAttackerThing
+	if g.coopDemoActive() {
+		if ref := g.demoCoopAttackers[g.localSlot]; ref < 0 {
+			return g.statusAttackerPosition()
+		} else if ref > 0 {
+			thing = ref - 1
+		}
+	}
+	if thing >= 0 && thing < len(g.thingCollected) && g.thingCollected[thing] {
+		return 0, 0
+	}
+	return g.statusAttackerPosition()
+}
+
+func TestBoomCoopProbeRemovedAttacker(t *testing.T) {
+	g := &game{statusAttackerThing: 0, statusAttackerX: 123, statusAttackerY: 456, thingCollected: []bool{false}}
+	if x, y := coopProbeAttackerPosition(g); x != 123 || y != 456 {
+		t.Fatalf("present attacker = %d,%d", x, y)
+	}
+	g.thingCollected[0] = true
+	if x, y := coopProbeAttackerPosition(g); x != 0 || y != 0 {
+		t.Fatalf("removed attacker = %d,%d", x, y)
+	}
+	g.opts.GameMode = gameModeCoop
+	g.opts.DemoScript = &demo.Script{Frames: make([][4]demo.Tic, 1)}
+	g.localSlot = 1
+	g.demoCoopAttackers = map[int]int{1: 1}
+	g.statusAttackerThing = selfAttackerThing
+	g.p.x, g.p.y = 789, 987
+	if x, y := coopProbeAttackerPosition(g); x != 789 || y != 987 {
+		t.Fatalf("self attacker = %d,%d", x, y)
 	}
 }
 

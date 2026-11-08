@@ -106,6 +106,7 @@ func (g *game) detachCoopCameraBody() int {
 		order = int64(g.localPlayerThingIndex + 1)
 	}
 	g.thingThinkerOrder[idx], g.thingBlockOrder[idx] = order, g.playerBlockOrder
+	g.thingThinkerIndexDirty = true
 	g.updateThingBlockmapIndex(idx)
 	if g.boomTouchSectors != nil {
 		for len(g.boomTouchActors) <= idx+4 {

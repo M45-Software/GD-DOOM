@@ -1,6 +1,16 @@
 package doomruntime
 
-import "gddoom/internal/mapdata"
+import (
+	"strings"
+
+	"gddoom/internal/mapdata"
+)
+
+// R_TextureNumForName maps '-' to texture zero. Boom excludes that index
+// from shortest-texture searches, including its explicit texture name.
+func (g *game) boomMissingWallTexture(name string) bool {
+	return name == "" || name == "-" || strings.EqualFold(name, g.opts.WallTextureZeroName)
+}
 
 func (g *game) activateGeneralizedFloor(line int, info mapdata.FloorInfo) bool {
 	gen := info.Generalized
@@ -122,6 +132,9 @@ func (g *game) boomShortestLowerTexture(sec int) int64 {
 		}
 		for _, side := range line.SideNum {
 			name := g.m.Sidedefs[side].Bottom
+			if g.boomMissingWallTexture(name) {
+				continue
+			}
 			height, ok := g.opts.WallTextureHeights[name]
 			if !ok {
 				if tex, found := g.opts.WallTexBank[name]; found {

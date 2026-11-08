@@ -20,6 +20,13 @@ recorded paths below are verified; complete Boom compatibility is not claimed.
 - Boom corpse movement: after the death animation clears solidity, a sliding
   corpse can pass through solid players, monsters and decorations. Walls still
   block it. Early solid death frames and vanilla demos keep actor blocking.
+  Sector height clipping uses the same non-solid corpse rule, so an overlapping
+  player cannot prevent the corpse's floor/ceiling support from updating.
+  Non-solid pickups use this rule too, including items on moving floors.
+- Boom 2.02 monster door unsticking: a handled special after a blocked move
+  consumes `pr_trywalk` and succeeds three times out of four. Boom 2.01 and
+  compatibility-mode demos retain the original handled-door result without
+  that draw.
 - Boom Pain Elementals: no vanilla 21-skull population cap; the PE-to-skull
   path rejects one-sided, blocking and monster-blocking lines before allocating
   a skull or consuming RNG. Spawned skulls outside their sector's vertical
@@ -1768,19 +1775,151 @@ six natural-ending/cast runs (21,600 command frames, 366 restores), and six
 original community co-op runs (10,527 active frames, 40 restores). The final
 co-op death campaign recheck, full Go suite and native Raylib package checks pass.
 
+### Additional community co-op coverage without gameplay patches
+
+`verify_boom_community_coop.py` also includes Brainfreezzzzz and Mahik's original
+Boom-complevel-9 Speed of Doom UV-Max recordings:
+
+| Recording | Original commands | Active map frames | Recorded intermission commands |
+| --- | ---: | ---: | ---: |
+| `sd01mc138.lmp` | 4,267 | 3,463 | 804 |
+| `sd02mc343.lmp` | 8,680 | 7,813 | 867 |
+
+The WAD archive SHA-256 is
+`e956bf271e1cb458a5402374729c1401a8f27e1fa7d05ee66835ff3531118497`.
+Its embedded patch has SHA-256
+`609bb4802bd956f2d31240851d76ad189968c1b4f0231ea1e6d190e1a86ae656`;
+the verifier audits that it contains metadata and `[STRINGS]` only. It has no
+actor, state, weapon or other gameplay replacements. Both demo archives and
+their original two-player Boom headers/command counts are pinned in the verifier.
+
+Both recordings match DSDA continuously and with cold save/keyframe restores:
+11,276 active frames and all 12,947 original commands per mode, matching kill,
+item, secret and exit totals, with 48 cold restores across the two formats.
+Comparisons include every recorded intermission command and checkpoints before,
+at and inside those screens. Both original files select console zero; they do
+not establish an independently recorded alternate console view or a multi-map
+co-op campaign. Evidence: `/tmp/gddoom-community-coop-expanded/results.json`.
+The expanded matrix retains the four original Sunlust console recordings too:
+18 cases, 54,882 active-frame comparisons, 62,868 recorded-command phase
+comparisons and 144 cold restores all pass on the same source revision.
+
+The generated cold campaign and finale matrices also pass on that source:
+30 campaign cases and 36 finale cases, including natural story timing and all
+17 cast actors. Evidence: `/tmp/gddoom-coop-cold-campaign-final/results.json`
+and `/tmp/gddoom-coop-cold-finales-final/results.json`.
+
+MAP02 exposed a lost-soul retaliation case: a failed movement probe can change
+the chase target synchronously. New direction selection must read the current
+target, rather than coordinates cached before the collision. Unit regressions
+cover replacement targets that are players and monsters.
+
+```sh
+python3 scripts/verify_boom_community_coop.py \
+  --iwad /path/to/doom2.wad --reference /path/to/instrumented/dsda-doom \
+  --case sd01mc138 --case sd02mc343 --out /tmp/gddoom-sod-coop
+```
+
+### Full co-op movie investigation
+
+The original J4C/Kinetic Sunlust D2All UV-Max movie, `slallc45115.zip`
+([DSDA archive](https://dsdarchive.com/files/demos/sunlust/112514/slallc45115.zip)),
+contains two console recordings, each with 652,981 two-player Boom commands.
+The archive SHA-256 is
+`8d4c1d297abe2850fc3f2f35c3d057c2c46deff652629ac96cd28e39b9634a20`.
+Its documented MAP26 co-op-start fix, `sunlust-m26.wad`, is included in the
+already pinned Sunlust archive; its SHA-256 is
+`3e6954e5898babc5df625e0c070a55539238067cd00fbbdc8caf6b872f7bd443`.
+MAP30 contains 56 Commander Keens and requires Sunlust's gameplay patch.
+The earlier maps' `-nodeh` audit cannot justify excluding it for this movie.
+DeHackEd actor support is outside the current Boom-only milestone; this movie
+therefore remains a diagnostic corpus rather than a completed full-campaign
+proof. Its commands must not be altered to bypass that dependency.
+
+For long comparisons, `GD_COOP_COMPACT=1` hashes each complete existing active
+world CSV row, including its newline, with MD5. Both observers retain the command,
+map and tic beside the digest. This reduces storage without sampling actors,
+sectors or RNG. It is an accidental-difference check, not an input authenticity
+check. `GD_COOP_DETAIL_COMMAND=N` writes that command's original full row to
+`OUT.detail.csv`. `GD_COOP_CAPTURE_COMMANDS=N` is an explicit diagnostic prefix;
+leave it unset for campaign verification. Phase CSVs remain separate and complete
+for the commands replayed. Attacker coordinates cover live actor identities;
+read-only reference hooks track removal, reassignment and level replacement so
+freed memory or allocator reuse cannot appear as a new attacker.
+The headless replay also loads original wall texture dimensions: generalized
+"by shortest texture" floor and ceiling targets depend on them even when
+rendering is disabled. Geometry-only generated fixtures may omit texture lumps.
+Shortest-texture searches exclude texture index zero, both `-` and the WAD's
+explicit name for that index. Legacy raise-to-texture floors use Boom's
+32000-unit sentinel and destination clamp; vanilla retains its signed fixed-point
+overflow behavior. Unit regressions cover lower/upper searches, a named index
+zero, missing textures, and the Boom/vanilla destination difference.
+The same investigation corrected ordinary teleports into sectors shorter than
+the arriving actor: `P_TeleportMove` checks overlapping things but does not reject
+vertical fit, even in a closed destination sector. MAP13 command 168,823's entire
+canonical row now matches DSDA; the subsequent diagnostic matches 19,717 active
+frames and 21,177 command phases through command 190,000 in MAP14.
+
+Conveyors reuse actors' cached center sectors while retaining their live-radius
+boundary intersection checks. A 3,000-frame MAP07 capture is byte-identical before
+and after this optimization. Sound propagation retains linedef order in derived
+adjacency lists, and the derived thing-thinker index preserves original thinker
+order, live momentum eligibility, removal, respawn and appended bodies. These
+caches add no serialized fields.
+
+Original commands 1–190,000 now match DSDA in both console recordings, each
+continuously and with cold save/keyframe restores: six passing cases, each with
+173,883 active frames, 16,016 intermission commands and 101 story-screen commands.
+The 72 restore positions per recording/format cover 27 active, 39 intermission
+and six story-screen states: 288 cold restores across the complete matrix.
+Evidence: `/tmp/gddoom-coop-prefix-final/results.json`, aggregating the two
+source/observer-matched console reports.
+
+This prefix reaches MAP14 and contains no player deaths/rebirths. It is **not**
+full-movie coverage. Full campaign playback and real-recorded death/rebirth
+checkpoints remain unverified; patched MAP30 actor behavior is outside this
+Boom-only milestone.
+DSDA completes MAP30 in the original movie, but its final recorded command is
+still in intermission. It cannot establish original-recording finale playback;
+do not append replacement commands and count them as community demo coverage.
+
+`scripts/verify_boom_community_coop_campaign.py` audits the original movie, the exact
+MAP26 start additions, and the active Sunlust patch. The reference uses
+`-nodeh -deh sunlust.deh` to retain the original Sunlust gameplay/text changes
+while excluding Freedoom's unrelated embedded patch. Its default matrix is both
+original console views, each continuous and with cold save/keyframe restores.
+Reference coverage finds all 32 maps, five story screens, deaths and rebirths
+for both players, and 191 checkpoint positions: 80 active, 96 intermission,
+15 story-finale. The verifier caches reference captures with input, executable,
+observer and trace hashes, compares traces as streams, and stops GD at the
+first difference. A diagnostic or failed prefix is never counted as full parity.
+`--through N` compares exactly commands 1 through N from the original recording,
+with separately named prefix traces/reports. It refuses DeHackEd-dependent
+MAP30, reports `diagnostic_only: true` and always leaves `full_suite: false`.
+An interrupted or incomplete requested matrix cannot report `passed: true`.
+
+```sh
+python3 scripts/verify_boom_community_coop_campaign.py \
+  --iwad /path/to/doom2.wad --reference /path/to/instrumented/dsda-doom \
+  --out /tmp/gddoom-coop-prefix --through 190000
+```
+
 ## Remaining work
 
 The next milestones are:
 
-1. Expand complete-map combat coverage beyond the verified Sunlust routes.
+1. Expand complete-map combat coverage beyond the verified Sunlust and
+   Speed of Doom routes.
    Two real MAP01–10 community campaigns now cover intermission/finale
    checkpoints. Add other map sets and actual campaigns reaching episodic or
    MAP30 endgame finales, keeping movement, combat, lifecycle and movers as
    regressions. Death/rebirth checkpoints and
    generated normal/secret transitions now have DSDA comparisons; MAP02 covers
    a complete crusher/resurrection route with binary checkpoint continuation.
-2. Broaden community co-op coverage beyond the two verified Sunlust routes:
-   multi-map recordings, other map sets, and more combat/death/exit combinations.
+2. Broaden community co-op coverage beyond the verified Sunlust and Speed of Doom
+   recordings: obtain a complete Boom multi-map co-op recording without gameplay
+   patches, and cover more combat/death/exit combinations. A bounded Sunlust
+   prefix is useful regression evidence but cannot replace that full recording.
    Generated normal/secret campaigns, episodic/MAP30 finales and full-roster
    checkpoints already have DSDA comparisons. Native authority save/rollback
    remains separate from client replication baselines.
@@ -1796,7 +1935,10 @@ not full combat RNG parity, every map route, or large-fight performance. The map
 audit detects unknown specials; it does not detect every unsupported interaction.
 
 These changes advance the multiplayer simulation ID to
-`gd-doom-authority-dev-30`. Deploy matching clients and servers. Door lighting
+`gd-doom-authority-dev-31`. Deploy matching clients and servers. The corpse
+height-clipping, mover target, trigger, teleport, chase-target and damage-source
+corrections change simulation behavior without adding saved fields;
+save/keyframe versions remain 43/30. Door lighting
 adds the controlling line reference to owned and displaced door snapshots.
 Sector identities extend the sound-event schema. Explicit ceiling ownership
 and retained doors extend the mover schema; displaced ceilings remain in the

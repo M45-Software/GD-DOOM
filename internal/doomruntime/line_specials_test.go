@@ -9,7 +9,8 @@ import (
 )
 
 func TestTeleportStompAssignsDeathTimersInMutableBlockOrder(t *testing.T) {
-	t.Cleanup(doomrand.Clear)
+	original := doomrand.Capture()
+	t.Cleanup(func() { doomrand.Restore(original) })
 	g := &game{
 		m: &mapdata.Map{
 			Things:   []mapdata.Thing{{Type: 9, X: 32, Y: 32}, {Type: 9, X: 40, Y: 32}},
@@ -31,7 +32,9 @@ func TestTeleportStompAssignsDeathTimersInMutableBlockOrder(t *testing.T) {
 	g.rebuildThingBlockmap()
 	// The original E4M1 teleport visits the newer blocklink first. Each kill
 	// creates a shotgun drop that changes the list during the traversal.
-	doomrand.SetState(0, 182)
+	// Select vanilla RNG as well as its table index; a preceding Boom test
+	// must not turn these expected vanilla death timers into LCG draws.
+	doomrand.Restore(doomrand.Snapshot{PlayIndex: 182})
 	if !g.teleportStompDestinationThings(36*fracUnit, 32*fracUnit, playerRadius, -1, true, g.p.x, g.p.y) {
 		t.Fatal("player teleport was rejected")
 	}

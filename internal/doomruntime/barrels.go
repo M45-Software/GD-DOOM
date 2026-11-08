@@ -310,6 +310,21 @@ func (g *game) radiusAttackFromThing(spotIdx int, damage int) {
 	sx, sy := g.thingPosFixed(spotIdx, spot)
 	sz, _, _ := g.thingSupportState(spotIdx, spot)
 	sheight := g.thingCurrentHeight(spotIdx, spot)
+	if g.coopDemoActive() {
+		// Doom's barrel target changes only after surviving damage and a
+		// successful retarget. A lethal first hit leaves the source NULL.
+		// Rebirth converts retained player targets to their detached bodies.
+		slot, sourceThing := 0, -1
+		if g.thingTargetPlayer[spotIdx] {
+			slot = g.monsterTargetPlayerSlot(spotIdx)
+		} else {
+			sourceThing = g.thingTargetIdx[spotIdx]
+		}
+		g.withProjectileSource(slot, g.authorityPlayerGeneration(slot), func(validSource bool) {
+			g.radiusAttackAt(sx, sy, sz, sheight, spotIdx, damage, "Explosion", validSource, sourceThing)
+		})
+		return
+	}
 	if len(g.authorityPlayers) != 0 {
 		if owner, ok := g.authorityBarrelSources[spotIdx]; ok {
 			g.withProjectileSource(owner.PlayerSlot, owner.PlayerGeneration, func(validSource bool) {
@@ -395,7 +410,10 @@ func (g *game) radiusAttackAt(sx, sy, sz, sheight int64, ignoreThing int, damage
 		// but P_KillMobj retains the explosion owner as player->attacker for
 		// P_DeathThink. Keep those two Doom concepts distinct.
 		g.applyPlayerDamageTargetFrom(g.localSlot, sourceIdentity, func() {
-			g.damagePlayerFromWithInflictorZ(damageToPlayer, msg, sx, sy, true, -1, sz)
+			hasSource := sourceThing >= 0 || sourcePlayer || sourceIdentity.Slot != 0
+			if !g.damagePlayerBodyWithSource(damageToPlayer, msg, sx, sy, true, -1, sz, -1, hasSource) {
+				return
+			}
 			if g.statusHasAttacker && sourceThing >= 0 && g.m != nil && sourceThing < len(g.m.Things) {
 				g.statusAttackerX, g.statusAttackerY = g.thingPosFixed(sourceThing, g.m.Things[sourceThing])
 				g.statusAttackerThing = sourceThing

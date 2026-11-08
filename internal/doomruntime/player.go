@@ -146,6 +146,9 @@ func spawnPlayer(m *mapdata.Map, requestedSlot int) (player, int, []playerStart,
 
 func (g *game) initPhysics() {
 	g.lines = buildPhysLines(g.m)
+	g.sectorNoiseLines = nil
+	g.sectorNoiseLineCount = 0
+	g.thingThinkerIndexDirty = true
 	g.mapVisibleLines = buildMapVisibleLines(g.lines)
 	g.lineValid = make([]int, len(g.lines))
 	if g.m.BlockMap != nil {

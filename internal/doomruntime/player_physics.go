@@ -168,6 +168,54 @@ type worldThinkerRef struct {
 	order int64
 }
 
+type orderedThingThinker struct {
+	key   int
+	order int64
+}
+
+func (g *game) nextThingThinkerAfter(lastOrder int64) (worldThinkerRef, bool) {
+	if g == nil || g.m == nil {
+		return worldThinkerRef{}, false
+	}
+	if g.thingThinkerIndexDirty || len(g.thingThinkerIndex) != len(g.m.Things) {
+		g.thingThinkerIndex = g.thingThinkerIndex[:0]
+		for i := range g.m.Things {
+			order := int64(i + 1)
+			if i < len(g.thingThinkerOrder) && g.thingThinkerOrder[i] > 0 {
+				order = g.thingThinkerOrder[i]
+			}
+			g.thingThinkerIndex = append(g.thingThinkerIndex, orderedThingThinker{i, order})
+		}
+		slices.SortFunc(g.thingThinkerIndex, func(a, b orderedThingThinker) int {
+			if a.order < b.order {
+				return -1
+			}
+			if a.order > b.order {
+				return 1
+			}
+			return a.key - b.key
+		})
+		g.thingThinkerIndexDirty = false
+	}
+	low, high := 0, len(g.thingThinkerIndex)
+	for low < high {
+		mid := low + (high-low)/2
+		if g.thingThinkerIndex[mid].order <= lastOrder {
+			low = mid + 1
+		} else {
+			high = mid
+		}
+	}
+	for _, entry := range g.thingThinkerIndex[low:] {
+		// Momentum, removal and resurrection can change eligibility during
+		// this same tic. Only the stable order is cached, never activity.
+		if g.thingHasWorldThinker(entry.key, g.m.Things[entry.key]) {
+			return worldThinkerRef{worldThinkerThing, entry.key, entry.order}, true
+		}
+	}
+	return worldThinkerRef{}, false
+}
+
 func (g *game) runOrderedWorldThinkers() {
 	g.runOrderedWorldThinkersForPlayers(nil)
 }
@@ -223,15 +271,8 @@ func (g *game) nextWorldThinkerAfterForPlayers(lastOrder int64, players []*autho
 				consider(worldThinkerPlayer, i, p.thinkerOrder(g.m))
 			}
 		}
-		for i, th := range g.m.Things {
-			if !g.thingHasWorldThinker(i, th) {
-				continue
-			}
-			order := int64(i + 1)
-			if i >= 0 && i < len(g.thingThinkerOrder) && g.thingThinkerOrder[i] > 0 {
-				order = g.thingThinkerOrder[i]
-			}
-			consider(worldThinkerThing, i, order)
+		if thing, ok := g.nextThingThinkerAfter(lastOrder); ok {
+			consider(thing.kind, thing.key, thing.order)
 		}
 	}
 	for sec, ft := range g.floors {
@@ -1536,6 +1577,11 @@ func (g *game) blockLinesIterator(x, y int, fn func(int) bool) bool {
 		return true
 	}
 	cell := g.m.BlockMap.Cells[idx]
+	if g.boomMomentumDropoff && len(cell) != 0 {
+		// Boom skips the first blocklist word. Vanilla treats that delimiter
+		// as linedef zero, including its historical phantom slide intercepts.
+		cell = cell[1:]
+	}
 	for _, lineWord := range cell {
 		if !fn(int(lineWord)) {
 			return false

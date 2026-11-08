@@ -1517,6 +1517,7 @@ func restoreGameSaveState(g *game, s gameSaveState) {
 	g.thingCollected = restoreSaveSlice(g.thingCollected, s.ThingCollected)
 	g.thingDropped = restoreSaveSlice(g.thingDropped, s.ThingDropped)
 	g.thingThinkerOrder = restoreSaveSlice(g.thingThinkerOrder, s.ThingThinkerOrder)
+	g.thingThinkerIndexDirty = true
 	g.thingSpawnPoint = restoreSaveSlice(g.thingSpawnPoint, s.ThingSpawnPoint)
 	g.thingX = restoreSaveSlice(g.thingX, s.ThingX)
 	g.thingY = restoreSaveSlice(g.thingY, s.ThingY)

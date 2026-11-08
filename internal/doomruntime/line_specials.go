@@ -185,6 +185,12 @@ func (g *game) taggedSectorsForTag(tag uint16) []int {
 }
 
 func (g *game) raiseToTextureHeight(sec int) int64 {
+	if g.boomMomentumDropoff {
+		// Boom ignores texture zero and performs the addition in map units
+		// before clamping, avoiding vanilla's fixed-point overflow.
+		height := (g.sectorFloor[sec] >> fracBits) + (g.boomShortestLowerTexture(sec) >> fracBits)
+		return min64(height, 32000) << fracBits
+	}
 	minHeight := int64(math.MaxInt32)
 	for _, line := range g.m.Linedefs {
 		if line.Flags&mlTwoSided == 0 {
@@ -651,9 +657,9 @@ func (g *game) heightClipThing(i int, th mapdata.Thing) bool {
 	x, y := g.thingPosFixed(i, th)
 	radius := g.thingCurrentRadius(i, th)
 	oldZ, oldFloorZ, _ := g.thingSupportState(i, th)
-	// P_ThingHeightClip checks the current position of every non-player
-	// object. Even pickups and corpses collide with the player's solid body
-	// and ML_BLOCKMONSTERS lines; an early rejection leaves subsector support.
+	// P_ThingHeightClip uses P_CheckPosition, including Boom's exemption
+	// from thing blocking for non-solid pickups and fallen corpses.
+	// Line blocking still applies; early rejection leaves subsector support.
 	var tmfloor, tmceil int64
 	slammed := false
 	if i < len(g.thingSkullFly) && g.thingSkullFly[i] {
@@ -673,7 +679,7 @@ func (g *game) heightClipThing(i int, th mapdata.Thing) bool {
 		}
 	}
 	if !slammed {
-		tmfloor, tmceil, _, _ = g.checkPositionForActor(x, y, radius, true, i, true)
+		tmfloor, tmceil, _, _ = g.checkPositionForActorWithThingPolicy(x, y, radius, true, i, true, g.boomNonSolidMover(i))
 	}
 	z := oldZ
 	if slammed {
@@ -1364,7 +1370,6 @@ func (g *game) activateTeleportLine(lineIdx int, side int, info mapdata.Teleport
 	actorCeilZ := g.p.ceilz
 	actorAngle := g.p.angle
 	actorRadius := int64(playerRadius)
-	actorHeight := g.playerMobjHeight()
 	if !isPlayer {
 		actor := g.m.Things[actorIdx]
 		actorLabel = "thing"
@@ -1373,7 +1378,6 @@ func (g *game) activateTeleportLine(lineIdx int, side int, info mapdata.Teleport
 		actorZ, actorFloorZ, actorCeilZ = g.thingSupportState(actorIdx, actor)
 		actorAngle = g.thingWorldAngle(actorIdx, actor)
 		actorRadius = thingTypeRadius(actor.Type)
-		actorHeight = g.thingCurrentHeight(actorIdx, actor)
 	}
 	// EV_Teleport scans tagged sectors first, then the thinker list within
 	// each sector. Map Things retain that spawn order; a destination in an
@@ -1411,9 +1415,9 @@ func (g *game) activateTeleportLine(lineIdx int, side int, info mapdata.Teleport
 				}
 				return false
 			}
-			if !info.Silent && tmceil-tmfloor < actorHeight {
-				return false
-			}
+			// P_TeleportMove checks destination things, not vertical fit.
+			// Actors may arrive in a short or even closed destination sector;
+			// subsequent movement and sector clipping handle the headroom.
 			if !g.teleportStompDestinationThings(tx, ty, actorRadius, actorIdx, isPlayer, actorX, actorY) {
 				return false
 			}

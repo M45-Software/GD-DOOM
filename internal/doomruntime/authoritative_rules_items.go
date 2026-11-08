@@ -53,6 +53,7 @@ func (g *game) tickAuthoritativeItemRespawns() {
 		g.setThingMomentum(i, 0, 0, 0)
 		if i < len(g.thingThinkerOrder) {
 			g.thingThinkerOrder[i] = g.allocThinkerOrder()
+			g.thingThinkerIndexDirty = true
 		}
 		g.snapThingRenderState(i)
 	}

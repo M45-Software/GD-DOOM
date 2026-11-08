@@ -633,7 +633,7 @@ func (g *game) checkWalkSpecialLinesForActorWithCandidatesAndRadius(prevX, prevY
 				return false
 			}
 			activated := g.activateDoorLine(ld.idx, info, playerActor)
-			if !info.Repeat && (!info.Boom || activated) && ld.idx >= 0 && ld.idx < len(g.lineSpecial) {
+			if !info.Repeat && (activated || !info.Boom && !g.boomMomentumDropoff) && ld.idx >= 0 && ld.idx < len(g.lineSpecial) {
 				g.lineSpecial[ld.idx] = 0
 			}
 			if activated {
@@ -642,10 +642,12 @@ func (g *game) checkWalkSpecialLinesForActorWithCandidatesAndRadius(prevX, prevY
 			return false
 		}
 		activated := g.activateNonDoorLineSpecial(ld.idx, startSide, info, actorIdx, isPlayer)
-		// Vanilla consumes failed W1 crossings; Boom extended W1 actions
-		// remain available until a tagged sector accepts the action.
-		consumeFailed := !info.Boom && !(g.boomMomentumDropoff && info.Teleport != nil)
-		if !info.Repeat && (consumeFailed || activated) && ld.idx >= 0 && ld.idx < len(g.lineSpecial) {
+		// Boom also preserves failed legacy W1 actions, not just extended
+		// specials. Light events and EV_StopPlat report success even when
+		// no target changes, so their W1 trigger is still consumed.
+		consumeFailed := !info.Boom && !g.boomMomentumDropoff
+		handled := activated || info.Light != nil || special == 54 && g.m.Linedefs[ld.idx].Tag != 0
+		if !info.Repeat && (consumeFailed || handled) && ld.idx >= 0 && ld.idx < len(g.lineSpecial) {
 			g.lineSpecial[ld.idx] = 0
 		}
 		if activated {
@@ -713,7 +715,9 @@ func (g *game) handleExitSpecial(lineIdx int, special uint16, trigger mapdata.Tr
 	if info.Exit == mapdata.ExitNone || info.Trigger != trigger {
 		return false
 	}
-	if !info.Repeat && lineIdx >= 0 && lineIdx < len(g.lineSpecial) {
+	// Walk exits queue G_ExitLevel without clearing their linedef. Use/shoot
+	// exits consume their switch special independently of the level request.
+	if trigger != mapdata.TriggerWalk && !info.Repeat && lineIdx >= 0 && lineIdx < len(g.lineSpecial) {
 		g.lineSpecial[lineIdx] = 0
 	}
 	switch info.Exit {

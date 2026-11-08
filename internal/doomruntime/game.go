@@ -538,6 +538,8 @@ type game struct {
 	authorityDamageSource       int // Scoped source player; zero is world/monster.
 
 	lines                   []physLine
+	sectorNoiseLines        [][]int // Derived topology; openings/flags remain live.
+	sectorNoiseLineCount    int
 	mapVisibleLines         []mapview.Line
 	lineValid               []int
 	validCount              int
@@ -650,6 +652,8 @@ type game struct {
 	thingCollected                                []bool
 	thingDropped                                  []bool
 	thingThinkerOrder                             []int64
+	thingThinkerIndex                             []orderedThingThinker // Derived order; eligibility stays live.
+	thingThinkerIndexDirty                        bool
 	thingSpawnPoint                               []mapdata.Thing
 	prevThingX                                    []int64
 	prevThingY                                    []int64
@@ -1570,6 +1574,7 @@ func newGameWithRNG(m *mapdata.Map, opts Options, clearRNG bool) *game {
 		g.thingThinkerOrder[i] = int64(i + 1)
 		g.thingBlockOrder[i] = int64(i + 1)
 	}
+	g.thingThinkerIndexDirty = true
 	g.nextThinkerOrder = int64(len(m.Things) + 1)
 	g.nextBlockmapOrder = int64(len(m.Things) + 1)
 	g.secretFound = make([]bool, len(m.Sectors))

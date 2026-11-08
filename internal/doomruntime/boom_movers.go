@@ -123,6 +123,9 @@ func (g *game) boomShortestUpperTexture(sec int) int64 {
 		}
 		for _, side := range line.SideNum {
 			name := g.m.Sidedefs[side].Top
+			if g.boomMissingWallTexture(name) {
+				continue
+			}
 			height, ok := g.opts.WallTextureHeights[name]
 			if !ok {
 				if tex, found := g.opts.WallTexBank[name]; found {

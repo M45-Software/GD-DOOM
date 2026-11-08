@@ -34,6 +34,7 @@ func (a *Authority) spawnVoodooDolls(slot int) {
 		g.thingDoomState[idx], g.thingStateTics[idx] = 149, -1
 		if g.authorityPlayerGeneration(slot) == 1 {
 			g.thingThinkerOrder[idx] = int64(p.index + 1)
+			g.thingThinkerIndexDirty = true
 		}
 		// Friction arrays are optional until the first friction/pusher thinker.
 		if len(g.thingFriction) > 0 {

@@ -190,6 +190,20 @@ func wadIsShareware(wf *wad.File) bool {
 	return episodeOne && !episodeTwo && !commercial
 }
 
+func wallTextureZeroName(wf *wad.File, ts *doomtex.Set) string {
+	if ts == nil {
+		var err error
+		ts, err = doomtex.LoadFromWAD(wf)
+		if err != nil {
+			return ""
+		}
+	}
+	if names := ts.TextureNames(); len(names) > 0 {
+		return names[0]
+	}
+	return ""
+}
+
 func normalizeNetplayShorthandArgs(args []string) []string {
 	if len(args) == 0 {
 		return nil
@@ -1380,6 +1394,7 @@ func RunParse(args []string, stdout io.Writer, stderr io.Writer) int {
 			FlatBankIndexed:            flatBankIndexed,
 			WallTexBank:                wallTexBank,
 			WallTextureHeights:         wallTextureHeights(wf, texSet),
+			WallTextureZeroName:        wallTextureZeroName(wf, texSet),
 			Shareware:                  wadIsShareware(wf),
 			WallTextureAnimSequences:   wallTextureAnimSequences,
 			WallTextureAnimSpeeds:      boomTables.WallSpeeds,
@@ -2340,6 +2355,7 @@ func buildRenderBundle(resolvedWADPath string, cfg renderBuildConfig, stderr io.
 		FlatBankIndexed:            flatBankIndexed,
 		WallTexBank:                wallTexBank,
 		WallTextureHeights:         wallTextureHeights(wf, texSet),
+		WallTextureZeroName:        wallTextureZeroName(wf, texSet),
 		Shareware:                  wadIsShareware(wf),
 		WallTextureAnimSequences:   wallTextureAnimSequences,
 		WallTextureAnimSpeeds:      boomTables.WallSpeeds,

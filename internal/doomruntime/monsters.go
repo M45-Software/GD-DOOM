@@ -3750,6 +3750,15 @@ func (g *game) monsterPickNewChaseDir(i int, typ int16, targetX, targetY int64) 
 	if g.m == nil || i < 0 || i >= len(g.m.Things) || i >= len(g.thingMoveDir) {
 		return
 	}
+	// P_NewChaseDir reads actor->target when it is called. A failed P_Move
+	// can slam a charging skull and synchronously run damage/state actions
+	// that replace that target. Coordinates cached by the enclosing A_Chase
+	// no longer describe the actor it must pursue.
+	if g.monsterHasExplicitTarget(i) {
+		if x, y, _, _, _, ok := g.monsterTargetPos(i); ok {
+			targetX, targetY = x, y
+		}
+	}
 	tx, ty := g.thingPosFixed(i, g.m.Things[i])
 	olddir := g.thingMoveDir[i]
 	if olddir > monsterDirNoDir {
@@ -4032,6 +4041,9 @@ func (g *game) monsterMoveInDir(i int, typ int16, dir monsterMoveDir) bool {
 			if g.useSpecialLineForActorIndex(lines[j], 0, false, i) {
 				good = true
 			}
+		}
+		if good && g.boomDoorUnstickEnabled() {
+			return doomrand.PRandom(doomrand.Trywalk)&3 != 0
 		}
 		return good
 	}
@@ -5236,6 +5248,23 @@ func (g *game) propagateNoiseAlertFrom(x, y int64) {
 	g.propagateSectorNoise(sec, 0, best)
 }
 
+func (g *game) ensureSectorNoiseLines() {
+	if len(g.sectorNoiseLines) == len(g.m.Sectors) && g.sectorNoiseLineCount == len(g.lines) {
+		return
+	}
+	g.sectorNoiseLines = make([][]int, len(g.m.Sectors))
+	g.sectorNoiseLineCount = len(g.lines)
+	for i, line := range g.lines {
+		front, back := g.physLineSectors(line)
+		if front >= 0 && front < len(g.sectorNoiseLines) {
+			g.sectorNoiseLines[front] = append(g.sectorNoiseLines[front], i)
+		}
+		if back >= 0 && back < len(g.sectorNoiseLines) && back != front {
+			g.sectorNoiseLines[back] = append(g.sectorNoiseLines[back], i)
+		}
+	}
+}
+
 func (g *game) propagateSectorNoise(sec int, soundBlocks int, best []int) {
 	if g == nil || g.m == nil || sec < 0 || sec >= len(g.m.Sectors) {
 		return
@@ -5247,6 +5276,7 @@ func (g *game) propagateSectorNoise(sec int, soundBlocks int, best []int) {
 	if sec < len(best) {
 		best[sec] = traversed
 	}
+	g.ensureSectorNoiseLines()
 	if sec < len(g.sectorSoundTarget) {
 		g.sectorSoundTarget[sec] = true
 		if len(g.authorityPlayers) > 0 {
@@ -5258,7 +5288,10 @@ func (g *game) propagateSectorNoise(sec int, soundBlocks int, best []int) {
 			g.sectorSoundPlayerSlot[sec] = g.localSlot
 		}
 	}
-	for _, ld := range g.lines {
+	// Preserve physical-line order without scanning the entire map in every
+	// visited sector. Moving doors and sound-block flags are checked below.
+	for _, line := range g.sectorNoiseLines[sec] {
+		ld := g.lines[line]
 		front, back := g.physLineSectors(ld)
 		if front != sec && back != sec {
 			continue
@@ -5481,7 +5514,7 @@ func (g *game) probeMonsterMoveWithDropoff(i int, typ int16, x, y int64, allowDr
 	// Boom's PIT_CheckThing allows a non-solid mover through solid actors.
 	// A_Fall clears corpse solidity partway through the death animation;
 	// vanilla demos still use the original actor-blocking rule.
-	nonSolidCorpse := g.boomMomentumDropoff && (i < len(g.thingDead) && g.thingDead[i] && !g.monsterCorpseBlocksMovement(i) || typ == detachedPlayerBodyType && !g.detachedPlayerBodySolid(i))
+	nonSolidCorpse := g.boomNonSolidMover(i)
 	tmfloor, tmceil, tmdrop, checkPosOK := g.checkPositionForActorWithPickupTouch(x, y, g.thingCurrentRadius(i, g.m.Things[i]), !isVoodooDollType(typ), i, true, nonSolidCorpse, isVoodooDollType(typ))
 	probeLines := make([]int, 0)
 	if base := g.probeSpecialLinesForMover(i); len(base) > 0 {
@@ -5511,6 +5544,20 @@ func (g *game) probeMonsterMoveWithDropoff(i int, typ int16, x, y int64, allowDr
 		return monsterMoveProbeResult{tmfloor: tmfloor, tmceil: tmceil, tmdrop: tmdrop, probeLines: probeLines, checkPosOK: true, floatOK: floatOK}
 	}
 	return monsterMoveProbeResult{tmfloor: tmfloor, tmceil: tmceil, tmdrop: tmdrop, probeLines: probeLines, checkPosOK: true, floatOK: floatOK, ok: true}
+}
+
+func (g *game) boomNonSolidMover(i int) bool {
+	if !g.boomMomentumDropoff || g.m == nil || i < 0 || i >= len(g.m.Things) {
+		return false
+	}
+	typ := g.m.Things[i].Type
+	if typ == detachedPlayerBodyType {
+		return !g.detachedPlayerBodySolid(i)
+	}
+	if isMonster(typ) || isPlayerBodyThingType(typ) || isBarrelThingType(typ) {
+		return i < len(g.thingDead) && g.thingDead[i] && !g.monsterCorpseBlocksMovement(i)
+	}
+	return !thingTypeBlocksActorMovement(typ, true)
 }
 
 func (g *game) tryMoveProbeMonster(i int, typ int16, x, y int64) (int64, int64, []int, bool) {

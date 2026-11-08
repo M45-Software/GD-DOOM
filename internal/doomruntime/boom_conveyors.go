@@ -10,7 +10,11 @@ type boomCarryThinker struct {
 }
 
 func (g *game) boomActorTouchesSector(x, y, radius int64, sec int) bool {
-	if g.sectorAt(x, y) == sec {
+	return g.boomActorTouchesSectorWithCenter(x, y, radius, sec, g.sectorAt(x, y))
+}
+
+func (g *game) boomActorTouchesSectorWithCenter(x, y, radius int64, sec, center int) bool {
+	if center == sec {
 		return true
 	}
 	box := [4]int64{y + radius, y - radius, x + radius, x - radius}
@@ -43,7 +47,7 @@ func (g *game) tickBoomCarry(c boomCarryThinker) {
 		water = g.sectorFloor[control]
 	}
 	carryPlayer := func() {
-		if !g.noClip && (g.p.z <= floor || g.p.z < water) && g.boomActorTouchesSector(g.p.x, g.p.y, playerRadius, c.sector) {
+		if !g.noClip && (g.p.z <= floor || g.p.z < water) && g.boomActorTouchesSectorWithCenter(g.p.x, g.p.y, playerRadius, c.sector, g.playerSector()) {
 			g.p.momx = boomFixed(g.p.momx + c.vector.x)
 			g.p.momy = boomFixed(g.p.momy + c.vector.y)
 		}
@@ -61,7 +65,9 @@ func (g *game) tickBoomCarry(c boomCarryThinker) {
 		}
 		x, y := g.thingPosFixed(i, th)
 		z, _, _ := g.thingSupportState(i, th)
-		if ((!monsterCanFloat(th.Type) && !thingSpawnsOnCeiling(th.Type) && z <= floor) || z < water) && g.boomActorTouchesSector(x, y, g.thingCurrentRadius(i, th), c.sector) {
+		// Successful XY moves refresh thingSectorCache. Reuse that BSP result
+		// across conveyors, retaining the live-radius boundary intersection.
+		if ((!monsterCanFloat(th.Type) && !thingSpawnsOnCeiling(th.Type) && z <= floor) || z < water) && g.boomActorTouchesSectorWithCenter(x, y, g.thingCurrentRadius(i, th), c.sector, g.thingSectorCached(i, th)) {
 			g.thingMomX[i] = boomFixed(g.thingMomX[i] + c.vector.x)
 			g.thingMomY[i] = boomFixed(g.thingMomY[i] + c.vector.y)
 		}

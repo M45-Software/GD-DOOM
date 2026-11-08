@@ -475,13 +475,19 @@ func (g *game) damagePlayerFromWithInflictorZ(amount int, msg string, attackerX,
 	g.damagePlayerBody(amount, msg, attackerX, attackerY, hasAttacker, attackerThing, inflictorZ, -1)
 }
 
-func (g *game) damagePlayerBody(amount int, msg string, attackerX, attackerY int64, hasAttacker bool, attackerThing int, inflictorZ int64, dollIndex int) {
+func (g *game) damagePlayerBody(amount int, msg string, attackerX, attackerY int64, hasInflictor bool, attackerThing int, inflictorZ int64, dollIndex int) {
+	g.damagePlayerBodyWithSource(amount, msg, attackerX, attackerY, hasInflictor, attackerThing, inflictorZ, dollIndex, hasInflictor)
+}
+
+// Explosions can have an inflictor that supplies thrust without a source mobj
+// to become player->attacker or receive kill credit.
+func (g *game) damagePlayerBodyWithSource(amount int, msg string, attackerX, attackerY int64, hasInflictor bool, attackerThing int, inflictorZ int64, dollIndex int, hasAttacker bool) bool {
 	doll := dollIndex >= 0
 	independentBody := doll || g.playerOwnsVoodooBody()
 	const playerPainChance = 255
 
 	if amount <= 0 || (independentBody && g.playerMobjHealth <= 0) || (!independentBody && (g.stats.Health <= 0 || g.isDead)) {
-		return
+		return false
 	}
 	if want := runtimeDebugEnv("GD_DEBUG_PLAYER_DAMAGE_TIC"); want != "" {
 		var tic int
@@ -492,7 +498,7 @@ func (g *game) damagePlayerBody(amount int, msg string, attackerX, attackerY int
 			}
 		}
 	}
-	if hasAttacker {
+	if hasInflictor {
 		health := g.stats.Health
 		if independentBody {
 			health = g.playerMobjHealth
@@ -517,7 +523,7 @@ func (g *game) damagePlayerBody(amount int, msg string, attackerX, attackerY int
 	// the legacy/demo path unchanged, and leave co-op protection to the scoped
 	// player-damage policy before this function is entered.
 	if g.playerInvulnerable() && (g.authorityRules == nil || amount < 1000) {
-		return
+		return false
 	}
 	if g.stats.ArmorType != 0 && g.stats.Armor > 0 {
 		saved := 0
@@ -608,6 +614,7 @@ func (g *game) damagePlayerBody(amount int, msg string, attackerX, attackerY int
 		}
 	}
 	g.setHUDMessage(msg, 20)
+	return true
 }
 
 func (g *game) applyPlayerDamageThrust(amount int, attackerX, attackerY, inflictorZ int64) {

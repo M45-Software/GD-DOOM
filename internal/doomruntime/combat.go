@@ -1978,6 +1978,7 @@ func (g *game) appendRuntimeThingWithSpawnRNG(th mapdata.Thing, dropped, spawnRN
 	g.thingCollected = append(g.thingCollected, false)
 	g.thingDropped = append(g.thingDropped, dropped)
 	g.thingThinkerOrder = append(g.thingThinkerOrder, g.allocThinkerOrder())
+	g.thingThinkerIndexDirty = true
 	g.prevThingX = append(g.prevThingX, x)
 	g.prevThingY = append(g.prevThingY, y)
 	g.prevThingZ = append(g.prevThingZ, 0)
