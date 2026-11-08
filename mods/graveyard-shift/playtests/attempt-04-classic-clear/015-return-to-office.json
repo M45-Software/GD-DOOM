@@ -1,0 +1,42 @@
+{
+  "angle": 0,
+  "armor": 0,
+  "attempt": "attempt-04-classic-clear",
+  "blue_key": false,
+  "bullets": 55,
+  "dead": false,
+  "exited": false,
+  "health": 68,
+  "kills": 10,
+  "message": "Picked up shells",
+  "remaining": 26,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-04-classic-clear/015-return-to-office.png",
+  "seconds": 23.142857142857142,
+  "secrets": 1,
+  "sector": 6,
+  "shells": 25,
+  "tic": 810,
+  "total": 36,
+  "visible": [
+    {
+      "id": 48,
+      "type": 3001,
+      "X": -347.7530059814453,
+      "Y": 510.5445861816406,
+      "HP": 40,
+      "Distance": 390.7320948904738
+    },
+    {
+      "id": 50,
+      "type": 3001,
+      "X": -207.46507263183594,
+      "Y": 543.9766235351562,
+      "HP": 48,
+      "Distance": 531.978203508628
+    }
+  ],
+  "weapon": 3,
+  "x": -738.4823303222656,
+  "y": 512.0160064697266,
+  "z": 0
+}

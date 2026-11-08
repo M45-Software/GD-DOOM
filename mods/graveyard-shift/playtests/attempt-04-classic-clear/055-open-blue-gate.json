@@ -1,0 +1,66 @@
+{
+  "angle": 0,
+  "armor": 200,
+  "attempt": "attempt-04-classic-clear",
+  "blue_key": true,
+  "bullets": 123,
+  "dead": false,
+  "exited": false,
+  "health": 103,
+  "kills": 19,
+  "message": "USE: door active",
+  "remaining": 17,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-04-classic-clear/055-open-blue-gate.png",
+  "seconds": 96.25714285714285,
+  "secrets": 3,
+  "sector": 38,
+  "shells": 50,
+  "tic": 3369,
+  "total": 36,
+  "visible": [
+    {
+      "id": 74,
+      "type": 3004,
+      "X": 1388.3642578125,
+      "Y": 748.3642578125,
+      "HP": 20,
+      "Distance": 112.32219222148234
+    },
+    {
+      "id": 75,
+      "type": 3001,
+      "X": 1406.4658203125,
+      "Y": 1086.4658203125,
+      "HP": 60,
+      "Distance": 343.49026163087404
+    },
+    {
+      "id": 78,
+      "type": 3002,
+      "X": 1644.709228515625,
+      "Y": 659.290771484375,
+      "HP": 150,
+      "Distance": 382.70154271358035
+    },
+    {
+      "id": 79,
+      "type": 3001,
+      "X": 1824.8896484375,
+      "Y": 1120.8896484375,
+      "HP": 60,
+      "Distance": 651.0552806561491
+    },
+    {
+      "id": 76,
+      "type": 3001,
+      "X": 1988.203125,
+      "Y": 1028.203125,
+      "HP": 60,
+      "Distance": 756.5855910449046
+    }
+  ],
+  "weapon": 5,
+  "x": 1277.7709503173828,
+  "y": 767.9957427978516,
+  "z": 0
+}

@@ -1,0 +1,42 @@
+{
+  "angle": 323.4375,
+  "armor": 0,
+  "attempt": "attempt-01-hmp",
+  "blue_key": false,
+  "bullets": 36,
+  "dead": false,
+  "exited": false,
+  "health": 11,
+  "kills": 9,
+  "message": "Fireball hit",
+  "remaining": 27,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-01-hmp/018-collect-shell-box.png",
+  "seconds": 20.542857142857144,
+  "secrets": 0,
+  "sector": 6,
+  "shells": 4,
+  "tic": 719,
+  "total": 36,
+  "visible": [
+    {
+      "id": 49,
+      "type": 3004,
+      "X": -311.72705078125,
+      "Y": 610.1639251708984,
+      "HP": 11,
+      "Distance": 309.1733577421383
+    },
+    {
+      "id": 47,
+      "type": 3001,
+      "X": -167.99822998046875,
+      "Y": 619.6295166015625,
+      "HP": 48,
+      "Distance": 447.28693969900064
+    }
+  ],
+  "weapon": 3,
+  "x": -608.6737060546875,
+  "y": 696.2502136230469,
+  "z": 0
+}

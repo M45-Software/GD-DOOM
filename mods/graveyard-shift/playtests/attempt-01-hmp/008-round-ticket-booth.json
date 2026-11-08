@@ -1,0 +1,42 @@
+{
+  "angle": 90,
+  "armor": 0,
+  "attempt": "attempt-01-hmp",
+  "blue_key": false,
+  "bullets": 45,
+  "dead": false,
+  "exited": false,
+  "health": 76,
+  "kills": 2,
+  "message": "Fireball hit",
+  "remaining": 34,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-01-hmp/008-round-ticket-booth.png",
+  "seconds": 8.17142857142857,
+  "secrets": 0,
+  "sector": 12,
+  "shells": 0,
+  "tic": 286,
+  "total": 36,
+  "visible": [
+    {
+      "id": 49,
+      "type": 3004,
+      "X": 212.525390625,
+      "Y": 793.86328125,
+      "HP": 20,
+      "Distance": 332.5308540636429
+    },
+    {
+      "id": 50,
+      "type": 3001,
+      "X": 318.388671875,
+      "Y": 782.388671875,
+      "HP": 60,
+      "Distance": 359.1059000029
+    }
+  ],
+  "weapon": 2,
+  "x": 143.99786376953125,
+  "y": 468.4700622558594,
+  "z": 0
+}

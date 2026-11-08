@@ -1,0 +1,34 @@
+{
+  "angle": 0,
+  "armor": 160,
+  "attempt": "attempt-07-detailed",
+  "blue_key": true,
+  "bullets": 22,
+  "dead": false,
+  "exited": false,
+  "health": 83,
+  "kills": 35,
+  "message": "Picked up a box of shells",
+  "remaining": 1,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/detailed-showcase/attempt-07-detailed/070-checkpoint.png",
+  "seconds": 124.31428571428572,
+  "secrets": 3,
+  "sector": 17,
+  "shells": 50,
+  "tic": 4351,
+  "total": 36,
+  "visible": [
+    {
+      "id": 86,
+      "type": 9,
+      "X": 884.8544921875,
+      "Y": 618.2763671875,
+      "HP": 30,
+      "Distance": 984.3169494295659
+    }
+  ],
+  "weapon": 5,
+  "x": -98.55540466308594,
+  "y": 576.0290985107422,
+  "z": 0
+}

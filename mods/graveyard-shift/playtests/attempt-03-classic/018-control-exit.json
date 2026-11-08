@@ -1,0 +1,42 @@
+{
+  "angle": 230.625,
+  "armor": 60,
+  "attempt": "attempt-03-classic",
+  "blue_key": true,
+  "bullets": 60,
+  "dead": false,
+  "exited": false,
+  "health": 38,
+  "kills": 16,
+  "message": "Picked up 4 shotgun shells",
+  "remaining": 20,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-03-classic/018-control-exit.png",
+  "seconds": 33.97142857142857,
+  "secrets": 0,
+  "sector": 24,
+  "shells": 20,
+  "tic": 1189,
+  "total": 36,
+  "visible": [
+    {
+      "id": 43,
+      "type": 3004,
+      "X": 398.4928741455078,
+      "Y": 766.3047027587891,
+      "HP": 17,
+      "Distance": 880.0822571316236
+    },
+    {
+      "id": 42,
+      "type": 3004,
+      "X": 334.626953125,
+      "Y": 693.0859375,
+      "HP": 20,
+      "Distance": 964.2836354203015
+    }
+  ],
+  "weapon": 3,
+  "x": 545.6399841308594,
+  "y": 1633.9984893798828,
+  "z": 112
+}

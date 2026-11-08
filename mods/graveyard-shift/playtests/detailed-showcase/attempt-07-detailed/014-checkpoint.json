@@ -1,0 +1,34 @@
+{
+  "angle": 5.625,
+  "armor": 65,
+  "attempt": "attempt-07-detailed",
+  "blue_key": false,
+  "bullets": 60,
+  "dead": false,
+  "exited": false,
+  "health": 19,
+  "kills": 16,
+  "message": "Picked up a clip",
+  "remaining": 20,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/detailed-showcase/attempt-07-detailed/014-checkpoint.png",
+  "seconds": 26,
+  "secrets": 0,
+  "sector": 3,
+  "shells": 17,
+  "tic": 910,
+  "total": 36,
+  "visible": [
+    {
+      "id": 72,
+      "type": 3004,
+      "X": 562.1015625,
+      "Y": 1874.1015625,
+      "HP": 20,
+      "Distance": 1239.5548330930098
+    }
+  ],
+  "weapon": 3,
+  "x": -671.9881896972656,
+  "y": 1757.8317565917969,
+  "z": 0
+}

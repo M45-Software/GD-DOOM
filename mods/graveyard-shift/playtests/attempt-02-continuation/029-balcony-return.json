@@ -1,0 +1,42 @@
+{
+  "angle": 288.28125,
+  "armor": 87,
+  "attempt": "attempt-02-continuation",
+  "blue_key": true,
+  "bullets": 133,
+  "dead": false,
+  "exited": false,
+  "health": 54,
+  "kills": 18,
+  "message": "Picked up 4 shotgun shells",
+  "remaining": 18,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-02-continuation/029-balcony-return.png",
+  "seconds": 56.31428571428572,
+  "secrets": 2,
+  "sector": 23,
+  "shells": 50,
+  "tic": 1971,
+  "total": 36,
+  "visible": [
+    {
+      "id": 43,
+      "type": 3004,
+      "X": 280.9736328125,
+      "Y": 1106.2490234375,
+      "HP": 20,
+      "Distance": 468.364094419862
+    },
+    {
+      "id": 42,
+      "type": 3004,
+      "X": 418.8232421875,
+      "Y": -0.4833984375,
+      "HP": 20,
+      "Distance": 1455.0139448988848
+    }
+  ],
+  "weapon": 5,
+  "x": 607.2377319335938,
+  "y": 1442.279769897461,
+  "z": 112
+}

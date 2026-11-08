@@ -1,0 +1,34 @@
+{
+  "angle": 182.8125,
+  "armor": 87,
+  "attempt": "attempt-02-continuation",
+  "blue_key": true,
+  "bullets": 133,
+  "dead": false,
+  "exited": false,
+  "health": 54,
+  "kills": 18,
+  "message": "Picked up 4 shotgun shells",
+  "remaining": 18,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-02-continuation/035-plaza-medikit.png",
+  "seconds": 67.88571428571429,
+  "secrets": 2,
+  "sector": 12,
+  "shells": 50,
+  "tic": 2376,
+  "total": 36,
+  "visible": [
+    {
+      "id": 42,
+      "type": 3004,
+      "X": 900.7568359375,
+      "Y": 601.4501953125,
+      "HP": 20,
+      "Distance": 207.41225165705308
+    }
+  ],
+  "weapon": 5,
+  "x": 1058.4857177734375,
+  "y": 736.1403656005859,
+  "z": 0
+}

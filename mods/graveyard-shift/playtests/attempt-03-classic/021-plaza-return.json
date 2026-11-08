@@ -1,0 +1,34 @@
+{
+  "angle": 136.40625,
+  "armor": 37,
+  "attempt": "attempt-03-classic",
+  "blue_key": true,
+  "bullets": 60,
+  "dead": true,
+  "exited": false,
+  "health": 0,
+  "kills": 17,
+  "message": "You Died",
+  "remaining": 19,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-03-classic/021-plaza-return.png",
+  "seconds": 38.57142857142857,
+  "secrets": 0,
+  "sector": 12,
+  "shells": 20,
+  "tic": 1350,
+  "total": 36,
+  "visible": [
+    {
+      "id": 48,
+      "type": 3001,
+      "X": 578.0099639892578,
+      "Y": 1322.472412109375,
+      "HP": 45,
+      "Distance": 52.281428277339984
+    }
+  ],
+  "weapon": 3,
+  "x": 618.8979644775391,
+  "y": 1289.8914489746094,
+  "z": 0
+}

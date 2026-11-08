@@ -1,0 +1,42 @@
+{
+  "angle": 174.375,
+  "armor": 154,
+  "attempt": "attempt-02-continuation",
+  "blue_key": true,
+  "bullets": 126,
+  "dead": false,
+  "exited": false,
+  "health": 67,
+  "kills": 29,
+  "message": "Picked up a medikit.",
+  "remaining": 7,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-02-continuation/051-courtyard-medikit.png",
+  "seconds": 96.94285714285714,
+  "secrets": 3,
+  "sector": 37,
+  "shells": 39,
+  "tic": 3393,
+  "total": 36,
+  "visible": [
+    {
+      "id": 76,
+      "type": 3001,
+      "X": 1976.6022033691406,
+      "Y": 1152.2344818115234,
+      "HP": 36,
+      "Distance": 294.8598965257654
+    },
+    {
+      "id": 86,
+      "type": 9,
+      "X": 1826.1787109375,
+      "Y": 1189.8212890625,
+      "HP": 30,
+      "Distance": 448.97635755741135
+    }
+  ],
+  "weapon": 5,
+  "x": 2269.6995544433594,
+  "y": 1120.0428466796875,
+  "z": 0
+}

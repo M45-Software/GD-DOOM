@@ -1,0 +1,42 @@
+{
+  "angle": 165.9375,
+  "armor": 190,
+  "attempt": "attempt-02-continuation",
+  "blue_key": true,
+  "bullets": 129,
+  "dead": false,
+  "exited": false,
+  "health": 81,
+  "kills": 25,
+  "message": "Monster shot you",
+  "remaining": 11,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-02-continuation/048-cross-north-of-carousel.png",
+  "seconds": 89.97142857142858,
+  "secrets": 3,
+  "sector": 37,
+  "shells": 44,
+  "tic": 3149,
+  "total": 36,
+  "visible": [
+    {
+      "id": 85,
+      "type": 3004,
+      "X": 1661.576171875,
+      "Y": 1331.880859375,
+      "HP": 20,
+      "Distance": 462.738355000591
+    },
+    {
+      "id": 79,
+      "type": 3001,
+      "X": 1626.9991455078125,
+      "Y": 902.7250823974609,
+      "HP": 10,
+      "Distance": 575.3289729609425
+    }
+  ],
+  "weapon": 3,
+  "x": 2109.5662994384766,
+  "y": 1215.9859466552734,
+  "z": 0
+}

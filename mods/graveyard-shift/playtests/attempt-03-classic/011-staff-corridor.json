@@ -1,0 +1,50 @@
+{
+  "angle": 98.4375,
+  "armor": 76,
+  "attempt": "attempt-03-classic",
+  "blue_key": false,
+  "bullets": 55,
+  "dead": false,
+  "exited": false,
+  "health": 60,
+  "kills": 11,
+  "message": "Monster hit you",
+  "remaining": 25,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-03-classic/011-staff-corridor.png",
+  "seconds": 19.542857142857144,
+  "secrets": 0,
+  "sector": 7,
+  "shells": 24,
+  "tic": 684,
+  "total": 36,
+  "visible": [
+    {
+      "id": 60,
+      "type": 3001,
+      "X": -614.3125610351562,
+      "Y": 1071.4421844482422,
+      "HP": 5,
+      "Distance": 41.42177953196685
+    },
+    {
+      "id": 62,
+      "type": 3001,
+      "X": -628.763671875,
+      "Y": 1186.998046875,
+      "HP": 60,
+      "Distance": 157.86442428276234
+    },
+    {
+      "id": 64,
+      "type": 3004,
+      "X": -655.8388671875,
+      "Y": 1480.6513671875,
+      "HP": 20,
+      "Distance": 452.68013591763037
+    }
+  ],
+  "weapon": 3,
+  "x": -607.9612121582031,
+  "y": 1030.510238647461,
+  "z": 0
+}

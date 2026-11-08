@@ -1,0 +1,66 @@
+{
+  "angle": 92.8125,
+  "armor": 0,
+  "attempt": "attempt-01-hmp",
+  "blue_key": false,
+  "bullets": 45,
+  "dead": false,
+  "exited": false,
+  "health": 91,
+  "kills": 2,
+  "message": "Monster shot you",
+  "remaining": 34,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-01-hmp/003-clear-arrival.png",
+  "seconds": 4.171428571428572,
+  "secrets": 0,
+  "sector": 16,
+  "shells": 0,
+  "tic": 146,
+  "total": 36,
+  "visible": [
+    {
+      "id": 45,
+      "type": 3004,
+      "X": 355.9580078125,
+      "Y": 276.0419921875,
+      "HP": 20,
+      "Distance": 638.760255923071
+    },
+    {
+      "id": 46,
+      "type": 3004,
+      "X": 581.0927734375,
+      "Y": 389.0927734375,
+      "HP": 20,
+      "Distance": 784.8390830293287
+    },
+    {
+      "id": 47,
+      "type": 3001,
+      "X": 400.966796875,
+      "Y": 623.033203125,
+      "HP": 60,
+      "Distance": 986.7852382835879
+    },
+    {
+      "id": 48,
+      "type": 3001,
+      "X": 751.033203125,
+      "Y": 687.033203125,
+      "HP": 60,
+      "Distance": 1121.686196014463
+    },
+    {
+      "id": 49,
+      "type": 3004,
+      "X": 413.3310546875,
+      "Y": 994.6689453125,
+      "HP": 20,
+      "Distance": 1358.6054333749653
+    }
+  ],
+  "weapon": 2,
+  "x": 355.8094482421875,
+  "y": -362.71824645996094,
+  "z": 0
+}

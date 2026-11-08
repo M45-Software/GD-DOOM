@@ -1,0 +1,50 @@
+{
+  "angle": 172.96875,
+  "armor": 154,
+  "attempt": "attempt-02-continuation",
+  "blue_key": true,
+  "bullets": 129,
+  "dead": false,
+  "exited": false,
+  "health": 42,
+  "kills": 28,
+  "message": "Fireball hit",
+  "remaining": 8,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-02-continuation/050-move-off-crossfire.png",
+  "seconds": 96.02857142857142,
+  "secrets": 3,
+  "sector": 37,
+  "shells": 39,
+  "tic": 3361,
+  "total": 36,
+  "visible": [
+    {
+      "id": 76,
+      "type": 3001,
+      "X": 2000.1611328125,
+      "Y": 1136.1611328125,
+      "HP": 60,
+      "Distance": 112.72298638313532
+    },
+    {
+      "id": 79,
+      "type": 3001,
+      "X": 1948.2882080078125,
+      "Y": 1224.014144897461,
+      "HP": 10,
+      "Distance": 192.7309081678195
+    },
+    {
+      "id": 86,
+      "type": 9,
+      "X": 1820.44140625,
+      "Y": 1195.55859375,
+      "HP": 30,
+      "Distance": 300.64046876000765
+    }
+  ],
+  "weapon": 3,
+  "x": 2112.037368774414,
+  "y": 1122.3705749511719,
+  "z": 0
+}

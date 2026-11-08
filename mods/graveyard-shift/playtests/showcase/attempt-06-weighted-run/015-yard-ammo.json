@@ -1,0 +1,42 @@
+{
+  "angle": 358.59375,
+  "armor": 91,
+  "attempt": "attempt-06-weighted-run",
+  "blue_key": false,
+  "bullets": 55,
+  "dead": false,
+  "exited": false,
+  "health": 92,
+  "kills": 13,
+  "message": "Picked up a box of shells",
+  "remaining": 23,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/showcase/attempt-06-weighted-run/015-yard-ammo.png",
+  "seconds": 27.2,
+  "secrets": 0,
+  "sector": 3,
+  "shells": 39,
+  "tic": 952,
+  "total": 36,
+  "visible": [
+    {
+      "id": 71,
+      "type": 3001,
+      "X": 243.4377899169922,
+      "Y": 1807.4686584472656,
+      "HP": 40,
+      "Distance": 1233.1188328152857
+    },
+    {
+      "id": 72,
+      "type": 3004,
+      "X": 487.5166015625,
+      "Y": 1799.5166015625,
+      "HP": 20,
+      "Distance": 1477.2885601123007
+    }
+  ],
+  "weapon": 3,
+  "x": -989.5750732421875,
+  "y": 1823.634521484375,
+  "z": 0
+}

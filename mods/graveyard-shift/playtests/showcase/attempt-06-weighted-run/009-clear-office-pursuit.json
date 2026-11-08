@@ -1,0 +1,50 @@
+{
+  "angle": 95.625,
+  "armor": 92,
+  "attempt": "attempt-06-weighted-run",
+  "blue_key": false,
+  "bullets": 50,
+  "dead": false,
+  "exited": false,
+  "health": 84,
+  "kills": 10,
+  "message": "Fireball hit",
+  "remaining": 26,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/showcase/attempt-06-weighted-run/009-clear-office-pursuit.png",
+  "seconds": 16.34285714285714,
+  "secrets": 0,
+  "sector": 6,
+  "shells": 21,
+  "tic": 572,
+  "total": 36,
+  "visible": [
+    {
+      "id": 61,
+      "type": 3002,
+      "X": -612.8290100097656,
+      "Y": 1091.9383392333984,
+      "HP": 95,
+      "Distance": 403.086878718749
+    },
+    {
+      "id": 64,
+      "type": 3004,
+      "X": -641.2958984375,
+      "Y": 1601.2958984375,
+      "HP": 20,
+      "Distance": 912.8397960410474
+    },
+    {
+      "id": 62,
+      "type": 3001,
+      "X": -541.814453125,
+      "Y": 1610.185546875,
+      "HP": 60,
+      "Distance": 918.9824119330692
+    }
+  ],
+  "weapon": 3,
+  "x": -566.4158172607422,
+  "y": 691.5324859619141,
+  "z": 0
+}

@@ -1,0 +1,58 @@
+{
+  "angle": 61.875,
+  "armor": 0,
+  "attempt": "attempt-01-hmp",
+  "blue_key": false,
+  "bullets": 40,
+  "dead": false,
+  "exited": false,
+  "health": 16,
+  "kills": 3,
+  "message": "Fireball hit",
+  "remaining": 33,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-01-hmp/012-office-close-fight.png",
+  "seconds": 12.628571428571428,
+  "secrets": 0,
+  "sector": 6,
+  "shells": 0,
+  "tic": 442,
+  "total": 36,
+  "visible": [
+    {
+      "id": 55,
+      "type": 3001,
+      "X": -237.25390625,
+      "Y": 621.25390625,
+      "HP": 60,
+      "Distance": 138.37422109801304
+    },
+    {
+      "id": 50,
+      "type": 3001,
+      "X": 43.3203125,
+      "Y": 587.3203125,
+      "HP": 60,
+      "Distance": 355.86514900544915
+    },
+    {
+      "id": 49,
+      "type": 3004,
+      "X": 63.35546875,
+      "Y": 644.693359375,
+      "HP": 20,
+      "Distance": 392.83966832210757
+    },
+    {
+      "id": 58,
+      "type": 3001,
+      "X": -533.4150390625,
+      "Y": 861.4150390625,
+      "HP": 60,
+      "Distance": 430.7092265669688
+    }
+  ],
+  "weapon": 2,
+  "x": -301.30743408203125,
+  "y": 498.59759521484375,
+  "z": 0
+}

@@ -1,0 +1,72 @@
+{
+  "attempt-02-continuation": {
+    "tic": 6588,
+    "seconds": 188.22857142857143,
+    "health": 58,
+    "armor": 145,
+    "kills": 36,
+    "total": 36,
+    "secrets": 3,
+    "remaining": 0,
+    "dead": false,
+    "exited": true,
+    "classic_playback": false,
+    "demo_sha256": "3aaf06fa4c6bcbe9c9f0343368a694df984c811fc84dfc80899d701c6aee54cb"
+  },
+  "attempt-04-classic-clear": {
+    "tic": 6304,
+    "seconds": 180.11428571428573,
+    "health": 100,
+    "armor": 174,
+    "kills": 36,
+    "total": 36,
+    "secrets": 3,
+    "remaining": 0,
+    "dead": false,
+    "exited": true,
+    "classic_playback": true,
+    "demo_sha256": "95613bfd85fb92275cb749304f07cbe24c0a8532dea192c00dd6b13fdd684453"
+  },
+  "attempt-03-classic": {
+    "tic": 1350,
+    "seconds": 38.57142857142857,
+    "health": 0,
+    "armor": 37,
+    "kills": 17,
+    "total": 36,
+    "secrets": 0,
+    "remaining": 19,
+    "dead": true,
+    "exited": false,
+    "classic_playback": true,
+    "demo_sha256": "93e7ec59e2ef333f648499561204716e0745590d6f4934ee4bc27a645bb81540"
+  },
+  "attempt-01-hmp": {
+    "tic": 798,
+    "seconds": 22.8,
+    "health": 0,
+    "armor": 0,
+    "kills": 12,
+    "total": 36,
+    "secrets": 0,
+    "remaining": 24,
+    "dead": true,
+    "exited": false,
+    "classic_playback": false,
+    "demo_sha256": "3c4fd6c6d8068b59e81aa40da76d4d35d34bc72d5e85229df289b582d4fc22aa"
+  },
+  "attempt-02-direct-shotgun": {
+    "tic": 435,
+    "seconds": 12.428571428571429,
+    "health": 25,
+    "armor": 0,
+    "kills": 6,
+    "total": 36,
+    "secrets": 1,
+    "remaining": 30,
+    "dead": false,
+    "exited": false,
+    "classic_playback": false,
+    "demo_sha256": "8ca09fae3b32194d3deee42c66d70268c61f872bcf62b85700eda65f0dfc8341"
+  }
+}

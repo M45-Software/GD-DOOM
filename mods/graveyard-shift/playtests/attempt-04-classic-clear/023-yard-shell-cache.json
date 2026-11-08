@@ -1,0 +1,42 @@
+{
+  "angle": 358.59375,
+  "armor": 100,
+  "attempt": "attempt-04-classic-clear",
+  "blue_key": false,
+  "bullets": 60,
+  "dead": false,
+  "exited": false,
+  "health": 78,
+  "kills": 16,
+  "message": "Picked up a box of shells",
+  "remaining": 20,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-04-classic-clear/023-yard-shell-cache.png",
+  "seconds": 40.65714285714286,
+  "secrets": 1,
+  "sector": 3,
+  "shells": 50,
+  "tic": 1423,
+  "total": 36,
+  "visible": [
+    {
+      "id": 71,
+      "type": 3001,
+      "X": 234.17071533203125,
+      "Y": 1799.7855377197266,
+      "HP": 25,
+      "Distance": 1224.2563168949432
+    },
+    {
+      "id": 72,
+      "type": 3004,
+      "X": 470.3046875,
+      "Y": 1782.3046875,
+      "HP": 20,
+      "Distance": 1460.7423068993903
+    }
+  ],
+  "weapon": 3,
+  "x": -989.8543243408203,
+  "y": 1823.5811614990234,
+  "z": 0
+}

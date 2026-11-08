@@ -1,0 +1,42 @@
+{
+  "angle": 180,
+  "armor": 0,
+  "attempt": "attempt-01-hmp",
+  "blue_key": false,
+  "bullets": 42,
+  "dead": false,
+  "exited": false,
+  "health": 64,
+  "kills": 2,
+  "message": "Monster shot you",
+  "remaining": 34,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-01-hmp/011-claim-shotgun.png",
+  "seconds": 11.628571428571428,
+  "secrets": 0,
+  "sector": 6,
+  "shells": 0,
+  "tic": 407,
+  "total": 36,
+  "visible": [
+    {
+      "id": 56,
+      "type": 9,
+      "X": -332.5505676269531,
+      "Y": 543.6746673583984,
+      "HP": 15,
+      "Distance": 46.13477835312716
+    },
+    {
+      "id": 54,
+      "type": 3004,
+      "X": -641.9402313232422,
+      "Y": 525.0650024414062,
+      "HP": 5,
+      "Distance": 352.2971439607022
+    }
+  ],
+  "weapon": 2,
+  "x": -289.6469421386719,
+  "y": 526.7130432128906,
+  "z": 0
+}

@@ -1,0 +1,31 @@
+# Map Audit
+
+Map-data audit against the implemented Doom and initial Boom subset.
+
+Unknown specials can indicate unsupported features or malformed data. An empty report does not establish full map compatibility; resource extensions, node formats, and interactions require separate checks.
+
+Notes:
+- In vanilla Doom, a non-player thing with no skill bits set does not spawn. This is not harmless data.
+- Unknown thing flag bits means map data outside the normal Doom thing-option mask.
+
+## mods/graveyard-shift/graveyard-shift.wad
+
+Maps scanned: 1
+
+### Summary
+
+| Category | Count | Why it matters | Examples |
+| --- | ---: | --- | --- |
+| Unknown linedef specials | 0 | Malformed data or unsupported/non-Doom specials. | none |
+| Unknown sector specials | 0 | Sector behavior not recognized by current runtime. | none |
+| Things with no skill bits | 0 | Vanilla Doom will not spawn these non-player things. This is map data, not a missing feature. | none |
+| Things with unknown flag bits | 0 | Flag bits outside the current Doom thing mask. | none |
+
+### Unknown Linedef Specials
+
+None.
+
+### Unknown Sector Specials
+
+None.
+

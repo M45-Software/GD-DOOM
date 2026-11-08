@@ -1,0 +1,50 @@
+{
+  "angle": 348.75,
+  "armor": 200,
+  "attempt": "attempt-04-classic-clear",
+  "blue_key": true,
+  "bullets": 119,
+  "dead": false,
+  "exited": false,
+  "health": 103,
+  "kills": 20,
+  "message": "Picked up a clip",
+  "remaining": 16,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-04-classic-clear/056-carousel-ambush-trigger.png",
+  "seconds": 97.22857142857143,
+  "secrets": 3,
+  "sector": 37,
+  "shells": 50,
+  "tic": 3403,
+  "total": 36,
+  "visible": [
+    {
+      "id": 78,
+      "type": 3002,
+      "X": 1572.480941772461,
+      "Y": 741.8908386230469,
+      "HP": 80,
+      "Distance": 137.31006953827136
+    },
+    {
+      "id": 79,
+      "type": 3001,
+      "X": 1761.779296875,
+      "Y": 1057.779296875,
+      "HP": 60,
+      "Distance": 434.7336639884567
+    },
+    {
+      "id": 77,
+      "type": 3004,
+      "X": 2162.1015625,
+      "Y": 754.1015625,
+      "HP": 20,
+      "Distance": 724.5535029012007
+    }
+  ],
+  "weapon": 5,
+  "x": 1437.6819610595703,
+  "y": 768.0306549072266,
+  "z": 0
+}

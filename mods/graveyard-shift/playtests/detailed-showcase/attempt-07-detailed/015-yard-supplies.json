@@ -1,0 +1,34 @@
+{
+  "angle": 358.59375,
+  "armor": 65,
+  "attempt": "attempt-07-detailed",
+  "blue_key": false,
+  "bullets": 60,
+  "dead": false,
+  "exited": false,
+  "health": 19,
+  "kills": 16,
+  "message": "Picked up a box of shells",
+  "remaining": 20,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/detailed-showcase/attempt-07-detailed/015-yard-supplies.png",
+  "seconds": 27.37142857142857,
+  "secrets": 0,
+  "sector": 3,
+  "shells": 36,
+  "tic": 958,
+  "total": 36,
+  "visible": [
+    {
+      "id": 72,
+      "type": 3004,
+      "X": 493.25390625,
+      "Y": 1805.25390625,
+      "HP": 20,
+      "Distance": 1483.0091533700802
+    }
+  ],
+  "weapon": 3,
+  "x": -989.6410980224609,
+  "y": 1823.6537780761719,
+  "z": 0
+}

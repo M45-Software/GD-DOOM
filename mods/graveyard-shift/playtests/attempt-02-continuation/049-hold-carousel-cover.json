@@ -1,0 +1,74 @@
+{
+  "angle": 206.71875,
+  "armor": 154,
+  "attempt": "attempt-02-continuation",
+  "blue_key": true,
+  "bullets": 129,
+  "dead": false,
+  "exited": false,
+  "health": 42,
+  "kills": 28,
+  "message": "Fireball hit",
+  "remaining": 8,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-02-continuation/049-hold-carousel-cover.png",
+  "seconds": 95.11428571428571,
+  "secrets": 3,
+  "sector": 37,
+  "shells": 39,
+  "tic": 3329,
+  "total": 36,
+  "visible": [
+    {
+      "id": 79,
+      "type": 3001,
+      "X": 1885.1778564453125,
+      "Y": 1160.903793334961,
+      "HP": 10,
+      "Distance": 260.92261103758574
+    },
+    {
+      "id": 76,
+      "type": 3001,
+      "X": 1942.7880859375,
+      "Y": 1078.7880859375,
+      "HP": 60,
+      "Distance": 266.59190105403195
+    },
+    {
+      "id": 86,
+      "type": 9,
+      "X": 1791.7548828125,
+      "Y": 1224.2451171875,
+      "HP": 30,
+      "Distance": 330.1401210076459
+    },
+    {
+      "id": 90,
+      "type": 9,
+      "X": 2146.3880310058594,
+      "Y": 736.2794952392578,
+      "HP": 27,
+      "Distance": 545.0405016613961
+    },
+    {
+      "id": 88,
+      "type": 3001,
+      "X": 2109.576171875,
+      "Y": 514.017578125,
+      "HP": 60,
+      "Distance": 766.549427245754
+    },
+    {
+      "id": 89,
+      "type": 3004,
+      "X": 2133.4150390625,
+      "Y": 411.5517578125,
+      "HP": 20,
+      "Distance": 869.1325640115283
+    }
+  ],
+  "weapon": 3,
+  "x": 2117.0615997314453,
+  "y": 1280.5304565429688,
+  "z": 0
+}

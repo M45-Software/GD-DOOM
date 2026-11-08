@@ -1,0 +1,34 @@
+{
+  "angle": 270,
+  "armor": 91,
+  "attempt": "attempt-06-weighted-run",
+  "blue_key": false,
+  "bullets": 125,
+  "dead": false,
+  "exited": false,
+  "health": 92,
+  "kills": 13,
+  "message": "Picked up a box of bullets",
+  "remaining": 23,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/showcase/attempt-06-weighted-run/021-leave-gallery-line.png",
+  "seconds": 33.542857142857144,
+  "secrets": 1,
+  "sector": 0,
+  "shells": 36,
+  "tic": 1174,
+  "total": 36,
+  "visible": [
+    {
+      "id": 50,
+      "type": 3001,
+      "X": -867.0546875,
+      "Y": 1394.423828125,
+      "HP": 60,
+      "Distance": 478.3779002408945
+    }
+  ],
+  "weapon": 5,
+  "x": -1311.9884185791016,
+  "y": 1570.149154663086,
+  "z": 0
+}

@@ -1,0 +1,34 @@
+{
+  "angle": 81.5625,
+  "armor": 0,
+  "attempt": "attempt-02-continuation",
+  "blue_key": false,
+  "bullets": 55,
+  "dead": false,
+  "exited": false,
+  "health": 50,
+  "kills": 9,
+  "message": "Picked up a clip",
+  "remaining": 27,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-02-continuation/006-fight-out-of-cache.png",
+  "seconds": 15.6,
+  "secrets": 1,
+  "sector": 6,
+  "shells": 21,
+  "tic": 546,
+  "total": 36,
+  "visible": [
+    {
+      "id": 59,
+      "type": 3004,
+      "X": -663.677734375,
+      "Y": 1026.830078125,
+      "HP": 20,
+      "Distance": 520.2348483769493
+    }
+  ],
+  "weapon": 3,
+  "x": -738.5464019775391,
+  "y": 512.0107116699219,
+  "z": 0
+}

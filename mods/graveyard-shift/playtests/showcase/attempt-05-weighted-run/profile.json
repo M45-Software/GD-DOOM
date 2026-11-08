@@ -1,0 +1,8 @@
+{
+  "auto_weapon_switch": true,
+  "cheats": false,
+  "run_controls": true,
+  "skill": 3,
+  "tool_assisted": true,
+  "turning": "weighted mouse-like acceleration"
+}

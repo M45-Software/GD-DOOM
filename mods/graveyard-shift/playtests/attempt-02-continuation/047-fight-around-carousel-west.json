@@ -1,0 +1,66 @@
+{
+  "angle": 271.40625,
+  "armor": 200,
+  "attempt": "attempt-02-continuation",
+  "blue_key": true,
+  "bullets": 129,
+  "dead": false,
+  "exited": false,
+  "health": 92,
+  "kills": 22,
+  "message": "Picked up a stimpack",
+  "remaining": 14,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-02-continuation/047-fight-around-carousel-west.png",
+  "seconds": 86.97142857142858,
+  "secrets": 3,
+  "sector": 37,
+  "shells": 47,
+  "tic": 3044,
+  "total": 36,
+  "visible": [
+    {
+      "id": 78,
+      "type": 3002,
+      "X": 1442.7275695800781,
+      "Y": 1013.6298065185547,
+      "HP": 80,
+      "Distance": 199.98608693580482
+    },
+    {
+      "id": 79,
+      "type": 3001,
+      "X": 1589.66015625,
+      "Y": 885.66015625,
+      "HP": 60,
+      "Distance": 360.48313028923894
+    },
+    {
+      "id": 77,
+      "type": 3004,
+      "X": 2058.830078125,
+      "Y": 845.8984375,
+      "HP": 20,
+      "Distance": 719.8495564812713
+    },
+    {
+      "id": 93,
+      "type": 3004,
+      "X": 2364.525390625,
+      "Y": 980.525390625,
+      "HP": 20,
+      "Distance": 953.4752994196033
+    },
+    {
+      "id": 92,
+      "type": 3001,
+      "X": 2534.626953125,
+      "Y": 939.474609375,
+      "HP": 60,
+      "Distance": 1128.4525733035916
+    }
+  ],
+  "weapon": 3,
+  "x": 1439.975341796875,
+  "y": 1213.5969543457031,
+  "z": 0
+}

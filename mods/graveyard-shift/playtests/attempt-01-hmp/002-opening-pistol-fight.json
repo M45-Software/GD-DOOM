@@ -1,0 +1,74 @@
+{
+  "angle": 45,
+  "armor": 0,
+  "attempt": "attempt-01-hmp",
+  "blue_key": false,
+  "bullets": 48,
+  "dead": false,
+  "exited": false,
+  "health": 91,
+  "kills": 1,
+  "message": "Monster shot you",
+  "remaining": 35,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-01-hmp/002-opening-pistol-fight.png",
+  "seconds": 2.8857142857142857,
+  "secrets": 0,
+  "sector": 16,
+  "shells": 0,
+  "tic": 101,
+  "total": 36,
+  "visible": [
+    {
+      "id": 42,
+      "type": 3004,
+      "X": 310.0595703125,
+      "Y": -182.0595703125,
+      "HP": 20,
+      "Distance": 186.36149977378503
+    },
+    {
+      "id": 45,
+      "type": 3004,
+      "X": 344.4833984375,
+      "Y": 359.5166015625,
+      "HP": 20,
+      "Distance": 722.3236498289431
+    },
+    {
+      "id": 46,
+      "type": 3004,
+      "X": 649.9404296875,
+      "Y": 457.9404296875,
+      "HP": 20,
+      "Distance": 871.7761736719384
+    },
+    {
+      "id": 47,
+      "type": 3001,
+      "X": 314.9072265625,
+      "Y": 709.0927734375,
+      "HP": 60,
+      "Distance": 1072.5911868517146
+    },
+    {
+      "id": 49,
+      "type": 3004,
+      "X": 344.4833984375,
+      "Y": 1063.5166015625,
+      "HP": 20,
+      "Distance": 1426.2798186603604
+    },
+    {
+      "id": 50,
+      "type": 3001,
+      "X": 656.5673828125,
+      "Y": 1040.5673828125,
+      "HP": 60,
+      "Distance": 1435.1536128685343
+    }
+  ],
+  "weapon": 2,
+  "x": 355.8094482421875,
+  "y": -362.71824645996094,
+  "z": 0
+}

@@ -1,0 +1,50 @@
+{
+  "angle": 109.6875,
+  "armor": 100,
+  "attempt": "attempt-06-weighted-run",
+  "blue_key": false,
+  "bullets": 50,
+  "dead": false,
+  "exited": false,
+  "health": 100,
+  "kills": 1,
+  "message": "Picked up green armor",
+  "remaining": 35,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/showcase/attempt-06-weighted-run/007-armor-during-weapon-switch.png",
+  "seconds": 9.6,
+  "secrets": 0,
+  "sector": 6,
+  "shells": 7,
+  "tic": 336,
+  "total": 36,
+  "visible": [
+    {
+      "id": 56,
+      "type": 9,
+      "X": -461.0087890625,
+      "Y": 589.0087890625,
+      "HP": 30,
+      "Distance": 176.67153169051625
+    },
+    {
+      "id": 55,
+      "type": 3001,
+      "X": -420.84765625,
+      "Y": 667.15234375,
+      "HP": 60,
+      "Distance": 249.43436333483535
+    },
+    {
+      "id": 58,
+      "type": 3001,
+      "X": -579.3134765625,
+      "Y": 963.3134765625,
+      "HP": 60,
+      "Distance": 569.020760786423
+    }
+  ],
+  "weapon": 3,
+  "x": -417.65818786621094,
+  "y": 417.7383728027344,
+  "z": 0
+}

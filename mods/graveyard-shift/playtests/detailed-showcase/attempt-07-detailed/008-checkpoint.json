@@ -1,0 +1,82 @@
+{
+  "angle": 295.3125,
+  "armor": 93,
+  "attempt": "attempt-07-detailed",
+  "blue_key": false,
+  "bullets": 50,
+  "dead": false,
+  "exited": false,
+  "health": 65,
+  "kills": 2,
+  "message": "Picked up a box of shells",
+  "remaining": 34,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/detailed-showcase/attempt-07-detailed/008-checkpoint.png",
+  "seconds": 11.057142857142857,
+  "secrets": 0,
+  "sector": 8,
+  "shells": 26,
+  "tic": 387,
+  "total": 36,
+  "visible": [
+    {
+      "id": 55,
+      "type": 3001,
+      "X": -510.0595703125,
+      "Y": 582.4658203125,
+      "HP": 60,
+      "Distance": 93.25701089143958
+    },
+    {
+      "id": 56,
+      "type": 9,
+      "X": -374.96107482910156,
+      "Y": 541.1528625488281,
+      "HP": 15,
+      "Distance": 211.72736164608415
+    },
+    {
+      "id": 47,
+      "type": 3001,
+      "X": -227.1133575439453,
+      "Y": 536.49169921875,
+      "HP": 42,
+      "Distance": 343.036947135324
+    },
+    {
+      "id": 45,
+      "type": 3004,
+      "X": -70.90080261230469,
+      "Y": 525.9964141845703,
+      "HP": 17,
+      "Distance": 493.7163440055937
+    },
+    {
+      "id": 50,
+      "type": 3001,
+      "X": 151.6845703125,
+      "Y": 535.6845703125,
+      "HP": 60,
+      "Distance": 707.7396679426461
+    },
+    {
+      "id": 46,
+      "type": 3004,
+      "X": 365.0505676269531,
+      "Y": 519.5481109619141,
+      "HP": 17,
+      "Distance": 920.6311174527908
+    },
+    {
+      "id": 48,
+      "type": 3001,
+      "X": 383.1723937988281,
+      "Y": 459.65899658203125,
+      "HP": 27,
+      "Distance": 949.932451178956
+    }
+  ],
+  "weapon": 3,
+  "x": -543.268310546875,
+  "y": 669.6096649169922,
+  "z": 0
+}

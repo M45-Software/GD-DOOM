@@ -1,0 +1,58 @@
+{
+  "angle": 66.09375,
+  "armor": 100,
+  "attempt": "attempt-02-continuation",
+  "blue_key": false,
+  "bullets": 55,
+  "dead": false,
+  "exited": false,
+  "health": 50,
+  "kills": 10,
+  "message": "Picked up green armor",
+  "remaining": 26,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-02-continuation/008-collect-green-armor.png",
+  "seconds": 18.285714285714285,
+  "secrets": 1,
+  "sector": 6,
+  "shells": 43,
+  "tic": 640,
+  "total": 36,
+  "visible": [
+    {
+      "id": 50,
+      "type": 3001,
+      "X": -339.50209045410156,
+      "Y": 593.7447052001953,
+      "HP": 25,
+      "Distance": 192.03062540816856
+    },
+    {
+      "id": 48,
+      "type": 3001,
+      "X": -101.37467956542969,
+      "Y": 652.2750091552734,
+      "HP": 57,
+      "Distance": 393.053917829492
+    },
+    {
+      "id": 62,
+      "type": 3001,
+      "X": -631.3192291259766,
+      "Y": 1221.3717498779297,
+      "HP": 30,
+      "Distance": 831.4083013649116
+    },
+    {
+      "id": 61,
+      "type": 3002,
+      "X": -721.5820159912109,
+      "Y": 1218.3191680908203,
+      "HP": 145,
+      "Distance": 856.2583261335443
+    }
+  ],
+  "weapon": 3,
+  "x": -417.02137756347656,
+  "y": 418.0559997558594,
+  "z": 0
+}

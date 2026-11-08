@@ -1,0 +1,58 @@
+{
+  "angle": 90,
+  "armor": 0,
+  "attempt": "attempt-05-weighted-run",
+  "blue_key": false,
+  "bullets": 50,
+  "dead": false,
+  "exited": false,
+  "health": 100,
+  "kills": 0,
+  "message": "",
+  "remaining": 36,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/showcase/attempt-05-weighted-run/002-run-through-entrance.png",
+  "seconds": 2.3714285714285714,
+  "secrets": 0,
+  "sector": 26,
+  "shells": 0,
+  "tic": 83,
+  "total": 36,
+  "visible": [
+    {
+      "id": 45,
+      "type": 3004,
+      "X": 224,
+      "Y": 480,
+      "HP": 20,
+      "Distance": 135.85379177010108
+    },
+    {
+      "id": 47,
+      "type": 3001,
+      "X": 160,
+      "Y": 864,
+      "HP": 60,
+      "Distance": 470.45556047190996
+    },
+    {
+      "id": 48,
+      "type": 3001,
+      "X": 877.25390625,
+      "Y": 813.25390625,
+      "HP": 60,
+      "Distance": 647.5524422103755
+    },
+    {
+      "id": 49,
+      "type": 3004,
+      "X": 224,
+      "Y": 1184,
+      "HP": 20,
+      "Distance": 760.3414136020173
+    }
+  ],
+  "weapon": 2,
+  "x": 352.0121612548828,
+  "y": 434.51220703125,
+  "z": 0
+}

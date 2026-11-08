@@ -1,0 +1,50 @@
+{
+  "angle": 0,
+  "armor": 0,
+  "attempt": "attempt-02-direct-shotgun",
+  "blue_key": false,
+  "bullets": 50,
+  "dead": false,
+  "exited": false,
+  "health": 58,
+  "kills": 5,
+  "message": "Fireball hit",
+  "remaining": 31,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-02-direct-shotgun/007-clear-security-and-pursuers.png",
+  "seconds": 11.142857142857142,
+  "secrets": 0,
+  "sector": 6,
+  "shells": 3,
+  "tic": 390,
+  "total": 36,
+  "visible": [
+    {
+      "id": 50,
+      "type": 3001,
+      "X": 135.11001586914062,
+      "Y": 524.7313995361328,
+      "HP": 25,
+      "Distance": 912.0379531613812
+    },
+    {
+      "id": 46,
+      "type": 3004,
+      "X": 292.1259765625,
+      "Y": 526.7880859375,
+      "HP": 20,
+      "Distance": 1069.048400484866
+    },
+    {
+      "id": 48,
+      "type": 3001,
+      "X": 366.6337890625,
+      "Y": 509.1767578125,
+      "HP": 60,
+      "Distance": 1143.7125696422213
+    }
+  ],
+  "weapon": 3,
+  "x": -776.9215698242188,
+  "y": 528.1394348144531,
+  "z": 0
+}

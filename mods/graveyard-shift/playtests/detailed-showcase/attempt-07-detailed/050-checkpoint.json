@@ -1,0 +1,74 @@
+{
+  "angle": 243.28125,
+  "armor": 186,
+  "attempt": "attempt-07-detailed",
+  "blue_key": true,
+  "bullets": 56,
+  "dead": false,
+  "exited": false,
+  "health": 86,
+  "kills": 25,
+  "message": "Picked up a medikit.",
+  "remaining": 11,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/detailed-showcase/attempt-07-detailed/050-checkpoint.png",
+  "seconds": 78.37142857142857,
+  "secrets": 2,
+  "sector": 45,
+  "shells": 38,
+  "tic": 2743,
+  "total": 36,
+  "visible": [
+    {
+      "id": 93,
+      "type": 3004,
+      "X": 2091.0751953125,
+      "Y": 974.7880859375,
+      "HP": 20,
+      "Distance": 229.97813679880093
+    },
+    {
+      "id": 77,
+      "type": 3004,
+      "X": 2055.278610229492,
+      "Y": 922.6891632080078,
+      "HP": 10,
+      "Distance": 291.18184284979026
+    },
+    {
+      "id": 79,
+      "type": 3001,
+      "X": 1758.9857025146484,
+      "Y": 906.3429718017578,
+      "HP": 55,
+      "Distance": 553.3148671920142
+    },
+    {
+      "id": 90,
+      "type": 9,
+      "X": 2139.15234375,
+      "Y": 398.54296875,
+      "HP": 30,
+      "Distance": 733.1743417357362
+    },
+    {
+      "id": 89,
+      "type": 3004,
+      "X": 2156.3642578125,
+      "Y": 296.8056640625,
+      "HP": 20,
+      "Distance": 830.9753751113714
+    },
+    {
+      "id": 88,
+      "type": 3001,
+      "X": 2093.576171875,
+      "Y": 232.322265625,
+      "HP": 60,
+      "Distance": 904.9767056570928
+    }
+  ],
+  "weapon": 5,
+  "x": 2269.3592987060547,
+  "y": 1120.062728881836,
+  "z": 0
+}

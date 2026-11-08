@@ -1,0 +1,34 @@
+{
+  "angle": 270,
+  "armor": 0,
+  "attempt": "attempt-01-hmp",
+  "blue_key": false,
+  "bullets": 47,
+  "dead": false,
+  "exited": false,
+  "health": 76,
+  "kills": 2,
+  "message": "Fireball hit",
+  "remaining": 34,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-01-hmp/006-sidestep-kiosk-route.png",
+  "seconds": 6.485714285714286,
+  "secrets": 0,
+  "sector": 26,
+  "shells": 0,
+  "tic": 227,
+  "total": 36,
+  "visible": [
+    {
+      "id": 45,
+      "type": 3004,
+      "X": 276.00782775878906,
+      "Y": 263.46168518066406,
+      "HP": 5,
+      "Distance": 139.57386299911752
+    }
+  ],
+  "weapon": 2,
+  "x": 360.07061767578125,
+  "y": 374.88121032714844,
+  "z": 0
+}

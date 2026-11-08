@@ -1,0 +1,82 @@
+{
+  "angle": 296.71875,
+  "armor": 197,
+  "attempt": "attempt-07-detailed",
+  "blue_key": true,
+  "bullets": 83,
+  "dead": false,
+  "exited": false,
+  "health": 74,
+  "kills": 22,
+  "message": "Picked up a stimpack",
+  "remaining": 14,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/detailed-showcase/attempt-07-detailed/047-checkpoint.png",
+  "seconds": 74.8,
+  "secrets": 2,
+  "sector": 45,
+  "shells": 38,
+  "tic": 2618,
+  "total": 36,
+  "visible": [
+    {
+      "id": 78,
+      "type": 3002,
+      "X": 1641.987060546875,
+      "Y": 811.9215850830078,
+      "HP": 11,
+      "Distance": 449.53828444777116
+    },
+    {
+      "id": 76,
+      "type": 3001,
+      "X": 1655.8388671875,
+      "Y": 760.1611328125,
+      "HP": 60,
+      "Distance": 502.1229617899888
+    },
+    {
+      "id": 77,
+      "type": 3004,
+      "X": 2047.35546875,
+      "Y": 804.525390625,
+      "HP": 20,
+      "Distance": 732.195080620486
+    },
+    {
+      "id": 93,
+      "type": 3004,
+      "X": 2268.931640625,
+      "Y": 796.931640625,
+      "HP": 20,
+      "Distance": 927.6840144159441
+    },
+    {
+      "id": 92,
+      "type": 3001,
+      "X": 2500.203125,
+      "Y": 985.373046875,
+      "HP": 60,
+      "Distance": 1084.4174358319094
+    },
+    {
+      "id": 90,
+      "type": 9,
+      "X": 2127.677734375,
+      "Y": 272.322265625,
+      "HP": 30,
+      "Distance": 1165.6486286851045
+    },
+    {
+      "id": 89,
+      "type": 3004,
+      "X": 2190.7880859375,
+      "Y": 113.2119140625,
+      "HP": 20,
+      "Distance": 1332.046375037972
+    }
+  ],
+  "weapon": 5,
+  "x": 1440.0651245117188,
+  "y": 1213.5584869384766,
+  "z": 0
+}

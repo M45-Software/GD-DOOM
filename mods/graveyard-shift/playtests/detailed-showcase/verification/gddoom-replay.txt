@@ -1,0 +1,2 @@
+TestGraveyardShiftRecordedSessionReplay: PASS
+attempt-07-detailed: 5544 tics, kills=36, secrets=3, exited=true, dead=false; exact final position, health, armor and ammunition.

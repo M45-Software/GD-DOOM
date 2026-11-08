@@ -1,0 +1,42 @@
+{
+  "angle": 288.28125,
+  "armor": 91,
+  "attempt": "attempt-06-weighted-run",
+  "blue_key": true,
+  "bullets": 115,
+  "dead": false,
+  "exited": false,
+  "health": 100,
+  "kills": 15,
+  "message": "Picked up 4 shotgun shells",
+  "remaining": 21,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/showcase/attempt-06-weighted-run/030-balcony-turn.png",
+  "seconds": 47.628571428571426,
+  "secrets": 1,
+  "sector": 23,
+  "shells": 40,
+  "tic": 1667,
+  "total": 36,
+  "visible": [
+    {
+      "id": 42,
+      "type": 3004,
+      "X": 580.119140625,
+      "Y": 722.255859375,
+      "HP": 20,
+      "Distance": 720.72325647034
+    },
+    {
+      "id": 43,
+      "type": 3004,
+      "X": 490.6689453125,
+      "Y": 35.7900390625,
+      "HP": 20,
+      "Distance": 1411.4999601299971
+    }
+  ],
+  "weapon": 5,
+  "x": 607.2289733886719,
+  "y": 1442.4690704345703,
+  "z": 112
+}

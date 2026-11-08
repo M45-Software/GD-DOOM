@@ -1,0 +1,219 @@
+{
+  "title": "Come and Join Our Happy Crowd",
+  "tempo_bpm": 112,
+  "meter": "3/4",
+  "beats_per_line": 6,
+  "syllable_onsets_beats": [
+    0,
+    0.5,
+    1.5,
+    2.5,
+    3,
+    3.5,
+    4.5
+  ],
+  "final_note_beats": 1.25,
+  "lines": [
+    {
+      "text": "Come and join our happy crowd",
+      "syllables": [
+        "Come",
+        "and",
+        "join",
+        "our",
+        "hap-",
+        "py",
+        "crowd"
+      ],
+      "notes": [
+        "A4",
+        "B4",
+        "C5",
+        "E5",
+        "E5",
+        "D5",
+        "C5"
+      ],
+      "chords": [
+        "Am",
+        "C"
+      ]
+    },
+    {
+      "text": "Keep your screams both clear and loud",
+      "syllables": [
+        "Keep",
+        "your",
+        "screams",
+        "both",
+        "clear",
+        "and",
+        "loud"
+      ],
+      "notes": [
+        "A4",
+        "B4",
+        "C5",
+        "E5",
+        "D5",
+        "C5",
+        "B4"
+      ],
+      "chords": [
+        "Dm",
+        "E7"
+      ]
+    },
+    {
+      "text": "Buy a pass and take your place",
+      "syllables": [
+        "Buy",
+        "a",
+        "pass",
+        "and",
+        "take",
+        "your",
+        "place"
+      ],
+      "notes": [
+        "A4",
+        "B4",
+        "C5",
+        "E5",
+        "F5",
+        "E5",
+        "D5"
+      ],
+      "chords": [
+        "F",
+        "Dm"
+      ]
+    },
+    {
+      "text": "Put a smile upon your face",
+      "syllables": [
+        "Put",
+        "a",
+        "smile",
+        "up-",
+        "on",
+        "your",
+        "face"
+      ],
+      "notes": [
+        "B4",
+        "C5",
+        "B4",
+        "G#4",
+        "B4",
+        "C5",
+        "A4"
+      ],
+      "chords": [
+        "E7",
+        "Am"
+      ]
+    },
+    {
+      "text": "When the lights begin to fade",
+      "syllables": [
+        "When",
+        "the",
+        "lights",
+        "be-",
+        "gin",
+        "to",
+        "fade"
+      ],
+      "notes": [
+        "C5",
+        "D5",
+        "E5",
+        "F5",
+        "E5",
+        "D5",
+        "E5"
+      ],
+      "chords": [
+        "F",
+        "C"
+      ]
+    },
+    {
+      "text": "Think of all the friends you've made",
+      "syllables": [
+        "Think",
+        "of",
+        "all",
+        "the",
+        "friends",
+        "you've",
+        "made"
+      ],
+      "notes": [
+        "D5",
+        "E5",
+        "F5",
+        "E5",
+        "D5",
+        "C5",
+        "B4"
+      ],
+      "chords": [
+        "Dm",
+        "E7"
+      ]
+    },
+    {
+      "text": "Stay until the morning light",
+      "syllables": [
+        "Stay",
+        "un-",
+        "til",
+        "the",
+        "morn-",
+        "ing",
+        "light"
+      ],
+      "notes": [
+        "A4",
+        "B4",
+        "C5",
+        "E5",
+        "D5",
+        "B4",
+        "G#4"
+      ],
+      "chords": [
+        "F",
+        "E7"
+      ]
+    },
+    {
+      "text": "No refunds and no goodnight",
+      "syllables": [
+        "No",
+        "re-",
+        "funds",
+        "and",
+        "no",
+        "good-",
+        "night"
+      ],
+      "notes": [
+        "B4",
+        "C5",
+        "B4",
+        "G#4",
+        "B4",
+        "C5",
+        "A4"
+      ],
+      "chords": [
+        "E7",
+        "Am"
+      ]
+    }
+  ],
+  "arrangement": "Metal waltz: distorted lead, palm-muted power chords, pick bass, drums, quiet carnival accents"
+}

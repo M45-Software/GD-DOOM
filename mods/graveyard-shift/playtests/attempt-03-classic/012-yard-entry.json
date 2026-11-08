@@ -1,0 +1,34 @@
+{
+  "angle": 66.09375,
+  "armor": 60,
+  "attempt": "attempt-03-classic",
+  "blue_key": false,
+  "bullets": 55,
+  "dead": false,
+  "exited": false,
+  "health": 28,
+  "kills": 13,
+  "message": "Monster hit you",
+  "remaining": 23,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-03-classic/012-yard-entry.png",
+  "seconds": 22.02857142857143,
+  "secrets": 0,
+  "sector": 3,
+  "shells": 22,
+  "tic": 771,
+  "total": 36,
+  "visible": [
+    {
+      "id": 64,
+      "type": 3004,
+      "X": -609.9404296875,
+      "Y": 1388.8544921875,
+      "HP": 20,
+      "Distance": 155.85929656354304
+    }
+  ],
+  "weapon": 3,
+  "x": -671.8970336914062,
+  "y": 1245.8387603759766,
+  "z": 0
+}

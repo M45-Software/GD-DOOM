@@ -1,0 +1,42 @@
+{
+  "angle": 334.6875,
+  "armor": 0,
+  "attempt": "attempt-04-classic-clear",
+  "blue_key": false,
+  "bullets": 55,
+  "dead": false,
+  "exited": false,
+  "health": 68,
+  "kills": 11,
+  "message": "Picked up a box of shells",
+  "remaining": 25,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-04-classic-clear/016-main-shell-supply.png",
+  "seconds": 24.4,
+  "secrets": 1,
+  "sector": 6,
+  "shells": 44,
+  "tic": 854,
+  "total": 36,
+  "visible": [
+    {
+      "id": 50,
+      "type": 3001,
+      "X": -293.52464294433594,
+      "Y": 549.7139282226562,
+      "HP": 48,
+      "Distance": 279.7339847003785
+    },
+    {
+      "id": 43,
+      "type": 3004,
+      "X": 153.541015625,
+      "Y": 468.763671875,
+      "HP": 20,
+      "Distance": 727.9018045588589
+    }
+  ],
+  "weapon": 3,
+  "x": -545.8610687255859,
+  "y": 670.4509582519531,
+  "z": 0
+}

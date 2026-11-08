@@ -1,0 +1,58 @@
+{
+  "angle": 358.59375,
+  "armor": 200,
+  "attempt": "attempt-02-continuation",
+  "blue_key": true,
+  "bullets": 129,
+  "dead": false,
+  "exited": false,
+  "health": 82,
+  "kills": 21,
+  "message": "USE: door active",
+  "remaining": 15,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-02-continuation/046-trigger-carousel-ambush.png",
+  "seconds": 84.88571428571429,
+  "secrets": 3,
+  "sector": 37,
+  "shells": 49,
+  "tic": 2971,
+  "total": 36,
+  "visible": [
+    {
+      "id": 78,
+      "type": 3002,
+      "X": 1527.134765625,
+      "Y": 766.865234375,
+      "HP": 150,
+      "Distance": 89.35563094570598
+    },
+    {
+      "id": 79,
+      "type": 3001,
+      "X": 1721.6181640625,
+      "Y": 1017.6181640625,
+      "HP": 60,
+      "Distance": 377.9751971788806
+    },
+    {
+      "id": 77,
+      "type": 3004,
+      "X": 2167.8388671875,
+      "Y": 759.8388671875,
+      "HP": 20,
+      "Distance": 730.0981274602755
+    },
+    {
+      "id": 85,
+      "type": 3004,
+      "X": 1696,
+      "Y": 1568,
+      "HP": 20,
+      "Distance": 840.6307605892147
+    }
+  ],
+  "weapon": 3,
+  "x": 1437.7864532470703,
+  "y": 768.0088500976562,
+  "z": 0
+}

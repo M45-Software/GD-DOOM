@@ -1,0 +1,34 @@
+{
+  "angle": 358.59375,
+  "armor": 87,
+  "attempt": "attempt-02-continuation",
+  "blue_key": false,
+  "bullets": 65,
+  "dead": false,
+  "exited": false,
+  "health": 34,
+  "kills": 17,
+  "message": "Fireball hit",
+  "remaining": 19,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-02-continuation/014-clear-service-yard-west.png",
+  "seconds": 35,
+  "secrets": 1,
+  "sector": 3,
+  "shells": 34,
+  "tic": 1225,
+  "total": 36,
+  "visible": [
+    {
+      "id": 72,
+      "type": 3004,
+      "X": 440.9746551513672,
+      "Y": 1742.1138610839844,
+      "HP": 10,
+      "Distance": 1120.1868416139732
+    }
+  ],
+  "weapon": 3,
+  "x": -679.0263366699219,
+  "y": 1762.5182342529297,
+  "z": 0
+}

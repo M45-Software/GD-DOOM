@@ -1,0 +1,224 @@
+{
+  "map": "E1M1",
+  "title": "Admission Is Mandatory",
+  "format": "vanilla Doom",
+  "vertices": 874,
+  "linedefs": 977,
+  "sectors": 70,
+  "subsectors": 349,
+  "nodes": 348,
+  "secrets": 3,
+  "actions": {
+    "SW1GARG": [
+      30,
+      34
+    ],
+    "snack door": [
+      58,
+      59,
+      73,
+      76
+    ],
+    "security door": [
+      171,
+      172,
+      192,
+      195
+    ],
+    "SW1COMM": [
+      495,
+      496
+    ],
+    "garden door": [
+      526,
+      541,
+      542,
+      555,
+      556
+    ],
+    "admission gate": [
+      609,
+      610,
+      611,
+      613,
+      624,
+      626,
+      627,
+      629
+    ],
+    "courtyard ambush": [
+      662,
+      663,
+      664,
+      665
+    ],
+    "SW1EXIT": [
+      829,
+      830
+    ]
+  },
+  "sector_labels": {
+    "target prize": 0,
+    "snack cache": 1,
+    "target shutter": 2,
+    "sign backing SW1GARG": 3,
+    "service yard": 4,
+    "stacked crate": 5,
+    "low crate": 6,
+    "sign backing GSICK": 7,
+    "snack door": 8,
+    "generator": 9,
+    "security office": 10,
+    "staff corridor": 11,
+    "staff ceiling light": 12,
+    "staff ambush shutter": 13,
+    "staff ambush": 14,
+    "security door": 15,
+    "sign backing GWINDOW": 17,
+    "staff stair 1": 18,
+    "park facade": 20,
+    "security lintel": 21,
+    "staff stair 2": 22,
+    "ticket plaza": 23,
+    "staff stair 3": 24,
+    "arrival": 25,
+    "ticket kiosk": 26,
+    "staff stair 4": 27,
+    "sign backing GSAFETY": 28,
+    "staff stair 5": 29,
+    "staff stair 6": 30,
+    "staff stair 7": 31,
+    "balcony rail": 32,
+    "balcony": 33,
+    "control booth": 34,
+    "sign backing GOPEN": 35,
+    "entry arch": 36,
+    "welcome carpet": 37,
+    "fountain rim": 38,
+    "fountain water": 67,
+    "power shutter": 40,
+    "arrival fence": 41,
+    "prize garden": 42,
+    "garden window": 43,
+    "sign backing GPRIZE": 44,
+    "garden door": 45,
+    "admission lintel": 46,
+    "admission gate": 47,
+    "courtyard facade": 50,
+    "admission porch": 49,
+    "welcome courtyard": 51,
+    "north maintenance": 52,
+    "north ambush door": 53,
+    "sign backing GRIDE": 54,
+    "south maintenance": 55,
+    "customer care sign light": 56,
+    "sign backing GSCREAM": 57,
+    "south ambush door": 58,
+    "midway exit": 59,
+    "carousel lit platform": 60,
+    "carousel canopy 176 red": 61,
+    "carousel canopy 176 cream": 62,
+    "carousel horses": 63,
+    "carousel canopy 224 red": 64,
+    "carousel canopy 224 cream": 65,
+    "carousel spindle": 66,
+    "fountain bronze base": 68,
+    "fountain finial": 69
+  },
+  "sector_tags": {
+    "10": [
+      47
+    ],
+    "20": [
+      13,
+      40
+    ],
+    "30": [
+      53,
+      58
+    ],
+    "40": [
+      2
+    ]
+  },
+  "landmarks": {
+    "start": [
+      352,
+      -352
+    ],
+    "shotgun": [
+      -544,
+      544
+    ],
+    "blue_key": [
+      544,
+      1888
+    ],
+    "power_switch": [
+      688,
+      1792
+    ],
+    "balcony_drop": [
+      608,
+      1344
+    ],
+    "gate": [
+      1152,
+      768
+    ],
+    "exit": [
+      2672,
+      896
+    ],
+    "target": [
+      -1088,
+      1792
+    ]
+  },
+  "animations": {
+    "entrance_marquee": [
+      "GSTFONT1",
+      "GSTFONT2",
+      "GSTFONT3"
+    ],
+    "chasing_trim": [
+      "SLADRIP1",
+      "SLADRIP2",
+      "SLADRIP3"
+    ],
+    "fountain_water": [
+      "FWATER1",
+      "FWATER2",
+      "FWATER3",
+      "FWATER4"
+    ]
+  },
+  "difficulty": {
+    "easy": {
+      "monsters": 20,
+      "types": {
+        "zombieman": 7,
+        "imp": 12,
+        "pinky": 1
+      }
+    },
+    "hurt_me_plenty": {
+      "monsters": 36,
+      "types": {
+        "zombieman": 15,
+        "imp": 15,
+        "shotgunner": 4,
+        "pinky": 2
+      }
+    },
+    "ultra_violence": {
+      "monsters": 52,
+      "types": {
+        "zombieman": 20,
+        "imp": 21,
+        "shotgunner": 8,
+        "pinky": 3
+      }
+    }
+  }
+}

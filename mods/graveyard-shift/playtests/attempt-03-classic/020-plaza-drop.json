@@ -1,0 +1,34 @@
+{
+  "angle": 90,
+  "armor": 45,
+  "attempt": "attempt-03-classic",
+  "blue_key": true,
+  "bullets": 60,
+  "dead": false,
+  "exited": false,
+  "health": 8,
+  "kills": 17,
+  "message": "Monster hit you",
+  "remaining": 19,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-03-classic/020-plaza-drop.png",
+  "seconds": 38.48571428571429,
+  "secrets": 0,
+  "sector": 12,
+  "shells": 20,
+  "tic": 1347,
+  "total": 36,
+  "visible": [
+    {
+      "id": 48,
+      "type": 3001,
+      "X": 578.0099639892578,
+      "Y": 1322.472412109375,
+      "HP": 45,
+      "Distance": 49.40320042141895
+    }
+  ],
+  "weapon": 3,
+  "x": 608.0615997314453,
+  "y": 1283.260482788086,
+  "z": 0
+}

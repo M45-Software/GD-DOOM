@@ -1,0 +1,50 @@
+{
+  "angle": 90,
+  "armor": 0,
+  "attempt": "attempt-04-classic-clear",
+  "blue_key": false,
+  "bullets": 50,
+  "dead": false,
+  "exited": false,
+  "health": 100,
+  "kills": 0,
+  "message": "",
+  "remaining": 36,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-04-classic-clear/001-spawn.png",
+  "seconds": 0.02857142857142857,
+  "secrets": 0,
+  "sector": 16,
+  "shells": 0,
+  "tic": 1,
+  "total": 36,
+  "visible": [
+    {
+      "id": 43,
+      "type": 3004,
+      "X": 538.2626953125,
+      "Y": -165.7373046875,
+      "HP": 20,
+      "Distance": 263.415229875105
+    },
+    {
+      "id": 42,
+      "type": 3004,
+      "X": 224,
+      "Y": -96,
+      "HP": 20,
+      "Distance": 286.2167011199731
+    },
+    {
+      "id": 50,
+      "type": 3001,
+      "X": 800,
+      "Y": 1184,
+      "HP": 60,
+      "Distance": 1600
+    }
+  ],
+  "weapon": 2,
+  "x": 352,
+  "y": -352,
+  "z": 0
+}

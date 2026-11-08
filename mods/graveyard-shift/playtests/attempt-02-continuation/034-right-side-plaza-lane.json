@@ -1,0 +1,34 @@
+{
+  "angle": 270,
+  "armor": 87,
+  "attempt": "attempt-02-continuation",
+  "blue_key": true,
+  "bullets": 133,
+  "dead": false,
+  "exited": false,
+  "health": 54,
+  "kills": 18,
+  "message": "Picked up 4 shotgun shells",
+  "remaining": 18,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-02-continuation/034-right-side-plaza-lane.png",
+  "seconds": 67.37142857142857,
+  "secrets": 2,
+  "sector": 35,
+  "shells": 50,
+  "tic": 2358,
+  "total": 36,
+  "visible": [
+    {
+      "id": 42,
+      "type": 3004,
+      "X": 883.544921875,
+      "Y": 584.23828125,
+      "HP": 20,
+      "Distance": 282.35418645368594
+    }
+  ],
+  "weapon": 5,
+  "x": 1119.969497680664,
+  "y": 738.5992431640625,
+  "z": 0
+}

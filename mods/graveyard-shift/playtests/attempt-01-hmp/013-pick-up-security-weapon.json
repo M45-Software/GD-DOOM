@@ -1,0 +1,42 @@
+{
+  "angle": 180,
+  "armor": 0,
+  "attempt": "attempt-01-hmp",
+  "blue_key": false,
+  "bullets": 38,
+  "dead": false,
+  "exited": false,
+  "health": 16,
+  "kills": 3,
+  "message": "Fireball hit",
+  "remaining": 33,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-01-hmp/013-pick-up-security-weapon.png",
+  "seconds": 13.2,
+  "secrets": 0,
+  "sector": 6,
+  "shells": 0,
+  "tic": 462,
+  "total": 36,
+  "visible": [
+    {
+      "id": 54,
+      "type": 3004,
+      "X": -605.3378448486328,
+      "Y": 530.6137390136719,
+      "HP": 5,
+      "Distance": 215.89187040746447
+    },
+    {
+      "id": 58,
+      "type": 3001,
+      "X": -533.4150390625,
+      "Y": 805.4150390625,
+      "HP": 60,
+      "Distance": 348.81765761682806
+    }
+  ],
+  "weapon": 2,
+  "x": -394.19403076171875,
+  "y": 485.58497619628906,
+  "z": 0
+}

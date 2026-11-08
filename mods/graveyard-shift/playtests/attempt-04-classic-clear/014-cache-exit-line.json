@@ -1,0 +1,58 @@
+{
+  "angle": 291.09375,
+  "armor": 0,
+  "attempt": "attempt-04-classic-clear",
+  "blue_key": false,
+  "bullets": 55,
+  "dead": false,
+  "exited": false,
+  "health": 68,
+  "kills": 7,
+  "message": "Monster shot you",
+  "remaining": 29,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-04-classic-clear/014-cache-exit-line.png",
+  "seconds": 21.714285714285715,
+  "secrets": 1,
+  "sector": 1,
+  "shells": 23,
+  "tic": 760,
+  "total": 36,
+  "visible": [
+    {
+      "id": 63,
+      "type": 9,
+      "X": -826.017578125,
+      "Y": 529.134765625,
+      "HP": 30,
+      "Distance": 199.32937658906621
+    },
+    {
+      "id": 49,
+      "type": 3004,
+      "X": -425.5497283935547,
+      "Y": 580.7313995361328,
+      "HP": 8,
+      "Distance": 602.925558788415
+    },
+    {
+      "id": 48,
+      "type": 3001,
+      "X": -325.646484375,
+      "Y": 549.337890625,
+      "HP": 60,
+      "Distance": 700.0179673053508
+    },
+    {
+      "id": 50,
+      "type": 3001,
+      "X": -115.66819763183594,
+      "Y": 543.9766235351562,
+      "HP": 48,
+      "Distance": 909.5980837127255
+    }
+  ],
+  "weapon": 3,
+  "x": -1024.772689819336,
+  "y": 514.0150451660156,
+  "z": 0
+}

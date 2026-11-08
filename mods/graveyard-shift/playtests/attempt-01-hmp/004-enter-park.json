@@ -1,0 +1,66 @@
+{
+  "angle": 90,
+  "armor": 0,
+  "attempt": "attempt-01-hmp",
+  "blue_key": false,
+  "bullets": 50,
+  "dead": false,
+  "exited": false,
+  "health": 91,
+  "kills": 2,
+  "message": "Picked up a clip",
+  "remaining": 34,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-01-hmp/004-enter-park.png",
+  "seconds": 5.171428571428572,
+  "secrets": 0,
+  "sector": 25,
+  "shells": 0,
+  "tic": 181,
+  "total": 36,
+  "visible": [
+    {
+      "id": 45,
+      "type": 3004,
+      "X": 355.9580078125,
+      "Y": 244.0419921875,
+      "HP": 20,
+      "Distance": 179.41087926868897
+    },
+    {
+      "id": 46,
+      "type": 3004,
+      "X": 569.6181640625,
+      "Y": 377.6181640625,
+      "HP": 20,
+      "Distance": 379.1398865484498
+    },
+    {
+      "id": 47,
+      "type": 3001,
+      "X": 343.59375,
+      "Y": 554.185546875,
+      "HP": 60,
+      "Distance": 489.7023578574032
+    },
+    {
+      "id": 48,
+      "type": 3001,
+      "X": 682.185546875,
+      "Y": 618.185546875,
+      "HP": 60,
+      "Distance": 642.6925447465503
+    },
+    {
+      "id": 49,
+      "type": 3004,
+      "X": 367.4326171875,
+      "Y": 948.7705078125,
+      "HP": 20,
+      "Distance": 884.2177456810648
+    }
+  ],
+  "weapon": 2,
+  "x": 355.6407470703125,
+  "y": 64.63139343261719,
+  "z": 0
+}

@@ -1,0 +1,34 @@
+{
+  "angle": 102.65625,
+  "armor": 0,
+  "attempt": "attempt-02-continuation",
+  "blue_key": false,
+  "bullets": 55,
+  "dead": false,
+  "exited": false,
+  "health": 50,
+  "kills": 10,
+  "message": "Picked up a box of shells",
+  "remaining": 26,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-02-continuation/007-main-shell-box.png",
+  "seconds": 16.857142857142858,
+  "secrets": 1,
+  "sector": 6,
+  "shells": 40,
+  "tic": 590,
+  "total": 36,
+  "visible": [
+    {
+      "id": 62,
+      "type": 3001,
+      "X": -679.916015625,
+      "Y": 1241.86328125,
+      "HP": 60,
+      "Distance": 586.930522864877
+    }
+  ],
+  "weapon": 3,
+  "x": -545.8448333740234,
+  "y": 670.45068359375,
+  "z": 0
+}

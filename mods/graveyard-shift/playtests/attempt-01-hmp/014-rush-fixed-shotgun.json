@@ -1,0 +1,42 @@
+{
+  "angle": 160.3125,
+  "armor": 0,
+  "attempt": "attempt-01-hmp",
+  "blue_key": false,
+  "bullets": 42,
+  "dead": false,
+  "exited": false,
+  "health": 16,
+  "kills": 4,
+  "message": "Picked up a clip",
+  "remaining": 32,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-01-hmp/014-rush-fixed-shotgun.png",
+  "seconds": 13.714285714285714,
+  "secrets": 0,
+  "sector": 6,
+  "shells": 8,
+  "tic": 480,
+  "total": 36,
+  "visible": [
+    {
+      "id": 58,
+      "type": 3001,
+      "X": -533.4150390625,
+      "Y": 757.4150390625,
+      "HP": 60,
+      "Distance": 218.47664866990374
+    },
+    {
+      "id": 63,
+      "type": 9,
+      "X": -533.4150390625,
+      "Y": 1253.4150390625,
+      "HP": 30,
+      "Distance": 713.8999874002844
+    }
+  ],
+  "weapon": 2,
+  "x": -552.4446716308594,
+  "y": 539.7687225341797,
+  "z": 0
+}

@@ -1,0 +1,50 @@
+{
+  "angle": 306.5625,
+  "armor": 0,
+  "attempt": "attempt-04-classic-clear",
+  "blue_key": false,
+  "bullets": 55,
+  "dead": false,
+  "exited": false,
+  "health": 58,
+  "kills": 7,
+  "message": "Monster shot you",
+  "remaining": 29,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-04-classic-clear/011-line-up-cache-door.png",
+  "seconds": 18.485714285714284,
+  "secrets": 0,
+  "sector": 6,
+  "shells": 3,
+  "tic": 647,
+  "total": 36,
+  "visible": [
+    {
+      "id": 49,
+      "type": 3004,
+      "X": -380.1962890625,
+      "Y": 540.1259765625,
+      "HP": 20,
+      "Distance": 421.37909038772773
+    },
+    {
+      "id": 48,
+      "type": 3001,
+      "X": -100.1123046875,
+      "Y": 578.0244140625,
+      "HP": 60,
+      "Distance": 702.1530208483604
+    },
+    {
+      "id": 50,
+      "type": 3001,
+      "X": 62.18824768066406,
+      "Y": 572.6631469726562,
+      "HP": 48,
+      "Distance": 864.1342898585616
+    }
+  ],
+  "weapon": 3,
+  "x": -801.5344848632812,
+  "y": 545.9964599609375,
+  "z": 0
+}

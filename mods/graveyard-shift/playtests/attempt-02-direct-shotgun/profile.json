@@ -1,0 +1,7 @@
+{
+  "auto_weapon_switch": false,
+  "skill": 3,
+  "tool_assisted": true,
+  "cheats": false,
+  "note": "Experimental recorder profile; default demo playback enables auto-switch and differs."
+}

@@ -1,0 +1,50 @@
+{
+  "angle": 92.8125,
+  "armor": 68,
+  "attempt": "attempt-07-detailed",
+  "blue_key": false,
+  "bullets": 50,
+  "dead": false,
+  "exited": false,
+  "health": 15,
+  "kills": 13,
+  "message": "Fireball hit",
+  "remaining": 23,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/detailed-showcase/attempt-07-detailed/010-opening-cleared.png",
+  "seconds": 21.057142857142857,
+  "secrets": 0,
+  "sector": 8,
+  "shells": 16,
+  "tic": 737,
+  "total": 36,
+  "visible": [
+    {
+      "id": 60,
+      "type": 3001,
+      "X": -605.8721008300781,
+      "Y": 979.1472473144531,
+      "HP": 50,
+      "Distance": 350.77857381344126
+    },
+    {
+      "id": 62,
+      "type": 3001,
+      "X": -580.3845977783203,
+      "Y": 1264.3540802001953,
+      "HP": 50,
+      "Distance": 636.2059812643895
+    },
+    {
+      "id": 64,
+      "type": 3004,
+      "X": -600.5673828125,
+      "Y": 1487.9228515625,
+      "HP": 20,
+      "Distance": 859.4938579189001
+    }
+  ],
+  "weapon": 3,
+  "x": -599.3184051513672,
+  "y": 628.4299011230469,
+  "z": 0
+}

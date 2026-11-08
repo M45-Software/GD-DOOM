@@ -1,0 +1,50 @@
+{
+  "angle": 180,
+  "armor": 0,
+  "attempt": "attempt-07-detailed",
+  "blue_key": false,
+  "bullets": 50,
+  "dead": false,
+  "exited": false,
+  "health": 91,
+  "kills": 0,
+  "message": "Monster shot you",
+  "remaining": 36,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/detailed-showcase/attempt-07-detailed/005-checkpoint.png",
+  "seconds": 7,
+  "secrets": 0,
+  "sector": 17,
+  "shells": 0,
+  "tic": 245,
+  "total": 36,
+  "visible": [
+    {
+      "id": 56,
+      "type": 9,
+      "X": -352,
+      "Y": 480,
+      "HP": 30,
+      "Distance": 268.16069314375903
+    },
+    {
+      "id": 55,
+      "type": 3001,
+      "X": -352,
+      "Y": 736,
+      "HP": 60,
+      "Distance": 296.927326184104
+    },
+    {
+      "id": 54,
+      "type": 3004,
+      "X": -672,
+      "Y": 480,
+      "HP": 20,
+      "Distance": 578.3570658586192
+    }
+  ],
+  "weapon": 2,
+  "x": -101.70822143554688,
+  "y": 576.2506256103516,
+  "z": 0
+}

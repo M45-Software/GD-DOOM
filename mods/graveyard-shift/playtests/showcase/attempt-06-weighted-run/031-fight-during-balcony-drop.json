@@ -1,0 +1,34 @@
+{
+  "angle": 178.59375,
+  "armor": 90,
+  "attempt": "attempt-06-weighted-run",
+  "blue_key": true,
+  "bullets": 106,
+  "dead": false,
+  "exited": false,
+  "health": 98,
+  "kills": 16,
+  "message": "Fireball hit",
+  "remaining": 20,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/showcase/attempt-06-weighted-run/031-fight-during-balcony-drop.png",
+  "seconds": 49.114285714285714,
+  "secrets": 1,
+  "sector": 12,
+  "shells": 40,
+  "tic": 1719,
+  "total": 36,
+  "visible": [
+    {
+      "id": 48,
+      "type": 3001,
+      "X": 512.2293243408203,
+      "Y": 1300.142807006836,
+      "HP": 36,
+      "Distance": 96.27720524238522
+    }
+  ],
+  "weapon": 5,
+  "x": 608.0584716796875,
+  "y": 1309.4204559326172,
+  "z": 0
+}

@@ -1,0 +1,66 @@
+{
+  "angle": 71.71875,
+  "armor": 96,
+  "attempt": "attempt-03-classic",
+  "blue_key": false,
+  "bullets": 55,
+  "dead": false,
+  "exited": false,
+  "health": 100,
+  "kills": 9,
+  "message": "Picked up a stimpack",
+  "remaining": 27,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-03-classic/010-office-health.png",
+  "seconds": 15.542857142857143,
+  "secrets": 0,
+  "sector": 6,
+  "shells": 24,
+  "tic": 544,
+  "total": 36,
+  "visible": [
+    {
+      "id": 59,
+      "type": 3004,
+      "X": -553.2958984375,
+      "Y": 1069.8212890625,
+      "HP": 20,
+      "Distance": 354.58116323799925
+    },
+    {
+      "id": 60,
+      "type": 3001,
+      "X": -594.6920471191406,
+      "Y": 1104.6739044189453,
+      "HP": 5,
+      "Distance": 377.30575531784785
+    },
+    {
+      "id": 61,
+      "type": 3002,
+      "X": -604.5673828125,
+      "Y": 1157.134765625,
+      "HP": 150,
+      "Distance": 427.2272747701526
+    },
+    {
+      "id": 62,
+      "type": 3001,
+      "X": -623.0263671875,
+      "Y": 1386.4306640625,
+      "HP": 60,
+      "Distance": 653.1945161989521
+    },
+    {
+      "id": 64,
+      "type": 3004,
+      "X": -496.2451171875,
+      "Y": 1664.2451171875,
+      "HP": 20,
+      "Distance": 945.3936476434019
+    }
+  ],
+  "weapon": 3,
+  "x": -669.7514038085938,
+  "y": 734.9094848632812,
+  "z": 0
+}

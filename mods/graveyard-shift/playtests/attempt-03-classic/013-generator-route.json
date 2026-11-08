@@ -1,0 +1,42 @@
+{
+  "angle": 2.8125,
+  "armor": 60,
+  "attempt": "attempt-03-classic",
+  "blue_key": false,
+  "bullets": 55,
+  "dead": false,
+  "exited": false,
+  "health": 28,
+  "kills": 14,
+  "message": "Monster hit you",
+  "remaining": 22,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-03-classic/013-generator-route.png",
+  "seconds": 24.37142857142857,
+  "secrets": 0,
+  "sector": 3,
+  "shells": 20,
+  "tic": 853,
+  "total": 36,
+  "visible": [
+    {
+      "id": 71,
+      "type": 3001,
+      "X": 260.203125,
+      "Y": 1796.203125,
+      "HP": 60,
+      "Distance": 933.0134429360008
+    },
+    {
+      "id": 72,
+      "type": 3004,
+      "X": 544.8896484375,
+      "Y": 1856.8896484375,
+      "HP": 20,
+      "Distance": 1220.9408725831513
+    }
+  ],
+  "weapon": 3,
+  "x": -672.0155792236328,
+  "y": 1757.7015380859375,
+  "z": 0
+}

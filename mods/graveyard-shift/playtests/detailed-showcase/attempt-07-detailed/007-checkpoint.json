@@ -1,0 +1,50 @@
+{
+  "angle": 109.6875,
+  "armor": 100,
+  "attempt": "attempt-07-detailed",
+  "blue_key": false,
+  "bullets": 50,
+  "dead": false,
+  "exited": false,
+  "health": 79,
+  "kills": 1,
+  "message": "Picked up green armor",
+  "remaining": 35,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/detailed-showcase/attempt-07-detailed/007-checkpoint.png",
+  "seconds": 9.571428571428571,
+  "secrets": 0,
+  "sector": 8,
+  "shells": 7,
+  "tic": 335,
+  "total": 36,
+  "visible": [
+    {
+      "id": 56,
+      "type": 9,
+      "X": -428.69837951660156,
+      "Y": 535.4155578613281,
+      "HP": 15,
+      "Distance": 118.13898858980886
+    },
+    {
+      "id": 55,
+      "type": 3001,
+      "X": -443.796875,
+      "Y": 588.203125,
+      "HP": 60,
+      "Distance": 172.39923761647978
+    },
+    {
+      "id": 58,
+      "type": 3001,
+      "X": -579.3134765625,
+      "Y": 963.3134765625,
+      "HP": 60,
+      "Distance": 568.9568078639663
+    }
+  ],
+  "weapon": 3,
+  "x": -417.7150115966797,
+  "y": 417.7882385253906,
+  "z": 0
+}

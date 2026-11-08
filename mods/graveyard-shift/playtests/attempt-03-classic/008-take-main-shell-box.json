@@ -1,0 +1,50 @@
+{
+  "angle": 340.3125,
+  "armor": 100,
+  "attempt": "attempt-03-classic",
+  "blue_key": false,
+  "bullets": 55,
+  "dead": false,
+  "exited": false,
+  "health": 100,
+  "kills": 5,
+  "message": "Picked up a box of shells",
+  "remaining": 31,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-03-classic/008-take-main-shell-box.png",
+  "seconds": 10.17142857142857,
+  "secrets": 0,
+  "sector": 6,
+  "shells": 28,
+  "tic": 356,
+  "total": 36,
+  "visible": [
+    {
+      "id": 45,
+      "type": 3004,
+      "X": -97.2890625,
+      "Y": 514.423828125,
+      "HP": 20,
+      "Distance": 471.99642740666604
+    },
+    {
+      "id": 50,
+      "type": 3001,
+      "X": 111.6845703125,
+      "Y": 570.1083984375,
+      "HP": 60,
+      "Distance": 662.1902116526518
+    },
+    {
+      "id": 48,
+      "type": 3001,
+      "X": 475.642578125,
+      "Y": 469.015625,
+      "HP": 60,
+      "Distance": 1038.2059554032999
+    }
+  ],
+  "weapon": 3,
+  "x": -542.9430389404297,
+  "y": 669.9010314941406,
+  "z": 0
+}

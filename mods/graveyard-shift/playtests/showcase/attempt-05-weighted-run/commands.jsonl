@@ -1,0 +1,8 @@
+{"run":true,"go":[352,437],"resume":"","ticks":160,"forward":0,"side":0,"turn":0,"buttons":0,"angle":null,"target":null,"fight":false,"label":"run-through-entrance","reset":"","quit":false}
+{"run":true,"go":[-96,576],"resume":"","ticks":140,"forward":0,"side":0,"turn":0,"buttons":0,"angle":null,"target":null,"fight":false,"label":"weighted-turn-to-security","reset":"","quit":false}
+{"run":false,"go":null,"resume":"","ticks":75,"forward":0,"side":0,"turn":0,"buttons":2,"angle":180,"target":null,"fight":false,"label":"open-security","reset":"","quit":false}
+{"run":false,"go":[-544,544],"resume":"","ticks":140,"forward":0,"side":0,"turn":0,"buttons":0,"angle":null,"target":null,"fight":false,"label":"take-shotgun","reset":"","quit":false}
+{"run":false,"go":null,"resume":"","ticks":90,"forward":0,"side":0,"turn":0,"buttons":0,"angle":180,"target":null,"fight":true,"label":"clear-office-west","reset":"","quit":false}
+{"run":false,"go":[-416,416],"resume":"","ticks":140,"forward":0,"side":0,"turn":0,"buttons":0,"angle":null,"target":null,"fight":true,"label":"collect-armor","reset":"","quit":false}
+{"run":false,"go":[-544,672],"resume":"","ticks":140,"forward":0,"side":0,"turn":0,"buttons":0,"angle":null,"target":null,"fight":true,"label":"collect-shells","reset":"","quit":false}
+{"run":false,"go":null,"resume":"","ticks":220,"forward":0,"side":0,"turn":0,"buttons":0,"angle":90,"target":null,"fight":true,"label":"defend-before-advancing","reset":"","quit":false}

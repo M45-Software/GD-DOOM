@@ -1,0 +1,42 @@
+{
+  "angle": 104.0625,
+  "armor": 91,
+  "attempt": "attempt-02-continuation",
+  "blue_key": false,
+  "bullets": 55,
+  "dead": false,
+  "exited": false,
+  "health": 32,
+  "kills": 14,
+  "message": "Fireball hit",
+  "remaining": 22,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-02-continuation/009-clear-office-crossfire.png",
+  "seconds": 24.571428571428573,
+  "secrets": 1,
+  "sector": 6,
+  "shells": 37,
+  "tic": 860,
+  "total": 36,
+  "visible": [
+    {
+      "id": 61,
+      "type": 3002,
+      "X": -553.0806274414062,
+      "Y": 884.4390258789062,
+      "HP": 55,
+      "Distance": 508.8802309739872
+    },
+    {
+      "id": 64,
+      "type": 3004,
+      "X": -716.4482421875,
+      "Y": 1233.3798828125,
+      "HP": 20,
+      "Distance": 889.2700956182176
+    }
+  ],
+  "weapon": 3,
+  "x": -438.8784637451172,
+  "y": 388.53887939453125,
+  "z": 0
+}

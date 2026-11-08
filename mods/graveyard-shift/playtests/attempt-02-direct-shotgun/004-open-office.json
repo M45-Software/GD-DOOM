@@ -1,0 +1,42 @@
+{
+  "angle": 180,
+  "armor": 0,
+  "attempt": "attempt-02-direct-shotgun",
+  "blue_key": false,
+  "bullets": 50,
+  "dead": false,
+  "exited": false,
+  "health": 100,
+  "kills": 0,
+  "message": "USE: door active",
+  "remaining": 36,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-02-direct-shotgun/004-open-office.png",
+  "seconds": 4.514285714285714,
+  "secrets": 0,
+  "sector": 13,
+  "shells": 0,
+  "tic": 158,
+  "total": 36,
+  "visible": [
+    {
+      "id": 56,
+      "type": 9,
+      "X": -352,
+      "Y": 480,
+      "HP": 30,
+      "Distance": 266.2643179201781
+    },
+    {
+      "id": 54,
+      "type": 3004,
+      "X": -672,
+      "Y": 480,
+      "HP": 20,
+      "Distance": 571.9572323778874
+    }
+  ],
+  "weapon": 2,
+  "x": -111.62751770019531,
+  "y": 594.5327758789062,
+  "z": 0
+}

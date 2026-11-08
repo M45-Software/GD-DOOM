@@ -1,0 +1,50 @@
+{
+  "angle": 230.625,
+  "armor": 91,
+  "attempt": "attempt-06-weighted-run",
+  "blue_key": true,
+  "bullets": 115,
+  "dead": false,
+  "exited": false,
+  "health": 100,
+  "kills": 15,
+  "message": "Picked up 4 shotgun shells",
+  "remaining": 21,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/showcase/attempt-06-weighted-run/029-control-exit.png",
+  "seconds": 46.542857142857144,
+  "secrets": 1,
+  "sector": 24,
+  "shells": 40,
+  "tic": 1629,
+  "total": 36,
+  "visible": [
+    {
+      "id": 50,
+      "type": 3001,
+      "X": -398.935546875,
+      "Y": 1790.865234375,
+      "HP": 60,
+      "Distance": 957.372314180106
+    },
+    {
+      "id": 47,
+      "type": 3001,
+      "X": -480.41664123535156,
+      "Y": 1765.9971923828125,
+      "HP": 57,
+      "Distance": 1034.3643621087006
+    },
+    {
+      "id": 43,
+      "type": 3004,
+      "X": 439.033203125,
+      "Y": -15.845703125,
+      "HP": 20,
+      "Distance": 1653.0825823134498
+    }
+  ],
+  "weapon": 5,
+  "x": 545.4660949707031,
+  "y": 1633.8070068359375,
+  "z": 112
+}

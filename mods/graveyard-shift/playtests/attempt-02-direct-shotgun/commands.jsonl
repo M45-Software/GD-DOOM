@@ -1,0 +1,8 @@
+{"ticks":57,"forward":50,"side":0,"turn":0,"buttons":0,"angle":90,"target":null,"fight":false,"label":"direct-entrance-run","reset":"","quit":false}
+{"ticks":35,"forward":50,"side":0,"turn":0,"buttons":0,"angle":180,"target":null,"fight":false,"label":"direct-security-approach","reset":"","quit":false}
+{"ticks":65,"forward":0,"side":0,"turn":0,"buttons":2,"angle":180,"target":null,"fight":false,"label":"open-office","reset":"","quit":false}
+{"ticks":37,"forward":50,"side":0,"turn":0,"buttons":0,"angle":186,"target":null,"fight":false,"label":"rush-shotgun-without-firing","reset":"","quit":false}
+{"ticks":55,"forward":0,"side":0,"turn":0,"buttons":20,"angle":null,"target":null,"fight":true,"label":"equip-shotgun-and-clear-west","reset":"","quit":false}
+{"ticks":140,"forward":0,"side":0,"turn":0,"buttons":0,"angle":0,"target":null,"fight":true,"label":"clear-security-and-pursuers","reset":"","quit":false}
+{"ticks":45,"forward":50,"side":0,"turn":0,"buttons":2,"angle":180,"target":null,"fight":false,"label":"discover-snack-cache","reset":"","quit":false}
+{"ticks":0,"forward":0,"side":0,"turn":0,"buttons":0,"angle":null,"target":null,"fight":false,"label":"saved-for-control-refinement","reset":"","quit":true}

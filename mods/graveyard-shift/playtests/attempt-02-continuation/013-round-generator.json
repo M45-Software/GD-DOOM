@@ -1,0 +1,42 @@
+{
+  "angle": 2.8125,
+  "armor": 91,
+  "attempt": "attempt-02-continuation",
+  "blue_key": false,
+  "bullets": 65,
+  "dead": false,
+  "exited": false,
+  "health": 42,
+  "kills": 16,
+  "message": "Picked up a clip",
+  "remaining": 20,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-02-continuation/013-round-generator.png",
+  "seconds": 31.571428571428573,
+  "secrets": 1,
+  "sector": 3,
+  "shells": 37,
+  "tic": 1105,
+  "total": 36,
+  "visible": [
+    {
+      "id": 71,
+      "type": 3001,
+      "X": 288.2783508300781,
+      "Y": 1814.3125457763672,
+      "HP": 45,
+      "Distance": 961.9435449300539
+    },
+    {
+      "id": 72,
+      "type": 3004,
+      "X": 556.3642578125,
+      "Y": 1868.3642578125,
+      "HP": 20,
+      "Distance": 1233.344207853983
+    }
+  ],
+  "weapon": 3,
+  "x": -671.9840545654297,
+  "y": 1757.466293334961,
+  "z": 0
+}

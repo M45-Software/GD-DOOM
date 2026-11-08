@@ -1,0 +1,66 @@
+{
+  "angle": 1.40625,
+  "armor": 200,
+  "attempt": "attempt-07-detailed",
+  "blue_key": true,
+  "bullets": 99,
+  "dead": false,
+  "exited": false,
+  "health": 67,
+  "kills": 20,
+  "message": "USE: door active",
+  "remaining": 16,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/detailed-showcase/attempt-07-detailed/045-checkpoint.png",
+  "seconds": 72.02857142857142,
+  "secrets": 2,
+  "sector": 43,
+  "shells": 38,
+  "tic": 2521,
+  "total": 36,
+  "visible": [
+    {
+      "id": 74,
+      "type": 3004,
+      "X": 1382.626953125,
+      "Y": 742.626953125,
+      "HP": 20,
+      "Distance": 107.8661627151488
+    },
+    {
+      "id": 75,
+      "type": 3001,
+      "X": 1572.203125,
+      "Y": 852.203125,
+      "HP": 60,
+      "Distance": 306.2524656010237
+    },
+    {
+      "id": 78,
+      "type": 3002,
+      "X": 1613.9404296875,
+      "Y": 757.373046875,
+      "HP": 150,
+      "Distance": 336.33429868945046
+    },
+    {
+      "id": 76,
+      "type": 3001,
+      "X": 1855.8388671875,
+      "Y": 760.1611328125,
+      "HP": 60,
+      "Distance": 578.119103700498
+    },
+    {
+      "id": 77,
+      "type": 3004,
+      "X": 2150.626953125,
+      "Y": 742.626953125,
+      "HP": 20,
+      "Distance": 873.2217598476293
+    }
+  ],
+  "weapon": 5,
+  "x": 1277.7720489501953,
+  "y": 767.9362030029297,
+  "z": 0
+}

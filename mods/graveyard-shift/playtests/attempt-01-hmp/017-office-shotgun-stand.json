@@ -1,0 +1,34 @@
+{
+  "angle": 85.78125,
+  "armor": 0,
+  "attempt": "attempt-01-hmp",
+  "blue_key": false,
+  "bullets": 36,
+  "dead": false,
+  "exited": false,
+  "health": 11,
+  "kills": 9,
+  "message": "Fireball hit",
+  "remaining": 27,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-01-hmp/017-office-shotgun-stand.png",
+  "seconds": 19.714285714285715,
+  "secrets": 0,
+  "sector": 6,
+  "shells": 5,
+  "tic": 690,
+  "total": 36,
+  "visible": [
+    {
+      "id": 61,
+      "type": 3002,
+      "X": -671.0418395996094,
+      "Y": 1194.60693359375,
+      "HP": 138,
+      "Distance": 403.08525621513587
+    }
+  ],
+  "weapon": 3,
+  "x": -705.84521484375,
+  "y": 793.0269927978516,
+  "z": 0
+}

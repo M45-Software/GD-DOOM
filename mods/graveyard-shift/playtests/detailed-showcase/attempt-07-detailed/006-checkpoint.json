@@ -1,0 +1,34 @@
+{
+  "angle": 184.21875,
+  "armor": 0,
+  "attempt": "attempt-07-detailed",
+  "blue_key": false,
+  "bullets": 50,
+  "dead": false,
+  "exited": false,
+  "health": 79,
+  "kills": 0,
+  "message": "Picked up a shotgun",
+  "remaining": 36,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/detailed-showcase/attempt-07-detailed/006-checkpoint.png",
+  "seconds": 8.6,
+  "secrets": 0,
+  "sector": 8,
+  "shells": 8,
+  "tic": 301,
+  "total": 36,
+  "visible": [
+    {
+      "id": 54,
+      "type": 3004,
+      "X": -672,
+      "Y": 480,
+      "HP": 20,
+      "Distance": 145.56848663279231
+    }
+  ],
+  "weapon": 2,
+  "x": -541.3606262207031,
+  "y": 544.2147827148438,
+  "z": 0
+}

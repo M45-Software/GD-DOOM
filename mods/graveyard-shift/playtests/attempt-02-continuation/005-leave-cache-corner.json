@@ -1,0 +1,42 @@
+{
+  "angle": 288.28125,
+  "armor": 0,
+  "attempt": "attempt-02-continuation",
+  "blue_key": false,
+  "bullets": 50,
+  "dead": false,
+  "exited": false,
+  "health": 50,
+  "kills": 7,
+  "message": "Picked up a box of shells",
+  "remaining": 29,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-02-continuation/005-leave-cache-corner.png",
+  "seconds": 14.17142857142857,
+  "secrets": 1,
+  "sector": 1,
+  "shells": 23,
+  "tic": 496,
+  "total": 36,
+  "visible": [
+    {
+      "id": 49,
+      "type": 3004,
+      "X": -180.763671875,
+      "Y": 547.236328125,
+      "HP": 20,
+      "Distance": 844.5647263951698
+    },
+    {
+      "id": 48,
+      "type": 3001,
+      "X": 214.5833282470703,
+      "Y": 520.3170013427734,
+      "HP": 57,
+      "Distance": 1239.2748416213647
+    }
+  ],
+  "weapon": 3,
+  "x": -1024.6755981445312,
+  "y": 514.0363616943359,
+  "z": 0
+}

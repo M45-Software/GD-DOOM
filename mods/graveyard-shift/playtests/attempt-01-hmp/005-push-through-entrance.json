@@ -1,0 +1,58 @@
+{
+  "angle": 90,
+  "armor": 0,
+  "attempt": "attempt-01-hmp",
+  "blue_key": false,
+  "bullets": 48,
+  "dead": false,
+  "exited": false,
+  "health": 91,
+  "kills": 2,
+  "message": "Picked up a clip",
+  "remaining": 34,
+  "screenshot": "/home/dist/Documents/ChatGPT/github/GD-DOOM/mods/graveyard-shift/playtests/attempt-01-hmp/005-push-through-entrance.png",
+  "seconds": 6.085714285714285,
+  "secrets": 0,
+  "sector": 26,
+  "shells": 0,
+  "tic": 213,
+  "total": 36,
+  "visible": [
+    {
+      "id": 47,
+      "type": 3001,
+      "X": 326.3818359375,
+      "Y": 536.9736328125,
+      "HP": 60,
+      "Distance": 219.19204503552658
+    },
+    {
+      "id": 48,
+      "type": 3001,
+      "X": 619.0751953125,
+      "Y": 555.0751953125,
+      "HP": 60,
+      "Distance": 353.5039631954238
+    },
+    {
+      "id": 50,
+      "type": 3001,
+      "X": 424.9736328125,
+      "Y": 856.9736328125,
+      "HP": 60,
+      "Distance": 541.7682618884733
+    },
+    {
+      "id": 49,
+      "type": 3004,
+      "X": 321.5341796875,
+      "Y": 902.8720703125,
+      "HP": 20,
+      "Distance": 584.1493143806607
+    }
+  ],
+  "weapon": 2,
+  "x": 355.32530212402344,
+  "y": 319.700927734375,
+  "z": 0
+}
