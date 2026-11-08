@@ -2,11 +2,14 @@
 static void GD_CoopDemoFrame(void)
 {
  const char *path=getenv("GD_DSDA_COOP_OUT");
- static FILE *out;static int last=-1;
+ static FILE *out;static int last=-1,first=-1;
+ int campaign=getenv("GD_COOP_CAMPAIGN")!=NULL;
+ if(first<0)first=gametic;
  int slot,i;thinker_t *it=NULL;
  if(!path||!demoplayback||gamestate!=GS_LEVEL||leveltime<=0||gametic==last)return;
  last=gametic;
- if(!out){out=fopen(path,"w");if(!out)I_Error("co-op output");fprintf(out,"tic,players,bodies,items,sectors,playindex,seeds\n");}
+ if(!out){out=fopen(path,"w");if(!out)I_Error("co-op output");if(campaign)fprintf(out,"demotic,map,");fprintf(out,"tic,players,bodies,items,sectors,playindex,seeds\n");}
+ if(campaign)fprintf(out,"%d,MAP%02d,",gametic-first+1,gamemap);
  fprintf(out,"%d,",leveltime-1);
  for(slot=0;slot<4;++slot)if(playeringame[slot]){
   player_t *p=&players[slot];mobj_t *m=p->mo;int cards=0;

@@ -97,6 +97,7 @@ type sessionGame struct {
 	musicCtl                 *sessionmusic.Playback
 	secretVisited            bool
 	levelCarryover           *playerLevelCarryover
+	coopCarryover            []coopLevelCarryover
 	faithfulSurface          *ebiten.Image
 	faithfulNearest          *ebiten.Image
 	faithfulFrame            *ebiten.Image

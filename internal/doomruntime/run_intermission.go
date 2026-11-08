@@ -75,26 +75,30 @@ type intermissionStats struct {
 }
 
 type intermissionState struct {
-	Active      bool
-	Screen      intermissionScreenState
-	Tic         int
-	Bcnt        int
-	Cnt         int
-	SPState     int
-	PauseTics   int
-	Accelerate  bool
-	Commercial  bool
-	Retail      bool
-	DidSecret   bool
-	PointerOn   bool
-	Episode     int
-	Last        int
-	Next        int
-	Show        intermissionStats
-	Target      intermissionStats
-	Anims       []intermissionAnimState
-	StartMusic  bool
-	StageQueued bool
+	Coop                            bool
+	CoopSlots                       [4]bool
+	CoopShow, CoopTarget, CoopLimit [4][4]int
+	CoopDoFrags                     bool
+	Active                          bool
+	Screen                          intermissionScreenState
+	Tic                             int
+	Bcnt                            int
+	Cnt                             int
+	SPState                         int
+	PauseTics                       int
+	Accelerate                      bool
+	Commercial                      bool
+	Retail                          bool
+	DidSecret                       bool
+	PointerOn                       bool
+	Episode                         int
+	Last                            int
+	Next                            int
+	Show                            intermissionStats
+	Target                          intermissionStats
+	Anims                           []intermissionAnimState
+	StartMusic                      bool
+	StageQueued                     bool
 }
 
 var (
@@ -139,6 +143,7 @@ var (
 )
 
 func (sg *sessionGame) startIntermission(next *mapdata.Map, nextName mapdata.MapName, secretExit bool) {
+	sg.captureCoopCarryover()
 	sg.freezeDemoRecord()
 	sg.stopAndClearMusic()
 	if sg.g != nil {
@@ -191,6 +196,7 @@ func (sg *sessionGame) startIntermission(next *mapdata.Map, nextName mapdata.Map
 	if !nextOK {
 		state.Next = 0
 	}
+	initCoopIntermission(sg.g, &state)
 	state.Anims = newIntermissionAnims(lastEp, commercial, retail)
 	sg.intermission = sessionIntermission{state: state, nextMap: next}
 	sg.maybeStartIntermissionMusic()
@@ -243,7 +249,11 @@ func tickVanillaIntermission(state intermissionState, skipPressed bool) (intermi
 	var sounds []soundEvent
 	switch state.Screen {
 	case intermissionScreenStats:
-		state, sounds = updateIntermissionStats(state)
+		if state.Coop {
+			state, sounds = updateCoopIntermissionStats(state)
+		} else {
+			state, sounds = updateIntermissionStats(state)
+		}
 	case intermissionScreenShowNextLoc:
 		state.PointerOn = (state.Cnt & 31) < 20
 		state.Cnt--
@@ -532,10 +542,11 @@ func (sg *sessionGame) finishIntermission() {
 	if sg.g != nil {
 		sg.g.clearPendingSoundState()
 	}
+	old := sg.g
 	sg.current = im.nextMap.Name
 	sg.currentTemplate = cloneMapForRestart(im.nextMap)
 	sg.rebuildGameWithPersistentSettings(im.nextMap)
-	if sg.levelCarryover != nil && sg.g != nil {
+	if !sg.applyCoopCarryover(sg.g, old) && sg.levelCarryover != nil && sg.g != nil {
 		sg.g.applyLevelCarryover(*sg.levelCarryover)
 		sg.levelCarryover = nil
 		if sg.g.opts.DemoScript != nil {
@@ -599,6 +610,10 @@ func (sg *sessionGame) drawIntermissionStatsScreen(screen *ebiten.Image, scale, 
 	sg.drawIntermissionBackdrop(screen, scale, ox, oy, im.state)
 	sg.drawIntermissionAnimatedBack(screen, scale, ox, oy, im.state)
 	sg.drawIntermissionFinished(screen, scale, ox, oy, im.state)
+	if im.state.Coop {
+		sg.drawCoopIntermissionStats(screen, scale, ox, oy, im.state)
+		return
+	}
 	lh := (3 * sg.intermissionPatchHeight("WINUM0")) / 2
 	if lh <= 0 {
 		lh = 16
@@ -614,6 +629,39 @@ func (sg *sessionGame) drawIntermissionStatsScreen(screen *ebiten.Image, scale, 
 	if !im.state.Commercial && im.state.Episode >= 1 && im.state.Episode <= 3 {
 		_ = sg.drawIntermissionPatch(screen, "WIPAR", doomLogicalW/2+wiTimeX, wiTimeY, scale, ox, oy, false)
 		sg.drawIntermissionTime(screen, doomLogicalW-wiTimeX, wiTimeY, im.state.Show.ParSec, scale, ox, oy)
+	}
+}
+
+func (sg *sessionGame) drawCoopIntermissionStats(screen *ebiten.Image, scale, ox, oy float64, state intermissionState) {
+	x := 32 + sg.intermissionPatchWidth("STFST01")/2
+	if !state.CoopDoFrags {
+		x += 32
+	}
+	for column, name := range []string{"WIOSTK", "WIOSTI", "WIOSTS", "WIFRGS"} {
+		if column == 3 && !state.CoopDoFrags {
+			break
+		}
+		sg.drawIntermissionPatch(screen, name, x+(column+1)*64-sg.intermissionPatchWidth(name), 50, scale, ox, oy, false)
+	}
+	y := 50 + sg.intermissionPatchHeight("WIOSTK")
+	for slot, on := range state.CoopSlots {
+		if !on {
+			continue
+		}
+		sg.drawIntermissionPatch(screen, fmt.Sprintf("STPB%d", slot), x-sg.intermissionPatchWidth("STPB0"), y, scale, ox, oy, false)
+		if sg.g != nil && slot+1 == sg.g.localSlot {
+			sg.drawIntermissionPatch(screen, "STFST01", x-sg.intermissionPatchWidth("STPB0"), y, scale, ox, oy, false)
+		}
+		for column, value := range state.CoopShow[slot] {
+			if column == 3 {
+				if state.CoopDoFrags {
+					sg.drawIntermissionNum(screen, x+256, y+10, value, -1, scale, ox, oy)
+				}
+			} else {
+				sg.drawIntermissionPercent(screen, x+(column+1)*64-sg.intermissionPatchWidth("WIPCNT"), y+10, value, scale, ox, oy)
+			}
+		}
+		y += 33
 	}
 }
 

@@ -135,17 +135,17 @@ func TestBoomSightBoundsRejectDistantHorizontalEquality(t *testing.T) {
 	}
 }
 
-func TestCoopDemoRejectsIncompleteCheckpointsAndCampaignTransitions(t *testing.T) {
+func TestCoopDemoCampaignInputUsesWholeRoster(t *testing.T) {
 	g := coopPlaybackTestGame()
-	sg := &sessionGame{g: g}
-	if _, err := sg.marshalSaveGame("co-op"); err == nil {
-		t.Fatal("saved a co-op world without its roster")
-	}
-	if _, err := sg.marshalNetplayKeyframe(); err == nil {
-		t.Fatal("keyframed a co-op world without its roster")
-	}
 	g.demoIntermissionActive = true
-	if err := g.advanceDemoTic(); err == nil || errors.Is(err, ebiten.Termination) || g.demoTick != 0 {
-		t.Fatal("unsupported campaign boundary silently consumed commands")
+	g.opts.DemoScript.Frames[1][0].Buttons = 1
+	if err := g.advanceDemoTic(); err != nil {
+		t.Fatal(err)
+	}
+	if err := g.advanceDemoTic(); err != nil {
+		t.Fatal(err)
+	}
+	if g.demoTick != 2 || !g.demoIntermissionSkip || !g.coopTransitionPrepared {
+		t.Fatal("intermission ignored non-console input")
 	}
 }

@@ -567,6 +567,14 @@ func (g *game) damagePlayerBody(amount int, msg string, attackerX, attackerY int
 	}
 	if (independentBody && g.playerMobjHealth <= 0) || (!independentBody && g.stats.Health == 0) {
 		g.isDead = true
+		if g.coopDemoActive() {
+			source := g.authorityDamageSource
+			if source > 0 {
+				g.demoCoopFrags[source-1][g.localSlot-1]++
+			} else if !hasAttacker {
+				g.demoCoopFrags[g.localSlot-1][g.localSlot-1]++
+			}
+		}
 		if len(g.authorityPlayers) != 0 {
 			g.authorityPlayerKilled(g.localSlot, g.authorityDamageSource)
 		}

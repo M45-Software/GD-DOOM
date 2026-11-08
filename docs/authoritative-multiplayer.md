@@ -790,7 +790,7 @@ experiment verifies damage/rebirth semantics; complete classic netdemo timing
 and RNG parity remain unverified. See [Boom co-op doll verification](boom-support.md#co-op-voodoo-dolls)
 for commands and limits. World saves/keyframes retain doll state but do not
 checkpoint the full authority roster. Matching clients and servers must use
-simulation ID `gd-doom-authority-dev-26`.
+simulation ID `gd-doom-authority-dev-27`.
 
 ## Classic co-op demo playback
 
@@ -803,6 +803,10 @@ persistent pickups, sparse/four-slot rosters and pause commands. See
 commands and the compared fields.
 
 Late network joins, team-shared keys, respawn delays and prediction keep their
-native policy. Recorded co-op campaign transitions and full-roster checkpoints
-are explicitly unsupported; multiplayer deathmatch recordings are rejected.
+native policy. Recorded co-op normal/secret campaign transitions and full-roster session
+checkpoints now have 10 generated routes compared continuously and through
+save/keyframe restores: 30 runs, 21,774 active frames and 520 restores against
+DSDA. Save 41/keyframe 28 embed the recording, roster, retained references and
+campaign state. These checkpoints do not implement native server rollback;
+multiplayer deathmatch recordings remain rejected.
 These checks do not establish universal classic netdemo or presentation parity.

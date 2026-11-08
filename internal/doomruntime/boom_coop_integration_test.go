@@ -6,6 +6,8 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
+	"strings"
 	"testing"
 
 	"gddoom/internal/demo"
@@ -27,11 +29,41 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	m, err := mapdata.LoadMap(wf, "MAP01")
+	m, err := mapdata.LoadMap(wf, mapdata.MapName(fmt.Sprintf("MAP%02d", script.Header.Map)))
 	if err != nil {
 		t.Fatal(err)
 	}
-	g := newGame(m, Options{Headless: true, DemoScript: script})
+	opts := Options{Headless: true, DemoScript: script, DemoQuitOnComplete: true, NewGameLoader: func(name string) (*mapdata.Map, error) { return mapdata.LoadMap(wf, mapdata.MapName(name)) }}
+	var g *game
+	var sg *sessionGame
+	campaign := os.Getenv("GD_COOP_CAMPAIGN") != ""
+	if campaign {
+		rt, meta := NewRuntime(m, opts, func(current mapdata.MapName, secret bool) (*mapdata.Map, mapdata.MapName, error) {
+			name, err := mapdata.NextMapName(wf, current, secret)
+			if err != nil {
+				return nil, "", err
+			}
+			next, err := mapdata.LoadMap(wf, name)
+			return next, name, err
+		})
+		defer meta.Close()
+		sg = rt.(*sessionGame)
+		g = sg.g
+	} else {
+		g = newGame(m, opts)
+		sg = &sessionGame{g: g, rt: g, opts: opts, current: m.Name}
+	}
+	checkpoints := map[int]bool{}
+	for _, v := range strings.Split(os.Getenv("GD_COOP_CHECKPOINT_TICS"), ",") {
+		if v != "" {
+			n, err := strconv.Atoi(v)
+			if err != nil {
+				t.Fatal(err)
+			}
+			checkpoints[n] = true
+		}
+	}
+	restored := 0
 	f, err := os.Create(path)
 	if err != nil {
 		t.Fatal(err)
@@ -39,10 +71,55 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 	defer f.Close()
 	out := bufio.NewWriter(f)
 	defer out.Flush()
+	if campaign {
+		fmt.Fprint(out, "demotic,map,")
+	}
 	fmt.Fprintln(out, "tic,players,bodies,items,sectors,playindex,seeds")
 	for tic := range script.Frames {
-		if err := g.advanceDemoTic(); err != nil {
-			t.Fatalf("tic %d: %v", tic, err)
+		oldMap, oldWorld := g.m.Name, g.worldTic
+		if campaign {
+			for updates := 0; ; updates++ {
+				if err := sg.Update(); err != nil {
+					t.Fatal(err)
+				}
+				g = sg.g
+				if g.demoTick == tic+1 {
+					break
+				}
+				if updates >= 8 {
+					t.Fatal("stalled campaign")
+				}
+			}
+		} else if err := g.advanceDemoTic(); err != nil {
+			t.Fatal(err)
+		}
+		if checkpoints[tic] {
+			var data []byte
+			var err error
+			if os.Getenv("GD_COOP_CHECKPOINT_FORMAT") == "keyframe" {
+				data, err = sg.marshalNetplayKeyframe()
+			} else {
+				data, err = sg.marshalSaveGame("co-op")
+			}
+			if err != nil {
+				t.Fatal(err)
+			}
+			if os.Getenv("GD_COOP_CHECKPOINT_FORMAT") == "keyframe" {
+				err = sg.unmarshalNetplayKeyframe(data)
+			} else {
+				err = sg.unmarshalSaveGame(data)
+			}
+			if err != nil {
+				t.Fatalf("checkpoint %d: %v", tic, err)
+			}
+			g = sg.g
+			restored++
+		}
+		if campaign && g.m.Name == oldMap && g.worldTic == oldWorld {
+			continue
+		}
+		if campaign {
+			fmt.Fprintf(out, "%d,%s,", tic+1, g.m.Name)
 		}
 		fmt.Fprintf(out, "%d,", g.worldTic-1)
 		for _, p := range g.authorityPlayers {
@@ -108,5 +185,8 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 			}
 		}
 		fmt.Fprintln(out)
+	}
+	if restored != len(checkpoints) {
+		t.Fatal("not all checkpoints restored")
 	}
 }

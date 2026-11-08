@@ -769,6 +769,8 @@ type game struct {
 	secretsTotal                                  int
 	sectorSoundTarget                             []bool
 	sectorSoundPlayerSlot                         []int
+	coopTransitionPrepared                        bool
+	demoCoopFrags                                 [4][4]int
 	demoCoopSoundBodies                           map[int]int
 	demoCoopAttackers                             map[int]int // Negative live slot or one-based detached thing.
 	isDead                                        bool

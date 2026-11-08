@@ -1488,13 +1488,60 @@ homing targets retain the same physical body; a replacement player receives
 fresh inventory. A living camera left after a doll death stays an independent,
 unowned body after respawn.
 
-This establishes the generated **single-map** recordings, not universal co-op
-or visual/audio parity. Co-op intermission/finale/campaign transitions and full
-co-op save/keyframe checkpoints are explicitly unsupported rather than silently
-advancing or restoring only the selected player. Those checkpoints need the
-whole roster plus retained references. Native authority replication baselines
-remain distinct from server rollback. Broader community recordings and
-multiplayer deathmatch remain follow-up work.
+These recordings establish generated co-op gameplay parity, rather than universal
+co-op or visual/audio parity. Broader community recordings and multiplayer
+deathmatch remain follow-up work.
+
+## Recorded co-op campaigns and checkpoints
+
+Recorded co-op now continues through normal and secret exits, intermissions and
+Boom commercial finales. Every living player carries health, armor, ammo and
+weapons independently; dead players receive fresh rebirth inventory on the next
+map. Keys and temporary powers clear for the whole roster. Attack/use edges from
+any active player accelerate the screens. Co-op statistics tally each player's
+kills, items, secrets and frags, and display the active roster.
+
+`verify_boom_coop_campaign.py` compares **10 routes / 30 runs / 21,774 active
+frames** against DSDA 0.27.5: two-player, sparse slots 3/4 and four-player rosters,
+normal/secret transitions, natural tally timing, held input through a finale,
+and a player dead at the exit. Continuous, save-restored and keyframe-restored
+runs match every compared active frame, its original command position, all
+players/bodies/items/sectors and gameplay RNG. This includes **520 restores**
+before/after exits, during intermissions/finales and at next-map startup.
+Evidence: `/tmp/gddoom-coop-campaign-final/results.json`.
+
+```sh
+python3 scripts/verify_boom_coop_campaign.py \
+  --iwad /path/to/doom2.wad \
+  --reference /path/to/instrumented/dsda-doom \
+  --out /tmp/gddoom-coop-campaign
+```
+
+Build the reference with the observer installation used by
+`verify_boom_coop.py --reference-source`. Campaign observation only adds the
+original command number and map name; it does not change reference gameplay.
+The comparator observes active level frames and checks screen duration through
+command positions. It does not compare rendered pixels or screen audio.
+
+Save 41/keyframe 28 include a bounded, versioned recorded-session attachment:
+embedded demo commands/cursor/pause state, the complete owned roster, player
+activation/latches, physical body ownership, target/sound/attacker references,
+frags, pending map/carryover, intermission animations and finale state. Loading
+validates the attachment and world before replacing the active session, and
+restores the saved RNG after construction. Unit checks cover pending rebirth,
+retained bodies/references, all RNG classes, exact binary continuation, screen
+state and malformed data rejected without changing the active session. Existing
+single-map co-op coverage remains **40 cases / 9,360 matching frames**.
+
+Sparse recordings retain Doom's `playeringame[1]` netgame-rule switch: slots 3/4
+alone use single-player item persistence and tally rules while still advancing
+their complete recorded roster. Retained former-camera bodies now have one
+sector-membership link, preserving crusher traversal through checkpoint loads.
+
+These are recorded co-op session checkpoints. Native authority save/rollback
+remains separate from client replication baselines and is not supplied by this
+attachment. Community campaign recordings, episodic/endgame presentation and
+multiplayer deathmatch still need broader comparison coverage.
 
 ## Remaining work
 
@@ -1506,10 +1553,10 @@ The next milestones are:
    lifecycle and mover matrices as regressions. Death/rebirth checkpoints and
    generated normal/secret transitions now have DSDA comparisons; MAP02 covers
    a complete crusher/resurrection route with binary checkpoint continuation.
-2. Extend the recorded single-map co-op matrix to intermissions, finales and
-   campaign transitions, then add full-roster co-op checkpoints and community
-   recordings. Native authority save/rollback remains separate from client
-   replication baselines.
+2. Broaden recorded co-op campaigns to community recordings, episodic endings,
+   more combat and death/exit combinations. Generated normal/secret campaigns
+   and full-roster recorded-session checkpoints now have DSDA comparisons.
+   Native authority save/rollback remains separate from client replication baselines.
 3. Add custom weapon preferences, then broaden complex-map progression and
    large-fight performance coverage. GL nodes and mixer-wide sound parity
    remain separate follow-up work.
@@ -1522,12 +1569,14 @@ not full combat RNG parity, every map route, or large-fight performance. The map
 audit detects unknown specials; it does not detect every unsupported interaction.
 
 These changes advance the multiplayer simulation ID to
-`gd-doom-authority-dev-26`. Deploy matching clients and servers. Door lighting
+`gd-doom-authority-dev-27`. Deploy matching clients and servers. Door lighting
 adds the controlling line reference to owned and displaced door snapshots.
 Sector identities extend the sound-event schema. Explicit ceiling ownership
 and retained doors extend the mover schema; displaced ceilings remain in the
-ordered mover state. Save version 40 reads versions 37–39;
-keyframe version 27 reads versions 24–26. Save 40/keyframe 27 add the pending
+ordered mover state. Save version 41 reads versions 38–40;
+keyframe version 28 reads versions 25–27. Save 41/keyframe 28 add the recorded
+co-op session attachment; older formats cannot reconstruct a complete recorded
+roster or campaign cursor. Save 40/keyframe 27 added the pending
 rebirth request and death-camera attacker. Previous formats default those to
 no request/no attacker; they cannot reconstruct them for exact death-boundary
 continuation. Save 39/keyframe 26 introduced ordered sector membership and
@@ -1544,5 +1593,6 @@ Older snapshots initialize previously unsupported friction state to defaults.
 Scroller data from version 30/keyframe 17 remains readable; earlier snapshots
 cannot reconstruct the preceding acceleration history of unsupported scrollers.
 Co-op doll ownership is encoded in internal actor types and existing body
-arrays, so this change keeps save 40/keyframe 27. The simulation ID changes
-because joins, damage routing and actor lifecycle behavior change.
+arrays. Full-roster recorded-session checkpoints add the save 41/keyframe 28
+attachment. The simulation ID also changes for campaign, sparse pickup and
+retained-body sector-link behavior.

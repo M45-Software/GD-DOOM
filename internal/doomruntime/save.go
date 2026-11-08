@@ -14,6 +14,7 @@ import (
 	"strings"
 	"time"
 
+	"gddoom/internal/demo"
 	"gddoom/internal/doomrand"
 	"gddoom/internal/mapdata"
 	"gddoom/internal/render/mapview"
@@ -24,10 +25,10 @@ import (
 )
 
 const (
-	saveGameVersion     = 40
+	saveGameVersion     = 41
 	saveGamePrefix      = "dsg"
 	saveGameQuickPrefix = "quicksave"
-	keyframeVersion     = 27
+	keyframeVersion     = 28
 	saveGameDirName     = "saves"
 )
 
@@ -58,13 +59,14 @@ type saveMandatoryKeyframeSink interface {
 }
 
 type saveFile struct {
-	Version     int
-	Description string
-	Current     mapdata.MapName
-	WADSources  []saveWADSource
-	BoomOptions []byte
-	RNG         saveRNGState
-	Game        gameSaveState
+	CoopCheckpoint []byte
+	Version        int
+	Description    string
+	Current        mapdata.MapName
+	WADSources     []saveWADSource
+	BoomOptions    []byte
+	RNG            saveRNGState
+	Game           gameSaveState
 }
 
 type saveRNGState struct {
@@ -1067,8 +1069,9 @@ func (sg *sessionGame) marshalSaveGame(description string) ([]byte, error) {
 	if sg == nil || sg.g == nil || sg.g.m == nil {
 		return nil, errSaveGameUnavailable
 	}
-	if sg.g.coopDemoActive() {
-		return nil, fmt.Errorf("co-op demo checkpoints do not yet include the full player roster")
+	coop, err := sg.captureCoopCheckpoint()
+	if err != nil {
+		return nil, err
 	}
 	description = strings.TrimSpace(description)
 	if description == "" {
@@ -1076,10 +1079,11 @@ func (sg *sessionGame) marshalSaveGame(description string) ([]byte, error) {
 	}
 	rngState := doomrand.Capture()
 	file := saveFile{
-		Version:     saveGameVersion,
-		Description: description,
-		Current:     sg.current,
-		WADSources:  captureSaveWADSources(sg.opts.WADSources),
+		CoopCheckpoint: coop,
+		Version:        saveGameVersion,
+		Description:    description,
+		Current:        sg.current,
+		WADSources:     captureSaveWADSources(sg.opts.WADSources),
 		RNG: saveRNGState{
 			Extended:  rngState,
 			MenuIndex: rngState.MenuIndex,
@@ -1099,15 +1103,17 @@ func (sg *sessionGame) marshalNetplayKeyframe() ([]byte, error) {
 	if sg == nil || sg.g == nil || sg.g.m == nil {
 		return nil, errSaveGameUnavailable
 	}
-	if sg.g.coopDemoActive() {
-		return nil, fmt.Errorf("co-op demo checkpoints do not yet include the full player roster")
+	coop, err := sg.captureCoopCheckpoint()
+	if err != nil {
+		return nil, err
 	}
 	rngState := doomrand.Capture()
 	file := saveFile{
-		Version:     keyframeVersion,
-		Description: "Netplay Keyframe",
-		Current:     sg.current,
-		WADSources:  captureSaveWADSources(sg.opts.WADSources),
+		CoopCheckpoint: coop,
+		Version:        keyframeVersion,
+		Description:    "Netplay Keyframe",
+		Current:        sg.current,
+		WADSources:     captureSaveWADSources(sg.opts.WADSources),
 		RNG: saveRNGState{
 			Extended:  rngState,
 			MenuIndex: rngState.MenuIndex,
@@ -1183,14 +1189,29 @@ func (sg *sessionGame) applyLoadedSnapshot(file saveFile, warning string) error 
 	if strings.TrimSpace(string(file.Current)) == "" {
 		return fmt.Errorf("save missing current map")
 	}
-	applySavedSessionOptions(&sg.opts, file.Game.Session)
-	restoreBoomOptions(&sg.opts, file.BoomOptions)
-
-	sg.stopAndClearMusic()
-	if sg.g != nil {
-		sg.g.clearPendingSoundState()
-		sg.g.clearSpritePatchCache()
+	checkpoint, err := decodeCoopCheckpoint(file.CoopCheckpoint)
+	if err != nil {
+		return err
 	}
+	loadOpts := sg.opts
+	applySavedSessionOptions(&loadOpts, file.Game.Session)
+	restoreBoomOptions(&loadOpts, file.BoomOptions)
+	if checkpoint != nil {
+		loadOpts.DemoScript, err = demo.Parse(checkpoint.Demo)
+		if err != nil {
+			return err
+		}
+	}
+	if checkpoint == nil && loadOpts.DemoScript != nil && loadOpts.DemoScript.Header.PlayerCount() > 1 && file.Game.Session.GameMode == gameModeCoop {
+		return fmt.Errorf("co-op demo checkpoint missing full roster")
+	}
+	priorRNG := doomrand.Capture()
+	installed := false
+	defer func() {
+		if !installed {
+			doomrand.Restore(priorRNG)
+		}
+	}()
 
 	loadedMap, err := sg.opts.NewGameLoader(string(file.Current))
 	if err != nil {
@@ -1199,7 +1220,13 @@ func (sg *sessionGame) applyLoadedSnapshot(file saveFile, warning string) error 
 	if loadedMap == nil {
 		return fmt.Errorf("load saved map %s: nil map", file.Current)
 	}
-	g := sg.buildGame(loadedMap, sg.opts)
+	stage := &sessionGame{opts: loadOpts, gameFactory: sg.gameFactory}
+	g := stage.buildGame(loadedMap, loadOpts)
+	if checkpoint != nil {
+		if err := checkpoint.validate(g, file); err != nil {
+			return err
+		}
+	}
 	if ((file.Version >= 30 && file.Version <= saveGameVersion) || (file.Version >= 17 && file.Version <= keyframeVersion)) && !g.validBoomScrollerStates(file.Game.BoomScrollers) {
 		return fmt.Errorf("save scrollers do not match loaded map")
 	}
@@ -1231,8 +1258,14 @@ func (sg *sessionGame) applyLoadedSnapshot(file saveFile, warning string) error 
 		g.inventory.CardKeys = inferred
 	}
 
+	if checkpoint != nil {
+		checkpoint.restoreGame(g)
+	}
+	sg.stopAndClearMusic()
+	sg.opts = loadOpts
+	g.opts.CaptureKeyframe, g.opts.LoadKeyframe = sg.marshalNetplayKeyframe, sg.unmarshalNetplayKeyframe
 	restoreSavedRNG(file)
-
+	installed = true
 	sg.transition.Clear()
 	sg.clearQuitPrompt()
 	sg.frontend = frontendState{}
@@ -1249,6 +1282,9 @@ func (sg *sessionGame) applyLoadedSnapshot(file saveFile, warning string) error 
 	sg.currentTemplate = cloneMapForRestart(g.m)
 	sg.levelCarryover = nil
 	sg.secretVisited = false
+	if checkpoint != nil {
+		checkpoint.restoreSession(sg)
+	}
 	sg.playMusicForMap(sg.current)
 	sg.announceMapMusic(sg.current)
 	ebiten.SetWindowTitle(runtimehost.WindowTitle(sg.current))
@@ -1257,7 +1293,9 @@ func (sg *sessionGame) applyLoadedSnapshot(file saveFile, warning string) error 
 		msg = "WAD WARNING: " + strings.TrimSpace(warning)
 		fmt.Println(msg)
 	}
-	g.setHUDMessage(msg, 70)
+	if checkpoint == nil {
+		g.setHUDMessage(msg, 70)
+	}
 	return nil
 }
 

@@ -145,7 +145,7 @@ func (c *NativeCampaign) finishLevel() error {
 		game.g.inheritDemoPlayback(old)
 		game.g.weaponAttackDown, game.g.useButtonDown = old.weaponAttackDown, old.useButtonDown
 	}
-	if sg.levelCarryover != nil {
+	if !sg.applyCoopCarryover(game.g, old) && sg.levelCarryover != nil {
 		game.g.applyLevelCarryover(*sg.levelCarryover)
 		if continuing {
 			game.g.bringUpWeapon()

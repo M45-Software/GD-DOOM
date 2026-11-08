@@ -1,12 +1,17 @@
 package doomruntime
 
 import (
-	"fmt"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
 func (g *game) coopDemoActive() bool {
 	return g.opts.DemoScript != nil && g.opts.GameMode == gameModeCoop && len(g.opts.DemoScript.Frames) > 0
+}
+
+// Classic demo playback enables netgame rules from the second slot bit,
+// even when a sparse recording contains other active players.
+func (g *game) coopDemoNetgame() bool {
+	return g.coopDemoActive() && g.opts.DemoScript.Header.PlayerInGame[1]
 }
 
 // The recorded roster is present during map spawning, unlike late network
@@ -57,15 +62,10 @@ func (g *game) initCoopDemoPlayers() {
 func (g *game) advanceCoopDemoTic() error {
 	script := g.opts.DemoScript
 	if g.demoIntermissionActive || g.demoFinaleActive {
-		return fmt.Errorf("co-op demo campaign transitions are not yet supported")
+		return g.updateCoopDemoIntermission()
 	}
 	if g.demoTick >= len(script.Frames) || g.opts.DemoStopAfterTics > 0 && g.demoTick >= g.opts.DemoStopAfterTics {
-		if g.demoTrace != nil {
-			g.demoTrace.Close()
-			g.demoTrace = nil
-		}
-		g.reportDemoBench(script)
-		return ebiten.Termination
+		return g.finishCoopDemo()
 	}
 	frame := script.Frames[g.demoTick]
 	g.demoTick++
@@ -103,4 +103,13 @@ func (g *game) advanceCoopDemoTic() error {
 	g.writeDemoTraceTic(g.demoTick - 1)
 	g.demoTraceInitialWritten = true
 	return nil
+}
+
+func (g *game) finishCoopDemo() error {
+	if g.demoTrace != nil {
+		g.demoTrace.Close()
+		g.demoTrace = nil
+	}
+	g.reportDemoBench(g.opts.DemoScript)
+	return ebiten.Termination
 }

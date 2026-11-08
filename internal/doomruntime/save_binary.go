@@ -957,6 +957,11 @@ func (w saveBinaryWriter) saveFile(v saveFile) error {
 			return err
 		}
 	}
+	if version >= 41 {
+		if err := w.bytesWithLen(v.CoopCheckpoint); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -2058,6 +2063,19 @@ func (r saveBinaryReader) saveFile() (saveFile, error) {
 		}
 		if v.Game.StatusHasAttacker && (v.Game.StatusAttackerThing < -1 || v.Game.StatusAttackerThing >= len(v.Game.Things)) {
 			return v, fmt.Errorf("invalid saved death attacker")
+		}
+	}
+	if version >= 41 {
+		n, e := r.u32()
+		if e != nil {
+			return v, e
+		}
+		if n > maxCoopCheckpointBytes || uint64(n) > uint64(r.remaining()) {
+			return v, fmt.Errorf("invalid co-op checkpoint length")
+		}
+		v.CoopCheckpoint = make([]byte, int(n))
+		if err := r.read(v.CoopCheckpoint); err != nil {
+			return v, err
 		}
 	}
 	return v, nil

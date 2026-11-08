@@ -707,7 +707,7 @@ func ammoCaps(backpack bool) (bullets int, shells int, rockets int, cells int) {
 // Classic netgame keys and map-placed weapons remain for every player. Native
 // authority item/team-key rules are separate from recorded compatibility mode.
 func (g *game) coopDemoPersistentPickup(typ int16, dropped bool) (bool, bool) {
-	if !g.coopDemoActive() {
+	if !g.coopDemoNetgame() {
 		return false, false
 	}
 	switch typ {

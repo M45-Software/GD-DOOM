@@ -111,6 +111,9 @@ func (g *game) detachCoopCameraBody() int {
 		for len(g.boomTouchActors) <= idx+4 {
 			g.boomTouchActors = append(g.boomTouchActors, nil)
 		}
+		// Position setup linked the new thing once. Replace that link with the
+		// original camera nodes so crushers visit the retained body exactly once.
+		g.updateBoomActorTouch(idx, nil)
 		nodes := g.boomTouchActors[4-g.localSlot]
 		for _, node := range nodes {
 			node.actor = idx
