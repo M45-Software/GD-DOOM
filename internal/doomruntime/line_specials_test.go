@@ -49,6 +49,37 @@ func TestTeleportStompAssignsDeathTimersInMutableBlockOrder(t *testing.T) {
 	}
 }
 
+func TestTeleportStompBossBrainChangesBoomOverlapContext(t *testing.T) {
+	original := doomrand.Capture()
+	t.Cleanup(func() { doomrand.Restore(original) })
+	for _, boom := range []bool{false, true} {
+		t.Run(fmt.Sprint("boom=", boom), func(t *testing.T) {
+			g := &game{
+				m: &mapdata.Map{
+					Things:   []mapdata.Thing{{Type: 88, X: 32, Y: 32}, {Type: 2035, X: 32, Y: 32}},
+					Sectors:  []mapdata.Sector{{CeilingHeight: 128}},
+					BlockMap: &mapdata.BlockMap{Width: 1, Height: 1},
+				},
+				p:       player{x: -128 * fracUnit, ceilz: 128 * fracUnit},
+				thingHP: []int{250, 20}, thingCollected: []bool{false, false},
+				thingBlockOrder: []int64{2, 1}, boomMomentumDropoff: boom,
+			}
+			g.initPhysics()
+			g.ensureMonsterAIState()
+			g.rebuildThingBlockmap()
+			if !g.teleportStompDestinationThings(32*fracUnit, 32*fracUnit, playerRadius, -1, true, g.p.x, g.p.y) {
+				t.Fatal("brain teleport was rejected")
+			}
+			if !g.thingDead[0] || len(g.projectiles) != 65 {
+				t.Fatal("boss brain was not telefragged with its native death action")
+			}
+			if g.thingDead[1] == boom {
+				t.Fatalf("remaining barrel dead=%v; Boom should test the last brain rocket instead", g.thingDead[1])
+			}
+		})
+	}
+}
+
 func TestHeightClipBlockLinksExcludePlayerStartMarkers(t *testing.T) {
 	g := &game{
 		m: &mapdata.Map{

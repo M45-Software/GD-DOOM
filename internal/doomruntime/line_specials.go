@@ -1560,13 +1560,14 @@ func (g *game) teleportStompDestinationThings(x, y, radius int64, actorIdx int, 
 		}
 	}
 	blocked := false
+	stompX, stompY, stompRadius := x, y, radius
 	visitPlayer := func() {
 		self := isPlayer
 		if len(g.authorityPlayers) != 0 {
 			self = isPlayer && sourceSlot != 0 && g.localSlot == sourceSlot
 		}
 		if blocked || self || g.playerBodyDead() ||
-			!actorsOverlapXY(x, y, radius, g.p.x, g.p.y, playerRadius) {
+			!actorsOverlapXY(stompX, stompY, stompRadius, g.p.x, g.p.y, playerRadius) {
 			return
 		}
 		if !allowStomp {
@@ -1595,11 +1596,11 @@ func (g *game) teleportStompDestinationThings(x, y, radius int64, actorIdx int, 
 		if !thingTypeIsShootable(th.Type) {
 			return
 		}
-		if isMonster(th.Type) && i < len(g.thingHP) && g.thingHP[i] <= 0 {
+		if (isMonster(th.Type) || th.Type == 88) && i < len(g.thingHP) && g.thingHP[i] <= 0 {
 			return
 		}
 		tx, ty := g.thingPosFixed(i, th)
-		if !actorsOverlapXY(x, y, radius, tx, ty, g.thingCurrentRadius(i, th)) {
+		if !actorsOverlapXY(stompX, stompY, stompRadius, tx, ty, g.thingCurrentRadius(i, th)) {
 			return
 		}
 		if !allowStomp {
@@ -1607,6 +1608,16 @@ func (g *game) teleportStompDestinationThings(x, y, radius int64, actorIdx int, 
 			return
 		}
 		switch {
+		case th.Type == 88:
+			g.damageShootableThingFrom(i, 10000, isPlayer, actorIdx, inflictorX, inflictorY, true)
+			// Boom's P_CreateSecNodeList leaves tmthing/tmx/tmy set to
+			// the last rocket spawned by A_BrainScream. PIT_StompThing
+			// uses that rocket for subsequent overlap tests, while the
+			// outer P_TeleportMove retains its original block rectangle.
+			if g.boomMomentumDropoff && g.thingHP[i] <= 0 && len(g.projectiles) > 0 {
+				last := g.projectiles[len(g.projectiles)-1]
+				stompX, stompY, stompRadius = last.x, last.y, last.radius
+			}
 		case isPlayerBodyThingType(th.Type):
 			g.damageShootableThingFrom(i, 10000, isPlayer, actorIdx, inflictorX, inflictorY, true)
 		case isMonster(th.Type):
@@ -1616,7 +1627,6 @@ func (g *game) teleportStompDestinationThings(x, y, radius int64, actorIdx int, 
 			if i < len(g.thingTelefragTick) {
 				g.thingTelefragTick[i] = g.worldTic
 			}
-			g.setThingMomentum(i, 0, 0, 0)
 		case playerSlotFromThingType(th.Type) != 0:
 			g.damagePlayerFrom(10000, "Telefragged", inflictorX, inflictorY, true, actorIdx)
 		}

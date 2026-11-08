@@ -198,6 +198,7 @@ func (sg *sessionGame) startIntermission(next *mapdata.Map, nextName mapdata.Map
 		state.Next = 0
 	}
 	state.TerminalEpisode = sg.boomEpisodeEnd()
+	state.CoopDoFrags = sg.intermission.state.CoopDoFrags
 	initCoopIntermission(sg.g, &state)
 	state.Anims = newIntermissionAnims(lastEp, commercial, retail)
 	sg.intermission = sessionIntermission{state: state, nextMap: next}
@@ -569,7 +570,10 @@ func (sg *sessionGame) finishIntermission() {
 	sg.playMusicForMap(im.nextMap.Name)
 	sg.announceMapMusic(im.nextMap.Name)
 	ebiten.SetWindowTitle(runtimehost.WindowTitle(im.nextMap.Name))
-	sg.intermission = sessionIntermission{}
+	// WI_initNetgameStats adds the previous static dofrags flag before
+	// normalizing the next map's frag sum. Keep it through level loading.
+	doFrags := sg.intermission.state.CoopDoFrags
+	sg.intermission = sessionIntermission{state: intermissionState{CoopDoFrags: doFrags}}
 	sg.finale = sessionFinale{}
 }
 

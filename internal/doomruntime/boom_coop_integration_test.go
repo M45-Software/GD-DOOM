@@ -466,6 +466,9 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 }
 
 func coopProbeAttackerPosition(g *game) (int64, int64) {
+	if !g.statusHasAttacker {
+		return 0, 0
+	}
 	// GD_LiveAttacker in the reference observes only current live thinkers.
 	// Removed barrels can leave a dangling player->attacker pointer in Boom;
 	// its freed coordinates are deliberately outside this comparison profile.
@@ -487,7 +490,7 @@ func coopProbeAttackerPosition(g *game) (int64, int64) {
 }
 
 func TestBoomCoopProbeRemovedAttacker(t *testing.T) {
-	g := &game{statusAttackerThing: 0, statusAttackerX: 123, statusAttackerY: 456, thingCollected: []bool{false}}
+	g := &game{statusHasAttacker: true, statusAttackerThing: 0, statusAttackerX: 123, statusAttackerY: 456, thingCollected: []bool{false}}
 	if x, y := coopProbeAttackerPosition(g); x != 123 || y != 456 {
 		t.Fatalf("present attacker = %d,%d", x, y)
 	}
@@ -503,6 +506,10 @@ func TestBoomCoopProbeRemovedAttacker(t *testing.T) {
 	g.p.x, g.p.y = 789, 987
 	if x, y := coopProbeAttackerPosition(g); x != 789 || y != 987 {
 		t.Fatalf("self attacker = %d,%d", x, y)
+	}
+	g.statusHasAttacker = false
+	if x, y := coopProbeAttackerPosition(g); x != 0 || y != 0 {
+		t.Fatalf("absent attacker retained cached coordinates = %d,%d", x, y)
 	}
 }
 

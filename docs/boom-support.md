@@ -1904,6 +1904,55 @@ python3 scripts/verify_boom_community_coop_campaign.py \
   --out /tmp/gddoom-coop-prefix --through 190000
 ```
 
+## Generated community co-op campaign without gameplay patches
+
+`scripts/verify_boom_generated_coop_campaign.py` verifies a frozen, generated
+two-player NoMo fixture on Joshy’s unchanged **Surge MAP01–MAP17**. The release
+readme marks MAP18 incomplete, so it is excluded. The WAD has co-op starts and
+no DeHackEd lump. The movement source is kvothesixstring’s archived solo NoMo
+`srallo721.lmp` (7:21, 2022-10-09); this is **not an archived human co-op movie**.
+The JSON recipe in `scripts/fixtures/surge_coop_recipe.json` pins both archives,
+attributes that source, and records every copied command range and every
+authored input. Added legal inputs exercise pistol deaths and use-button
+rebirths for both players, park the partner away from solo paths, wait for
+natural death exits, and advance campaign screens. Verification rebuilds the
+same hash-pinned input offline, without an adaptive controller or state edits.
+Both console headers are generated views of those same two-player commands.
+
+Each view contains **17,190 commands**: **16,250 active frames**, **878
+intermission frames**, and **62 story-finale frames**. Coverage requires all 17
+maps and intermissions, MAP06/MAP11 stories, both players dying and rebirthing,
+and the MAP17 intermission ending. Each cold save/keyframe replay restores at
+**103 checkpoints** around map/phase and death/rebirth boundaries and within
+screens. The report requires all requested cases to finish; only both consoles
+in baseline/save/keyframe modes can report `full_suite: true`.
+The six-case matrix passes against DSDA with Freedoom 0.13.0: **97,500 active
+comparisons**, **103,140 campaign-command comparisons** and **412 cold restores**.
+The existing 18-case archived community co-op, 30-case co-op transition and
+36-case finale matrices also pass: **90 DSDA replay cases** in total.
+
+This campaign exposed living-player view recovery and reborn attack/use latches
+that must survive or reset at map loads respectively. It also covers boss-brain
+telefrags and Boom’s native `P_CreateSecNodeList` side effect: the final rocket
+from `A_BrainScream` changes subsequent stomp overlap tests while the outer
+teleport retains its original block rectangle. Telefragged barrels retain their
+damage thrust. Environmental explosions damage dolls without inventing an
+attacker, and their deaths count as environmental frags. Co-op intermissions
+retain the native static frag-display latch across maps, including cancellation
+by a negative frag sum and hiding that column when stats are accelerated.
+
+```sh
+python3 scripts/verify_boom_generated_coop_campaign.py \
+  --iwad /path/to/doom2.wad --reference /path/to/instrumented/dsda-doom \
+  --out /tmp/gddoom-generated-coop-campaign
+```
+
+This proves the generated NoMo route and canonical campaign state, not combat
+campaign parity or every route. It ends in MAP17 intermission; it does not add
+a cast finale. Custom text, pixels, audio, cosmetic RNG and decoration animation
+remain outside this comparison profile. Archived human co-op and full combat
+campaign coverage remain separate milestones.
+
 ## Remaining work
 
 The next milestones are:
@@ -1920,6 +1969,9 @@ The next milestones are:
    recordings: obtain a complete Boom multi-map co-op recording without gameplay
    patches, and cover more combat/death/exit combinations. A bounded Sunlust
    prefix is useful regression evidence but cannot replace that full recording.
+   Generated two-player coverage now traverses all 17 released Surge maps with
+   deaths/rebirths and cold campaign checkpoints, without gameplay patches;
+   it likewise does not replace an original human co-op combat recording.
    Generated normal/secret campaigns, episodic/MAP30 finales and full-roster
    checkpoints already have DSDA comparisons. Native authority save/rollback
    remains separate from client replication baselines.
@@ -1935,7 +1987,9 @@ not full combat RNG parity, every map route, or large-fight performance. The map
 audit detects unknown specials; it does not detect every unsupported interaction.
 
 These changes advance the multiplayer simulation ID to
-`gd-doom-authority-dev-31`. Deploy matching clients and servers. The corpse
+`gd-doom-authority-dev-32`. Deploy matching clients and servers. Boss-brain
+telefrag dispatch, retained barrel thrust and environmental doll damage change
+simulation behavior without adding saved fields. The corpse
 height-clipping, mover target, trigger, teleport, chase-target and damage-source
 corrections change simulation behavior without adding saved fields;
 save/keyframe versions remain 43/30. Door lighting

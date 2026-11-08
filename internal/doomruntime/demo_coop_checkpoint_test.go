@@ -158,12 +158,18 @@ func TestCoopCheckpointRejectsInvalidRosterWithoutMutation(t *testing.T) {
 func TestCoopCampaignCarriesEveryLivingPlayerAndRebirthsDeadPlayers(t *testing.T) {
 	old := coopPlaybackTestGame()
 	sg := &sessionGame{g: old}
-	old.withAuthoritativePlayer(old.authorityPlayers[0], func() { old.stats.Health = 47; old.stats.Shells = 17; old.inventory.BlueKey = true })
+	old.withAuthoritativePlayer(old.authorityPlayers[0], func() {
+		old.stats.Health = 47
+		old.stats.Shells = 17
+		old.inventory.BlueKey = true
+		old.p.deltaViewHeight = -5 * fracUnit / 8
+	})
 	old.withAuthoritativePlayer(old.authorityPlayers[1], func() {
 		old.stats.Health = 0
 		old.isDead = true
 		old.inventory.Weapons[2001] = true
 		old.stats.Shells = 99
+		old.p.deltaViewHeight = 4 * fracUnit
 	})
 	sg.captureCoopCarryover()
 	next := newGame(cloneMapForRestart(old.restartTemplate), old.opts)
@@ -176,6 +182,37 @@ func TestCoopCampaignCarriesEveryLivingPlayerAndRebirthsDeadPlayers(t *testing.T
 	}
 	if next.thingHP[0] != 47 {
 		t.Fatal("new doll did not inherit owner health")
+	}
+	if a.p.deltaViewHeight != -5*fracUnit/8 || b.p.deltaViewHeight != 0 {
+		t.Fatalf("view recovery alive=%d reborn=%d", a.p.deltaViewHeight, b.p.deltaViewHeight)
+	}
+	if !b.weaponAttackDown || !b.useButtonDown {
+		t.Fatal("reborn player did not suppress held attack/use")
+	}
+}
+
+func TestCoopIntermissionRetainsNativeFragDisplayLatch(t *testing.T) {
+	g := coopPlaybackTestGame()
+	g.demoCoopFrags[0][0] = 1 // one environment death, frag sum -1
+	state := intermissionState{CoopDoFrags: true}
+	initCoopIntermission(g, &state)
+	if state.CoopDoFrags {
+		t.Fatal("prior dofrags + current frag sum should cancel")
+	}
+	state.Accelerate = true
+	state, _ = updateCoopIntermissionStats(state)
+	if state.CoopShow[0][3] != 0 {
+		t.Fatal("accelerating revealed the hidden frag column")
+	}
+}
+
+func TestCoopDollEnvironmentalExplosionHasNoAttacker(t *testing.T) {
+	g := coopPlaybackTestGame()
+	i := dollsForSlot(g, 1)[0]
+	g.damageVoodooDoll(i, 100, -64*fracUnit, 0, 0, true, -1, false)
+	owner := g.authoritativePlayerForSlot(1)
+	if owner.statusHasAttacker || g.demoCoopFrags[0][0] != 1 {
+		t.Fatal("environmental doll death acquired an attacker or lost its suicide frag")
 	}
 }
 

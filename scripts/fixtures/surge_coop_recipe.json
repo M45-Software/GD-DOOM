@@ -1,0 +1,958 @@
+{
+  "schema": 1,
+  "scope": "Generated two-player NoMo coverage on unchanged Surge MAP01-MAP17; not an archived human co-op recording.",
+  "route_author": "kvothesixstring",
+  "route_archive": "/files/demos/surge/67733/srallo721.zip",
+  "route_archive_sha256": "09089318e6cc6195fb42e5402e7ef38d72026719fe257f1588b87bba3e3684ed",
+  "route_entry": "srallo721.lmp",
+  "wad_archive": "/files/wads/doom2/2733/surge.zip",
+  "wad_archive_sha256": "4f49d63682adbc299e9dce56877720704eaa8ec504ba3da370c05875b405ae22",
+  "wad_entry": "surge.wad",
+  "header": "ca1d426f6f6de600030101000001010001000100000100eabc638301000000000000000000000001010000000000000001000101000101000100010100000100010000000101010000000000000101000000000000000000000000000000000000000000000000000000000000",
+  "commands": 17190,
+  "console0_sha256": "44db12732886891da42298fa5cd25297e059af54bd8ab3b0202d6ebd51a74543",
+  "segments": [
+    {
+      "map": "MAP01",
+      "action": "lifecycle_0",
+      "input": "0000c60100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP01",
+      "action": "lifecycle_0",
+      "input": "0000000100000000",
+      "repeat": 144
+    },
+    {
+      "map": "MAP01",
+      "action": "lifecycle_1",
+      "input": "0000000000000002",
+      "repeat": 2
+    },
+    {
+      "map": "MAP01",
+      "action": "lifecycle_2",
+      "input": "0000000000004601",
+      "repeat": 1
+    },
+    {
+      "map": "MAP01",
+      "action": "lifecycle_2",
+      "input": "0000000000000001",
+      "repeat": 108
+    },
+    {
+      "map": "MAP01",
+      "action": "lifecycle_2",
+      "input": "000000000000ff01",
+      "repeat": 1
+    },
+    {
+      "map": "MAP01",
+      "action": "lifecycle_2",
+      "input": "0000000000000001",
+      "repeat": 11
+    },
+    {
+      "map": "MAP01",
+      "action": "lifecycle_2",
+      "input": "000000000000ff01",
+      "repeat": 1
+    },
+    {
+      "map": "MAP01",
+      "action": "lifecycle_2",
+      "input": "0000000000000001",
+      "repeat": 8
+    },
+    {
+      "map": "MAP01",
+      "action": "lifecycle_3",
+      "input": "0000000200000000",
+      "repeat": 2
+    },
+    {
+      "map": "MAP01",
+      "action": "lifecycle_4",
+      "input": "0000000000000000",
+      "repeat": 35
+    },
+    {
+      "map": "MAP01",
+      "action": "source_route",
+      "source_first": 1,
+      "source_last": 96
+    },
+    {
+      "map": "MAP01",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 10
+    },
+    {
+      "map": "MAP01",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP01",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP01",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP01",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 11
+    },
+    {
+      "map": "MAP02",
+      "action": "source_route",
+      "source_first": 139,
+      "source_last": 287
+    },
+    {
+      "map": "MAP02",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP02",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP02",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP02",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP02",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 11
+    },
+    {
+      "map": "MAP03",
+      "action": "source_route",
+      "source_first": 320,
+      "source_last": 1294
+    },
+    {
+      "map": "MAP03",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 13
+    },
+    {
+      "map": "MAP03",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP03",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP03",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP03",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 11
+    },
+    {
+      "map": "MAP04",
+      "action": "source_route",
+      "source_first": 1318,
+      "source_last": 2287
+    },
+    {
+      "map": "MAP04",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 18
+    },
+    {
+      "map": "MAP04",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP04",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP04",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP04",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 11
+    },
+    {
+      "map": "MAP05",
+      "action": "source_route",
+      "source_first": 2347,
+      "source_last": 3065
+    },
+    {
+      "map": "MAP05",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 9
+    },
+    {
+      "map": "MAP05",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP05",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP05",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP05",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 11
+    },
+    {
+      "map": "MAP06",
+      "action": "source_route",
+      "source_first": 3095,
+      "source_last": 3534
+    },
+    {
+      "map": "MAP06",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 8
+    },
+    {
+      "map": "MAP06",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP06",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP06",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP06",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP06",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP06",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP06",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP06",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP07",
+      "action": "source_route",
+      "source_first": 3610,
+      "source_last": 3813
+    },
+    {
+      "map": "MAP07",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 14
+    },
+    {
+      "map": "MAP07",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP07",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP07",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP07",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 11
+    },
+    {
+      "map": "MAP08",
+      "action": "source_route",
+      "source_first": 3880,
+      "source_last": 5598
+    },
+    {
+      "map": "MAP08",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 9
+    },
+    {
+      "map": "MAP08",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP08",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP08",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP08",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 11
+    },
+    {
+      "map": "MAP09",
+      "action": "source_route",
+      "source_first": 5644,
+      "source_last": 6523
+    },
+    {
+      "map": "MAP09",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 8
+    },
+    {
+      "map": "MAP09",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP09",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP09",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP09",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 11
+    },
+    {
+      "map": "MAP10",
+      "action": "park_partner",
+      "input": "0000000019008000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP10",
+      "action": "park_partner",
+      "input": "0000000019000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP10",
+      "action": "park_partner",
+      "input": "0000000000000000",
+      "repeat": 20
+    },
+    {
+      "map": "MAP10",
+      "action": "source_route",
+      "source_first": 6636,
+      "source_last": 8382
+    },
+    {
+      "map": "MAP10",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP10",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP10",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP10",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP10",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP10",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP10",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP10",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP10",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP10",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP10",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP10",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP10",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP10",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP10",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP10",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 6
+    },
+    {
+      "map": "MAP10",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP10",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP10",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP10",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 11
+    },
+    {
+      "map": "MAP11",
+      "action": "source_route",
+      "source_first": 8555,
+      "source_last": 9316
+    },
+    {
+      "map": "MAP11",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 6
+    },
+    {
+      "map": "MAP11",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP11",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP11",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP11",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP11",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP11",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP11",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP11",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP12",
+      "action": "source_route",
+      "source_first": 9437,
+      "source_last": 10311
+    },
+    {
+      "map": "MAP12",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 3
+    },
+    {
+      "map": "MAP12",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP12",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP12",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP12",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 11
+    },
+    {
+      "map": "MAP13",
+      "action": "source_route",
+      "source_first": 10358,
+      "source_last": 10733
+    },
+    {
+      "map": "MAP13",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 12
+    },
+    {
+      "map": "MAP13",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP13",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP13",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP13",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 11
+    },
+    {
+      "map": "MAP14",
+      "action": "park_partner",
+      "input": "000000001900c000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP14",
+      "action": "park_partner",
+      "input": "0000000019000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP14",
+      "action": "park_partner",
+      "input": "0000000000000000",
+      "repeat": 20
+    },
+    {
+      "map": "MAP14",
+      "action": "source_route",
+      "source_first": 10782,
+      "source_last": 12102
+    },
+    {
+      "map": "MAP14",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 7
+    },
+    {
+      "map": "MAP14",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP14",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP14",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP14",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 11
+    },
+    {
+      "map": "MAP15",
+      "action": "park_partner",
+      "input": "0000000019008000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP15",
+      "action": "park_partner",
+      "input": "0000000019000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP15",
+      "action": "park_partner",
+      "input": "0000000000000000",
+      "repeat": 20
+    },
+    {
+      "map": "MAP15",
+      "action": "source_route",
+      "source_first": 12210,
+      "source_last": 13951
+    },
+    {
+      "map": "MAP15",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP15",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP15",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP15",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP15",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP15",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP15",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP15",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP15",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP15",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP15",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP15",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP15",
+      "action": "finish_death_exit",
+      "input": "0000000000000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP15",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 13
+    },
+    {
+      "map": "MAP15",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP15",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP15",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP15",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 11
+    },
+    {
+      "map": "MAP16",
+      "action": "park_partner",
+      "input": "0000000019008000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP16",
+      "action": "park_partner",
+      "input": "0000000019000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP16",
+      "action": "park_partner",
+      "input": "0000000000000000",
+      "repeat": 20
+    },
+    {
+      "map": "MAP16",
+      "action": "source_route",
+      "source_first": 14131,
+      "source_last": 15016
+    },
+    {
+      "map": "MAP16",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 2
+    },
+    {
+      "map": "MAP16",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP16",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 19
+    },
+    {
+      "map": "MAP16",
+      "action": "screen",
+      "input": "0000000100000000",
+      "repeat": 1
+    },
+    {
+      "map": "MAP16",
+      "action": "screen",
+      "input": "0000000000000000",
+      "repeat": 11
+    },
+    {
+      "map": "MAP17",
+      "action": "source_route",
+      "source_first": 15105,
+      "source_last": 17002
+    },
+    {
+      "map": "MAP17",
+      "action": "final_intermission",
+      "input": "0000000000000000",
+      "repeat": 200
+    }
+  ]
+}

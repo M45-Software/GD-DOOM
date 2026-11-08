@@ -187,7 +187,7 @@ func (g *game) damageVoodooDoll(i, amount int, x, y, z int64, hasInflictor bool,
 		}
 		main, health, state, tics := g.p, g.playerMobjHealth, g.playerMobjState, g.playerMobjTics
 		previousSource := g.authorityDamageSource
-		if g.authorityRules != nil {
+		if g.authorityRules != nil || g.coopDemoActive() {
 			g.authorityDamageSource = 0
 			if g.authoritativeSourceIdentityValid(source) {
 				g.authorityDamageSource = source.Slot
@@ -198,7 +198,8 @@ func (g *game) damageVoodooDoll(i, amount int, x, y, z int64, hasInflictor bool,
 		pz, floor, ceil := g.thingSupportState(i, th)
 		g.p = player{x: px, y: py, z: pz, floorz: floor, ceilz: ceil, momx: g.thingMomX[i], momy: g.thingMomY[i], momz: g.thingMomZ[i], subsector: -1, sector: -1, viewHeight: playerViewHeight}
 		g.playerMobjHealth = g.thingHP[i]
-		g.damagePlayerBody(amount, "Ouch!", x, y, hasInflictor, sourceThing, z, i)
+		hasSource := sourceThing >= 0 || sourcePlayer || source.Slot != 0
+		g.damagePlayerBodyWithSource(amount, "Ouch!", x, y, hasInflictor, sourceThing, z, i, hasSource)
 		g.thingHP[i] = g.playerMobjHealth
 		g.setThingMomentum(i, g.p.momx, g.p.momy, g.p.momz)
 		g.thingDead[i] = g.thingHP[i] <= 0

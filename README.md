@@ -78,6 +78,10 @@ for the accepted names and toggle rules.
 Original Sunlust MAP01–10 NoMo and UV Speed TAS campaigns also have DSDA
 comparisons, including cold save/keyframe restores during intermissions and the
 MAP06 story finale. See the [campaign verification notes](docs/boom-support.md#real-community-campaign-recordings-and-screen-checkpoints).
+Generated two-player NoMo coverage also traverses all 17 released Surge maps
+against DSDA, including deaths, rebirths and cold campaign checkpoints.
+See the [generated co-op fixture notes](docs/boom-support.md#generated-community-co-op-campaign-without-gameplay-patches)
+for its source attribution and scope.
 
 Repeated columns and sprite rows share compact draw commands, and nearby
 sprites reuse horizontal visibility spans until clipping changes. These reduce

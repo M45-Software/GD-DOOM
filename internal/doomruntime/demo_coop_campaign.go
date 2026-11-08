@@ -1,7 +1,7 @@
 package doomruntime
 
-// Carry only inventory and shared health across a map load. Physical bodies,
-// pointers and per-map statistics belong to the old level, not the new roster.
+// Carry player state across a map load. Physical bodies, pointers and per-map
+// statistics belong to the old level, not the new roster.
 type coopLevelCarryover struct {
 	Slot   int
 	Player playerLevelCarryover
@@ -34,8 +34,17 @@ func (sg *sessionGame) applyCoopCarryover(next, old *game) bool {
 				next.applyLevelCarryover(carry.Player)
 			}
 			next.bringUpWeapon()
+			if carry.Reborn {
+				// G_PlayerReborn suppresses held attack/use on the new body.
+				next.weaponAttackDown, next.useButtonDown = true, true
+			}
 			if prior := old.authoritativePlayerForSlot(carry.Slot); prior != nil && !carry.Reborn {
 				next.weaponAttackDown, next.useButtonDown = prior.weaponAttackDown, prior.useButtonDown
+				// P_SpawnPlayer resets viewheight, but a living player's
+				// deltaviewheight survives G_DoLoadLevel. G_PlayerReborn
+				// clears it for a dead player. The old roster is also present
+				// after a cold intermission save/keyframe restore.
+				next.p.deltaViewHeight = prior.p.deltaViewHeight
 			}
 
 		})
@@ -105,6 +114,9 @@ func initCoopIntermission(g *game, state *intermissionState) {
 		state.CoopTarget[slot][3], state.CoopLimit[slot][3] = frags, frags
 	}
 	sum := 0
+	if state.CoopDoFrags {
+		sum = 1
+	}
 	for _, target := range state.CoopTarget {
 		sum += target[3]
 	}
@@ -116,6 +128,11 @@ func updateCoopIntermissionStats(state intermissionState) (intermissionState, []
 	if state.Accelerate && state.SPState != 10 {
 		state.Accelerate = false
 		state.CoopShow = state.CoopTarget
+		if !state.CoopDoFrags {
+			for slot := range state.CoopShow {
+				state.CoopShow[slot][3] = 0
+			}
+		}
 		state.SPState = 10
 		sounds = append(sounds, soundEventIntermissionDone)
 	}
