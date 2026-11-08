@@ -132,3 +132,56 @@ func TestBoomCommercialFinaleAccelerationAndTimeout(t *testing.T) {
 		t.Fatal("unaccelerated commercial text should wait for input")
 	}
 }
+
+func TestBoomEpisodeFinaleStaysOnArtAndDoesNotConsumeCastInput(t *testing.T) {
+	f, _ := StartFinale("E3M8", false)
+	f.Boom = true
+	f, _ = TickFinale(f, true)
+	if !f.Accelerated || f.Stage != FinaleStageText {
+		t.Fatal("first edge must reveal text")
+	}
+	f, _ = TickFinale(f, false)
+	f, _ = TickFinale(f, true)
+	if f.Stage != FinaleStagePicture || f.Tic != 0 {
+		t.Fatal("second edge must start art")
+	}
+	for range 1500 {
+		var done bool
+		f, done = TickFinale(f, true)
+		if done || !f.Active || f.Stage != FinaleStagePicture {
+			t.Fatal("Boom art returned to frontend")
+		}
+	}
+}
+
+func TestCastKeysAndFullRosterCycleDoNotRunWorldActions(t *testing.T) {
+	f, _ := StartCommercialFinale("MAP30", false)
+	f.Boom = true
+	f.Accelerated = true
+	f, _ = TickFinale(f, true)
+	first := f.Cast
+	for range 200 {
+		f, _ = TickFinale(f, true)
+	}
+	if f.Cast.Death || f.Cast.Actor != 0 {
+		t.Fatal("recorded fire/use killed cast actor")
+	}
+	if first.State == f.Cast.State && first.Tics == f.Cast.Tics && first.Frames == f.Cast.Frames {
+		t.Fatal("cast did not animate")
+	}
+	for actor := 0; actor < len(castActors); actor++ {
+		if f.Cast.Actor != actor {
+			t.Fatalf("actor=%d want %d", f.Cast.Actor, actor)
+		}
+		f.KillCast()
+		if !f.Cast.Death || f.Cast.Attacking {
+			t.Fatal("host key did not trigger death")
+		}
+		for ticks := 0; f.Cast.Actor == actor && ticks < 300; ticks++ {
+			f, _ = TickFinale(f, false)
+		}
+	}
+	if f.Cast.Actor != 0 || f.Cast.Death {
+		t.Fatal("cast did not wrap after the hero")
+	}
+}

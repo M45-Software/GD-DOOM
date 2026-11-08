@@ -302,10 +302,22 @@ func (g *game) runAuthoritativePlayersTic(players []*authoritativePlayerState, c
 	saved := g.captureAuthoritativePlayer()
 	g.applyAuthoritativePlayer(*roster[0])
 	g.platTickedThisTic = false
+	// Doom's onground is process-global. During teleport freeze P_MovePlayer
+	// leaves it unchanged, so the next player's P_CalcHeight observes the value
+	// left by the preceding thinker. The last roster entry already checkpoints
+	// the value left at the end of the previous command; no extra state is needed.
+	ground := roster[len(roster)-1].p.viewGroundState
+	if saved.localSlot == roster[len(roster)-1].localSlot {
+		ground = saved.p.viewGroundState
+	}
 	for _, p := range roster {
 		g.withAuthoritativePlayer(p, func() {
 			cmd, use, fire := demoTicCommand(commands[p.localSlot])
+			if g.coopDemoActive() {
+				g.p.viewGroundState = ground
+			}
 			g.runPlayerTic(cmd, use, fire)
+			ground = g.p.viewGroundState
 		})
 	}
 	g.platTickedThisTic = false

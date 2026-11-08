@@ -993,6 +993,9 @@ func (g *game) tickGenericMonsterStateWithAttackReacquire(i int, th mapdata.Thin
 			return
 		}
 	}
+	if g.retargetHiddenCoopPlayer(i, th.Type, tx, ty) {
+		return
+	}
 	g.thingMoveCount[i]--
 	if g.thingMoveCount[i] < 0 || !g.monsterMoveInDir(i, th.Type, g.thingMoveDir[i]) {
 		g.monsterPickNewChaseDir(i, th.Type, targetX, targetY)
@@ -2251,6 +2254,9 @@ func (g *game) runExactDoomMonsterChaseAction(i int, typ int16, tx, ty, targetX,
 		}
 		return
 	}
+	if g.retargetHiddenCoopPlayer(i, typ, tx, ty) {
+		return
+	}
 	if i < len(g.thingMoveCount) {
 		g.thingMoveCount[i]--
 		if g.thingMoveCount[i] < 0 || !g.monsterMoveInDir(i, typ, g.thingMoveDir[i]) {
@@ -2413,7 +2419,7 @@ func (g *game) tickMonsterMomentum(i int, th mapdata.Thing) {
 		// P_ZMovement. Vertical momentum therefore must not suppress the
 		// horizontal decay when this actor is currently on its floor.
 		if z <= floorZ && !g.corpseShouldSkipFriction(i, th, momx, momy) {
-			if momx > -stopSpeed && momx < stopSpeed && momy > -stopSpeed && momy < stopSpeed {
+			if momx > -stopSpeed && momx < stopSpeed && momy > -stopSpeed && momy < stopSpeed && !g.voodooOwnerMoving(th) {
 				momx = 0
 				momy = 0
 			} else {
@@ -2439,7 +2445,7 @@ func (g *game) tickMonsterMomentum(i int, th mapdata.Thing) {
 		}
 		return
 	}
-	if momx > -stopSpeed && momx < stopSpeed && momy > -stopSpeed && momy < stopSpeed {
+	if momx > -stopSpeed && momx < stopSpeed && momy > -stopSpeed && momy < stopSpeed && !g.voodooOwnerMoving(th) {
 		g.thingMomX[i] = 0
 		g.thingMomY[i] = 0
 		g.thingMomZ[i] = 0

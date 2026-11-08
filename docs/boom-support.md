@@ -1540,8 +1540,124 @@ sector-membership link, preserving crusher traversal through checkpoint loads.
 
 These are recorded co-op session checkpoints. Native authority save/rollback
 remains separate from client replication baselines and is not supplied by this
-attachment. Community campaign recordings, episodic/endgame presentation and
-multiplayer deathmatch still need broader comparison coverage.
+attachment. Community campaign recordings and multiplayer deathmatch still need broader
+comparison coverage; generated episodic/endgame verification is described below.
+
+## Episodic and endgame co-op finales
+
+Boom episode endings now show the final map's statistics, queue victory for the
+following command, and continue text/art using the whole recorded roster.
+Headless playback advances these screens too. Text supports Boom acceleration
+and natural timeout; episode art stays on screen instead of returning to the
+frontend. Episode three renders the PFUB1/PFUB2 bunny scroll and END0–END6 overlays.
+
+MAP30 renders BOSSBACK, the actor name and front-view sprite. Its cast ticker
+uses cast-only Doom state data: walking, alternating attacks, deaths, all 17
+actors, and wraparound. It never executes world actions or draws gameplay RNG.
+A real host key kills the current cast actor; recorded ticcmd fire/use only
+accelerates the story and never substitutes for that key event. Native and
+Ebiten hosts use the same finale layout and ticker. The host selects finale,
+cast and bunny music, and restores the appropriate track after checkpoint load;
+audio sample-position seeking and mixer-wide parity are not established.
+
+`verify_boom_coop_finale.py` compares **12 routes / 36 runs / 66,600 recorded
+commands** against DSDA 0.27.5, with **786 checkpoint restores**. It covers E1M8,
+E2M8, E3M8, E4M8 and MAP30 with two/four-player rosters, a natural episode-three
+text timeout, and an explicit cast-key experiment visiting all 17 actors. Each
+row compares screen phase, finale counter/stage, acceleration, cast actor/state/
+tics/frame count/attack/death flags, all players' inventory and button latches,
+and gameplay RNG (excluding cosmetic pr_misc). The optional key experiment
+feeds matched host keydowns through the real reference F_Responder; the observer
+otherwise only reads state after G_Ticker. Continuous, save and keyframe runs
+match. Evidence: `/tmp/gddoom-coop-finale-final/results.json`.
+
+```sh
+python3 scripts/verify_boom_coop_finale.py \
+  --iwad /path/to/doom2.wad \
+  --episode-iwad /path/to/doom.wad \
+  --reference /path/to/instrumented/dsda-doom \
+  --out /tmp/gddoom-coop-finale
+```
+
+Build the reference from pristine 0.27.5 with the current observer installer.
+`generate_finale_cast.py /path/to/dsda/src` reproducibly extracts the 338
+cast-reachable state definitions. Rendering verification exports ten cast/bunny
+scenes and checks identical pixels between native patch commands and Ebiten;
+these are not DSDA pixel or sound comparisons. Run with
+
+```sh
+GD_FINALE_RENDER_OUT=/tmp/gddoom-finale-render xvfb-run -a go test -tags integration \
+  ./internal/doomruntime -run '^TestFinaleRenderCPUAndNative$' -count=1
+```
+
+Save 42/keyframe 29 write co-op attachment version 2, including cast state and
+pending episode victory. Version-1 attachments remain readable outside the
+previously incomplete cast stage; missing cast actor state is rejected rather
+than inventing continuation. Unit checks verify cast-death continuation, no
+world RNG consumption, and malformed actor rejection without session mutation.
+The existing normal/secret co-op campaign matrix remains 30 passing runs,
+21,774 active frames and 520 restores. Native authority rollback, custom
+DeHackEd cast changes, broader community campaigns and full presentation parity
+remain follow-up work.
+
+## Community co-op recordings
+
+The unchanged Sunlust MAP31 **UV Pacifist co-op 0:14.37** and MAP32 **UV Max
+co-op 1:25.89** recordings by 4shockblast and GarrettChan now match DSDA 0.27.5.
+Both original console recordings are tested for each route: `sl31b014.lmp`,
+`sl31g014.lmp`, `sl32b125.lmp`, and `sl32g125.lmp`. The recordings and WAD archives
+are pinned by SHA-256; commands, map geometry and actor placement are unchanged.
+Sources: [MAP31 archive](https://dsdarchive.com/files/demos/sunlust/61512/sl31pc014.zip),
+[MAP32 archive](https://dsdarchive.com/files/demos/sunlust/92079/sl32mc125.zip).
+
+`verify_boom_community_coop.py` runs both routes and both console views
+continuously and through saves/keyframes: **12 runs / 21,054 matching active
+frames / 80 restores**. It compares complete player/body coordinates, momentum,
+health, weapons/ammo, attack/refire state, keys and attacker positions; combat
+actors, projectiles/effects and dolls in thinker order; pickup persistence;
+sector planes/lights; and gameplay RNG. Independent exit summaries also match
+per-player kills, items, secrets, health/armor/ammo and level totals. MAP32 kills
+all 105 counted monsters (88 credited to slot 1 and 17 to slot 2), using pistol,
+rockets and BFG. MAP31 verifies its cooperative boost and conveyor-scripted exit.
+Evidence: `/tmp/gddoom-community-coop-final/results.json` (combined reports from
+`/tmp/gddoom-community-coop-map31-final` and `/tmp/gddoom-community-coop-map32-final`).
+
+```sh
+python3 scripts/verify_boom_community_coop.py \
+  --iwad /path/to/doom2.wad \
+  --reference-source /path/to/pristine/dsda-doom-0.27.5 \
+  --out /tmp/gddoom-community-coop
+```
+
+The real recordings exposed and fixed:
+
+- Co-op A_Chase reacquisition after losing sight of a target when its retaliation
+  threshold expires. A successful search returns before movement and chase RNG.
+- Boom lowering lifts continuing through intermediate insufficient-headroom
+  checks, while preserving the final-destination obstruction check and vanilla
+  reversion behavior.
+- Slow doll momentum retaining friction decay when its owner starts moving,
+  independent of the selected console player's command.
+- Doom's shared `onground` value during co-op teleport freeze. The last roster
+  entry's already-saved view flag supplies the next command's value.
+- Classic non-player kill attribution to a live retained enemy's owner or the
+  first active slot. Kill attribution keeps lastenemy even with AI memory off.
+- Weapon pickups initializing an empty restored inventory rather than writing
+  to a nil map.
+
+These changes advance the simulation ID to `gd-doom-authority-dev-29`. The
+existing save 42/keyframe 29 layouts already contain the required state.
+Targeted tests cover the boundary behaviors; the 40-case generated co-op matrix
+and the complete single-player Sunlust MAP02 route with keyframes remain matched.
+
+This profile excludes static-decoration animation, cosmetic pr_misc, pixels,
+sound and custom story text. It audits the pinned Sunlust DeHackEd patch and
+rejects maps containing its altered Commander Keen before using `-nodeh` in the
+reference, which also excludes Freedoom's unrelated weapon-frame patch. The
+selected maps contain no Keen; active gameplay is unaffected by that exclusion.
+The Ancient Aliens candidate requires a separate audit of its custom actors and
+was not counted as verified. Community multi-map/endgame recordings, other map
+sets and additional co-op combat/death combinations remain follow-up coverage.
 
 ## Remaining work
 
@@ -1553,10 +1669,11 @@ The next milestones are:
    lifecycle and mover matrices as regressions. Death/rebirth checkpoints and
    generated normal/secret transitions now have DSDA comparisons; MAP02 covers
    a complete crusher/resurrection route with binary checkpoint continuation.
-2. Broaden recorded co-op campaigns to community recordings, episodic endings,
-   more combat and death/exit combinations. Generated normal/secret campaigns
-   and full-roster recorded-session checkpoints now have DSDA comparisons.
-   Native authority save/rollback remains separate from client replication baselines.
+2. Broaden community co-op coverage beyond the two verified Sunlust routes:
+   multi-map recordings, other map sets, and more combat/death/exit combinations.
+   Generated normal/secret campaigns, episodic/MAP30 finales and full-roster
+   checkpoints already have DSDA comparisons. Native authority save/rollback
+   remains separate from client replication baselines.
 3. Add custom weapon preferences, then broaden complex-map progression and
    large-fight performance coverage. GL nodes and mixer-wide sound parity
    remain separate follow-up work.
@@ -1569,12 +1686,13 @@ not full combat RNG parity, every map route, or large-fight performance. The map
 audit detects unknown specials; it does not detect every unsupported interaction.
 
 These changes advance the multiplayer simulation ID to
-`gd-doom-authority-dev-27`. Deploy matching clients and servers. Door lighting
+`gd-doom-authority-dev-29`. Deploy matching clients and servers. Door lighting
 adds the controlling line reference to owned and displaced door snapshots.
 Sector identities extend the sound-event schema. Explicit ceiling ownership
 and retained doors extend the mover schema; displaced ceilings remain in the
-ordered mover state. Save version 41 reads versions 38–40;
-keyframe version 28 reads versions 25–27. Save 41/keyframe 28 add the recorded
+ordered mover state. Save version 42 reads versions 39–41;
+keyframe version 29 reads versions 26–28. Save 42/keyframe 29 add cast and queued
+episode-victory state in attachment version 2. Save 41/keyframe 28 add the recorded
 co-op session attachment; older formats cannot reconstruct a complete recorded
 roster or campaign cursor. Save 40/keyframe 27 added the pending
 rebirth request and death-camera attacker. Previous formats default those to

@@ -9,6 +9,7 @@ import (
 
 	"gddoom/internal/demo"
 	"gddoom/internal/mapdata"
+	"gddoom/internal/sessionflow"
 )
 
 const maxCoopCheckpointBytes = 32 << 20
@@ -79,7 +80,7 @@ func (sg *sessionGame) captureCoopCheckpoint() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	c := coopCheckpoint{Version: 1, Demo: stream, Tick: g.demoTick, Replica: r,
+	c := coopCheckpoint{Version: 2, Demo: stream, Tick: g.demoTick, Replica: r,
 		Paused: g.demoPaused, IntermissionActive: g.demoIntermissionActive, Skip: g.demoIntermissionSkip,
 		FinaleActive: g.demoFinaleActive, FinaleCommercial: g.demoFinaleCommercial, WorldDone: g.demoWorldDone,
 		Prepared: g.coopTransitionPrepared, Exit: g.levelExitRequested, Secret: g.secretLevelExit,
@@ -120,8 +121,11 @@ func decodeCoopCheckpoint(data []byte) (*coopCheckpoint, error) {
 	if err := d.Decode(new(any)); err != io.EOF {
 		return nil, fmt.Errorf("trailing co-op checkpoint data")
 	}
-	if c.Version != 1 {
+	if c.Version < 1 || c.Version > 2 {
 		return nil, fmt.Errorf("unsupported co-op checkpoint version")
+	}
+	if c.Finale.Stage == 2 && !c.Finale.Cast.Valid() {
+		return nil, fmt.Errorf("checkpoint lacks a valid cast actor")
 	}
 	return c, nil
 }
@@ -174,6 +178,11 @@ func (c *coopCheckpoint) validate(g *game, file saveFile) error {
 	if (c.IntermissionActive || c.FinaleCommercial || c.WorldDone) && len(c.Carryover) != len(c.Replica.Players) {
 		return fmt.Errorf("campaign checkpoint missing player carryover")
 	}
+	if c.Intermission.TerminalEpisode {
+		if _, ok := sessionflow.StartFinale(file.Current, false); !ok || !g.boomMomentumDropoff || c.Secret {
+			return fmt.Errorf("invalid episode-victory checkpoint")
+		}
+	}
 	if len(c.Anims) > 64 || len(c.Carryover) > 4 || c.Intermission.Tic < 0 || c.Finale.Tic < 0 {
 		return fmt.Errorf("invalid campaign checkpoint")
 	}
@@ -190,7 +199,7 @@ func (c *coopCheckpoint) validate(g *game, file saveFile) error {
 			return fmt.Errorf("missing next map")
 		}
 	}
-	if (c.WorldDone || c.IntermissionActive || c.FinaleCommercial) && c.nextMap == nil {
+	if (c.WorldDone || c.IntermissionActive || c.FinaleCommercial) && c.nextMap == nil && !c.Intermission.TerminalEpisode {
 		return fmt.Errorf("campaign checkpoint missing next map")
 	}
 	for _, a := range c.Anims {

@@ -3,6 +3,7 @@ package doomruntime
 import (
 	"errors"
 	"fmt"
+	"gddoom/internal/sessionflow"
 	"os"
 	"path/filepath"
 	"strings"
@@ -33,7 +34,7 @@ func (c *NativeCampaign) tickDemo() error {
 	}
 	// G_DoWorldDone runs before reading the next recorded command, keeping both
 	// random streams, the continuous trace, command cursor and button latches.
-	if sg.g.demoWorldDone {
+	if sg.g.demoWorldDone && !sg.startQueuedEpisodeFinale() {
 		if err := c.finishLevel(); err != nil {
 			return err
 		}
@@ -56,10 +57,18 @@ func (c *NativeCampaign) tickDemo() error {
 			c.queueMusic("D_READ_M")
 		}
 	case NativeCampaignFinale:
-		if g.demoFinaleCommercial {
+		previous := sg.finale.Stage
+		if g.demoFinaleActive {
 			sg.tickFinale()
 		} else {
 			sg.tickFinaleAdvance(false)
+		}
+		if previous != sg.finale.Stage {
+			if sg.finale.Stage == sessionflow.FinaleStageCast {
+				c.queueMusic("D_EVIL")
+			} else if sg.finale.Stage == sessionflow.FinaleStagePicture && strings.HasPrefix(string(sg.current), "E3") {
+				c.queueMusic("D_BUNNY")
+			}
 		}
 	}
 	return nil

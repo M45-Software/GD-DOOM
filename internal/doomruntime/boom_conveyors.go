@@ -1,5 +1,7 @@
 package doomruntime
 
+import "gddoom/internal/mapdata"
+
 type boomScrollVector struct{ x, y int64 }
 type boomCarryThinker struct {
 	order  int64
@@ -244,6 +246,23 @@ func (g *game) playerOwnsVoodooBody() bool {
 		if voodooPlayerSlot(g.m.Things[i].Type) == g.localSlot && !g.thingCollected[i] {
 			return true
 		}
+	}
+	return false
+}
+
+// Boom 2.01/2.02 only stops a slow doll when its owner's command is neutral.
+// Later ports added an explicit doll-at-rest exception; classic Boom demos
+// retain the small residual momentum when that owner starts moving.
+func (g *game) voodooOwnerMoving(th mapdata.Thing) bool {
+	if !g.boomMomentumDropoff || !isVoodooDollType(th.Type) {
+		return false
+	}
+	slot := voodooPlayerSlot(th.Type)
+	if slot == g.localSlot {
+		return g.currentMoveCmd.forward != 0 || g.currentMoveCmd.side != 0
+	}
+	if owner := g.authoritativePlayerForSlot(slot); owner != nil {
+		return owner.currentMoveCmd.forward != 0 || owner.currentMoveCmd.side != 0
 	}
 	return false
 }

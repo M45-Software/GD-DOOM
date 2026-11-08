@@ -4309,7 +4309,8 @@ func buildIntermissionPatchBank(ts *doomtex.Set) map[string]media.WallTexture {
 	for _, n := range []string{
 		"WIF", "WIENTER", "WISPLAT", "WIURH0", "WIURH1",
 		"WIOSTK", "WIOSTI", "WIOSTS", "WITIME", "WIPAR", "WIPCNT",
-		"INTERPIC", "CREDIT", "VICTORY2", "ENDPIC", "HELP1", "HELP2",
+		"INTERPIC", "CREDIT", "VICTORY2", "ENDPIC", "HELP1", "HELP2", "BOSSBACK", "PFUB1", "PFUB2",
+		"END0", "END1", "END2", "END3", "END4", "END5", "END6",
 	} {
 		add(n)
 	}

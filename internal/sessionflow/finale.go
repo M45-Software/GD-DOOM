@@ -18,6 +18,7 @@ const (
 )
 
 type Finale struct {
+	Cast        Cast
 	Active      bool
 	Commercial  bool
 	Boom        bool
@@ -80,7 +81,12 @@ func TickFinale(state Finale, skipPressed bool) (Finale, bool) {
 	if !state.Active {
 		return state, false
 	}
-	if state.Commercial && state.Boom {
+	if state.Stage == FinaleStageCast {
+		state.Tic++
+		state.Cast = state.Cast.tick()
+		return state, false
+	}
+	if state.Boom {
 		state.Tic++
 		if state.Stage != FinaleStageText {
 			return state, false
@@ -91,9 +97,17 @@ func TickFinale(state Finale, skipPressed bool) (Finale, bool) {
 		}
 		// Boom's Get_TextSpeed consumes the first acceleration request.
 		// Another attack/use edge, or the accelerated text timeout, advances.
-		if state.Accelerated && ((wasAccelerated && skipPressed) || float32(state.Tic) > float32(len(state.Text))*0.01+1000) {
-			if state.MapName == "MAP30" {
+		speed, wait := float32(3), float32(250)
+		if state.Accelerated {
+			speed, wait = 0.01, 1000
+		}
+		if (!state.Commercial || state.Accelerated) && ((wasAccelerated && skipPressed) || float32(state.Tic) > float32(len(state.Text))*speed+wait) {
+			if !state.Commercial {
+				state.Stage = FinaleStagePicture
+				state.Tic = 0
+			} else if state.MapName == "MAP30" {
 				state.Stage = FinaleStageCast
+				state.Cast = startCast()
 			} else {
 				return state, true
 			}
@@ -106,6 +120,7 @@ func TickFinale(state Finale, skipPressed bool) (Finale, bool) {
 		if state.Tic > 50 && skipPressed {
 			if state.MapName == "MAP30" {
 				state.Stage = FinaleStageCast
+				state.Cast = startCast()
 			} else {
 				state.Tic++
 				return state, true

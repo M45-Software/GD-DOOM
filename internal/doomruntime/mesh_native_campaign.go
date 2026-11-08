@@ -5,6 +5,8 @@ import (
 	"gddoom/internal/mapdata"
 	"gddoom/internal/music"
 	"gddoom/internal/render/levelmesh"
+	"gddoom/internal/sessionflow"
+	"strings"
 )
 
 type NativeCampaignPhase uint8
@@ -66,22 +68,44 @@ func (c *NativeCampaign) TakeMusicRequest() string {
 // by the native host; the shared state machine enforces its input delay.
 func (c *NativeCampaign) tickCampaign(in NativeMeshInput, skip bool) error {
 	sg := c.session
+	if sg.startQueuedEpisodeFinale() {
+		c.queueMusic("D_VICTOR")
+	}
 	if sg.g.opts.DemoScript != nil {
+		if sg.finale.Stage == sessionflow.FinaleStageCast && skip {
+			sg.finale.KillCast()
+			sg.playFinaleCue(sg.finale.Cast.Cue)
+		}
 		return c.tickDemo()
 	}
 	switch c.Phase() {
 	case NativeCampaignComplete:
 		return nil
 	case NativeCampaignFinale:
+		if sg.finale.Stage == sessionflow.FinaleStageCast && skip {
+			sg.finale.KillCast()
+			sg.playFinaleCue(sg.finale.Cast.Cue)
+		}
+		previous := sg.finale.Stage
 		if sg.tickFinaleAdvance(skip) {
 			if sg.finale.Commercial {
 				return c.finishLevel()
 			}
 			c.complete = true
 		}
+		if sg.finale.Stage == sessionflow.FinaleStageCast && previous != sg.finale.Stage {
+			c.queueMusic("D_EVIL")
+		}
+		if sg.finale.Stage == sessionflow.FinaleStagePicture && previous != sg.finale.Stage && strings.HasPrefix(string(sg.current), "E3") {
+			c.queueMusic("D_BUNNY")
+		}
 		return nil
 	case NativeCampaignIntermission:
 		if sg.tickIntermissionAdvance(skip) {
+			if sg.intermission.state.TerminalEpisode {
+				sg.g.demoWorldDone = true
+				return nil
+			}
 			if sg.startCommercialFinale() {
 				c.queueMusic("D_READ_M")
 				return nil
@@ -99,6 +123,11 @@ func (c *NativeCampaign) tickCampaign(in NativeMeshInput, skip bool) error {
 
 func (c *NativeCampaign) startLevelExit() error {
 	sg := c.session
+	if sg.boomEpisodeEnd() {
+		sg.startIntermission(nil, sg.current, false)
+		c.queueMusic("D_INTER")
+		return nil
+	}
 	if sg.startEpisodeFinale(sg.current, sg.g.secretLevelExit) {
 		sg.freezeDemoRecord()
 		c.queueMusic("D_VICTOR")

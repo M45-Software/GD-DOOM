@@ -4,6 +4,7 @@ package doomruntime
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"os"
 	"strconv"
@@ -29,7 +30,11 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	m, err := mapdata.LoadMap(wf, mapdata.MapName(fmt.Sprintf("MAP%02d", script.Header.Map)))
+	mapName := os.Getenv("GD_COOP_MAP")
+	if mapName == "" {
+		mapName = fmt.Sprintf("MAP%02d", script.Header.Map)
+	}
+	m, err := mapdata.LoadMap(wf, mapdata.MapName(mapName))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -63,6 +68,18 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 			checkpoints[n] = true
 		}
 	}
+	finaleMode := os.Getenv("GD_COOP_FINALE") != ""
+	castKeys := map[int]bool{}
+	for _, v := range strings.Split(os.Getenv("GD_COOP_CAST_KEYS"), ",") {
+		if v != "" {
+			n, err := strconv.Atoi(v)
+			if err != nil {
+				t.Fatal(err)
+			}
+			castKeys[n] = true
+		}
+	}
+	summaryWritten := false
 	restored := 0
 	f, err := os.Create(path)
 	if err != nil {
@@ -74,7 +91,11 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 	if campaign {
 		fmt.Fprint(out, "demotic,map,")
 	}
-	fmt.Fprintln(out, "tic,players,bodies,items,sectors,playindex,seeds")
+	if finaleMode {
+		fmt.Fprintln(out, "phase,count,stage,accelerated,castnum,caststate,casttics,castframes,melee,attacking,death,players,playindex,seeds")
+	} else {
+		fmt.Fprintln(out, "tic,players,bodies,items,sectors,playindex,seeds")
+	}
 	for tic := range script.Frames {
 		oldMap, oldWorld := g.m.Name, g.worldTic
 		if campaign {
@@ -92,6 +113,33 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 			}
 		} else if err := g.advanceDemoTic(); err != nil {
 			t.Fatal(err)
+		}
+		if !summaryWritten && g.levelExitRequested && os.Getenv("GD_COOP_SUMMARY") != "" {
+			summary := struct {
+				Completed    bool             `json:"completed"`
+				Map          string           `json:"map"`
+				Leveltime    int              `json:"leveltime"`
+				TotalKills   int              `json:"total_kills"`
+				TotalItems   int              `json:"total_items"`
+				TotalSecrets int              `json:"total_secrets"`
+				Players      []map[string]int `json:"players"`
+			}{Completed: true, Map: string(g.m.Name), Leveltime: g.worldTic, TotalKills: g.levelKillsTotal, TotalItems: g.levelItemsTotal, TotalSecrets: g.secretsTotal}
+			for _, p := range g.authorityPlayers {
+				g.withAuthoritativePlayer(p, func() {
+					summary.Players = append(summary.Players, map[string]int{"slot": g.localSlot, "health": g.stats.Health, "armor": g.stats.Armor, "bullets": g.stats.Bullets, "shells": g.stats.Shells, "cells": g.stats.Cells, "rockets": g.stats.Rockets, "kills": g.playerKillCount, "items": g.playerItemCount, "secrets": g.secretsFound})
+				})
+			}
+			data, err := json.Marshal(summary)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := os.WriteFile(os.Getenv("GD_COOP_SUMMARY"), data, 0600); err != nil {
+				t.Fatal(err)
+			}
+			summaryWritten = true
+		}
+		if castKeys[tic+1] {
+			sg.finale.KillCast()
 		}
 		if checkpoints[tic] {
 			var data []byte
@@ -114,6 +162,19 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 			}
 			g = sg.g
 			restored++
+		}
+		if finaleMode {
+			phase := 0
+			if g.m.Name == oldMap && g.worldTic == oldWorld {
+				if sg.finale.Active {
+					phase = 2
+				} else if sg.intermission.state.Active {
+					phase = 1
+				}
+			}
+			fmt.Fprintf(out, "%d,%s,%d,", tic+1, g.m.Name, phase)
+			writeCoopFinaleFields(out, sg, phase)
+			continue
 		}
 		if campaign && g.m.Name == oldMap && g.worldTic == oldWorld {
 			continue
@@ -155,7 +216,7 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 		}
 		fmt.Fprint(out, ",")
 		for _, m := range g.demoTraceMobjs() {
-			if m.Player != 0 || m.Flags&1 != 0 {
+			if m.Player != 0 || m.Flags&1 != 0 || os.Getenv("GD_COOP_COMBAT_ONLY") != "" && (m.Type > 42 || m.Type == 41) {
 				continue
 			}
 			owner := m.ownerSlot
@@ -189,4 +250,48 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 	if restored != len(checkpoints) {
 		t.Fatal("not all checkpoints restored")
 	}
+}
+
+func writeCoopFinaleFields(out *bufio.Writer, sg *sessionGame, phase int) {
+	g := sg.g
+	f := sg.finale
+	if phase == 2 {
+		fmt.Fprintf(out, "%d,%d,%d,", f.Tic, f.Stage, boolToInt(f.Accelerated))
+		if f.Stage == 2 {
+			c := f.Cast
+			fmt.Fprintf(out, "%d,%d,%d,%d,%d,%d,%d,", c.Actor, c.State, c.Tics, c.Frames, c.OnMelee, boolToInt(c.Attacking), boolToInt(c.Death))
+		} else {
+			fmt.Fprint(out, "0,0,0,0,0,0,0,")
+		}
+	} else {
+		fmt.Fprint(out, "0,0,0,0,0,0,0,0,0,0,")
+	}
+	for _, p := range g.authorityPlayers {
+		g.withAuthoritativePlayer(p, func() {
+			pending := 10
+			if g.inventory.PendingWeapon != 0 {
+				pending = demoTraceWeaponID(g.inventory.PendingWeapon)
+			}
+			cards := 0
+			for i, on := range g.inventory.cardKeys() {
+				if on {
+					cards |= 1 << i
+				}
+			}
+			for i, on := range g.inventory.SkullKeys {
+				if on {
+					cards |= 1 << (i + 3)
+				}
+			}
+			fmt.Fprintf(out, "%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d;", g.localSlot, g.stats.Health, g.stats.Armor, g.stats.Bullets, g.stats.Shells, g.stats.Cells, g.stats.Rockets, demoTraceWeaponID(g.inventory.ReadyWeapon), pending, boolToInt(g.weaponAttackDown), boolToInt(g.useButtonDown), cards)
+		})
+	}
+	rng := doomrand.Capture()
+	fmt.Fprintf(out, ",%d,", rng.PlayIndex)
+	for cls, seed := range rng.Seeds {
+		if doomrand.Class(cls) != doomrand.Misc {
+			fmt.Fprintf(out, "%d;", seed)
+		}
+	}
+	fmt.Fprintln(out)
 }

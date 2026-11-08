@@ -790,7 +790,7 @@ experiment verifies damage/rebirth semantics; complete classic netdemo timing
 and RNG parity remain unverified. See [Boom co-op doll verification](boom-support.md#co-op-voodoo-dolls)
 for commands and limits. World saves/keyframes retain doll state but do not
 checkpoint the full authority roster. Matching clients and servers must use
-simulation ID `gd-doom-authority-dev-27`.
+simulation ID `gd-doom-authority-dev-29`.
 
 ## Classic co-op demo playback
 
@@ -810,3 +810,20 @@ DSDA. Save 41/keyframe 28 embed the recording, roster, retained references and
 campaign state. These checkpoints do not implement native server rollback;
 multiplayer deathmatch recordings remain rejected.
 These checks do not establish universal classic netdemo or presentation parity.
+
+
+Recorded episode endings and MAP30 now have 12 generated routes compared on
+all 66,600 command frames across continuous/save/keyframe runs, including 786
+restores. Episode statistics precede queued victory; text, art and the 17-actor
+cast continue with the whole roster. Save 42/keyframe 29 preserve cast state in
+co-op attachment version 2. Cast key events remain host input, distinct from
+recorded ticcmd attack/use. See [episodic/endgame verification](boom-support.md#episodic-and-endgame-co-op-finales).
+
+
+Two real Sunlust co-op routes (MAP31 Pacifist and MAP32 UV Max) now match DSDA
+from both original console recordings, continuously and across checkpoints:
+12 runs, 21,054 active frames and 80 restores, with independent per-player exit
+totals. They establish lost-sight retargeting, owner-command doll friction,
+shared teleport-freeze ground state and non-player kill credit. Save 42/keyframe
+29 already preserve the required fields. See [community co-op verification](boom-support.md#community-co-op-recordings)
+for the pinned recordings, patch audit and comparison limits.

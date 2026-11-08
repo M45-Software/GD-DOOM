@@ -56,7 +56,8 @@ func (g *game) boomEnemyAlive(ref int) bool {
 	return ref > 0 && i < len(g.thingHP) && g.thingHP[i] > 0
 }
 func (g *game) rememberBoomEnemy(i int) {
-	if !g.boomRememberEnabled() {
+	// Co-op kill attribution consults lastenemy even when AI memory is off.
+	if !g.boomRememberEnabled() && !g.coopDemoNetgame() {
 		return
 	}
 	if len(g.boomLastEnemy) != len(g.m.Things) {

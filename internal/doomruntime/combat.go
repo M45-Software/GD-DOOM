@@ -1511,8 +1511,12 @@ func (g *game) damageMonsterFromWithInflictorZ(thingIdx int, damage int, sourceP
 	if g.thingHP[thingIdx] <= 0 {
 		// P_KillMobj credits every counted death in single-player, including
 		// infighting and another death after resurrection or respawn.
-		if thingCountsKill(thingType) && (sourcePlayer || normalizeGameMode(g.opts.GameMode) == gameModeSingle) {
-			g.playerKillCount++
+		if thingCountsKill(thingType) {
+			if sourcePlayer || normalizeGameMode(g.opts.GameMode) == gameModeSingle {
+				g.playerKillCount++
+			} else if g.coopDemoNetgame() {
+				g.creditCoopUnownedKill(thingIdx)
+			}
 		}
 		xdeath := g.thingHP[thingIdx] < -monsterSpawnHealth(thingType) && monsterHasXDeath(thingType)
 		// P_KillMobj clears MF_SKULLFLY along with MF_FLOAT.

@@ -336,3 +336,20 @@ func TestSuppressTouchUntilReleaseClearsLatchedAndHeldState(t *testing.T) {
 		t.Fatalf("game touch state=(held=%v just=%v) want cleared", sg.g.input.touchHeldActions, sg.g.input.touchJustPressedActions)
 	}
 }
+
+func TestCoopDemoCastAcceptsHostKeysSeparatelyFromRecordedCommands(t *testing.T) {
+	g := coopPlaybackTestGame()
+	g.demoTick = 1
+	g.demoFinaleActive = true
+	g.demoFinaleCommercial = true
+	f, _ := sessionflow.StartCommercialFinale("MAP30", false)
+	f.Boom = true
+	f.Accelerated = true
+	f, _ = sessionflow.TickFinale(f, true)
+	sg := &sessionGame{g: g, opts: g.opts, finale: f}
+	sg.input.justPressedKeys = map[ebiten.Key]int{ebiten.KeySpace: 1}
+	sg.tickFinale()
+	if !sg.finale.Cast.Death || sg.finale.Cast.Actor != 0 || g.demoWorldDone {
+		t.Fatal("host key did not enter cast death without loading a map")
+	}
+}

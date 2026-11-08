@@ -25,10 +25,10 @@ import (
 )
 
 const (
-	saveGameVersion     = 41
+	saveGameVersion     = 42
 	saveGamePrefix      = "dsg"
 	saveGameQuickPrefix = "quicksave"
-	keyframeVersion     = 28
+	keyframeVersion     = 29
 	saveGameDirName     = "saves"
 )
 
@@ -1285,8 +1285,12 @@ func (sg *sessionGame) applyLoadedSnapshot(file saveFile, warning string) error 
 	if checkpoint != nil {
 		checkpoint.restoreSession(sg)
 	}
-	sg.playMusicForMap(sg.current)
-	sg.announceMapMusic(sg.current)
+	if checkpoint != nil && (sg.finale.Active || sg.intermission.state.Active) {
+		sg.resumeFinaleCheckpointMusic()
+	} else {
+		sg.playMusicForMap(sg.current)
+		sg.announceMapMusic(sg.current)
+	}
 	ebiten.SetWindowTitle(runtimehost.WindowTitle(sg.current))
 	msg := "GAME LOADED"
 	if strings.TrimSpace(warning) != "" {

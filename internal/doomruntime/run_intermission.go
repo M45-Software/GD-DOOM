@@ -75,6 +75,7 @@ type intermissionStats struct {
 }
 
 type intermissionState struct {
+	TerminalEpisode                 bool
 	Coop                            bool
 	CoopSlots                       [4]bool
 	CoopShow, CoopTarget, CoopLimit [4][4]int
@@ -196,6 +197,7 @@ func (sg *sessionGame) startIntermission(next *mapdata.Map, nextName mapdata.Map
 	if !nextOK {
 		state.Next = 0
 	}
+	state.TerminalEpisode = sg.boomEpisodeEnd()
 	initCoopIntermission(sg.g, &state)
 	state.Anims = newIntermissionAnims(lastEp, commercial, retail)
 	sg.intermission = sessionIntermission{state: state, nextMap: next}
@@ -253,6 +255,9 @@ func tickVanillaIntermission(state intermissionState, skipPressed bool) (intermi
 			state, sounds = updateCoopIntermissionStats(state)
 		} else {
 			state, sounds = updateIntermissionStats(state)
+		}
+		if state.TerminalEpisode && state.Screen == intermissionScreenShowNextLoc {
+			return state, sounds, true
 		}
 	case intermissionScreenShowNextLoc:
 		state.PointerOn = (state.Cnt & 31) < 20
@@ -465,6 +470,8 @@ func (sg *sessionGame) startEpisodeFinale(current mapdata.MapName, secret bool) 
 		}
 	}
 	sg.levelCarryover = nil
+	sg.coopCarryover = nil
+	state.Boom = sg.g != nil && sg.g.boomMomentumDropoff
 	if sg.g != nil {
 		sg.g.demoFinaleActive = sg.g.opts.DemoScript != nil
 		sg.g.demoIntermissionActive = false
@@ -484,6 +491,7 @@ func (sg *sessionGame) startCommercialFinale() bool {
 	sg.intermission.state.Active = false
 	state.Boom = sg.g != nil && sg.g.boomMomentumDropoff
 	sg.finale = state
+	sg.playFinaleMusicLump("D_READ_M")
 	if sg.g != nil {
 		sg.g.demoFinaleActive = sg.g.opts.DemoScript != nil
 		sg.g.demoFinaleCommercial = sg.g.demoFinaleActive
@@ -493,7 +501,7 @@ func (sg *sessionGame) startCommercialFinale() bool {
 }
 
 func (sg *sessionGame) tickFinale() bool {
-	if sg.g != nil && sg.g.demoFinaleCommercial {
+	if sg.g != nil && sg.g.opts.DemoScript != nil && sg.g.demoFinaleActive {
 		g := sg.g
 		buttons := byte(0)
 		if script := g.opts.DemoScript; script != nil && g.demoTick > 0 && g.demoTick <= len(script.Tics) {
@@ -504,19 +512,33 @@ func (sg *sessionGame) tickFinale() bool {
 			skip = g.demoIntermissionSkip
 			g.demoIntermissionSkip = false
 		}
+		if sg.finale.Stage == sessionflow.FinaleStageCast && sg.anyIntermissionSkipInput() {
+			sg.finale.KillCast()
+			sg.playFinaleCue(sg.finale.Cast.Cue)
+		}
 		g.demoWorldDone = sg.tickFinaleAdvance(skip)
 		g.writeDemoTraceTic(g.demoTick - 1)
 		return false
 	}
-	return sg.tickFinaleAdvance(sg.anyIntermissionSkipInput())
+	skip := sg.anyIntermissionSkipInput()
+	if sg.finale.Stage == sessionflow.FinaleStageCast && skip {
+		sg.finale.KillCast()
+		sg.playFinaleCue(sg.finale.Cast.Cue)
+	}
+	return sg.tickFinaleAdvance(skip)
 }
 
 func (sg *sessionGame) tickFinaleAdvance(skipPressed bool) bool {
 	if !sg.finale.Active {
 		return false
 	}
+	previous := sg.finale.Stage
 	state, done := sessionflow.TickFinale(sg.finale, skipPressed)
 	sg.finale = state
+	sg.finaleEnteredStage(previous)
+	if state.Stage == sessionflow.FinaleStageCast {
+		sg.playFinaleCue(state.Cast.Cue)
+	}
 	return done
 }
 
@@ -726,12 +748,9 @@ func (sg *sessionGame) drawFinaleContents(screen *ebiten.Image, scale, ox, oy fl
 		sg.drawFinaleFlatBackdrop(screen, f.Flat, scale, ox, oy)
 		sg.drawFinaleTextBlock(screen, f.VisibleText(), scale, ox, oy)
 	case sessionflow.FinaleStagePicture:
-		if strings.TrimSpace(f.Screen) != "" {
-			_ = sg.drawIntermissionPatch(screen, f.Screen, 0, 0, scale, ox, oy, false)
-		}
-		if (f.Tic/16)&1 == 0 {
-			sg.drawIntermissionText(screen, "PRESS ANY KEY OR CLICK TO CONTINUE", 160, 186, scale, ox, oy, true)
-		}
+		sg.drawEpisodeFinalePicture(screen, scale, ox, oy)
+	case sessionflow.FinaleStageCast:
+		sg.drawCastFinale(screen, scale, ox, oy)
 	}
 }
 

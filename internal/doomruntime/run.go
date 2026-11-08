@@ -232,7 +232,7 @@ func (sg *sessionGame) Update() error {
 		}
 		return ebiten.Termination
 	}
-	if sg.g != nil && sg.g.demoWorldDone {
+	if sg.g != nil && sg.g.demoWorldDone && !sg.startQueuedEpisodeFinale() {
 		sg.finishIntermission()
 	}
 	sg.releaseStartupMusicIfReady()
@@ -257,7 +257,7 @@ func (sg *sessionGame) Update() error {
 			// Explicit demo playback owns its lifetime until the end marker.
 			// Keep consuming its commands instead of starting an attract demo
 			// that would reopen and overwrite the requested replay's trace.
-			if sg.g != nil && sg.g.demoFinaleCommercial {
+			if sg.g != nil && sg.g.demoFinaleActive {
 				return sg.tickFinale()
 			}
 			if sg.headlessDemoPlayback() {
@@ -566,6 +566,10 @@ func (sg *sessionGame) handleGameplayTermination() error {
 	sig := sg.rt.sessionSignals()
 	if !sig.LevelExit {
 		return runtimehost.ErrTerminate
+	}
+	if sg.boomEpisodeEnd() {
+		sg.startIntermission(nil, sg.current, sig.SecretLevelExit)
+		return nil
 	}
 	if sg.startEpisodeFinale(sg.current, sig.SecretLevelExit) {
 		sg.freezeDemoRecord()

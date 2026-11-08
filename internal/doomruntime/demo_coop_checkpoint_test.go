@@ -231,3 +231,71 @@ func TestCoopCheckpointCampaignScreens(t *testing.T) {
 		})
 	}
 }
+
+func TestCoopCheckpointCastDeathRestoresWithoutRunningWorldActions(t *testing.T) {
+	g := coopPlaybackTestGame()
+	g.m.Name = "MAP30"
+	g.restartTemplate.Name = "MAP30"
+	template := cloneMapForRestart(g.restartTemplate)
+	opts := g.opts
+	opts.NewGameLoader = func(name string) (*mapdata.Map, error) {
+		m := cloneMapForRestart(template)
+		m.Name = mapdata.MapName(name)
+		return m, nil
+	}
+	g.opts = opts
+	sg := &sessionGame{g: g, rt: g, opts: opts, current: g.m.Name}
+	next, _ := opts.NewGameLoader("MAP31")
+	sg.startIntermission(next, "MAP31", false)
+	if !sg.startCommercialFinale() {
+		t.Fatal("no MAP30 finale")
+	}
+	sg.tickFinaleAdvance(true)
+	sg.tickFinaleAdvance(true)
+	sg.finale.KillCast()
+	for range 12 {
+		sg.tickFinaleAdvance(false)
+	}
+	if !sg.finale.Cast.Death || sg.finale.Stage != 2 {
+		t.Fatal("fixture did not reach cast death")
+	}
+	data, err := sg.marshalSaveGame("cast")
+	if err != nil {
+		t.Fatal(err)
+	}
+	rng := doomrand.Capture()
+	opts.DemoScript = nil
+	loaded := &sessionGame{opts: opts}
+	if err := loaded.unmarshalSaveGame(data); err != nil {
+		t.Fatal(err)
+	}
+	again, err := loaded.marshalSaveGame("cast")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(data) != string(again) || !reflect.DeepEqual(rng, doomrand.Capture()) {
+		t.Fatal("cast restore changed owned state or RNG")
+	}
+	for range 100 {
+		sg.tickFinaleAdvance(false)
+		loaded.tickFinaleAdvance(false)
+	}
+	if sg.finale != loaded.finale || !reflect.DeepEqual(rng, doomrand.Capture()) {
+		t.Fatal("cast continuation diverged or consumed world RNG")
+	}
+	file, err := decodeSnapshot(data, saveGameMagic)
+	if err != nil {
+		t.Fatal(err)
+	}
+	c, err := decodeCoopCheckpoint(file.CoopCheckpoint)
+	if err != nil {
+		t.Fatal(err)
+	}
+	c.Finale.Cast.State = 999999
+	file.CoopCheckpoint, _ = json.Marshal(c)
+	bad, _ := encodeSnapshot(saveGameMagic, file)
+	old := loaded.g
+	if err := loaded.unmarshalSaveGame(bad); err == nil || loaded.g != old || !reflect.DeepEqual(rng, doomrand.Capture()) {
+		t.Fatal("invalid cast checkpoint was accepted or mutated session")
+	}
+}

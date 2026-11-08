@@ -2026,7 +2026,7 @@ func (g *game) tickPlat(sec int, pt *platThinker) {
 			}
 			return
 		}
-		if g.setSectorFloorHeightWithCrush(sec, next, false) {
+		if g.setSectorFloorHeightWithCrush(sec, next, false) && !g.boomMomentumDropoff {
 			g.setSectorFloorHeight(sec, cur)
 		}
 	case platStatusWaiting:
