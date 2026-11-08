@@ -9,7 +9,7 @@ require (
 	github.com/coder/websocket v1.8.15
 	github.com/dustin/go-humanize v1.1.0
 	github.com/gen2brain/raylib-go/raylib v0.60.1
-	github.com/hajimehoshi/ebiten/v2 v2.10.4
+	github.com/hajimehoshi/ebiten/v2 v2.10.6
 	github.com/klauspost/compress v1.20.3
 	github.com/quic-go/quic-go v0.62.0
 	github.com/quic-go/webtransport-go v0.13.0
@@ -41,7 +41,7 @@ require (
 	github.com/ebitengine/gomobile v0.0.0-20260820040257-d11f821a26a6 // indirect
 	github.com/ebitengine/hideconsole v1.0.0 // indirect
 	github.com/ebitengine/oto/v3 v3.5.0 // indirect
-	github.com/ebitengine/purego v0.11.0 // indirect
+	github.com/ebitengine/purego v0.11.3 // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	golang.org/x/sync v0.23.0 // indirect
 )
