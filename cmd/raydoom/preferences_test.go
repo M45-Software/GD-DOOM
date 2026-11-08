@@ -53,6 +53,7 @@ func nativePreferenceFlags(path string) *flag.FlagSet {
 	fs.Bool("mouse-invert", false, "")
 	fs.Bool("always-run", runtimecfg.DefaultAlwaysRun, "")
 	fs.Bool("auto-weapon-switch", true, "")
+	fs.String("weapon-preferences", "", "")
 	fs.Bool("fullscreen", false, "")
 	fs.Bool("debug", false, "")
 	fs.Bool("msaa", true, "")
@@ -65,7 +66,7 @@ func nativePreferenceFlags(path string) *flag.FlagSet {
 }
 func TestNativePreferencesRoundTripPreservesMainAndOverrides(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "config.toml")
-	original := []byte("map=\"E1M3\"\nskill=4\nmusic_volume=0.4\nmouselook=true\nalways_run=true\ndetail_level_faithful=2\nmusic_backend=\"impsynth\"\nsoundfont=\"custom.sf2\"\n[raylib]\nwidth=640\nheight=400\nfps=0\nmsaa=false\ntexture_filter=\"nearest\"\nlighting=\"fullbright\"\n[keybinds]\nfire=[\"MB2\",\"LCTRL\"]\n")
+	original := []byte("weapon_preferences=\"shotgun,fist\"\nmap=\"E1M3\"\nskill=4\nmusic_volume=0.4\nmouselook=true\nalways_run=true\ndetail_level_faithful=2\nmusic_backend=\"impsynth\"\nsoundfont=\"custom.sf2\"\n[raylib]\nwidth=640\nheight=400\nfps=0\nmsaa=false\ntexture_filter=\"nearest\"\nlighting=\"fullbright\"\n[keybinds]\nfire=[\"MB2\",\"LCTRL\"]\n")
 	if err := os.WriteFile(path, original, 0644); err != nil {
 		t.Fatal(err)
 	}
@@ -76,6 +77,9 @@ func TestNativePreferencesRoundTripPreservesMainAndOverrides(t *testing.T) {
 	cfg, err := applyNativeConfig(fs)
 	if err != nil {
 		t.Fatal(err)
+	}
+	if got := fs.Lookup("weapon-preferences").Value.String(); got != "shotgun,fist" {
+		t.Fatalf("preferences=%q", got)
 	}
 	for name, want := range map[string]string{"music-backend": "pcspeaker", "soundfont": "custom.sf2", "map": "", "skill": "4", "width": "640", "fps": "120", "mouselook": "false", "msaa": "false", "music-volume": "0.9", "always-run": "true", "texture-filter": "nearest"} {
 		if got := fs.Lookup(name).Value.String(); got != want {
@@ -95,6 +99,9 @@ func TestNativePreferencesRoundTripPreservesMainAndOverrides(t *testing.T) {
 	loaded, err := configfile.Read(path)
 	if err != nil {
 		t.Fatal(err)
+	}
+	if loaded.WeaponPreferences == nil || *loaded.WeaponPreferences != "shotgun,fist" {
+		t.Fatal("native save lost weapon preferences")
 	}
 	if *loaded.MusicBackend != "meltysynth" || *loaded.SoundFont != "changed.sf2" || *loaded.MUSPanMax != .6 || *loaded.PCSpeakerVolume != .3 || *loaded.PCSpeakerVariant != "small-buzzer" || *loaded.DetailLevelFaithful != 2 || *loaded.Map != "E1M3" {
 		t.Fatal("native save destroyed unrelated main settings")

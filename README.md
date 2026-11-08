@@ -69,6 +69,13 @@ game-speed controls, including in multiplayer.
 **Source Port** mode adds high-resolution output, interpolated camera, monster
 and weapon motion, full-color rendering, and optional CRT effects.
 
+For BOOM maps, `-weapon-preferences=shotgun,fist,bfg` changes local weapon
+priorities. The same setting can be saved as
+`weapon_preferences = "shotgun,fist,bfg"` in `config.toml`. Omitted weapons
+follow the default order; `fist` ranks the berserk fist. See
+[BOOM weapon behavior](docs/boom-support.md#ammo-exhaustion-and-weapon-timing-verification)
+for the accepted names and toggle rules.
+
 Repeated columns and sprite rows share compact draw commands, and nearby
 sprites reuse horizontal visibility spans until clipping changes. These reduce
 CPU raster preparation and the geometry sent to the GPU, including the work

@@ -72,7 +72,7 @@ func applyNativeConfig(fs *flag.FlagSet) (*configfile.Config, error) {
 		invert = cfg.MouseInvertHorizontal
 	}
 	for _, err := range []error{
-		str("wad", cfg.Wad), str("demo", cfg.Demo), str("record-demo", cfg.RecordDemo), integer("skill", cfg.Skill), number("sfx-volume", cfg.SFXVolume), number("music-volume", cfg.MusicVolume),
+		str("weapon-preferences", cfg.WeaponPreferences), str("wad", cfg.Wad), str("demo", cfg.Demo), str("record-demo", cfg.RecordDemo), integer("skill", cfg.Skill), number("sfx-volume", cfg.SFXVolume), number("music-volume", cfg.MusicVolume),
 		str("music-backend", cfg.MusicBackend), str("soundfont", cfg.SoundFont), number("mus-pan-max", cfg.MUSPanMax), boolean("pc-speaker", cfg.PCSpeaker), number("pc-speaker-volume", cfg.PCSpeakerVolume), str("pc-speaker-variant", cfg.PCSpeakerVariant),
 		number("mouse-speed", cfg.MouseLookSpeed), number("keyboard-speed", cfg.KeyboardTurnSpeed), boolean("mouselook", cfg.MouseLook),
 		boolean("smooth-camera-yaw", cfg.SmoothCameraYaw),

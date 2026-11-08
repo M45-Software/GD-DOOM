@@ -190,7 +190,7 @@ func contentRenderConfig(o runtimecfg.Options) renderBuildConfig {
 		musicVolume: o.MusicVolume, musPanMax: o.MUSPanMax, musVolumeCompression: o.MUSVolumeCompression, oplVolume: o.OPLVolume,
 		audioPreEmphasis: o.AudioPreEmphasis, musicBackend: o.MusicBackend, soundFontPath: o.MusicSoundFontPath,
 		sfxVolume: o.SFXVolume, pcSpeakerVolume: o.PCSpeakerVolume, sfxPitchShift: o.SFXPitchShift,
-		fastMonsters: o.FastMonsters, alwaysRun: o.AlwaysRun, autoWeaponSwitch: o.AutoWeaponSwitch, cheatLevel: o.CheatLevel, invuln: o.Invulnerable,
+		fastMonsters: o.FastMonsters, alwaysRun: o.AlwaysRun, autoWeaponSwitch: o.AutoWeaponSwitch, weaponPreferences: o.WeaponPreferences, cheatLevel: o.CheatLevel, invuln: o.Invulnerable,
 		sourcePortMode: o.SourcePortMode, sourcePortThingRenderMode: o.SourcePortThingRenderMode, sourcePortThingBlendFrames: o.SourcePortThingBlendFrames,
 		sourcePortSectorLighting: o.SourcePortSectorLighting, doomLighting: !o.DisableDoomLighting, kageShader: o.KageShader, crtEffect: o.CRTEffect,
 		wallOcclusion: !o.DisableWallOcclusion, wallSpanReject: !o.DisableWallSpanReject, wallSpanClip: !o.DisableWallSpanClip, wallSliceOcclusion: !o.DisableWallSliceOcclusion,

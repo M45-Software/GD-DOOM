@@ -11,6 +11,7 @@ import (
 )
 
 type Config struct {
+	WeaponPreferences          *string                           `toml:"weapon_preferences"`
 	Wad                        *string                           `toml:"wad"`
 	Map                        *string                           `toml:"map"`
 	Render                     *bool                             `toml:"render"`

@@ -9,6 +9,7 @@ import (
 	"gddoom/internal/demo"
 	"gddoom/internal/doomrand"
 	"gddoom/internal/mapdata"
+	"gddoom/internal/runtimecfg"
 	"gddoom/internal/wad"
 	"os"
 	"testing"
@@ -68,6 +69,8 @@ func TestBoomWeaponsCapture(t *testing.T) {
 		Name                                                                                           string
 		Boom, Automatic, Ready, Owned, Bullets, Shells, Cells, Rockets, Pattern, Slot, Tics, Insurance int
 		Seed                                                                                           uint32
+		Preferences                                                                                    runtimecfg.WeaponPreferences
+		Strength                                                                                       int
 	}
 	if err = json.Unmarshal(data, &cases); err != nil {
 		t.Fatal(err)
@@ -95,7 +98,7 @@ func TestBoomWeaponsCapture(t *testing.T) {
 			settings := demo.GameOptions{Seed: c.Seed, Insurance: c.Insurance != 0, NoMonsters: true, MonstersRemember: true, VariableFriction: true, AllowPushers: true, PlayerBobbing: true}
 			h.BoomOptions = settings.Bytes()
 		}
-		g := newGame(m, Options{Headless: true, DemoScript: &DemoScript{Header: h}})
+		g := newGame(m, Options{Headless: true, WeaponPreferences: c.Preferences, DemoScript: &DemoScript{Header: h}})
 
 		for id := 0; id < 9; id++ {
 			w := commandWeapon(id + 1)
@@ -116,6 +119,8 @@ func TestBoomWeaponsCapture(t *testing.T) {
 				g.inventory.Weapons[2005] = c.Owned&(1<<id) != 0
 			}
 		}
+		g.inventory.Strength = c.Strength != 0
+		g.inventory.StrengthCount = c.Strength
 		g.stats.Bullets = c.Bullets
 		g.stats.Shells = c.Shells
 		g.stats.Cells = c.Cells
@@ -137,6 +142,9 @@ func TestBoomWeaponsCapture(t *testing.T) {
 			}
 			if c.Automatic != 0 && c.Boom != 0 {
 				g.demoWeaponSlot = 0
+				if (c.Pattern == 4 || c.Pattern == 5) && (tic == 40 || tic == 100 || tic == 160) {
+					g.demoWeaponSlot = c.Slot + 1
+				}
 				tc := g.buildOutgoingDemoTic(moveCmd{}, false, fire)
 				if tc.Buttons&demoButtonChange != 0 {
 					buttons = tc.Buttons

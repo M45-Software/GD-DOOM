@@ -49,6 +49,7 @@ func run() (runErr error) {
 	mouseLook := flag.Bool("mouselook", true, "enable horizontal mouse aiming")
 	mouseInvert := flag.Bool("mouse-invert", false, "reverse horizontal mouse aiming")
 	alwaysRun := flag.Bool("always-run", runtimecfg.DefaultAlwaysRun, "run by default (run modifier walks)")
+	weaponPreferenceText := flag.String("weapon-preferences", "", "Boom weapon priority (comma-separated names, highest first)")
 	autoWeaponSwitch := flag.Bool("auto-weapon-switch", true, "switch to collected weapons")
 	fullscreen := flag.Bool("fullscreen", false, "start fullscreen")
 	noVsync := flag.Bool("no-vsync", false, "disable vsync and default draw cap (an explicit or saved -fps still applies)")
@@ -102,6 +103,10 @@ func run() (runErr error) {
 	cfg, err := applyNativeConfig(flag.CommandLine)
 	if err != nil {
 		return err
+	}
+	weaponPreferences, err := runtimecfg.ParseWeaponPreferences(*weaponPreferenceText)
+	if err != nil {
+		return fmt.Errorf("weapon-preferences: %w", err)
 	}
 	broadcast, watch, err := nativeNetworkFlags(flag.CommandLine)
 	if err != nil {
@@ -221,6 +226,7 @@ func run() (runErr error) {
 	opts.RecordDemoPath = strings.TrimSpace(*recordDemoPath)
 	opts.InputBindings = bindings
 	opts.AlwaysRun, opts.AutoWeaponSwitch = *alwaysRun, *autoWeaponSwitch
+	opts.WeaponPreferences = weaponPreferences
 	opts.MouseLook, opts.MouseInvert, opts.MouseLookSpeed, opts.KeyboardTurnSpeed = *mouseLook, *mouseInvert, *mouseSpeed, *keyboardSpeed
 	opts.SmoothCameraYaw = *smoothCameraYaw
 	opts.DisableCameraBob, opts.DisableWeaponBob = *disableCameraBob, *disableWeaponBob

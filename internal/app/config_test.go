@@ -957,3 +957,39 @@ func TestMainConfigUpdatesPreserveRaylibPreferences(t *testing.T) {
 		t.Fatal("main preference writes destroyed native renderer settings")
 	}
 }
+
+func TestWeaponPreferenceConfigValidationAndPreservation(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "config.toml")
+	if err := os.WriteFile(path, []byte("weapon_preferences = \"shotgun,fist\"\nrender = false\n"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := saveRuntimeSettings(path, doomsession.RuntimeSettings{}, false); err != nil {
+		t.Fatal(err)
+	}
+	cfg, err := loadConfig(path, true)
+	if err != nil || cfg.WeaponPreferences == nil || *cfg.WeaponPreferences != "shotgun,fist" {
+		t.Fatalf("saved priorities: %v, %v", cfg, err)
+	}
+	var out, errb bytes.Buffer
+	// A valid config reaches WAD loading; a malformed priority is rejected first.
+	args := []string{"-config", path, "-wad", "missing-test.wad"}
+	_ = RunParse(append(args, "-weapon-preferences=invalid"), &out, &errb)
+	if !strings.Contains(errb.String(), "weapon-preferences: unknown weapon") {
+		t.Fatalf("stderr=%q", errb.String())
+	}
+	out.Reset()
+	errb.Reset()
+	if err := os.WriteFile(path, []byte("weapon_preferences = \"invalid\"\n"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	code := RunParse(args, &out, &errb)
+	if code != 2 || !strings.Contains(errb.String(), "weapon-preferences: unknown weapon") {
+		t.Fatalf("code=%d stderr=%q", code, errb.String())
+	}
+	out.Reset()
+	errb.Reset()
+	code = RunParse(append(args, "-weapon-preferences=shotgun,fist"), &out, &errb)
+	if strings.Contains(errb.String(), "weapon-preferences:") {
+		t.Fatalf("valid CLI override rejected: code=%d stderr=%q", code, errb.String())
+	}
+}

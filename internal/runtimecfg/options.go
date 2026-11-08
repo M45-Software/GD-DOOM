@@ -301,6 +301,7 @@ type Options struct {
 	PlayAsMonster                bool // Local possession sandbox; excluded from demos and network games.
 	AlwaysRun                    bool
 	AutoWeaponSwitch             bool
+	WeaponPreferences            WeaponPreferences
 	CheatLevel                   int
 	Invulnerable                 bool
 	SourcePortMode               bool

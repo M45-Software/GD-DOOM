@@ -403,6 +403,7 @@ func RunParse(args []string, stdout io.Writer, stderr io.Writer) int {
 	defaultNoMonsters := false
 	defaultAlwaysRun := runtimecfg.DefaultAlwaysRun
 	defaultAutoWeaponSwitch := true
+	defaultWeaponPreferences := ""
 	defaultCheatLevel := 0
 	defaultInvuln := false
 	defaultSourcePortMode := false
@@ -530,6 +531,9 @@ func RunParse(args []string, stdout io.Writer, stderr io.Writer) int {
 		if cfg.AlwaysRun != nil {
 			defaultAlwaysRun = *cfg.AlwaysRun
 		}
+		if cfg.WeaponPreferences != nil {
+			defaultWeaponPreferences = *cfg.WeaponPreferences
+		}
 		if cfg.AutoWeaponSwitch != nil {
 			defaultAutoWeaponSwitch = *cfg.AutoWeaponSwitch
 		}
@@ -636,6 +640,7 @@ func RunParse(args []string, stdout io.Writer, stderr io.Writer) int {
 	pcSpeakerOutput := fs.String("pc-speaker-output", defaultPCSpeakerOutput, "pc speaker output backend (emulated|linux)")
 	pcSpeakerInterleaveHz := fs.Float64("pc-speaker-interleave-hz", 280.0, "PC speaker SFX/music interleave rate in Hz when both streams are active (10..1000; default 140 matches one Doom tic)")
 	alwaysRun := fs.Bool("always-run", defaultAlwaysRun, "start with always-run enabled (Shift inverts while held)")
+	weaponPreferenceText := fs.String("weapon-preferences", defaultWeaponPreferences, "Boom weapon priority, highest first (comma-separated names; omitted weapons retain default order)")
 	autoWeaponSwitch := fs.Bool("auto-weapon-switch", defaultAutoWeaponSwitch, "auto-switch to newly picked weapons")
 	cheatLevel := fs.Int("cheat-level", defaultCheatLevel, "startup cheats (0=off, 1=automap, 2=idfa-like, 3=idkfa+invuln)")
 	invuln := fs.Bool("invuln", defaultInvuln, "start with invulnerability (iddqd-like)")
@@ -687,6 +692,11 @@ func RunParse(args []string, stdout io.Writer, stderr io.Writer) int {
 			return 0
 		}
 		fmt.Fprintf(stderr, "flag error: %v\n", err)
+		return 2
+	}
+	weaponPreferences, preferenceErr := runtimecfg.ParseWeaponPreferences(*weaponPreferenceText)
+	if preferenceErr != nil {
+		fmt.Fprintf(stderr, "weapon-preferences: %v\n", preferenceErr)
 		return 2
 	}
 	mapExplicit := flagProvided(normalizedArgs, "map") && strings.TrimSpace(*mapName) != ""
@@ -973,6 +983,7 @@ func RunParse(args []string, stdout io.Writer, stderr io.Writer) int {
 			fastMonsters:               defaultFastMonsters,
 			alwaysRun:                  *alwaysRun,
 			autoWeaponSwitch:           *autoWeaponSwitch,
+			weaponPreferences:          weaponPreferences,
 			cheatLevel:                 resolvedCheatLevel,
 			invuln:                     resolvedInvuln,
 			sourcePortMode:             *sourcePortMode,
@@ -1336,6 +1347,7 @@ func RunParse(args []string, stdout io.Writer, stderr io.Writer) int {
 			FastMonsters:               defaultFastMonsters,
 			AlwaysRun:                  *alwaysRun,
 			AutoWeaponSwitch:           *autoWeaponSwitch,
+			WeaponPreferences:          weaponPreferences,
 			CheatLevel:                 resolvedCheatLevel,
 			Invulnerable:               resolvedInvuln,
 			SourcePortMode:             *sourcePortMode,
@@ -1718,6 +1730,7 @@ func RunParse(args []string, stdout io.Writer, stderr io.Writer) int {
 			fastMonsters:               defaultFastMonsters,
 			alwaysRun:                  *alwaysRun,
 			autoWeaponSwitch:           *autoWeaponSwitch,
+			weaponPreferences:          weaponPreferences,
 			cheatLevel:                 resolvedCheatLevel,
 			invuln:                     resolvedInvuln,
 			sourcePortMode:             *sourcePortMode,
@@ -1949,6 +1962,7 @@ type renderBuildConfig struct {
 	fastMonsters               bool
 	alwaysRun                  bool
 	autoWeaponSwitch           bool
+	weaponPreferences          runtimecfg.WeaponPreferences
 	cheatLevel                 int
 	invuln                     bool
 	sourcePortMode             bool
@@ -2295,6 +2309,7 @@ func buildRenderBundle(resolvedWADPath string, cfg renderBuildConfig, stderr io.
 		FastMonsters:               cfg.fastMonsters,
 		AlwaysRun:                  cfg.alwaysRun,
 		AutoWeaponSwitch:           cfg.autoWeaponSwitch,
+		WeaponPreferences:          cfg.weaponPreferences,
 		CheatLevel:                 cfg.cheatLevel,
 		Invulnerable:               cfg.invuln,
 		SourcePortMode:             cfg.sourcePortMode,

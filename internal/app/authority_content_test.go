@@ -225,7 +225,8 @@ func TestPrepareAuthorityContentRebuildsAssetsAndCallbacksAcrossReloads(t *testi
 		MouseLook: true, MouseInvert: true, MouseLookSpeed: 1.75, KeyboardTurnSpeed: 1.25,
 		MusicBackend: music.BackendImpSynth, MusicVolume: .3, SFXVolume: .7, MUSVolumeCompression: 1,
 		AlwaysRun: true, AutoWeaponSwitch: true, NoVsync: true, SmoothCameraYaw: true,
-		VoiceCodec: "g726", VoiceG726BitsPerSample: 4, VoiceGateEnabled: true, VoiceGateThreshold: .125,
+		WeaponPreferences: runtimecfg.WeaponPreferences{3, 1, 7, 9, 6, 5, 4, 2, 8},
+		VoiceCodec:        "g726", VoiceG726BitsPerSample: 4, VoiceGateEnabled: true, VoiceGateThreshold: .125,
 		InputBindings:         runtimecfg.DefaultInputBindings(),
 		AuthorityJoinDefaults: runtimecfg.AuthorityJoinRequest{Name: "Doomer"},
 		AuthorityServers:      []runtimecfg.AuthorityServerEntry{{Address: "favorite:6666", Label: "Favorite"}},
@@ -271,7 +272,7 @@ func TestPrepareAuthorityContentRebuildsAssetsAndCallbacksAcrossReloads(t *testi
 		if opts.AuthorityContentCleanup == nil || opts.AuthorityJoin == nil || opts.AuthorityPrepareRoom == nil || !slices.Equal(opts.AuthorityWADHashes, pack.WADHashes) || string(bundle.Map.Name) != room.Manifest.Map {
 			t.Fatal("replacement content lacks ownership, identity, callbacks, or current room map")
 		}
-		if opts.InputBindings != current.InputBindings || opts.MouseLookSpeed != current.MouseLookSpeed || opts.MouseInvert != current.MouseInvert || opts.KeyboardTurnSpeed != current.KeyboardTurnSpeed || opts.InitialDetailLevel != current.InitialDetailLevel || opts.AutoDetail != current.AutoDetail || opts.MusicVolume != current.MusicVolume || opts.SFXVolume != current.SFXVolume || !opts.AlwaysRun || !opts.SmoothCameraYaw || opts.VoiceGateThreshold != current.VoiceGateThreshold || !reflect.DeepEqual(opts.AuthorityServers, current.AuthorityServers) {
+		if opts.WeaponPreferences != current.WeaponPreferences || opts.InputBindings != current.InputBindings || opts.MouseLookSpeed != current.MouseLookSpeed || opts.MouseInvert != current.MouseInvert || opts.KeyboardTurnSpeed != current.KeyboardTurnSpeed || opts.InitialDetailLevel != current.InitialDetailLevel || opts.AutoDetail != current.AutoDetail || opts.MusicVolume != current.MusicVolume || opts.SFXVolume != current.SFXVolume || !opts.AlwaysRun || !opts.SmoothCameraYaw || opts.VoiceGateThreshold != current.VoiceGateThreshold || !reflect.DeepEqual(opts.AuthorityServers, current.AuthorityServers) {
 			t.Fatal("replacement reset live controls, display, audio, voice, or saved servers")
 		}
 		opts.OnRuntimeSettingsChanged(gameplay.RuntimeSettings{})

@@ -972,7 +972,7 @@ It remains individually selectable as `--case diagnostic_ammo_exhaustion`.
 Boom moved automatic fallback selection from `P_CheckAmmo` into input command
 construction. An empty Boom weapon therefore waits for an actual change command
 when replaying a demo or receiving multiplayer input. Local input selects the
-default preferred usable fallback and records that choice. Vanilla demo playback
+preferred usable fallback and records that choice. Vanilla demo playback
 retains its original immediate fallback behavior. A failed ammo check returns
 before starting an attack; switching does not clear held-attack/refire flags
 outside their normal psprite actions. Rocket/BFG weapons therefore still require
@@ -983,11 +983,34 @@ identities. Numeric key toggles are resolved while sampling local input. The
 network validator accepts the nine valid weapon codes and rejects undefined
 codes or weapon bits without a change command. Boom fallback accepts exactly two
 SSG shells or 40 BFG cells; old Doom fallback retains its three-shell/41-cell
-thresholds. Custom weapon preference ordering is outside this slice.
+thresholds.
 
-The new DSDA matrix matches **622,080/622,080 frames across 2,592 cases**. It
-covers all nine weapons, twelve ownership/ammo profiles, initially empty and
-last-shot states, held attack, release, repress, and explicit mid-attack changes.
+Custom priorities are available in both desktop hosts through
+`-weapon-preferences=shotgun,fist,bfg`, or the shared TOML setting:
+
+```toml
+weapon_preferences = "shotgun,fist,bfg"
+```
+
+Names are `fist,pistol,shotgun,chaingun,rocket,plasma,bfg,chainsaw,ssg`, ordered
+from most to least preferred. Omitted weapons follow in the default Boom order
+(`plasma,ssg,chaingun,shotgun,pistol,chainsaw,rocket,bfg,fist`). An empty value
+restores that default. Unknown or repeated names are rejected. `fist` ranks the
+berserk fist; without berserk, the ordinary fist remains the last fallback.
+The fist/chainsaw and shotgun/SSG keys follow Boom's preference-aware toggles.
+
+Preferences belong to local input: they survive content/map changes and a
+received checkpoint retains the receiving player's priorities. They are not
+serialized as authoritative state or used to reinterpret recorded/network
+commands. Vanilla simulation still uses its original default fallback. This
+input-only addition does not change save/keyframe versions or the simulation ID.
+
+The DSDA matrix matches **1,451,520/1,451,520 frames across 6,048 cases**,
+including the original **622,080 frames across 2,592 default-order cases**.
+The additional 3,456 cases exercise four custom orders, all nine ready weapons,
+twelve ownership/ammo profiles, berserk on/off, held/repressed attack and
+repeated local fist/shotgun key toggles. The default cases cover initially empty
+and last-shot states, held attack, release, repress, and explicit mid-attack changes.
 It compares old Doom playback, Boom recorded commands, and generated Boom
 fallback commands. Unowned switch requests and shared-ammo thresholds are
 included. Every frame compares command bytes, ready/pending weapons, attackdown,
@@ -997,10 +1020,12 @@ streams. Cosmetic RNG is excluded; the runtime models refire as a boolean.
 
 The private reference calls real `P_PlayerThink`/`P_Ticker` and psprite functions
 with monsters disabled for this matrix. Its input controller uses the source
-`G_BuildTiccmd` policy with real `P_CheckAmmo`/`P_SwitchWeapon` and explicit default
-preferences; this does not test keyboard/device sampling. No reference weapon,
-player, RNG, or mover implementation is changed. Separate generated combat demos
-run through normal DSDA `G_Ticker` with actual monster AI and damage.
+`G_BuildTiccmd` policy with real `P_CheckAmmo`/`P_SwitchWeapon` and explicit
+default/custom preferences; this does not test keyboard/device sampling. No reference weapon,
+player, RNG, or mover implementation is changed. The stock-state probe uses
+`-nodeh` to exclude embedded DeHackEd patches (including Freedoom's altered SSG
+flash duration); this is not a DeHackEd compatibility test. Separate generated
+combat demos run through normal DSDA `G_Ticker` with actual monster AI and damage.
 
 The matrix also caught a BFG flash restarting at projectile launch. The flash now
 starts only from its original gun-flash action, preserving its phase through
@@ -1674,8 +1699,8 @@ The next milestones are:
    Generated normal/secret campaigns, episodic/MAP30 finales and full-roster
    checkpoints already have DSDA comparisons. Native authority save/rollback
    remains separate from client replication baselines.
-3. Add custom weapon preferences, then broaden complex-map progression and
-   large-fight performance coverage. GL nodes and mixer-wide sound parity
+3. Broaden complex-map progression and large-fight performance coverage.
+   Custom local weapon priorities now have DSDA comparisons. GL nodes and mixer-wide sound parity
    remain separate follow-up work.
 
 Unusual interactions beyond the fixtures remain unverified. Maps may load
