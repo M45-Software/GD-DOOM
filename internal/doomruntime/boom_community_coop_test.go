@@ -132,3 +132,27 @@ func TestWeaponPickupAfterEmptyInventoryCheckpoint(t *testing.T) {
 		t.Fatal("rocket launcher pickup failed after restoration")
 	}
 }
+
+func TestBoomIsolatedHighestFloorIgnoresSelfReferences(t *testing.T) {
+	g := newGame(predictionTestMap(), Options{Headless: true})
+	g.boomMomentumDropoff = true
+	g.m.Sidedefs = []mapdata.Sidedef{{Sector: 0}, {Sector: 0}}
+	g.m.Linedefs = []mapdata.Linedef{{Flags: mlTwoSided, SideNum: [2]int32{0, 1}}}
+	if got := g.findHighestFloorSurrounding(0); got != -32000*fracUnit {
+		t.Fatalf("isolated floor target=%d", got)
+	}
+}
+
+func TestCampaignCarryoverInitializesDollHealth(t *testing.T) {
+	g := coopPlaybackTestGame()
+	g.withAuthoritativePlayer(g.authorityPlayers[0], func() {
+		carry := g.captureLevelCarryover()
+		carry.Stats.Health = 73
+		g.applyLevelCarryover(carry)
+		for i, th := range g.m.Things {
+			if voodooPlayerSlot(th.Type) == g.localSlot && g.thingHP[i] != 73 {
+				t.Fatal("doll spawned with fresh health instead of carried health")
+			}
+		}
+	})
+}

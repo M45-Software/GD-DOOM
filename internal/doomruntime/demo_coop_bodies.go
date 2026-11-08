@@ -212,7 +212,13 @@ func (g *game) respawnCoopDemoPlayer() {
 	score.DeathRecorded = false
 }
 
+// A negative self reference survives a moving player's own splash damage.
+const selfAttackerThing = -2
+
 func (g *game) statusAttackerPosition() (int64, int64) {
+	if g.statusAttackerThing == selfAttackerThing {
+		return g.p.x, g.p.y
+	}
 	if g.coopDemoActive() {
 		if ref := g.demoCoopAttackers[g.localSlot]; ref < 0 {
 			if state := g.authoritativePlayerForSlot(-ref); state != nil {

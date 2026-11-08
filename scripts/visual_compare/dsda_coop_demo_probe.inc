@@ -1,5 +1,14 @@
 /* Read-only observation after real multiplayer G_Ticker commands. */
 extern void GD_FinaleFields(FILE *,int);
+// G_PlayerFinishLevel leaves attacker pointers behind when P_SetupLevel
+// frees the old thinkers. Observe live actor identities; never dereference
+// an old level's dangling pointer (allocator contents are not game state).
+static mobj_t *GD_LiveAttacker(mobj_t *attacker)
+{
+ thinker_t *it=NULL;
+ if(attacker)while((it=P_NextThinker(it,th_all)))if(it->function==P_MobjThinker && (mobj_t*)it==attacker)return attacker;
+ return NULL;
+}
 static void GD_CoopSummary(void)
 {
  static int done;const char *path=getenv("GD_COOP_SUMMARY");FILE *out;int slot,first=1;
@@ -12,6 +21,23 @@ static void GD_CoopSummary(void)
  }
  fprintf(out,"]}\n");fclose(out);
 }
+extern void GD_IntermissionFields(FILE *);
+static void GD_CampaignPhaseFrame(int command)
+{
+ const char *path=getenv("GD_DSDA_PHASE_OUT");static FILE *out;
+ if(!path||!demoplayback)return;
+ if(!out){out=fopen(path,"w");if(!out)I_Error("campaign phases");fprintf(out,"demotic,map,phase,count,stage,accelerated,castnum,caststate,casttics,castframes,melee,attacking,death,players,playindex,seeds,wi_screen,wi_bcnt,wi_cnt,wi_state,wi_pause,wi_accelerate,wi_counts,wi_time,wi_par\n");}
+ int slot,i;
+  fprintf(out,"%d,",command);
+  if(gamemode==commercial)fprintf(out,"MAP%02d,",gamemap);else fprintf(out,"E%dM%d,",gameepisode,gamemap);
+  fprintf(out,"%d,",gamestate==GS_FINALE?2:gamestate==GS_INTERMISSION?1:0);
+  GD_FinaleFields(out,command);
+  for(slot=0;slot<4;slot++)if(playeringame[slot]){player_t *p=&players[slot];int cards=0;for(i=0;i<NUMCARDS;i++)if(p->cards[i])cards|=1<<i;
+   fprintf(out,"%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d;",slot+1,p->health,p->armorpoints[0],p->ammo[am_clip],p->ammo[am_shell],p->ammo[am_cell],p->ammo[am_misl],p->readyweapon,p->pendingweapon,!!p->attackdown,!!p->usedown,cards);
+  }
+  fprintf(out,",%d,",rng.rndindex);for(i=0;i<NUMPRCLASS;i++)if(i!=pr_misc)fprintf(out,"%u;",rng.seed[i]);
+ GD_IntermissionFields(out);fputc('\n',out);fflush(out);
+}
 static void GD_CoopDemoFrame(void)
 {
  GD_CoopSummary();
@@ -19,6 +45,7 @@ static void GD_CoopDemoFrame(void)
  static FILE *out;static int last=-1,first=-1;
  int campaign=getenv("GD_COOP_CAMPAIGN")!=NULL;
  if(first<0)first=gametic;
+ if(gametic!=last)GD_CampaignPhaseFrame(gametic-first+1);
  int slot,i;thinker_t *it=NULL;
  if(path && demoplayback && getenv("GD_COOP_FINALE") && gametic!=last) {
   last=gametic;
@@ -42,7 +69,7 @@ static void GD_CoopDemoFrame(void)
   player_t *p=&players[slot];mobj_t *m=p->mo;int cards=0;
   for(i=0;i<NUMCARDS;++i)if(p->cards[i])cards|=1<<i;
   fprintf(out,"%d:%d:%d:%d:%u:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%ld:%d:%d:%d:%d",slot+1,m->x,m->y,m->z,m->angle,m->momx,m->momy,m->momz,p->health,m->health,p->armorpoints[0],p->ammo[am_clip],p->ammo[am_shell],p->ammo[am_cell],p->ammo[am_misl],p->playerstate,p->viewheight,p->viewz,p->readyweapon,p->pendingweapon,p->psprites[ps_weapon].state?(long)(p->psprites[ps_weapon].state-states):0,p->psprites[ps_weapon].tics,!!p->attackdown,!!p->refire,cards);
-  fprintf(out,":%d:%d",p->attacker?p->attacker->x:0,p->attacker?p->attacker->y:0);fputc(';',out);
+  fprintf(out,":%d:%d",GD_LiveAttacker(p->attacker)?p->attacker->x:0,GD_LiveAttacker(p->attacker)?p->attacker->y:0);fputc(';',out);
  }
  fputc(',',out);
  while((it=P_NextThinker(it,th_all)))if(it->function==P_MobjThinker){

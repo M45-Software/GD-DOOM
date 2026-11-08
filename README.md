@@ -75,6 +75,9 @@ priorities. The same setting can be saved as
 follow the default order; `fist` ranks the berserk fist. See
 [BOOM weapon behavior](docs/boom-support.md#ammo-exhaustion-and-weapon-timing-verification)
 for the accepted names and toggle rules.
+Original Sunlust MAP01–10 NoMo and UV Speed TAS campaigns also have DSDA
+comparisons, including cold save/keyframe restores during intermissions and the
+MAP06 story finale. See the [campaign verification notes](docs/boom-support.md#real-community-campaign-recordings-and-screen-checkpoints).
 
 Repeated columns and sprite rows share compact draw commands, and nearby
 sprites reuse horizontal visibility spans until clipping changes. These reduce

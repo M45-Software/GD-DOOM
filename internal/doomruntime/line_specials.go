@@ -743,6 +743,14 @@ func (g *game) findLowestFloorSurrounding(sec int) int64 {
 }
 
 func (g *game) findHighestFloorSurrounding(sec int) int64 {
+	if g.boomMomentumDropoff {
+		highest := int64(-32000) * fracUnit
+		for _, other := range g.boomNeighborSectors(sec) {
+			highest = max64(highest, g.sectorFloor[other])
+		}
+		return highest
+	}
+
 	highest := g.sectorFloor[sec]
 	found := false
 	for _, ld := range g.m.Linedefs {

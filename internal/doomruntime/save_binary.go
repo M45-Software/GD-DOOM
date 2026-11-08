@@ -2061,7 +2061,11 @@ func (r saveBinaryReader) saveFile() (saveFile, error) {
 		if v.Game.StatusAttackerThing, err = r.int(); err != nil {
 			return v, err
 		}
-		if v.Game.StatusHasAttacker && (v.Game.StatusAttackerThing < -1 || v.Game.StatusAttackerThing >= len(v.Game.Things)) {
+		minAttacker := -1
+		if version >= 43 {
+			minAttacker = selfAttackerThing
+		}
+		if v.Game.StatusHasAttacker && (v.Game.StatusAttackerThing < minAttacker || v.Game.StatusAttackerThing >= len(v.Game.Things)) {
 			return v, fmt.Errorf("invalid saved death attacker")
 		}
 	}

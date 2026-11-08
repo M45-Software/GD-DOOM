@@ -94,6 +94,13 @@ func (g *game) applyLevelCarryover(carry playerLevelCarryover) {
 	}
 	g.stats = carry.Stats
 	g.syncPlayerMobjHealth()
+	// P_SpawnPlayer initializes each earlier start from the carried health.
+	// Both desktop campaign hosts apply carryover before the first level tic.
+	for i, th := range g.m.Things {
+		if voodooPlayerSlot(th.Type) == g.localSlot {
+			g.thingHP[i] = g.stats.Health
+		}
+	}
 	g.finishLevelForCarryover()
 	g.ensureWeaponDefaults()
 	g.inventory.PendingWeapon = 0

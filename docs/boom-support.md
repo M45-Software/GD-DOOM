@@ -1684,14 +1684,99 @@ The Ancient Aliens candidate requires a separate audit of its custom actors and
 was not counted as verified. Community multi-map/endgame recordings, other map
 sets and additional co-op combat/death combinations remain follow-up coverage.
 
+## Real community campaign recordings and screen checkpoints
+
+`scripts/verify_boom_community_campaign.py` replays two original Sunlust
+MAP01–10 episode recordings against DSDA-Doom 0.27.5:
+
+| Recording | Player / category | Active frames | All command phases |
+| --- | --- | ---: | ---: |
+| [`slep1o546.lmp`](https://dsdarchive.com/files/demos/sunlust/50338/slep1o546.zip) | Teedre (TomatoTom), NoMo 5:46 | 12,317 | 12,995 |
+| [`sle1x344.lmp`](https://dsdarchive.com/files/demos/sunlust/48879/sle1x344.zip) | SuperWeaponDude, UV Speed TAS 3:44 | 8,091 | 8,702 |
+
+Both archives, the WAD and the exact demo payloads are hash-pinned. The original
+commands are unchanged: no injected exits, replacement inputs or appended tics.
+Each recording crosses ten intermissions and the actual MAP06 story finale;
+the UV Speed recording runs real monster AI, damage, infighting and teleports.
+The NoMo route also exercises a rocket jump, dolls and an exit after camera death.
+
+Active frames compare player/body position and momentum, inventory, health,
+weapon states, live attacker/target references, pickups, sector geometry/lights,
+and every gameplay RNG stream. A separate trace observes **every command**,
+including inventory/button latches, intermission screen/countdown/stat counters,
+and finale text/cast state. The reference observer only dereferences attacker
+pointers that still belong to live mobj thinkers; dangling pointers left after
+an old level is freed are not meaningful actor state and are recorded as absent.
+
+All **six runs** match DSDA: **61,224 active frames** and **65,091 command
+phases**, with **212 cold restores** (80 in active play, 120 in intermissions,
+12 in the story finale). Evidence: `/tmp/gddoom-community-campaign-parity/results.json`.
+
+Each route runs continuously, through binary saves, and through binary keyframes.
+Restores construct a fresh session with no demo or inherited campaign state,
+then load the embedded command stream and cursor, screen state and carryover.
+Each format restores 53 times per route: 20 active-level points, 30 points in
+intermissions and 3 in the MAP06 finale. Points include screen interiors and
+both sides of phase/map boundaries. The final intermission is covered without
+extending the original recording into MAP11.
+
+Single-player Boom playback now uses campaign attachment version 3, without
+creating an authority roster or enabling co-op rules. It retains the local
+player activation (including held-use/current commands), command cursor,
+pause/latches, queued world transition, inventory carry, intermission
+counters/animations, next-map identity and finale state. Co-op
+attachments still write version 2; versions 1–2 remain readable. A malformed
+single-player cursor, mode or missing carryover is rejected before replacing
+the active session, with RNG restored on failure.
+
+The recordings exposed several progression/state differences that are now fixed:
+
+- Keys and temporary powers clear on the first single-player intermission
+  command, after the final live frame, matching `G_DoCompleted`.
+- Newly spawned dolls inherit carried player health. Their slide traces use
+  their own friction and living/dead body height, independently of the camera.
+  Living dolls can activate walk exits after the camera dies under Boom rules.
+- Highest-neighbor floor targets ignore self-references and retain Boom's
+  -32000-unit sentinel when a sector has no real neighbor.
+- Failed one-shot Boom teleports retain the line so a later attempt can succeed.
+- Melee-only Boom monsters retain `MF_JUSTHIT` after entering a melee attack.
+- A resting arch-vile fire does not run vertical clipping until it moves off
+  its cached floor. Self-damage attacker identity follows the moving player;
+  valid Boom attacker pointers remain available after the damage flash ends.
+  The binary reader recognizes the saved self-attacker reference, and friction
+  validation counts spawned actors as well as the original map Things.
+- Zero-denominator intermission percentages use Boom's display values and
+  counting limits. A finished intermission retains its final counters until
+  the queued next-map command loads the level.
+
+```sh
+python3 scripts/verify_boom_community_campaign.py \
+  --iwad /path/to/doom2.wad --reference-source /path/to/pristine/dsda-doom \
+  --out /tmp/gddoom-community-campaign
+```
+
+Reports retain separate gameplay and phase CSVs, coverage checks, restore counts,
+original input hashes and source/reference/observer hashes. Static decoration
+animation, cosmetic `pr_misc`, pixels, audio and custom DeHackEd story text are
+outside this comparison. All ten played maps are audited to contain no Commander
+Keen before excluding Sunlust's pinned Keen patch and Freedoom's unrelated weapon
+patch with `-nodeh`. This does not establish general DeHackEd compatibility.
+Real community co-op movies, other map sets and campaigns reaching episodic or
+MAP30 endgame finales remain follow-up coverage. Regression checks also pass:
+nine generated normal/secret/death co-op campaign runs (9,687 frames, 156 restores),
+six natural-ending/cast runs (21,600 command frames, 366 restores), and six
+original community co-op runs (10,527 active frames, 40 restores). The final
+co-op death campaign recheck, full Go suite and native Raylib package checks pass.
+
 ## Remaining work
 
 The next milestones are:
 
-1. Expand complete-map combat coverage beyond the two verified Sunlust maps
-   and their recorded routes. Add actual campaign recordings and save/keyframe
-   boundaries during intermission/finale screens, keeping the movement, combat,
-   lifecycle and mover matrices as regressions. Death/rebirth checkpoints and
+1. Expand complete-map combat coverage beyond the verified Sunlust routes.
+   Two real MAP01–10 community campaigns now cover intermission/finale
+   checkpoints. Add other map sets and actual campaigns reaching episodic or
+   MAP30 endgame finales, keeping movement, combat, lifecycle and movers as
+   regressions. Death/rebirth checkpoints and
    generated normal/secret transitions now have DSDA comparisons; MAP02 covers
    a complete crusher/resurrection route with binary checkpoint continuation.
 2. Broaden community co-op coverage beyond the two verified Sunlust routes:
@@ -1700,8 +1785,8 @@ The next milestones are:
    checkpoints already have DSDA comparisons. Native authority save/rollback
    remains separate from client replication baselines.
 3. Broaden complex-map progression and large-fight performance coverage.
-   Custom local weapon priorities now have DSDA comparisons. GL nodes and mixer-wide sound parity
-   remain separate follow-up work.
+   Custom local weapon priorities now have DSDA comparisons. GL nodes and
+   mixer-wide sound parity remain separate follow-up work.
 
 Unusual interactions beyond the fixtures remain unverified. Maps may load
 while unsupported actions behave incorrectly.
@@ -1711,13 +1796,14 @@ not full combat RNG parity, every map route, or large-fight performance. The map
 audit detects unknown specials; it does not detect every unsupported interaction.
 
 These changes advance the multiplayer simulation ID to
-`gd-doom-authority-dev-29`. Deploy matching clients and servers. Door lighting
+`gd-doom-authority-dev-30`. Deploy matching clients and servers. Door lighting
 adds the controlling line reference to owned and displaced door snapshots.
 Sector identities extend the sound-event schema. Explicit ceiling ownership
 and retained doors extend the mover schema; displaced ceilings remain in the
-ordered mover state. Save version 42 reads versions 39–41;
-keyframe version 29 reads versions 26–28. Save 42/keyframe 29 add cast and queued
-episode-victory state in attachment version 2. Save 41/keyframe 28 add the recorded
+ordered mover state. Save version 43 reads versions 40–42;
+keyframe version 30 reads versions 27–29. Save 43/keyframe 30 add single-player
+recorded campaign checkpoints in attachment version 3. Save 42/keyframe 29 add
+cast and queued episode-victory state in attachment version 2. Save 41/keyframe 28 add the recorded
 co-op session attachment; older formats cannot reconstruct a complete recorded
 roster or campaign cursor. Save 40/keyframe 27 added the pending
 rebirth request and death-camera attacker. Previous formats default those to

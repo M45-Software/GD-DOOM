@@ -402,6 +402,9 @@ func (g *game) radiusAttackAt(sx, sy, sz, sheight int64, ignoreThing int, damage
 			} else if g.statusHasAttacker && (sourcePlayer || sourceIdentity.Slot != 0) {
 				g.statusAttackerX, g.statusAttackerY = attackerX, attackerY
 				g.statusAttackerThing = -1
+				if len(g.authorityPlayers) == 0 && sourcePlayer {
+					g.statusAttackerThing = selfAttackerThing
+				}
 			}
 		})
 		if debugRadius {

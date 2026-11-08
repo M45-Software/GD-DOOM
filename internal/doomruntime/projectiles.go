@@ -1114,11 +1114,15 @@ func (g *game) advanceProjectileImpactTic(fx *projectileImpact) bool {
 	}
 	// P_XYMovement can enter the death state below the updated support floor.
 	// P_MobjThinker still runs P_ZMovement before decrementing that state.
-	if fx.z < fx.floorz {
-		fx.z = fx.floorz
-	}
-	if fx.z+height > fx.ceilz {
-		fx.z = fx.ceilz - height
+	// An effect resting on its cached floor with no vertical momentum does
+	// not run P_ZMovement, even when the room is shorter than its height.
+	if fx.z != fx.floorz {
+		if fx.z < fx.floorz {
+			fx.z = fx.floorz
+		}
+		if fx.z+height > fx.ceilz {
+			fx.z = fx.ceilz - height
+		}
 	}
 	fx.tics--
 	fx.phaseTics--

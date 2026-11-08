@@ -615,6 +615,11 @@ func (g *game) checkWalkSpecialLinesForActorWithCandidatesAndRadius(prevX, prevY
 			if isPlayer && g.handleExitSpecial(ld.idx, special, mapdata.TriggerWalk) {
 				return true
 			}
+			if !isPlayer && playerActor {
+				activated := false
+				g.withVoodooOwner(actorIdx, func() { activated = g.handleExitSpecial(ld.idx, special, mapdata.TriggerWalk) })
+				return activated
+			}
 			return false
 		}
 		if info.Door != nil {
@@ -639,7 +644,8 @@ func (g *game) checkWalkSpecialLinesForActorWithCandidatesAndRadius(prevX, prevY
 		activated := g.activateNonDoorLineSpecial(ld.idx, startSide, info, actorIdx, isPlayer)
 		// Vanilla consumes failed W1 crossings; Boom extended W1 actions
 		// remain available until a tagged sector accepts the action.
-		if !info.Repeat && (!info.Boom || activated) && ld.idx >= 0 && ld.idx < len(g.lineSpecial) {
+		consumeFailed := !info.Boom && !(g.boomMomentumDropoff && info.Teleport != nil)
+		if !info.Repeat && (consumeFailed || activated) && ld.idx >= 0 && ld.idx < len(g.lineSpecial) {
 			g.lineSpecial[ld.idx] = 0
 		}
 		if activated {
@@ -700,7 +706,7 @@ func (g *game) lineTouchesSubsector(lineIdx, ss int) bool {
 }
 
 func (g *game) handleExitSpecial(lineIdx int, special uint16, trigger mapdata.TriggerType) bool {
-	if g.isDead {
+	if g.isDead && !g.boomMomentumDropoff {
 		return false
 	}
 	info := mapdata.LookupLineSpecial(special)

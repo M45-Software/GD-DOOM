@@ -268,7 +268,7 @@ func tickVanillaIntermission(state intermissionState, skipPressed bool) (intermi
 	case intermissionScreenNoState:
 		state.Cnt--
 		if state.Cnt <= 0 {
-			return intermissionState{}, nil, true
+			return state, nil, true
 		}
 	}
 	return state, sounds, false
@@ -287,41 +287,29 @@ func updateIntermissionStats(state intermissionState) (intermissionState, []soun
 		sounds = append(sounds, soundEventIntermissionDone)
 	}
 	switch state.SPState {
-	case 2:
-		if state.Show.KillsPct < state.Target.KillsPct {
-			state.Show.KillsPct += 2
-			if (state.Bcnt & 3) == 0 {
-				sounds = append(sounds, soundEventShootPistol)
+	case 2, 4, 6:
+		shown, target, limit := &state.Show.KillsPct, state.Target.KillsPct, state.Target.KillsPct
+		switch state.SPState {
+		case 2:
+			if state.Target.KillsTotal == 0 && target >= 100 {
+				limit = state.Target.KillsFound * 100
 			}
-			if state.Show.KillsPct >= state.Target.KillsPct {
-				state.Show.KillsPct = state.Target.KillsPct
-				sounds = append(sounds, soundEventIntermissionDone)
-				state.SPState++
+		case 4:
+			shown, target, limit = &state.Show.ItemsPct, state.Target.ItemsPct, state.Target.ItemsPct
+			if state.Target.ItemsTotal == 0 && target == 100 {
+				limit = state.Target.ItemsFound * 100
 			}
+		case 6:
+			shown, target, limit = &state.Show.SecretsPct, state.Target.SecretsPct, state.Target.SecretsPct
 		}
-	case 4:
-		if state.Show.ItemsPct < state.Target.ItemsPct {
-			state.Show.ItemsPct += 2
-			if (state.Bcnt & 3) == 0 {
-				sounds = append(sounds, soundEventShootPistol)
-			}
-			if state.Show.ItemsPct >= state.Target.ItemsPct {
-				state.Show.ItemsPct = state.Target.ItemsPct
-				sounds = append(sounds, soundEventIntermissionDone)
-				state.SPState++
-			}
+		*shown += 2
+		if state.Bcnt&3 == 0 {
+			sounds = append(sounds, soundEventShootPistol)
 		}
-	case 6:
-		if state.Show.SecretsPct < state.Target.SecretsPct {
-			state.Show.SecretsPct += 2
-			if (state.Bcnt & 3) == 0 {
-				sounds = append(sounds, soundEventShootPistol)
-			}
-			if state.Show.SecretsPct >= state.Target.SecretsPct {
-				state.Show.SecretsPct = state.Target.SecretsPct
-				sounds = append(sounds, soundEventIntermissionDone)
-				state.SPState++
-			}
+		if *shown >= limit {
+			*shown = target
+			sounds = append(sounds, soundEventIntermissionDone)
+			state.SPState++
 		}
 	case 8:
 		if (state.Bcnt & 3) == 0 {
@@ -570,6 +558,7 @@ func (sg *sessionGame) finishIntermission() {
 	sg.rebuildGameWithPersistentSettings(im.nextMap)
 	if !sg.applyCoopCarryover(sg.g, old) && sg.levelCarryover != nil && sg.g != nil {
 		sg.g.applyLevelCarryover(*sg.levelCarryover)
+
 		sg.levelCarryover = nil
 		if sg.g.opts.DemoScript != nil {
 			// P_SpawnPlayer raises the carried weapon using P_SetupPsprites.
@@ -1201,6 +1190,20 @@ func collectIntermissionStats(g *game, mapName, nextName mapdata.MapName) interm
 	out.KillsPct = intermissionPercent(out.KillsFound, max(out.KillsTotal, 1))
 	out.ItemsPct = intermissionPercent(out.ItemsFound, max(out.ItemsTotal, 1))
 	out.SecretsPct = intermissionPercent(out.SecretsFound, out.SecretsTotal)
+	if g.boomMomentumDropoff {
+		// Boom distinguishes the displayed zero-denominator percentage from
+		// the counter's completion threshold (WI_*Percent versus WI_*Limit).
+		out.SecretsTotal = g.secretsTotal
+		if out.KillsTotal == 0 {
+			out.KillsPct = max(1, out.KillsFound) * 100
+		}
+		if out.ItemsTotal == 0 {
+			out.ItemsPct = 100
+		}
+		if out.SecretsTotal == 0 {
+			out.SecretsPct = 100
+		}
+	}
 	out.TimeSec = g.worldTic / doomTicsPerSecond
 	return out
 }

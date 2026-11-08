@@ -984,6 +984,10 @@ func (g *game) tickGenericMonsterStateWithAttackReacquire(i int, th mapdata.Thin
 
 	if g.monsterCanMeleeTarget(i, th.Type, dist, tx, ty, targetX, targetY) {
 		if g.startMonsterAttackState(i, th.Type, false) {
+			// Boom remembers a melee-only actor's attack in MF_JUSTHIT.
+			if g.boomMomentumDropoff && isMeleeOnlyMonster(th.Type) {
+				g.thingJustHit[i] = true
+			}
 			return
 		}
 	}
@@ -5828,17 +5832,25 @@ func doomPRandomN(n int, classes ...doomrand.Class) int {
 // Slide traces share the player-sized collision shape; movement and triggers
 // remain attached to the doll's own mobj rather than the camera body.
 func (g *game) slideVoodooDoll(i int, th mapdata.Thing) {
-	saved := g.p
-	defer func() { g.p = saved }()
+	saved, savedHealth := g.p, g.playerMobjHealth
+	defer func() { g.p, g.playerMobjHealth = saved, savedHealth }()
+	// Slide traces use the doll's living/dead collision height, independently
+	// of its owner's camera body. The owner's death can leave this doll alive.
+	g.playerMobjHealth = g.thingHP[i]
 	g.p.x, g.p.y = g.thingPosFixed(i, th)
 	g.p.z, g.p.floorz, g.p.ceilz = g.thingSupportState(i, th)
 	g.p.momx, g.p.momy = g.thingMomX[i], g.thingMomY[i]
+	// Ice bounces use the sliding mobj's stored friction, not its camera
+	// owner's current floor. Keep that state attached to the doll as well.
+	if i < len(g.thingFriction) {
+		g.p.friction = g.thingFriction[i]
+	}
 	g.slideMoveUsing(func(x, y int64) bool {
-		slide := g.p
+		slide, slideHealth := g.p, g.playerMobjHealth
 		// Collision checks must still see the real camera body. Otherwise the
 		// doll collides with the temporary player state used by the slide traces.
-		g.p = saved
-		defer func() { saved = g.p; g.p = slide }()
+		g.p, g.playerMobjHealth = saved, savedHealth
+		defer func() { saved, savedHealth = g.p, g.playerMobjHealth; g.p, g.playerMobjHealth = slide, slideHealth }()
 		floor, ceil, lines, ok := g.tryMoveProbeMonster(i, th.Type, x, y)
 		if !ok {
 			return false

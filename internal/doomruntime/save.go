@@ -25,10 +25,10 @@ import (
 )
 
 const (
-	saveGameVersion     = 42
+	saveGameVersion     = 43
 	saveGamePrefix      = "dsg"
 	saveGameQuickPrefix = "quicksave"
-	keyframeVersion     = 29
+	keyframeVersion     = 30
 	saveGameDirName     = "saves"
 )
 
@@ -1230,7 +1230,7 @@ func (sg *sessionGame) applyLoadedSnapshot(file saveFile, warning string) error 
 	if ((file.Version >= 30 && file.Version <= saveGameVersion) || (file.Version >= 17 && file.Version <= keyframeVersion)) && !g.validBoomScrollerStates(file.Game.BoomScrollers) {
 		return fmt.Errorf("save scrollers do not match loaded map")
 	}
-	if !validBoomFrictionState(&file.Game, len(g.m.Things)) {
+	if !validBoomFrictionState(&file.Game, len(file.Game.Things)) {
 		return fmt.Errorf("save friction state does not match loaded map")
 	}
 	if file.Game.PlayerReborn && !file.Game.IsDead {

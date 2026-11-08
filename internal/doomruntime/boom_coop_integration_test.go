@@ -96,7 +96,22 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 	} else {
 		fmt.Fprintln(out, "tic,players,bodies,items,sectors,playindex,seeds")
 	}
-	for tic := range script.Frames {
+	var phases *bufio.Writer
+	if path := os.Getenv("GD_COOP_PHASE_OUT"); path != "" {
+		f, err := os.Create(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer f.Close()
+		phases = bufio.NewWriter(f)
+		defer phases.Flush()
+		fmt.Fprintln(phases, "demotic,map,phase,count,stage,accelerated,castnum,caststate,casttics,castframes,melee,attacking,death,players,playindex,seeds,wi_screen,wi_bcnt,wi_cnt,wi_state,wi_pause,wi_accelerate,wi_counts,wi_time,wi_par")
+	}
+	frames := len(script.Frames)
+	if script.Header.PlayerCount() == 1 {
+		frames = len(script.Tics)
+	}
+	for tic := 0; tic < frames; tic++ {
 		oldMap, oldWorld := g.m.Name, g.worldTic
 		if campaign {
 			for updates := 0; ; updates++ {
@@ -124,7 +139,7 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 				TotalSecrets int              `json:"total_secrets"`
 				Players      []map[string]int `json:"players"`
 			}{Completed: true, Map: string(g.m.Name), Leveltime: g.worldTic, TotalKills: g.levelKillsTotal, TotalItems: g.levelItemsTotal, TotalSecrets: g.secretsTotal}
-			for _, p := range g.authorityPlayers {
+			for _, p := range coopProbePlayers(g) {
 				g.withAuthoritativePlayer(p, func() {
 					summary.Players = append(summary.Players, map[string]int{"slot": g.localSlot, "health": g.stats.Health, "armor": g.stats.Armor, "bullets": g.stats.Bullets, "shells": g.stats.Shells, "cells": g.stats.Cells, "rockets": g.stats.Rockets, "kills": g.playerKillCount, "items": g.playerItemCount, "secrets": g.secretsFound})
 				})
@@ -152,6 +167,11 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
+			if os.Getenv("GD_COOP_COLD_RESTORE") != "" {
+				fresh := &sessionGame{opts: opts, nextMap: sg.nextMap, gameFactory: sg.gameFactory}
+				fresh.opts.DemoScript = nil
+				sg = fresh
+			}
 			if os.Getenv("GD_COOP_CHECKPOINT_FORMAT") == "keyframe" {
 				err = sg.unmarshalNetplayKeyframe(data)
 			} else {
@@ -162,6 +182,18 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 			}
 			g = sg.g
 			restored++
+		}
+		phase := 0
+		if g.m.Name == oldMap && g.worldTic == oldWorld {
+			if sg.finale.Active {
+				phase = 2
+			} else if sg.intermission.state.Active {
+				phase = 1
+			}
+		}
+		if phases != nil {
+			fmt.Fprintf(phases, "%d,%s,%d,", tic+1, g.m.Name, phase)
+			writeRecordedPhaseFields(phases, sg, phase, true)
 		}
 		if finaleMode {
 			phase := 0
@@ -183,7 +215,7 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 			fmt.Fprintf(out, "%d,%s,", tic+1, g.m.Name)
 		}
 		fmt.Fprintf(out, "%d,", g.worldTic-1)
-		for _, p := range g.authorityPlayers {
+		for _, p := range coopProbePlayers(g) {
 			g.withAuthoritativePlayer(p, func() {
 				state := 0
 				if g.playerReborn {
@@ -221,10 +253,14 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 			}
 			owner := m.ownerSlot
 			fmt.Fprintf(out, "%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d", m.Type, m.X, m.Y, m.Z, m.Angle, m.MomX, m.MomY, m.MomZ, m.Health, m.Tics, m.State, m.Radius, m.Height, m.FloorZ, m.CeilingZ, owner)
-			if m.Kind == "monster" {
+			if m.Kind == "monster" && thingCountsKill(g.m.Things[m.thingIndex].Type) {
 				idx := m.thingIndex
 				tx, ty, _, _, _, _ := g.monsterAttackTargetPos(idx)
-				fmt.Fprintf(out, ":%d:%d:%d:%d:%d:%d:%d:%d:%d:%d", g.monsterTargetPlayerSlot(idx), tx, ty, m.ReactionTime, m.Threshold, m.Movedir, m.Movecount, m.LastLook, boolToInt(g.thingJustHit[idx]), boolToInt(g.thingJustAtk[idx]))
+				targetSlot := g.monsterTargetPlayerSlot(idx)
+				if len(g.authorityPlayers) == 0 && g.thingTargetPlayer[idx] {
+					targetSlot = g.localSlot
+				}
+				fmt.Fprintf(out, ":%d:%d:%d:%d:%d:%d:%d:%d:%d:%d", targetSlot, tx, ty, m.ReactionTime, m.Threshold, m.Movedir, m.Movecount, m.LastLook, boolToInt(g.thingJustHit[idx]), boolToInt(g.thingJustAtk[idx]))
 			}
 			fmt.Fprint(out, ";")
 		}
@@ -252,7 +288,19 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 	}
 }
 
+func coopProbePlayers(g *game) []*authoritativePlayerState {
+	if len(g.authorityPlayers) != 0 {
+		return g.authorityPlayers
+	}
+	p := g.captureAuthoritativePlayer()
+	return []*authoritativePlayerState{&p}
+}
+
 func writeCoopFinaleFields(out *bufio.Writer, sg *sessionGame, phase int) {
+	writeRecordedPhaseFields(out, sg, phase, false)
+}
+
+func writeRecordedPhaseFields(out *bufio.Writer, sg *sessionGame, phase int, intermission bool) {
 	g := sg.g
 	f := sg.finale
 	if phase == 2 {
@@ -266,7 +314,7 @@ func writeCoopFinaleFields(out *bufio.Writer, sg *sessionGame, phase int) {
 	} else {
 		fmt.Fprint(out, "0,0,0,0,0,0,0,0,0,0,")
 	}
-	for _, p := range g.authorityPlayers {
+	for _, p := range coopProbePlayers(g) {
 		g.withAuthoritativePlayer(p, func() {
 			pending := 10
 			if g.inventory.PendingWeapon != 0 {
@@ -291,6 +339,33 @@ func writeCoopFinaleFields(out *bufio.Writer, sg *sessionGame, phase int) {
 	for cls, seed := range rng.Seeds {
 		if doomrand.Class(cls) != doomrand.Misc {
 			fmt.Fprintf(out, "%d;", seed)
+		}
+	}
+	if intermission {
+		if phase != 1 {
+			fmt.Fprint(out, ",0,0,0,0,0,0,,0,0")
+		} else {
+			w := sg.intermission.state
+			screen := int(w.Screen)
+			if w.Screen == intermissionScreenNoState {
+				screen = -1
+			}
+			fmt.Fprintf(out, ",%d,%d,%d,%d,%d,%d,", screen, w.Bcnt, w.Cnt, w.SPState, w.PauseTics, boolToInt(w.Accelerate))
+			if w.Coop {
+				for i, on := range w.CoopSlots {
+					if on {
+						v := w.CoopShow[i]
+						fmt.Fprintf(out, "%d:%d:%d:%d;", v[0], v[1], v[2], v[3])
+					}
+				}
+			} else {
+				fmt.Fprintf(out, "%d:%d:%d:0;", w.Show.KillsPct, w.Show.ItemsPct, w.Show.SecretsPct)
+			}
+			if w.Coop {
+				fmt.Fprint(out, ",0,0")
+			} else {
+				fmt.Fprintf(out, ",%d,%d", w.Show.TimeSec, w.Show.ParSec)
+			}
 		}
 	}
 	fmt.Fprintln(out)

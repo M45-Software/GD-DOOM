@@ -28,10 +28,10 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def run(command, log, env=None, cwd=ROOT):
+def run(command, log, env=None, cwd=ROOT, timeout=300):
     with log.open("w") as stream:
         subprocess.run(list(map(str, command)), cwd=cwd, env=env,
-                       stdout=stream, stderr=subprocess.STDOUT, check=True, timeout=300)
+                       stdout=stream, stderr=subprocess.STDOUT, check=True, timeout=timeout)
 
 
 def install_sector_sound_probe(target):
@@ -57,6 +57,9 @@ def install_sector_sound_probe(target):
 
 
 def install_rng_probe(target):
+    intermission = target / "src/wi_stuff.c"
+    intermission.write_text(intermission.read_text()+'\n#include "dsda_intermission_probe.inc"\n')
+    shutil.copy(ROOT / "scripts/visual_compare/dsda_intermission_probe.inc", target / "src")
     finale = target / "src/f_finale.c"
     finale.write_text(finale.read_text()+'\n#include "dsda_finale_probe.inc"\n')
     for name in ["dsda_rng_vectors.inc", "dsda_rng_demo_probe.inc", "dsda_rng_lifts.inc", "dsda_voodoo_lifecycle_probe.inc", "dsda_coop_demo_probe.inc", "dsda_finale_probe.inc"]:

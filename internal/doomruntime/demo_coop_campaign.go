@@ -37,11 +37,7 @@ func (sg *sessionGame) applyCoopCarryover(next, old *game) bool {
 			if prior := old.authoritativePlayerForSlot(carry.Slot); prior != nil && !carry.Reborn {
 				next.weaponAttackDown, next.useButtonDown = prior.weaponAttackDown, prior.useButtonDown
 			}
-			for i, th := range next.m.Things {
-				if voodooPlayerSlot(th.Type) == carry.Slot {
-					next.thingHP[i] = next.stats.Health
-				}
-			}
+
 		})
 	}
 	sg.coopCarryover = nil

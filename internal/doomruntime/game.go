@@ -3052,6 +3052,13 @@ func (g *game) advanceDemoTic() error {
 // the intermission ticker. The original game reads the demo stream every tic,
 // but does not advance the completed level's thinkers in GS_INTERMISSION.
 func (g *game) updateDemoIntermission(script *DemoScript) error {
+	if g.boomMomentumDropoff && !g.coopTransitionPrepared {
+		// G_DoCompleted runs before the first intermission command, after the
+		// final active level frame. Clear keys and powers at that same boundary.
+		g.finishLevelForCarryover()
+		g.coopTransitionPrepared = true
+	}
+
 	if g.demoTick >= len(script.Tics) {
 		if g.demoTrace != nil {
 			g.demoTrace.Close()
