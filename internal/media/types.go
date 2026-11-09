@@ -262,6 +262,10 @@ type SoundBank struct {
 	AttackSkull         PCMSample
 	AttackArchvile      PCMSample
 	AttackMancubus      PCMSample
+	Hoof                PCMSample
+	Metal               PCMSample
+	SkelSwing           PCMSample
+	SkelPunch           PCMSample
 	ImpactFire          PCMSample
 	ImpactRocket        PCMSample
 	BarrelExplode       PCMSample

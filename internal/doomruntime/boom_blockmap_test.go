@@ -2,6 +2,7 @@ package doomruntime
 
 import (
 	"fmt"
+	"reflect"
 	"testing"
 
 	"gddoom/internal/mapdata"
@@ -34,5 +35,20 @@ func TestBoomBlockmapDelimiterDoesNotCreatePhantomSlideWall(t *testing.T) {
 				}
 			})
 		}
+	}
+}
+
+func TestBoomBlockmapUnsignedLineNumbers(t *testing.T) {
+	g := &game{m: &mapdata.Map{BlockMap: &mapdata.BlockMap{Cells: [][]int16{{0, -25536, 7}}}}, bmapWidth: 1, bmapHeight: 1, boomMomentumDropoff: true}
+	var visited []int
+	g.blockLinesIterator(0, 0, func(line int) bool { visited = append(visited, line); return true })
+	if !reflect.DeepEqual(visited, []int{40000, 7}) {
+		t.Fatalf("high-numbered Boom collision line lost: %v", visited)
+	}
+	g.boomMomentumDropoff = false
+	visited = nil
+	g.blockLinesIterator(0, 0, func(line int) bool { visited = append(visited, line); return true })
+	if !reflect.DeepEqual(visited, []int{0, -25536, 7}) {
+		t.Fatalf("vanilla blocklist semantics changed: %v", visited)
 	}
 }

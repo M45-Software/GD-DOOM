@@ -2,10 +2,33 @@
  * voodoo experiment explicitly injects matched damage/rebirth API calls. */
 #include "dsda_voodoo_lifecycle_probe.inc"
 #include "dsda_coop_demo_probe.inc"
+/* Read-only observer of the native expanded/rebuilt block lists. */
+#include "p_setup.h"
+static void GD_BlockmapProbe(void)
+{
+ static int done;const char *path=getenv("GD_BLOCKMAP_OUT");FILE *file;int cell;
+ if(done||!path||!demoplayback||gamestate!=GS_LEVEL)return;
+ file=fopen(path,"w");if(!file)I_Error("blockmap observer output");done=1;
+ fprintf(file,"origin,%d,%d,%d,%d\n",bmaporgx>>FRACBITS,bmaporgy>>FRACBITS,bmapwidth,bmapheight);
+ for(cell=0;cell<bmapwidth*bmapheight;cell++){
+  int *word=blockmaplump+blockmap[cell];fprintf(file,"%d,",cell);
+  while(*word!=-1)fprintf(file,"%d;",*word++);
+  fputc('\n',file);
+ }
+ fclose(file);
+}
+static int GD_ActorFlagsSelected(int type)
+{
+ const char *p=getenv("GD_DEHACKED_FLAG_TYPES");char *end;
+ if(!p)return 0;
+ while(*p){long value=strtol(p,&end,10);if(end==p)break;if(value==type)return 1;p=*end==','?end+1:end;}
+ return 0;
+}
 static void GD_RNGDemoFrame(void)
 {
  static FILE *out;static int last_gametic=-1,summary_written,capture_tic,previous_leveltime,reloads,first_gametic=-1;
  const char *path=getenv("GD_DSDA_RNG_DEMO_OUT");thinker_t *th=NULL;int i;
+ GD_BlockmapProbe();
  GD_VoodooLifecycle();
  GD_CoopDemoFrame();
  if(!path||!demoplayback)return;
@@ -44,9 +67,10 @@ static void GD_RNGDemoFrame(void)
  {player_t *p=&players[displayplayer];mobj_t *m=p->mo;
  fprintf(out,"%d,%d,%d,%d,%u,%d,%d,%d,%d,%d,%d,%d,%d,",getenv("GD_RNG_REBIRTH")?capture_tic++:leveltime-1,m->x,m->y,m->z,m->angle,m->momx,m->momy,m->momz,p->health,p->armorpoints[0],p->ammo[am_clip],p->viewz,rng.rndindex);}
  while((th=P_NextThinker(th,th_all)))if(th->function==P_MobjThinker){mobj_t *m=(mobj_t*)th;if(m->player || (m->flags&MF_SPECIAL))continue;
- if(getenv("GD_RNG_COMBAT_ONLY") && !(getenv("GD_RNG_FULL_MAP") && m->type==MT_BARREL) && !(m->flags&(MF_COUNTKILL|MF_MISSILE)) && m->type!=MT_TRACER && m->type!=MT_FATSHOT && m->type!=MT_BRUISERSHOT && m->type!=MT_TROOPSHOT && m->type!=MT_HEADSHOT && m->type!=MT_ROCKET && m->type!=MT_PLASMA && m->type!=MT_BFG && m->type!=MT_ARACHPLAZ && m->type!=MT_EXTRABFG && m->type!=MT_SKULL && m->type!=MT_PUFF && m->type!=MT_BLOOD && m->type!=MT_SMOKE && m->type!=MT_FIRE && m->type!=MT_TFOG && m->type!=MT_IFOG)continue;
+ if(getenv("GD_RNG_COMBAT_ONLY") && !(getenv("GD_RNG_DEHACKED_ACTORS") && m->type>=MT_POSSESSED && m->type<=MT_KEEN) && !(getenv("GD_RNG_FULL_MAP") && m->type==MT_BARREL) && !(m->flags&(MF_COUNTKILL|MF_MISSILE)) && m->type!=MT_TRACER && m->type!=MT_FATSHOT && m->type!=MT_BRUISERSHOT && m->type!=MT_TROOPSHOT && m->type!=MT_HEADSHOT && m->type!=MT_ROCKET && m->type!=MT_PLASMA && m->type!=MT_BFG && m->type!=MT_ARACHPLAZ && m->type!=MT_EXTRABFG && m->type!=MT_SKULL && m->type!=MT_PUFF && m->type!=MT_BLOOD && m->type!=MT_SMOKE && m->type!=MT_FIRE && m->type!=MT_TFOG && m->type!=MT_IFOG)continue;
   fprintf(out,"%d:%d:%d:%d:%u:%d:%d:%d:%d:%d:%ld",m->type,m->x,m->y,m->z,m->angle,m->momx,m->momy,m->momz,m->health,m->tics,(long)(m->state-states));
   if(getenv("GD_RNG_COMBAT_ONLY"))fprintf(out,":%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d",m->target!=NULL,m->target?m->target->type:0,m->tracer!=NULL,m->tracer?m->tracer->type:0,m->movedir,m->movecount,m->reactiontime,m->threshold,m->lastlook,m->radius,m->height,m->floorz,m->ceilingz);
+  if(getenv("GD_RNG_DEHACKED_ACTORS")){if(GD_ActorFlagsSelected(m->type))fprintf(out,":%u",(unsigned)m->flags);else fprintf(out,":-");}
   fputc(';',out);}
  fputc(',',out);for(i=0;i<NUMPRCLASS;++i)if(i!=pr_misc)fprintf(out,"%u;",rng.seed[i]);
  if(getenv("GD_RNG_FULL_MAP")||getenv("GD_RNG_REBIRTH")) {player_t *p=&players[displayplayer];

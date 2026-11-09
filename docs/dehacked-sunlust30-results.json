@@ -1,0 +1,283 @@
+{
+  "passed": true,
+  "complete": true,
+  "source": "c99cace52937556d4aa8b4cea3f572ba5bc5dbd1f7b147f9821222ca3125d264",
+  "verifier": "fea5021788748634849e9b261bfadc1cccb89fe12ee0059369055d89a0969bce",
+  "inputs": {
+    "iwad": "10d67824b11025ddd9198e8cfc87ca335ee6e2d3e63af4180fa9b8a471893255",
+    "wad": "6a90becf56040896fd2876a29f60a7a528d9802b081e0a1cc7d7cc65d546a964",
+    "demo": "36d39a6a9b0926929085eccdfdf36ba27d282dc76363abbf4d0f26ec35ececb3",
+    "deh": "91f46075aea96dc191573d846e291f2e6cc5bf01abea64ceddca3fb60f94e0a1",
+    "reference": "3e42a3955db4858c365ec1d0949f34e6e39e4f65f84c2dda75d82aa89b34d976",
+    "observers": {
+      "dsda_coop_demo_probe.inc": "7bf741c17dd2f9ad5d1d44ee2666d2f5ed3821d67b7a4532a1785d778c4bc2d2",
+      "dsda_rng_demo_probe.inc": "0d82fb0beb48cce1599ed2ae8dca8f51d254357c138c50b3dc1ecea80e055d86",
+      "dsda_intermission_probe.inc": "92dbea31947c5391307d3c6b6d31be1e410219a8fe9471ab796e9e67b8868334",
+      "dsda_finale_probe.inc": "4f9602cf14a05340ee7c205bc492f502c13e6af1ba8a77b750b8cac79bb56c04"
+    }
+  },
+  "capture_sha256": "b17948c6f831b6b96edbc632ec2382273723ab61310d31164254c9c5d4ce9eaf",
+  "reference_coverage": {
+    "commands": 16496,
+    "active_frames": 15997,
+    "phases": {
+      "0": 15997,
+      "1": 499,
+      "2": 0
+    },
+    "cold_checkpoints_after_commands": [
+      23,
+      67,
+      6043,
+      6044,
+      10000,
+      15997,
+      15998,
+      16247,
+      16496
+    ],
+    "checkpoint_phases": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1
+    ]
+  },
+  "requested_modes": [
+    "baseline",
+    "save",
+    "keyframe"
+  ],
+  "cases": {
+    "baseline": {
+      "passed": true,
+      "execution": {
+        "returncode": 0,
+        "first_difference": null,
+        "matched_lines": {
+          "world": 15998,
+          "phase": 16497
+        },
+        "elapsed_seconds": 720.0438734310155
+      },
+      "cold_restores": 0,
+      "world": {
+        "passed": true,
+        "rows": 15997,
+        "matched": 15997,
+        "row_counts": {
+          "gd": 15997,
+          "dsda": 15997,
+          "expected": 15997
+        },
+        "failures": [],
+        "gd_hash": "9cebf5b7e6c0c1dfaaaf4cebbaf38c88f7094952fdffb1d1e68214c86a85bca0",
+        "dsda_hash": "9cebf5b7e6c0c1dfaaaf4cebbaf38c88f7094952fdffb1d1e68214c86a85bca0"
+      },
+      "phase": {
+        "passed": true,
+        "rows": 16496,
+        "matched": 16496,
+        "row_counts": {
+          "gd": 16496,
+          "dsda": 16496,
+          "expected": 16496
+        },
+        "failures": [],
+        "gd_hash": "73e60a27204f8472087e48d293bb49be35a1b1c4f0641f294a2842db019bbe1a",
+        "dsda_hash": "73e60a27204f8472087e48d293bb49be35a1b1c4f0641f294a2842db019bbe1a"
+      }
+    },
+    "save": {
+      "passed": true,
+      "execution": {
+        "returncode": 0,
+        "first_difference": null,
+        "matched_lines": {
+          "world": 15998,
+          "phase": 16497
+        },
+        "elapsed_seconds": 895.7828130240086
+      },
+      "cold_restores": 9,
+      "world": {
+        "passed": true,
+        "rows": 15997,
+        "matched": 15997,
+        "row_counts": {
+          "gd": 15997,
+          "dsda": 15997,
+          "expected": 15997
+        },
+        "failures": [],
+        "gd_hash": "9cebf5b7e6c0c1dfaaaf4cebbaf38c88f7094952fdffb1d1e68214c86a85bca0",
+        "dsda_hash": "9cebf5b7e6c0c1dfaaaf4cebbaf38c88f7094952fdffb1d1e68214c86a85bca0"
+      },
+      "phase": {
+        "passed": true,
+        "rows": 16496,
+        "matched": 16496,
+        "row_counts": {
+          "gd": 16496,
+          "dsda": 16496,
+          "expected": 16496
+        },
+        "failures": [],
+        "gd_hash": "73e60a27204f8472087e48d293bb49be35a1b1c4f0641f294a2842db019bbe1a",
+        "dsda_hash": "73e60a27204f8472087e48d293bb49be35a1b1c4f0641f294a2842db019bbe1a"
+      }
+    },
+    "keyframe": {
+      "passed": true,
+      "execution": {
+        "returncode": 0,
+        "first_difference": null,
+        "matched_lines": {
+          "world": 15998,
+          "phase": 16497
+        },
+        "elapsed_seconds": 894.5416991929815
+      },
+      "cold_restores": 9,
+      "world": {
+        "passed": true,
+        "rows": 15997,
+        "matched": 15997,
+        "row_counts": {
+          "gd": 15997,
+          "dsda": 15997,
+          "expected": 15997
+        },
+        "failures": [],
+        "gd_hash": "9cebf5b7e6c0c1dfaaaf4cebbaf38c88f7094952fdffb1d1e68214c86a85bca0",
+        "dsda_hash": "9cebf5b7e6c0c1dfaaaf4cebbaf38c88f7094952fdffb1d1e68214c86a85bca0"
+      },
+      "phase": {
+        "passed": true,
+        "rows": 16496,
+        "matched": 16496,
+        "row_counts": {
+          "gd": 16496,
+          "dsda": 16496,
+          "expected": 16496
+        },
+        "failures": [],
+        "gd_hash": "73e60a27204f8472087e48d293bb49be35a1b1c4f0641f294a2842db019bbe1a",
+        "dsda_hash": "73e60a27204f8472087e48d293bb49be35a1b1c4f0641f294a2842db019bbe1a"
+      }
+    }
+  },
+  "scope": "Replay Bredd's unchanged Sunlust MAP30 UV-Speed demo with its original patch.\n\nChecks the complete original command stream and cold save/keyframe restores.\nNo -nodeh override, edited gameplay patch, altered WAD, or appended demo tail.\nThe original recording ends during intermission; finale execution is not proved.\n",
+  "exclusions": "Cosmetic RNG, decoration animation, text pixels, rendering and audio. No appended finale commands.",
+  "dependencies": {
+    "verify_boom_community_coop_campaign.py": "672d2fa4b4e7e3607e3628cdc85226c7a662c631eecd96d56d3640db7bffb46f",
+    "verify_boom_full_combat.py": "dcfaf25c88e9d37de256ab4c3a3ad9985a53eb1407c7189a32c183e3b435f525",
+    "verify_boom_transfers.py": "263701fc218e952a6ced8f2978806f9d76834d662d99a402b28f4fd637ac630b"
+  },
+  "component_reports_sha256": {
+    "baseline": "48ee183d8861300eb1fb190fbf8b3185ea5403f167a30c77316073907c953ab6",
+    "save": "11ce0f0c694a4707d1d17b5d88672412ed4620016e6e8700e77295519bc2fc3c",
+    "keyframe": "7f47f9aa3da3c8061d2ecab306f99be6ac13d450025803e64e35303bf7c04d81"
+  },
+  "summaries": {
+    "baseline": {
+      "passed": true,
+      "value": {
+        "completed": true,
+        "map": "MAP30",
+        "leveltime": 15997,
+        "total_kills": 2131,
+        "total_items": 32,
+        "total_secrets": 5,
+        "players": [
+          {
+            "armor": 0,
+            "bullets": 55,
+            "cells": 0,
+            "health": 0,
+            "items": 13,
+            "kills": 926,
+            "rockets": 1,
+            "secrets": 2,
+            "shells": 4,
+            "slot": 1
+          }
+        ]
+      },
+      "gd_sha256": "0723e72deca04a5997ee2c193b266b81004b76f3570f9f6f862ad165ca92cb19",
+      "dsda_sha256": "43e740baf37b2f6a3aad517b83171a0a51ef061593812a01640f6068f3512442"
+    },
+    "save": {
+      "passed": true,
+      "value": {
+        "completed": true,
+        "map": "MAP30",
+        "leveltime": 15997,
+        "total_kills": 2131,
+        "total_items": 32,
+        "total_secrets": 5,
+        "players": [
+          {
+            "armor": 0,
+            "bullets": 55,
+            "cells": 0,
+            "health": 0,
+            "items": 13,
+            "kills": 926,
+            "rockets": 1,
+            "secrets": 2,
+            "shells": 4,
+            "slot": 1
+          }
+        ]
+      },
+      "gd_sha256": "0723e72deca04a5997ee2c193b266b81004b76f3570f9f6f862ad165ca92cb19",
+      "dsda_sha256": "43e740baf37b2f6a3aad517b83171a0a51ef061593812a01640f6068f3512442"
+    },
+    "keyframe": {
+      "passed": true,
+      "value": {
+        "completed": true,
+        "map": "MAP30",
+        "leveltime": 15997,
+        "total_kills": 2131,
+        "total_items": 32,
+        "total_secrets": 5,
+        "players": [
+          {
+            "armor": 0,
+            "bullets": 55,
+            "cells": 0,
+            "health": 0,
+            "items": 13,
+            "kills": 926,
+            "rockets": 1,
+            "secrets": 2,
+            "shells": 4,
+            "slot": 1
+          }
+        ]
+      },
+      "gd_sha256": "0723e72deca04a5997ee2c193b266b81004b76f3570f9f6f862ad165ca92cb19",
+      "dsda_sha256": "43e740baf37b2f6a3aad517b83171a0a51ef061593812a01640f6068f3512442"
+    }
+  },
+  "combination_script_sha256": "fc26ce435ae73a8626ad42c81c951da5414061de2f29b89f8107a47d6d3af884",
+  "blockmap": {
+    "passed": true,
+    "cells": 20880,
+    "header": "origin,-7552,-13456,116,180",
+    "gd_sha256": "57530802314408ed32d24337672ddb4ec65f961e4ef143c28315ca2c96165f41",
+    "dsda_sha256": "57530802314408ed32d24337672ddb4ec65f961e4ef143c28315ca2c96165f41",
+    "source_sha256": "c99cace52937556d4aa8b4cea3f572ba5bc5dbd1f7b147f9821222ca3125d264",
+    "capture_sha256": "b17948c6f831b6b96edbc632ec2382273723ab61310d31164254c9c5d4ce9eaf",
+    "reference_sha256": "3e42a3955db4858c365ec1d0949f34e6e39e4f65f84c2dda75d82aa89b34d976",
+    "test": "TestBoomRebuiltBlockmapCapture",
+    "scope": "All reconstructed MAP30 block lists, including dummy word and line order; original Sunlust geometry. Native read-only GD_BLOCKMAP_OUT observer at original demo command 1."
+  }
+}

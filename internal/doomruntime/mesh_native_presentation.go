@@ -54,7 +54,7 @@ func (n *NativeMeshGame) buildPresentation() {
 			}
 			x, y, z := g.thingRenderPosFixed(i, th, g.renderAlpha)
 			ref, flip, _ := g.monsterSpriteRefForView(i, th, g.worldTic, g.renderPX, g.renderPY)
-			add(ref, x, y, z, sector, flip, false, monsterUsesShadow(th.Type))
+			add(ref, x, y, z, sector, flip, false, g.monsterUsesShadow(th.Type))
 		} else {
 			x, y := g.thingPosFixed(i, th)
 			ref, _ := g.runtimeWorldThingSpriteRef(i, th, tickUnits, unitsPerTic)

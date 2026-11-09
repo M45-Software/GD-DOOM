@@ -642,7 +642,7 @@ func (g *game) collectedCardKeys() [3]bool {
 		return cards
 	}
 	for i, th := range g.m.Things {
-		if i >= len(g.thingCollected) || !g.thingCollected[i] || !thingSpawnsInSession(th, g.opts.SkillLevel, g.opts.GameMode, g.opts.ShowNoSkillItems, g.opts.ShowAllItems, g.opts.NoMonsters) {
+		if i >= len(g.thingCollected) || !g.thingCollected[i] || !g.thingSpawnsInSession(th, g.opts.SkillLevel, g.opts.GameMode, g.opts.ShowNoSkillItems, g.opts.ShowAllItems, g.opts.NoMonsters) {
 			continue
 		}
 		switch th.Type {

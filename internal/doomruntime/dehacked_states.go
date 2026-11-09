@@ -17,7 +17,7 @@ var patchedActions = map[dehacked.Action]doomMonsterAction{
 }
 
 func validatePatchedState(index int, member string, states []dehacked.State) error {
-	if _, ok := monsterDoomStateDef(index); !ok {
+	if !definitionStateSet[index] {
 		return fmt.Errorf("DeHackEd gameplay does not yet support Frame %d", index)
 	}
 	switch member {
@@ -30,7 +30,7 @@ func validatePatchedState(index int, member string, states []dehacked.State) err
 		return fmt.Errorf("DeHackEd Frame %d duration below -1 is not supported", index)
 	}
 	if state.Next != 0 {
-		if _, ok := monsterDoomStateDef(int(state.Next)); !ok {
+		if !definitionStateSet[int(state.Next)] {
 			return fmt.Errorf("DeHackEd Frame %d points to unsupported Frame %d", index, state.Next)
 		}
 	}
@@ -42,7 +42,7 @@ func validatePatchedState(index int, member string, states []dehacked.State) err
 
 func validateZeroStateChains(defs *dehacked.Definitions) error {
 	for start := 0; start < dehacked.NumStates; start++ {
-		if _, ok := monsterDoomStateDef(start); !ok {
+		if !definitionStateSet[start] {
 			continue
 		}
 		seen := map[int]bool{}
@@ -65,9 +65,9 @@ func validateZeroStateChains(defs *dehacked.Definitions) error {
 // definitions and zero-damage hit semantics are integrated, reject such cross-
 // type assignments, including indirect links and changed entry-state roots.
 func validateReachableStateActions(defs *dehacked.Definitions) error {
-	for _, typ := range []int16{3004, 9, 65, 68, 3005, 3006} {
+	for _, typ := range definitionMonsterTypes {
 		_, actor, _ := defs.ThingForEditorNumber(int32(typ))
-		todo := []int{int(actor.SpawnState), int(actor.SeeState), int(actor.PainState), int(actor.MissileState)}
+		todo := actorStateRoots(actor)
 		seen := map[int]bool{}
 		for len(todo) > 0 {
 			state := todo[len(todo)-1]
@@ -76,14 +76,20 @@ func validateReachableStateActions(defs *dehacked.Definitions) error {
 				continue
 			}
 			seen[state] = true
-			if _, ok := monsterDoomStateDef(state); !ok {
+			if !definitionStateSet[state] {
 				return fmt.Errorf("unsupported reachable state %d for actor %d", state, typ)
 			}
 			def, _ := defs.State(dehacked.StateID(state))
 			if def.Action == "SkullAttack" && typ != 3006 {
 				return fmt.Errorf("cross-type SkullAttack requires actor damage integration (actor %d, Frame %d)", typ, state)
 			}
+			if _, ok := patchedActions[def.Action]; !ok {
+				return fmt.Errorf("unsupported reachable action %s", def.Action)
+			}
 			todo = append(todo, int(def.Next))
+			if def.Action == "VileChase" {
+				todo = append(todo, 266)
+			}
 		}
 	}
 	return nil
@@ -93,45 +99,60 @@ func stateOverrides(defs *dehacked.Definitions) map[int]doomMonsterStateDef {
 	if defs == nil {
 		return nil
 	}
-	var out map[int]doomMonsterStateDef
-	for index := 0; index < dehacked.NumStates; index++ {
-		if !defs.FieldWasSet("frame", index, "Tics") && !defs.FieldWasSet("frame", index, "Next") && !defs.FieldWasSet("frame", index, "Action") {
-			continue
-		}
-		s, _ := defs.State(dehacked.StateID(index))
-		if out == nil {
-			out = make(map[int]doomMonsterStateDef)
-		}
-		out[index] = doomMonsterStateDef{tics: int(s.Tics), next: int(s.Next), action: patchedActions[s.Action]}
+	out := make(map[int]doomMonsterStateDef)
+	for index := range definitionStateSet {
+		state, _ := defs.State(dehacked.StateID(index))
+		out[index] = doomMonsterStateDef{tics: int(state.Tics), next: int(state.Next), action: patchedActions[state.Action]}
 	}
 	return out
 }
 
 func (g *game) monsterDoomStateDef(state int) (doomMonsterStateDef, bool) {
 	if def, ok := g.patchedStates[state]; ok {
+		// Fast mode modifies the original demon state slots, even when another
+		// actor enters them. Boom preserves one-tic states to avoid zero cycles.
+		if g.fastMonstersActive() && state >= 477 && state <= 489 && (def.tics != 1 || !g.boomMomentumDropoff) {
+			def.tics >>= 1
+		}
 		return def, true
 	}
 	return monsterDoomStateDef(state)
 }
 func (g *game) monsterInitialDoomState(typ int16) int {
+	if g.patchedStateRuntime(typ) {
+		actor, _ := g.definitionThing(typ)
+		return int(actor.SpawnState)
+	}
 	if value, ok := g.actorProperty(typ, "SpawnState"); ok {
 		return int(value)
 	}
 	return monsterInitialDoomState(typ)
 }
 func (g *game) monsterDoomSeeState(typ int16) int {
+	if g.patchedStateRuntime(typ) {
+		actor, _ := g.definitionThing(typ)
+		return int(actor.SeeState)
+	}
 	if value, ok := g.actorProperty(typ, "SeeState"); ok {
 		return int(value)
 	}
 	return monsterDoomSeeState(typ)
 }
 func (g *game) monsterDoomPainState(typ int16) int {
+	if g.patchedStateRuntime(typ) {
+		actor, _ := g.definitionThing(typ)
+		return int(actor.PainState)
+	}
 	if value, ok := g.actorProperty(typ, "PainState"); ok {
 		return int(value)
 	}
 	return monsterDoomPainState(typ)
 }
 func (g *game) monsterDoomMissileState(typ int16) int {
+	if g.patchedStateRuntime(typ) {
+		actor, _ := g.definitionThing(typ)
+		return int(actor.MissileState)
+	}
 	if value, ok := g.actorProperty(typ, "MissileState"); ok {
 		return int(value)
 	}
@@ -146,7 +167,7 @@ func (g *game) hasPatchedStateRoots(typ int16) bool {
 	return false
 }
 func (g *game) patchedStateRuntime(typ int16) bool {
-	return g != nil && g.opts.DehackedDefinitions != nil && monsterUsesExactDoomStateMachine(typ) && (len(g.patchedStates) > 0 || g.hasPatchedStateRoots(typ))
+	return g != nil && g.definitionActors[typ]
 }
 func (g *game) dehackedSpawnInfo(typ int16, info demoTraceThingInfo) demoTraceThingInfo {
 	if g.patchedStateRuntime(typ) {
@@ -242,7 +263,7 @@ func (g *game) runPatchedAttackAction(i int, typ int16, action doomMonsterAction
 }
 
 func (g *game) patchedVisualState(i int, th mapdata.Thing) (dehacked.State, bool) {
-	if !g.patchedStateRuntime(th.Type) || i < 0 || i >= len(g.thingDoomState) || g.thingDoomState[i] < 1 || g.thingDead[i] || g.thingState[i] == monsterStateRaise {
+	if !g.patchedStateRuntime(th.Type) || i < 0 || i >= len(g.thingDoomState) || g.thingDoomState[i] < 1 {
 		return dehacked.State{}, false
 	}
 	return g.opts.DehackedDefinitions.State(dehacked.StateID(g.thingDoomState[i]))

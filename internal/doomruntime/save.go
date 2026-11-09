@@ -25,10 +25,10 @@ import (
 )
 
 const (
-	saveGameVersion     = 46
+	saveGameVersion     = 47
 	saveGamePrefix      = "dsg"
 	saveGameQuickPrefix = "quicksave"
-	keyframeVersion     = 33
+	keyframeVersion     = 34
 	saveGameDirName     = "saves"
 )
 
@@ -169,6 +169,7 @@ type gameSaveState struct {
 	ThingPainTics        []int
 	ThingThinkWait       []int
 	ThingDoomState       []int
+	ThingDefinitionFlags []uint32
 	ThingState           []uint8
 	ThingStateTics       []int
 	ThingStatePhase      []int
@@ -1181,6 +1182,9 @@ func (sg *sessionGame) loadSnapshot(data []byte, magic []byte, version int) (sav
 	if file.Version < version-3 || file.Version > version {
 		return saveFile{}, fmt.Errorf("incompatible save version: %d", file.Version)
 	}
+	if file.DehackedDigest != "" && snapshotFeatureVersion(file.Version, bytes.Equal(magic, keyframeMagic)) < 47 {
+		return saveFile{}, fmt.Errorf("patched checkpoint predates canonical actor flags; replay from the map start")
+	}
 	if file.DehackedDigest != definitionDigest(sg.opts) {
 		return saveFile{}, fmt.Errorf("save DeHackEd definitions do not match the current session")
 	}
@@ -1422,6 +1426,7 @@ func captureGameSaveState(g *game) gameSaveState {
 		ThingPainTics:        append([]int(nil), g.thingPainTics...),
 		ThingThinkWait:       append([]int(nil), g.thingThinkWait...),
 		ThingDoomState:       append([]int(nil), g.thingDoomState...),
+		ThingDefinitionFlags: append([]uint32(nil), g.thingDefinitionFlags...),
 		ThingState:           cloneMonsterThinkStateSlice(g.thingState),
 		ThingStateTics:       append([]int(nil), g.thingStateTics...),
 		ThingStatePhase:      append([]int(nil), g.thingStatePhase...),
@@ -1579,6 +1584,7 @@ func restoreGameSaveState(g *game, s gameSaveState) {
 	g.thingPainTics = restoreSaveSlice(g.thingPainTics, s.ThingPainTics)
 	g.thingThinkWait = restoreSaveSlice(g.thingThinkWait, s.ThingThinkWait)
 	g.thingDoomState = restoreSaveSlice(g.thingDoomState, s.ThingDoomState)
+	g.thingDefinitionFlags = restoreSaveSlice(g.thingDefinitionFlags, s.ThingDefinitionFlags)
 	g.thingState = restoreMonsterThinkStateSlice(s.ThingState)
 	g.thingStateTics = restoreSaveSlice(g.thingStateTics, s.ThingStateTics)
 	g.thingStatePhase = restoreSaveSlice(g.thingStatePhase, s.ThingStatePhase)

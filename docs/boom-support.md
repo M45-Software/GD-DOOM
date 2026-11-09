@@ -1832,9 +1832,11 @@ already pinned Sunlust archive; its SHA-256 is
 `3e6954e5898babc5df625e0c070a55539238067cd00fbbdc8caf6b872f7bd443`.
 MAP30 contains 56 Commander Keens and requires Sunlust's gameplay patch.
 The earlier maps' `-nodeh` audit cannot justify excluding it for this movie.
-DeHackEd actor support is outside the current Boom-only milestone; this movie
-therefore remains a diagnostic corpus rather than a completed full-campaign
-proof. Its commands must not be altered to bypass that dependency.
+That dependency is now being addressed on the separate
+[DeHackEd branch](dehacked-support.md), including cross-type `VileChase` and Keen
+flags. This complete co-op movie remains a diagnostic corpus until replayed with
+its original patch; the separate MAP30 solo test does not establish full co-op
+campaign parity. Its commands must not be altered to bypass that dependency.
 
 For long comparisons, `GD_COOP_COMPACT=1` hashes each complete existing active
 world CSV row, including its newline, with MD5. Both observers retain the command,

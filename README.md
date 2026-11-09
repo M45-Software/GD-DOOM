@@ -167,7 +167,8 @@ or [cmd/musicwav](cmd/musicwav) for FM/PC speaker renders; see the
 ## Original Doom demo compatibility
 
 Partial [DeHackEd/BEX support](docs/dehacked-support.md) includes ordered embedded
-and external patch loading, actor properties, and selected live monster states/actions.
+and external patch loading, actor properties, monster death/raise states, selected
+flags and cross-type `VileChase`.
 Unsupported changes produce explicit errors; full DeHackEd gameplay remains in progress.
 
 The completed COMPET-N sweep covers **4,646 single-player Ultimate Doom and

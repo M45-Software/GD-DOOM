@@ -13,6 +13,14 @@ includes behavior-driven, ported, and derivative work based on the DOOM source r
 
 See [LICENSE](/home/dist/github/GD-DOOM/LICENSE) for the full GNU GPL v2 text.
 
+The Boom blockmap reconstruction in internal/doomruntime/boom_blockmap.go follows
+P_CreateBlockMap in PrBoom/DSDA-Doom's p_setup.c, distributed under GPL v2 or later:
+https://github.com/kraflab/dsda-doom/blob/v0.27.5/prboom2/src/p_setup.c
+Upstream copyright notices: (C) 1999 id Software, Chi Hoang, Lee Killough,
+Jim Flynn, Rand Phares, Ty Halderman; (C) 1999-2000 Jess Haas, Nicolas Kalkhof,
+Colin Phipps, Florian Schulze; (C) 2005, 2006 Florian Schulze, Colin Phipps,
+Neil Stevens, Andrey Budko.
+
 The unchanged automap debug-font atlas at
 internal/render/raymesh/assets/debug-font.png comes from Ebitengine v2.10.4's
 ebitenutil/text.png, generated with github.com/hajimehoshi/bitmapfont.

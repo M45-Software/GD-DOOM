@@ -1,10 +1,10 @@
 # DeHackEd/BEX support (partial)
 
 The engine loads external DeHackEd/BEX patches and embedded `DEHACKED` lumps,
-with session-local definitions, actor properties and selected live monster
-states/actions. **This is a supported subset, not complete DeHackEd support.**
-Unsupported changes fail explicitly. Sunlust MAP30's `VileChase` state loop,
-patched flags and strings still require further integration.
+with session-local definitions, actor properties, monster death/raise states
+and selected flags/actions. **This is a supported subset, not complete DeHackEd support.**
+Unsupported changes fail explicitly. The original Sunlust patch now loads,
+including its non-solid Keen `VileChase` loop, map titles and story strings.
 
 ## Definition model
 
@@ -171,30 +171,50 @@ preserves the broader original 32-bit values independently.
 
 ## Patched states and actions
 
-The exact live-state machines for zombiemen, shotgun guys, chaingunners,
-arachnotrons, cacodemons and lost souls consume patched `Duration`, `Next frame`
-and classic/BEX code pointers. Their spawn, see, pain and missile state roots can
-redirect to another supported live state. State zero removes an actor on entry;
-a zero missile-state root disables missile attacks. A zero initial-state root is
-not supported. The destination state's canonical sprite/frame metadata follows
-redirects, including redirects to another monster's live states.
+All nineteen map monster kinds (including Commander Keen) and barrels can use
+canonical spawn, see, pain, melee, missile, death, overkill and raise states.
+They consume patched `Duration`, `Next frame` and classic/BEX code pointers.
+State zero removes an actor on entry; a zero missile root disables missile
+attacks. A zero spawn root is rejected. The destination state's original
+sprite/frame metadata follows redirects, including cross-type redirects.
+Unmodified actor types keep their existing thinker paths.
 
-Implemented actions are `NULL`, `Look`, `Chase`, `FaceTarget`, `Pain`, `PosAttack`,
-`SPosAttack`, `CPosAttack`, `CPosRefire`, `HeadAttack`, `BspiAttack`, `SpidRefire` and
-`SkullAttack`. Attack substitutions dispatch the code pointer independently of
-the actor's map type. `SkullAttack` is restricted to lost souls until actor damage
-and zero-damage collision behavior are integrated; reachable-state validation
-also catches indirect cross-type assignments.
+The dispatcher covers the original monster actions, including `VileChase`,
+`VileTarget`, `VileAttack`, `KeenDie`, `BossDeath`, `Fall`, `Scream`, `XScream`,
+`PainDie`, `Explode`, the three mancubus attacks, revenant attacks and the
+existing hitscan/projectile attacks. `SkullAttack` remains restricted to lost
+souls until cross-type actor damage and zero-damage collision behavior are
+integrated. Projectile/effect/player/weapon state machines are separate and
+cannot be redirected or patched through this interface.
 
-Actions run on state entry, not initial spawning. Zero-tic chains execute within
-the same tic, including chains longer than the previous 16-frame recursion cap.
-Duration `-1` remains infinite. Pure zero-tic cycles are rejected during validation;
-a bounded transition budget reports action-driven recursion as a runtime error.
-Durations below `-1` remain parser data but are not enabled in gameplay.
+`VileChase` uses the calling actor's speed and the arch-vile definition's search
+radius, then enters the original arch-vile heal chain. Resurrection restores
+original definition flags, health and raise state. Death clears shootability,
+adds corpse/dropoff flags, and retains solidity until `Fall`; crusher gibs and
+cold checkpoints retain these per-instance changes. Fast mode halves the
+original demon state slots, including cross-type redirects, while Boom retains
+one-tic durations.
 
-Death/raise states, other actor families, projectile/effect/player/weapon states,
-Sprite/Frame edits, flags, editor-number changes, resources, strings and other
-rules are not enabled yet. Barrel pain/speed modifications remain unsupported.
+Supported flag consumers include solidity, shootability, ambush, blockmap links,
+ceiling spawning, gravity, float/dropoff movement, noclip, shadows, blood,
+kill/item counts, corpse state and deathmatch spawning. Pickup/special, NOSECTOR,
+SLIDE, TELEPORT, MISSILE, initial SKULLFLY, translation, translucency and extended
+flags are rejected. This is a partial flag implementation, not arbitrary Bits
+support. Actor sight/pain/death/active/attack sound slots accept mapped existing
+sounds or zero; sound-table/resource modifications remain unsupported.
+
+Actions execute on state entry, not initial spawning. Zero-tic chains execute
+within the same tic, including chains longer than the former 16-frame cap.
+Duration `-1` remains infinite. Pure zero-tic cycles are rejected during
+validation; a bounded transition budget reports action-driven recursion as a
+runtime error. Durations below `-1` are not enabled in gameplay.
+
+Sprite/Frame edits, editor-number changes, projectile/effect/player/weapon
+states, general strings/resources, weapon/ammo rules and miscellaneous gameplay
+rules remain unsupported. Barrel pain/speed modifications are still rejected.
+Supported presentation strings are `HUSTR_1` through `HUSTR_32` in the level/music
+catalog and `C1TEXT`–`C6TEXT` / `E1TEXT`–`E4TEXT` in story screens. Catalogs are
+cloned per session.
 
 ## Launcher, campaign and checkpoints
 
@@ -218,12 +238,14 @@ launching through the IWAD picker. The public runtime constructors also surface
 unsupported definitions before allocating gameplay resources or changing RNG.
 
 Definitions travel through `Options` into new levels, rebirths and restored games.
-Save version 46 and keyframe version 33 carry the resolved definition digest;
+Save version 47 and keyframe version 34 carry the resolved definition digest
+and persistent actor flags;
 loading requires the same definitions to be loaded again. Saves do not bundle
-external patch files. A mismatch is rejected before installing the snapshot or
+external patch files. Patched checkpoints older than version 47 must be replayed
+from the map start; unpatched saves retain the usual compatibility window. A mismatch is rejected before installing the snapshot or
 changing RNG in either host. Network sessions are explicitly unavailable for
 patched games until resolved-definition negotiation exists. The authority
-compatibility ID is `gd-doom-authority-dev-35` for the new checkpoint format.
+compatibility ID is `gd-doom-authority-dev-36` for the new checkpoint format.
 
 Focused Go tests cover actor properties, state roots, code-pointer RNG classes,
 zero-tic/infinite/null states, recursion limits, loader order/includes, launcher
@@ -248,11 +270,83 @@ python3 -B scripts/verify_dehacked_gameplay.py \
   --out /tmp/gddoom-dehacked-gameplay
 ```
 
+The separate [actor results](dehacked-actors-results.json) record **132 passing
+native comparisons and 42,240 matched tics**: twenty actor families, live and
+death sequences, plus fast demon/spectre variants. Each fixture explicitly
+selects the original spawn root to exercise the canonical state executor.
+Death fixtures lower health and fire the player's pistol. Full mapped actor
+flags, combat, weapon, sector and gameplay RNG columns are compared directly
+and with checkpoints at commands 23, 67 and 211. Observers do not change play.
+
+```sh
+python3 -B scripts/verify_dehacked_actors.py \
+  --iwad /path/to/doom2.wad \
+  --reference /path/to/dsda-with-dsda_rng_demo_probe \
+  --out /tmp/gddoom-dehacked-actors
+```
+
+The [resurrection results](dehacked-raise-results.json) add **42 passing native
+comparisons and 20,160 matched tics** for all fourteen monster families with
+raise roots. Each fixture requires an observed transition from dead to alive:
+the player kills the patched victim, then a non-solid patched Keen runs
+`VileChase`. Save/keyframe checkpoints occur before and during resurrection.
+The pain-elemental fixture explicitly retains its last death pose (duration
+`-1`); the original death chain removes that body before it can be raised.
+These synthetic edits are recorded separately from the unchanged MAP30 input.
+
+```sh
+python3 -B scripts/verify_dehacked_raise.py \
+  --iwad /path/to/doom2.wad \
+  --reference /path/to/dsda-with-dsda_rng_demo_probe \
+  --out /tmp/gddoom-dehacked-raise
+```
+
+Sunlust MAP30 also required two native Boom corrections: player starts/dolls
+must bypass ordinary map-thing skill filters, and oversized BLOCKMAPs must be
+rebuilt with unsigned linedef IDs. The rebuilt map's complete 20,880 block lists
+were compared byte-for-byte with DSDA. The original delimiter regression and
+unsigned high-numbered collision-line checks remain in the test suite.
+
+## Original Sunlust MAP30 replay
+
+`scripts/verify_dehacked_sunlust30.py` audits Bredd's original UV-Speed recording,
+[`sl30-737.lmp`](https://dsdarchive.com/files/demos/sunlust/97301/sl30-737.zip),
+the original Sunlust WAD and its embedded patch by SHA-256. It uses every one
+of the original 16,496 commands, without editing the patch, excluding DeHackEd,
+or appending a synthetic ending. The native capture has 15,997 active-world
+rows and 499 intermission commands.
+
+The [source-pinned results](dehacked-sunlust30-results.json) record **three
+complete passing replays and eighteen cold restores**. All 15,997 world rows
+and 16,496 phase rows match in each mode, as do the completed-level summaries.
+The report includes component-receipt hashes and the matching rebuilt blockmap.
+
+Baseline, cold-save and cold-keyframe comparisons cover every active-world
+digest and every phase row. Checkpoint commands are 23, 67, 6043, 6044, 10000,
+15997, 15998, 16247 and 16496, including the resurrection boundary and
+intermission. Each cold restore creates a new session from map resources and
+the original preloaded demo. Cosmetic RNG, decoration animation, rendered text,
+pixels and audio are excluded. This recording ends in intermission before the
+MAP30 finale; it cannot establish finale or full co-op campaign parity.
+
+```sh
+python3 -B scripts/verify_dehacked_sunlust30.py \
+  --iwad /path/to/doom2.wad --wad /path/to/sunlust.wad \
+  --demo /path/to/sl30-737.lmp \
+  --reference /path/to/instrumented/dsda-doom \
+  --out /tmp/gddoom-dehacked-sunlust30
+```
+
+For parallel verification, run `--mode baseline`, `--mode save` and
+`--mode keyframe` with separate output directories, then combine their receipts
+using `scripts/combine_dehacked_sunlust30.py --baseline DIR --save DIR
+--keyframe DIR --out results.json`. The combiner requires identical source,
+verifier, binary, input and reference identities, complete command/checkpoint
+coverage and matching native exit summaries.
+
 ## Next integration milestone
 
-Extend state/action dispatch to the remaining actors and death/raise/effect paths,
-starting with Commander Keen and cross-type `VileChase`. Wire flags, sprite/frame
-changes, strings and resource/weapon consumers before testing the unchanged
-Sunlust MAP30 patch. Then verify its actual demo against DSDA and expand to
-campaign transitions and cold checkpoints. Network definition negotiation remains
-separate work.
+Expand projectile/effect and player/weapon state consumers, sprite/frame/resource
+changes and the remaining flag semantics. Then broaden original patched-demo
+and campaign coverage, including finales reached by original recordings.
+Network definition negotiation remains separate work.

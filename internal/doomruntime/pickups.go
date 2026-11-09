@@ -286,7 +286,7 @@ func (g *game) processThingPickupAtIndex(i int, th mapdata.Thing, px, py, pz, pr
 	g.thingCollected[i] = true
 	g.updateBoomThingTouch(i)
 	g.scheduleAuthoritativeItemRespawn(i)
-	if thingCountsItem(th.Type) {
+	if g.thingCountsItem(th.Type) {
 		g.playerItemCount++
 	}
 	g.setHUDMessage(msg, 45)

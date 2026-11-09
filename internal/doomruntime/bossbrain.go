@@ -303,12 +303,12 @@ func (g *game) resolveBossCube(cube bossSpawnCube) {
 	g.thingStatePhase[idx] = 0
 	g.thingStateTics[idx] = monsterSpawnStateTics(typ)
 	g.thingMoveDir[idx] = monsterDirEast
-	if monsterUsesExactDoomStateMachine(typ) {
+	if g.monsterUsesExactDoomStateMachine(typ) {
 		g.thingDoomState[idx] = g.monsterInitialDoomState(typ)
 	}
 	if g.monsterLookForPlayer(idx, true, tx, ty) {
 		g.thingAggro[idx] = true
-		if monsterUsesExactDoomStateMachine(typ) {
+		if g.monsterUsesExactDoomStateMachine(typ) {
 			g.setExactDoomMonsterState(idx, typ, g.monsterDoomSeeState(typ))
 		} else {
 			g.thingStatePhase[idx] = monsterSeeStartPhase(typ)

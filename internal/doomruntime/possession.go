@@ -175,7 +175,7 @@ func (g *game) movePossessedMonster(i int, th mapdata.Thing, x, y int64) bool {
 		for _, line := range probe.probeLines {
 			g.useSpecialLineForActorIndex(line, 0, false, i)
 		}
-		if probe.floatOK && monsterCanFloat(th.Type) {
+		if probe.floatOK && g.monsterCanFloat(th.Type) {
 			z, floor, ceil := g.thingSupportState(i, th)
 			if z < probe.tmfloor {
 				z += 4 * fracUnit
@@ -188,7 +188,7 @@ func (g *game) movePossessedMonster(i int, th mapdata.Thing, x, y int64) bool {
 	}
 	oldX, oldY := g.thingPosFixed(i, th)
 	z, _, _ := g.thingSupportState(i, th)
-	if !monsterCanFloat(th.Type) {
+	if !g.monsterCanFloat(th.Type) {
 		z = probe.tmfloor
 	}
 	g.setThingPosFixed(i, x, y)

@@ -460,6 +460,7 @@ func (sg *sessionGame) startEpisodeFinale(current mapdata.MapName, secret bool) 
 	}
 	sg.levelCarryover = nil
 	sg.coopCarryover = nil
+	state = sg.applyDefinitionFinaleText(state)
 	state.Boom = sg.g != nil && sg.g.boomMomentumDropoff
 	if sg.g != nil {
 		sg.g.demoFinaleActive = sg.g.opts.DemoScript != nil
@@ -478,6 +479,7 @@ func (sg *sessionGame) startCommercialFinale() bool {
 	// Carryover and the intermission's nextMap are still needed when the
 	// commercial finale queues G_DoWorldDone on a later command tic.
 	sg.intermission.state.Active = false
+	state = sg.applyDefinitionFinaleText(state)
 	state.Boom = sg.g != nil && sg.g.boomMomentumDropoff
 	sg.finale = state
 	sg.playFinaleMusicLump("D_READ_M")

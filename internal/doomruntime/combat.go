@@ -86,7 +86,9 @@ const (
 )
 
 func (g *game) initThingCombatState() {
+	g.ensureDefinitionFlags()
 	for i, th := range g.m.Things {
+		g.initDefinitionActorFlags(i)
 		if slot := playerSlotFromThingType(th.Type); slot != 0 {
 			// Doom spawns the active player inline during map thing iteration,
 			// and P_SpawnMobj consumes one P_Random() for its lastlook field.
@@ -128,7 +130,7 @@ func (g *game) initThingCombatState() {
 					g.thingState[i] = monsterStateSpawn
 					g.thingStateTics[i] = spawnTics
 				}
-				if i >= 0 && i < len(g.thingDoomState) && monsterUsesExactDoomStateMachine(th.Type) {
+				if i >= 0 && i < len(g.thingDoomState) && g.monsterUsesExactDoomStateMachine(th.Type) {
 					g.thingDoomState[i] = g.monsterInitialDoomState(th.Type)
 				}
 				if i >= 0 && i < len(g.thingStatePhase) {
@@ -146,7 +148,7 @@ func (g *game) initThingCombatState() {
 		if g.opts.SkillLevel == 5 && i < len(g.thingReactionTics) {
 			g.thingReactionTics[i] = 0
 		}
-		if !thingTypeIsShootable(th.Type) {
+		if !g.thingTypeIsShootable(th.Type) && !g.patchedStateRuntime(th.Type) {
 			continue
 		}
 		g.thingHP[i] = g.shootableThingSpawnHealth(th.Type)
@@ -163,7 +165,7 @@ func (g *game) initThingCombatState() {
 				}
 			}
 		}
-		if i >= 0 && i < len(g.thingDoomState) && monsterUsesExactDoomStateMachine(th.Type) {
+		if i >= 0 && i < len(g.thingDoomState) && g.monsterUsesExactDoomStateMachine(th.Type) {
 			g.thingDoomState[i] = g.monsterInitialDoomState(th.Type)
 		}
 		if g.patchedStateRuntime(th.Type) {
@@ -786,7 +788,7 @@ func (g *game) lineAttackThingTargetable(i int, mask lineAttackTargetMask, exclu
 		return lineAttackTarget{}, false
 	}
 	th := g.m.Things[i]
-	if mask&lineAttackMaskShootables != 0 && thingTypeIsShootable(th.Type) {
+	if mask&lineAttackMaskShootables != 0 && g.thingTypeIsShootable(th.Type) {
 		return lineAttackTarget{kind: lineAttackTargetThing, idx: i}, true
 	}
 	return lineAttackTarget{}, false
@@ -813,8 +815,8 @@ func (g *game) lineAttackTargetState(target lineAttackTarget) (x, y, z, height, 
 		z, _, _ = g.thingSupportState(target.idx, th)
 		height = g.thingCurrentHeight(target.idx, th)
 		radius = g.thingCurrentRadius(target.idx, th)
-		noBlood = thingTypeNoBlood(th.Type)
-		shootable = thingTypeIsShootable(th.Type) && target.idx < len(g.thingHP) && g.thingHP[target.idx] > 0 && !(target.idx < len(g.thingDead) && g.thingDead[target.idx])
+		noBlood = g.thingTypeNoBlood(th.Type)
+		shootable = g.thingTypeIsShootable(th.Type) && target.idx < len(g.thingHP) && g.thingHP[target.idx] > 0 && !(target.idx < len(g.thingDead) && g.thingDead[target.idx])
 		return x, y, z, height, radius, noBlood, shootable, true
 	default:
 		return 0, 0, 0, 0, 0, false, false, false
@@ -1488,6 +1490,9 @@ func (g *game) damageMonsterFromWithInflictorZ(thingIdx int, damage int, sourceP
 	if g.m == nil || thingIdx >= len(g.m.Things) {
 		return
 	}
+	if flags, ok := g.definitionFlags(thingIdx); ok && flags&4 == 0 {
+		return
+	}
 	if g.m.Things[thingIdx].Type == 88 {
 		g.damageBossBrain(thingIdx, damage, sourcePlayer, sourceThing, inflictorX, inflictorY, hasInflictor, inflictorZ, hasInflictorZ)
 		return
@@ -1527,12 +1532,16 @@ func (g *game) damageMonsterFromWithInflictorZ(thingIdx int, damage int, sourceP
 	if g.thingHP[thingIdx] <= 0 {
 		// P_KillMobj credits every counted death in single-player, including
 		// infighting and another death after resurrection or respawn.
-		if thingCountsKill(thingType) {
+		if g.thingCountsKill(thingType) {
 			if sourcePlayer || normalizeGameMode(g.opts.GameMode) == gameModeSingle {
 				g.playerKillCount++
 			} else if g.coopDemoNetgame() {
 				g.creditCoopUnownedKill(thingIdx)
 			}
+		}
+		if g.patchedStateRuntime(thingType) {
+			g.definitionDeath(thingIdx)
+			return
 		}
 		xdeath := g.thingHP[thingIdx] < -g.monsterSpawnHealth(thingType) && monsterHasXDeath(thingType)
 		// P_KillMobj clears MF_SKULLFLY along with MF_FLOAT.
@@ -1605,10 +1614,10 @@ func (g *game) damageMonsterFromWithInflictorZ(thingIdx int, damage int, sourceP
 		if thingIdx >= 0 && thingIdx < len(g.thingReactionTics) {
 			g.thingReactionTics[thingIdx] = 0
 		}
-		if isMonster(thingType) {
+		if isMonster(thingType) || g.patchedStateRuntime(thingType) {
 			chance := g.monsterPainChance(thingType)
 			_, patchedPainChance := g.actorProperty(thingType, "PainChance")
-			if chance > 0 || patchedPainChance {
+			if chance > 0 || patchedPainChance || g.patchedStateRuntime(thingType) {
 				roll := doomrand.PRandom(doomrand.Painchance)
 				// Doom evaluates P_Random before testing MF_SKULLFLY, so a
 				// charging Lost Soul consumes the pain roll but cannot enter
@@ -1619,7 +1628,7 @@ func (g *game) damageMonsterFromWithInflictorZ(thingIdx int, damage int, sourceP
 						// Doom only marks JUSTHIT when the pain state triggers.
 						g.thingJustHit[thingIdx] = true
 					}
-					if monsterUsesExactDoomStateMachine(thingType) {
+					if g.monsterUsesExactDoomStateMachine(thingType) {
 						g.setExactDoomMonsterState(thingIdx, thingType, g.monsterDoomPainState(thingType))
 						if thingIdx >= 0 && thingIdx < len(g.thingAttackFireTics) {
 							g.thingAttackFireTics[thingIdx] = -1
@@ -1878,7 +1887,7 @@ func (g *game) wakeDormantMonsterFromDamage(i int, typ int16) {
 	// struck by another charging skull before its first thinker tick. Doom's
 	// P_DamageMobj retargets it and immediately enters S_SKULL_RUN1; that
 	// state's A_Chase action can in turn enter S_SKULL_ATK1 in the same tic.
-	if g != nil && monsterUsesExactDoomStateMachine(typ) && i >= 0 &&
+	if g != nil && g.monsterUsesExactDoomStateMachine(typ) && i >= 0 &&
 		i < len(g.thingDoomState) &&
 		(g.thingDoomState[i] == g.monsterInitialDoomState(typ) ||
 			(g.thingDoomState[i] == noDoomMonsterState && i < len(g.thingState) && g.thingState[i] == monsterStateSpawn)) {
@@ -1887,7 +1896,7 @@ func (g *game) wakeDormantMonsterFromDamage(i int, typ int16) {
 	}
 	// Every walking monster with a see state follows this transition, not
 	// just particular families. Commander Keen has no see state.
-	if g == nil || !isMonster(typ) || typ == 72 || monsterUsesExactDoomStateMachine(typ) || i < 0 || i >= len(g.thingState) || g.thingState[i] != monsterStateSpawn ||
+	if g == nil || !isMonster(typ) || typ == 72 || g.monsterUsesExactDoomStateMachine(typ) || i < 0 || i >= len(g.thingState) || g.thingState[i] != monsterStateSpawn ||
 		(i < len(g.thingStatePhase) && g.thingStatePhase[i] != 0) {
 		return
 	}
@@ -2019,6 +2028,7 @@ func (g *game) appendRuntimeThingWithSpawnRNG(th mapdata.Thing, dropped, spawnRN
 	g.thingMoveCount = append(g.thingMoveCount, 0)
 	g.thingJustAtk = append(g.thingJustAtk, false)
 	g.thingJustHit = append(g.thingJustHit, false)
+	g.ensureDefinitionFlags()
 	g.thingReactionTics = append(g.thingReactionTics, g.demoTraceSpawnReactionTime(th.Type))
 	if g.opts.SkillLevel == 5 {
 		g.thingReactionTics[len(g.thingReactionTics)-1] = 0
@@ -2049,6 +2059,14 @@ func (g *game) appendRuntimeThingWithSpawnRNG(th mapdata.Thing, dropped, spawnRN
 	g.thingStateTics = append(g.thingStateTics, 0)
 	g.thingStatePhase = append(g.thingStatePhase, 0)
 	g.thingWorldAnimRef = append(g.thingWorldAnimRef, g.buildThingWorldAnimRef(th))
+	g.initDefinitionActorFlags(len(g.m.Things) - 1)
+	if g.patchedStateRuntime(th.Type) {
+		actor, _ := g.definitionThing(th.Type)
+		state, _ := g.monsterDoomStateDef(int(actor.SpawnState))
+		g.thingDoomState[len(g.m.Things)-1] = int(actor.SpawnState)
+		g.thingStateTics[len(g.m.Things)-1] = state.tics
+		g.thingHP[len(g.m.Things)-1] = int(actor.SpawnHealth)
+	}
 	sec := -1
 	sec = g.sectorAt(x, y)
 	g.thingSectorCache = append(g.thingSectorCache, sec)

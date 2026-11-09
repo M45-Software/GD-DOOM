@@ -53,22 +53,41 @@ func (g *game) archvileTryRaiseCorpse(vileIdx int) bool {
 		return false
 	}
 	vx, vy := g.thingPosFixed(vileIdx, g.m.Things[vileIdx])
-	step := g.monsterMoveStep(64, g.fastMonstersActive())
+	vileType := int16(64)
+	if g.patchedStateRuntime(g.m.Things[vileIdx].Type) {
+		vileType = g.m.Things[vileIdx].Type
+	}
+	step := g.monsterMoveStep(vileType, g.fastMonstersActive())
 	tryX := vx + fixedMul(step, monsterXSpeed[dir])
 	tryY := vy + fixedMul(step, monsterYSpeed[dir])
 	corpseIdx := -1
 	visit := func(i int) bool {
-		if i == vileIdx || i < 0 || i >= len(g.m.Things) || !g.thingDead[i] || g.thingCollected[i] {
+		if i == vileIdx || i < 0 || i >= len(g.m.Things) || g.thingCollected[i] {
+			return true
+		}
+		corpse := g.thingDead[i]
+		if flags, ok := g.definitionFlags(i); ok {
+			corpse = flags&0x100000 != 0
+		}
+		if !corpse {
 			return true
 		}
 		if g.thingStateTics[i] != -1 {
 			return true
 		}
 		th := g.m.Things[i]
-		if len(monsterRaiseFrames(th.Type).tics) == 0 {
+		hasRaise := len(monsterRaiseFrames(th.Type).tics) > 0
+		if g.patchedStateRuntime(th.Type) {
+			actor, _ := g.definitionThing(th.Type)
+			hasRaise = actor.RaiseState != 0
+		}
+		if !hasRaise {
 			return true
 		}
 		cx, cy := g.thingPosFixed(i, th)
+		// A_VileChase uses the arch-vile definition's radius even when its
+		// code pointer runs on a different actor. Only the trial step uses
+		// the calling actor's speed.
 		maxDist := g.thingTypeRadius(th.Type) + g.thingTypeRadius(64)
 		if abs(cx-tryX) > maxDist || abs(cy-tryY) > maxDist {
 			return true
@@ -119,13 +138,21 @@ func (g *game) archvileTryRaiseCorpse(vileIdx int) bool {
 	if vileIdx < len(g.thingTargetPlayerSlot) {
 		g.thingTargetPlayerSlot[vileIdx] = oldSlot
 	}
-	g.thingState[vileIdx], g.thingStatePhase[vileIdx], g.thingStateTics[vileIdx] = monsterStateHeal, 0, 10
+	if g.patchedStateRuntime(vileType) {
+		g.setExactDoomMonsterState(vileIdx, vileType, 266)
+	} else {
+		g.thingState[vileIdx], g.thingStatePhase[vileIdx], g.thingStateTics[vileIdx] = monsterStateHeal, 0, 10
+	}
 	g.emitSoundEventAt(soundEventMonsterRaise, cx, cy)
 	g.startMonsterRaise(corpseIdx)
 	return true
 }
 
 func (g *game) startMonsterRaise(i int) {
+	if g.patchedStateRuntime(g.m.Things[i].Type) {
+		g.startDefinitionRaise(i)
+		return
+	}
 	seq := monsterRaiseFrames(g.m.Things[i].Type)
 	g.thingDead[i], g.thingXDeath[i] = false, false
 	if g.boomMomentumDropoff {
@@ -161,7 +188,7 @@ func (g *game) tickMonsterRaiseOrHeal(i int, th mapdata.Thing) {
 		g.thingStatePhase[i], g.thingStateTics[i] = phase, frames[phase]
 		return
 	}
-	if monsterUsesExactDoomStateMachine(th.Type) {
+	if g.monsterUsesExactDoomStateMachine(th.Type) {
 		state := g.monsterDoomSeeState(th.Type)
 		if th.Type == 68 {
 			// S_BSPI_RAISE7 enters RUN1, whose A_BabyMetal calls A_Chase.

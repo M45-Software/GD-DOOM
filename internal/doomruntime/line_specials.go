@@ -453,7 +453,7 @@ func (g *game) heightClipAroundSectorWithCrush(sec int, oldPlayerFloor int64, cr
 			clipPlayer()
 		}
 		for i, th := range g.m.Things {
-			if thingTypeUsesBlockmap(th.Type) && !(i < len(g.thingCollected) && g.thingCollected[i]) && g.thingTouchesSector(sec, i, th) {
+			if g.thingTypeUsesBlockmap(th.Type) && !(i < len(g.thingCollected) && g.thingCollected[i]) && g.thingTouchesSector(sec, i, th) {
 				clipThing(i)
 			}
 		}
@@ -634,7 +634,7 @@ func (g *game) heightClipThingsInSector(sec int) {
 		return
 	}
 	for i, th := range g.m.Things {
-		if !thingTypeUsesBlockmap(th.Type) {
+		if !g.thingTypeUsesBlockmap(th.Type) {
 			continue
 		}
 		if i >= 0 && i < len(g.thingCollected) && g.thingCollected[i] {
@@ -651,7 +651,7 @@ func (g *game) heightClipThing(i int, th mapdata.Thing) bool {
 	if g == nil || g.m == nil || i < 0 || i >= len(g.m.Things) {
 		return false
 	}
-	if !thingTypeUsesBlockmap(th.Type) {
+	if !g.thingTypeUsesBlockmap(th.Type) {
 		return true
 	}
 	x, y := g.thingPosFixed(i, th)
@@ -709,6 +709,10 @@ func (g *game) heightClipThing(i int, th mapdata.Thing) bool {
 		}
 		if i < len(g.thingState) && i < len(g.thingStateTics) {
 			g.thingState[i], g.thingStateTics[i] = monsterStateGibs, -1
+			if g.patchedStateRuntime(th.Type) {
+				g.thingDoomState[i] = 895
+				g.thingDefinitionFlags[i] &^= 2
+			}
 		}
 		if i < len(g.thingGibTick) {
 			g.thingGibTick[i] = g.worldTic
@@ -723,7 +727,7 @@ func (g *game) heightClipThing(i int, th mapdata.Thing) bool {
 		g.updateThingBlockmapIndex(i)
 		return true
 	}
-	if !thingTypeIsShootable(th.Type) {
+	if !g.thingTypeIsShootable(th.Type) {
 		return true
 	}
 	return false
@@ -1600,7 +1604,7 @@ func (g *game) teleportStompDestinationThings(x, y, radius int64, actorIdx int, 
 		if i < len(g.thingCollected) && g.thingCollected[i] {
 			return
 		}
-		if !thingTypeIsShootable(th.Type) {
+		if !g.thingTypeIsShootable(th.Type) {
 			return
 		}
 		if (isMonster(th.Type) || th.Type == 88) && i < len(g.thingHP) && g.thingHP[i] <= 0 {

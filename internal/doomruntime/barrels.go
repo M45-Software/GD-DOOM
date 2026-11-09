@@ -52,6 +52,14 @@ func (g *game) thingCurrentHeight(i int, th mapdata.Thing) int64 {
 	if g != nil && i >= 0 && i < len(g.thingGibbed) && g.thingGibbed[i] {
 		return 0
 	}
+	if g.patchedStateRuntime(th.Type) {
+		actor, _ := g.definitionThing(th.Type)
+		height := int64(actor.Height)
+		if i >= 0 && i < len(g.thingDead) && g.thingDead[i] {
+			height >>= 2
+		}
+		return height
+	}
 	if height, ok := g.actorProperty(th.Type, "Height"); ok {
 		if i >= 0 && i < len(g.thingDead) && g.thingDead[i] && (isBarrelThingType(th.Type) || monsterLeavesCorpse(th.Type) || th.Type == 3006) {
 			return int64(height) >> 2
@@ -79,6 +87,10 @@ func (g *game) thingCurrentHeight(i int, th mapdata.Thing) int64 {
 func (g *game) thingCurrentRadius(i int, th mapdata.Thing) int64 {
 	if g != nil && i >= 0 && i < len(g.thingGibbed) && g.thingGibbed[i] {
 		return 0
+	}
+	if g.patchedStateRuntime(th.Type) {
+		actor, _ := g.definitionThing(th.Type)
+		return int64(actor.Radius)
 	}
 	if radius, ok := g.actorProperty(th.Type, "Radius"); ok {
 		return int64(radius)
@@ -226,6 +238,10 @@ func (g *game) damageShootableThingFrom(thingIdx int, damage int, sourcePlayer b
 
 func (g *game) damageShootableThingFromWithInflictorZ(thingIdx int, damage int, sourcePlayer bool, sourceThing int, inflictorX, inflictorY int64, hasInflictor bool, inflictorZ int64, hasInflictorZ bool) {
 	if g == nil || g.m == nil || thingIdx < 0 || thingIdx >= len(g.m.Things) || damage <= 0 {
+		return
+	}
+	if g.patchedStateRuntime(g.m.Things[thingIdx].Type) {
+		g.damageMonsterFromWithInflictorZ(thingIdx, damage, sourcePlayer, sourceThing, inflictorX, inflictorY, hasInflictor, inflictorZ, hasInflictorZ)
 		return
 	}
 	if want := runtimeDebugEnv("GD_DEBUG_BARREL_DAMAGE_TIC"); want != "" && runtimeDebugEnv("GD_DEBUG_BARREL_DAMAGE_IDX") == fmt.Sprint(thingIdx) {
@@ -461,7 +477,7 @@ func (g *game) radiusAttackAtInSubsector(sx, sy, sz, sheight int64, ignoreThing 
 			return
 		}
 		th := g.m.Things[i]
-		if !thingTypeIsShootable(th.Type) {
+		if !g.thingTypeIsShootable(th.Type) {
 			return
 		}
 		if i >= len(g.thingHP) || g.thingHP[i] <= 0 {

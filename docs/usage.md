@@ -357,7 +357,7 @@ That file is for recognition and compatibility lookup. It is not a promise that 
 commas to apply several in order. Embedded `DEHACKED` lumps load first in WAD
 order. `-nodeh` skips embedded patches and retains explicit `-deh` files.
 
-Only actor properties and selected live monster states/actions are currently
-supported. Unsupported patch changes produce an error. See the
+Actor properties, monster death/raise states, selected flags/actions, map titles
+and story strings are supported as a partial implementation. Unsupported patch changes produce an error. See the
 [DeHackEd support scope](dehacked-support.md) for supported fields, checkpoint
 requirements and current limitations.

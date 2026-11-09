@@ -24,10 +24,10 @@ func (g *game) initLevelStats() {
 		if i < len(g.thingCollected) && g.thingCollected[i] {
 			continue
 		}
-		if thingCountsKill(th.Type) {
+		if g.thingCountsKill(th.Type) {
 			g.levelKillsTotal++
 		}
-		if thingCountsItem(th.Type) {
+		if g.thingCountsItem(th.Type) {
 			g.levelItemsTotal++
 		}
 	}

@@ -60,13 +60,19 @@ func (g *game) tickBoomCarry(c boomCarryThinker) {
 		carryPlayer()
 	}
 	for i, th := range g.m.Things {
-		if !thingTypeUsesBlockmap(th.Type) || g.thingCollected[i] {
+		if (!g.thingTypeUsesBlockmap(th.Type) && !g.patchedStateRuntime(th.Type)) || g.thingCollected[i] {
 			continue
 		}
 		x, y := g.thingPosFixed(i, th)
 		z, _, _ := g.thingSupportState(i, th)
-		noGravity := monsterCanFloat(th.Type) || thingSpawnsOnCeiling(th.Type)
-		if isMonster(th.Type) && i < len(g.thingDead) && g.thingDead[i] {
+		noGravity := g.monsterCanFloat(th.Type) || g.thingSpawnsOnCeiling(th.Type)
+		if flags, ok := g.definitionFlags(i); ok {
+			if flags&0x1000 != 0 {
+				continue
+			}
+			noGravity = flags&0x200 != 0
+		}
+		if isMonster(th.Type) && !g.patchedStateRuntime(th.Type) && i < len(g.thingDead) && g.thingDead[i] {
 			// P_KillMobj clears MF_NOGRAVITY except for lost souls. A
 			// fallen Keen or floating-monster corpse can ride the floor.
 			noGravity = th.Type == 3006

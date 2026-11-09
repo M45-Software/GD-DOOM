@@ -16,6 +16,7 @@ import (
 
 	"gddoom/internal/demo"
 	"gddoom/internal/doomrand"
+	"gddoom/internal/launchcatalog"
 	"gddoom/internal/mapdata"
 	"gddoom/internal/render/doomtex"
 	"gddoom/internal/wad"
@@ -43,6 +44,20 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 		t.Fatal(err)
 	}
 	opts := Options{Headless: true, DemoScript: script, DemoQuitOnComplete: true, NewGameLoader: func(name string) (*mapdata.Map, error) { return mapdata.LoadMap(wf, mapdata.MapName(name)) }}
+	if os.Getenv("GD_DEHACKED_CAPTURE") == "1" {
+		var paths []string
+		if value := os.Getenv("GD_DEHACKED_FILES"); value != "" {
+			paths = strings.Split(value, ",")
+		}
+		defs, _, err := launchcatalog.LoadDehacked(wf, paths, false)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := ValidateDehackedDefinitions(defs); err != nil {
+			t.Fatal(err)
+		}
+		opts.DehackedDefinitions = defs
+	}
 	// Texture dimensions affect simulation even without a renderer: Boom
 	// movers can use the shortest adjacent lower or upper texture as a target.
 	// Generated geometry-only fixtures deliberately have no texture lumps.
@@ -87,7 +102,9 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 			t.Fatal(err)
 		}
 		fresh := &sessionGame{opts: opts, nextMap: sg.nextMap, gameFactory: sg.gameFactory}
-		fresh.opts.DemoScript = nil
+		if script.Header.PlayerCount() > 1 {
+			fresh.opts.DemoScript = nil
+		}
 		if err := fresh.unmarshalSaveGame(data); err != nil {
 			t.Fatal(err)
 		}
@@ -264,7 +281,9 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 			}
 			if os.Getenv("GD_COOP_COLD_RESTORE") != "" {
 				fresh := &sessionGame{opts: opts, nextMap: sg.nextMap, gameFactory: sg.gameFactory}
-				fresh.opts.DemoScript = nil
+				if script.Header.PlayerCount() > 1 {
+					fresh.opts.DemoScript = nil
+				}
 				sg = fresh
 			}
 			if os.Getenv("GD_COOP_CHECKPOINT_FORMAT") == "keyframe" {
@@ -385,7 +404,7 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 			}
 			owner := m.ownerSlot
 			fmt.Fprintf(out, "%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d", m.Type, m.X, m.Y, m.Z, m.Angle, m.MomX, m.MomY, m.MomZ, m.Health, m.Tics, m.State, m.Radius, m.Height, m.FloorZ, m.CeilingZ, owner)
-			if m.Kind == "monster" && thingCountsKill(g.m.Things[m.thingIndex].Type) {
+			if m.Kind == "monster" && g.thingCountsKill(g.m.Things[m.thingIndex].Type) {
 				idx := m.thingIndex
 				tx, ty, _, _, _, _ := g.monsterAttackTargetPos(idx)
 				targetSlot := g.monsterTargetPlayerSlot(idx)

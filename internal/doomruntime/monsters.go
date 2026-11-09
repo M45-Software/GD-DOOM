@@ -689,6 +689,10 @@ func (g *game) tickThingThinker(i int, th mapdata.Thing) {
 	if i < 0 || i >= len(g.thingCollected) || g.thingCollected[i] {
 		return
 	}
+	if g.patchedStateRuntime(th.Type) {
+		g.tickDefinitionActor(i)
+		return
+	}
 	if th.Type == 89 {
 		g.tickBossBrainSpawner(i)
 		return
@@ -804,13 +808,13 @@ func (g *game) tickThingThinker(i int, th mapdata.Thing) {
 		// P_MobjThinker still executes P_XY/P_ZMovement for an exact-state
 		// monster whose player target has died. In particular, a floating
 		// cacodemon continues its vertical adjustment toward the corpse.
-		if monsterUsesExactDoomStateMachine(th.Type) {
+		if g.monsterUsesExactDoomStateMachine(th.Type) {
 			g.tickMonsterMomentum(i, th)
 		}
 		g.clearMonsterTargetState(i)
 		return
 	}
-	if monsterUsesExactDoomStateMachine(th.Type) {
+	if g.monsterUsesExactDoomStateMachine(th.Type) {
 		g.debugMonsterTick(i, "start")
 		g.debugThingState(i, th, "live")
 		g.tickMonsterMomentum(i, th)
@@ -1714,6 +1718,10 @@ func (g *game) clearMonsterPainState(i int) {
 }
 
 func (g *game) emitMonsterSeeSound(i int, typ int16, x, y int64) {
+	if g.patchedStateRuntime(typ) {
+		g.emitDefinitionSound(i, "SeeSound")
+		return
+	}
 	ev, fullVolume := monsterSeeSoundEvent(typ)
 	if ev < 0 {
 		return
@@ -1736,6 +1744,13 @@ func (g *game) emitMonsterSeeSound(i int, typ int16, x, y int64) {
 }
 
 func (g *game) emitMonsterActiveSound(i int, typ int16, x, y int64) {
+	if g.patchedStateRuntime(typ) {
+		actor, _ := g.definitionThing(typ)
+		if actor.ActiveSound != 0 && doomrand.PRandom(doomrand.See) < 3 {
+			g.emitDefinitionSound(i, "ActiveSound")
+		}
+		return
+	}
 	ev := monsterActiveSoundEvent(typ)
 	if ev < 0 {
 		return
@@ -1828,7 +1843,7 @@ func monsterActiveSoundEvent(typ int16) soundEvent {
 // P_MobjThinker checks respawning only when an actor starts its tic in an
 // infinite state. Entering the final death frame does not count that tic.
 func (g *game) tickNightmareRespawn(i int, th mapdata.Thing) {
-	if !isMonster(th.Type) || th.Type == 3006 || !(g.opts.RespawnMonsters || g.opts.SkillLevel == 5) {
+	if ((!isMonster(th.Type) || th.Type == 3006) && !g.patchedStateRuntime(th.Type)) || !(g.opts.RespawnMonsters || g.opts.SkillLevel == 5) {
 		return
 	}
 	g.thingMoveCount[i]++
@@ -1857,7 +1872,7 @@ func (g *game) tickNightmareRespawn(i int, th mapdata.Thing) {
 	g.ensureMonsterAIState()
 	g.thingSpawnPoint[idx] = spawn
 	z := floor
-	if thingSpawnsOnCeiling(th.Type) {
+	if g.thingSpawnsOnCeiling(th.Type) {
 		z = ceil - g.thingCurrentHeight(idx, g.m.Things[idx])
 	}
 	g.setThingSupportState(idx, z, floor, ceil)
@@ -1865,8 +1880,13 @@ func (g *game) tickNightmareRespawn(i int, th mapdata.Thing) {
 	g.thingHP[idx] = g.monsterSpawnHealth(th.Type)
 	g.thingState[idx] = monsterStateSpawn
 	g.thingStateTics[idx] = monsterSpawnStateTics(th.Type)
+	if g.patchedStateRuntime(th.Type) {
+		actor, _ := g.definitionThing(th.Type)
+		def, _ := g.monsterDoomStateDef(int(actor.SpawnState))
+		g.thingStateTics[idx] = def.tics
+	}
 	g.thingReactionTics[idx] = 18
-	if monsterUsesExactDoomStateMachine(th.Type) {
+	if g.monsterUsesExactDoomStateMachine(th.Type) {
 		g.thingDoomState[idx] = g.monsterInitialDoomState(th.Type)
 	}
 	g.thingCollected[i] = true
@@ -1875,6 +1895,7 @@ func (g *game) tickNightmareRespawn(i int, th mapdata.Thing) {
 }
 
 func (g *game) ensureMonsterAIState() {
+	g.ensureDefinitionFlags()
 	if g.m == nil {
 		return
 	}
@@ -2161,6 +2182,9 @@ func (g *game) runExactDoomMonsterAction(i int, typ int16, state int, action doo
 	if g == nil || g.m == nil || i < 0 || i >= len(g.m.Things) {
 		return
 	}
+	if g.patchedStateRuntime(typ) && g.runAdditionalDefinitionAction(i, typ, state, depth) {
+		return
+	}
 	if g.patchedStateRuntime(typ) && g.runPatchedAttackAction(i, typ, action) {
 		return
 	}
@@ -2206,7 +2230,11 @@ func (g *game) runExactDoomMonsterAction(i int, typ int16, state int, action doo
 			g.setExactDoomMonsterStateDepth(i, typ, g.monsterDoomSeeState(typ), depth+1)
 		}
 	case doomMonsterActionPain:
-		g.emitSoundEventAt(monsterPainSoundEvent(typ), tx, ty)
+		if g.patchedStateRuntime(typ) {
+			g.emitDefinitionSound(i, "PainSound")
+		} else {
+			g.emitSoundEventAt(monsterPainSoundEvent(typ), tx, ty)
+		}
 	case doomMonsterActionSkullAttack:
 		_ = g.monsterAttack(i, typ, dist)
 	case doomMonsterActionHeadAttack:
@@ -2258,7 +2286,17 @@ func (g *game) runExactDoomMonsterChaseAction(i int, typ int16, tx, ty, targetX,
 		}
 		return
 	}
-	if g.monsterCanMeleeTarget(i, typ, dist, tx, ty, targetX, targetY) {
+	if g.patchedStateRuntime(typ) {
+		actor, _ := g.definitionThing(typ)
+		if actor.MeleeState != 0 && g.definitionMeleeRange(i) {
+			g.emitDefinitionSound(i, "AttackSound")
+			g.setExactDoomMonsterStateDepth(i, typ, int(actor.MeleeState), depth+1)
+			if g.boomMomentumDropoff && actor.MissileState == 0 {
+				g.thingJustHit[i] = true
+			}
+			return
+		}
+	} else if g.monsterCanMeleeTarget(i, typ, dist, tx, ty, targetX, targetY) {
 		return
 	}
 	if g.monsterDoomMissileState(typ) != 0 && g.monsterCanTryMissileNow(i) && g.monsterCheckMissileRange(i, typ, dist, tx, ty, targetX, targetY) {
@@ -2285,7 +2323,7 @@ func (g *game) runExactDoomMonsterChaseAction(i int, typ int16, tx, ty, targetX,
 }
 
 func (g *game) tickExactDoomMonster(i int, th mapdata.Thing) bool {
-	if !monsterUsesExactDoomStateMachine(th.Type) {
+	if !g.monsterUsesExactDoomStateMachine(th.Type) {
 		return false
 	}
 	if i < 0 || i >= len(g.thingDoomState) {
@@ -2491,9 +2529,12 @@ func (g *game) tickMonsterZMovement(i int, th mapdata.Thing, z, floorZ, ceilZ, m
 		return momz
 	}
 	dead := i >= 0 && i < len(g.thingDead) && g.thingDead[i]
-	canFloat := monsterCanFloat(th.Type) && !dead
-	noGravity := !dead && (monsterCanFloat(th.Type) || th.Type == 72)
-	if dead && th.Type == 3006 {
+	canFloat := g.monsterCanFloat(th.Type) && !dead
+	noGravity := !dead && (g.monsterCanFloat(th.Type) || th.Type == 72)
+	if flags, ok := g.definitionFlags(i); ok {
+		noGravity = flags&0x200 != 0
+	}
+	if dead && th.Type == 3006 && !g.patchedStateRuntime(th.Type) {
 		// Doom's P_KillMobj preserves MF_NOGRAVITY for MT_SKULL only.
 		noGravity = true
 	}
@@ -2549,7 +2590,11 @@ func (g *game) corpseShouldSkipFriction(i int, th mapdata.Thing, momx, momy int6
 	if g == nil || g.m == nil || i < 0 || i >= len(g.m.Things) {
 		return false
 	}
-	if i >= len(g.thingDead) || !g.thingDead[i] || (!monsterLeavesCorpse(th.Type) && th.Type != 3006) {
+	corpse := i < len(g.thingDead) && g.thingDead[i] && (monsterLeavesCorpse(th.Type) || th.Type == 3006)
+	if flags, ok := g.definitionFlags(i); ok {
+		corpse = flags&0x100000 != 0
+	}
+	if !corpse {
 		return false
 	}
 	if momx <= fracUnit/4 && momx >= -fracUnit/4 && momy <= fracUnit/4 && momy >= -fracUnit/4 {
@@ -2611,7 +2656,7 @@ func (g *game) resetLostSoulCharge(i int, typ int16) {
 	if i < len(g.thingResumeChaseNow) {
 		g.thingResumeChaseNow[i] = false
 	}
-	if monsterUsesExactDoomStateMachine(typ) {
+	if g.monsterUsesExactDoomStateMachine(typ) {
 		g.setExactDoomMonsterState(i, typ, g.monsterInitialDoomState(typ))
 		return
 	}
@@ -2650,7 +2695,7 @@ func (g *game) hitSkullFlyTarget(i int, typ int16, target lineAttackTarget) {
 			g.damagePlayerFrom(damage, "Monster hit you", x, y, true, i)
 		}
 	case lineAttackTargetThing:
-		if target.idx >= 0 && target.idx < len(g.m.Things) && thingTypeIsShootable(g.m.Things[target.idx].Type) {
+		if target.idx >= 0 && target.idx < len(g.m.Things) && g.thingTypeIsShootable(g.m.Things[target.idx].Type) {
 			g.damageShootableThingFrom(target.idx, damage, false, i, x, y, true)
 		}
 	}
@@ -2707,7 +2752,11 @@ func (g *game) lostSoulChargeTargetAt(i int, th mapdata.Thing, x, y, z int64) (l
 			return lineAttackTarget{}, false
 		}
 		oth := g.m.Things[other]
-		if !thingTypeIsShootable(oth.Type) && !isPickupType(oth.Type) && !thingTypeBlocksActorMovement(oth.Type, true) {
+		if flags, patched := g.definitionFlags(other); patched {
+			if flags&(1|2|4) == 0 { // PIT_CheckThing ignores inert, non-solid bodies.
+				return lineAttackTarget{}, false
+			}
+		} else if !g.thingTypeIsShootable(oth.Type) && !isPickupType(oth.Type) && !thingTypeBlocksActorMovement(oth.Type, true) {
 			return lineAttackTarget{}, false
 		}
 		ox, oy := g.thingPosFixed(other, oth)
@@ -3710,7 +3759,7 @@ func (g *game) monsterCheckMissileRange(i int, typ int16, dist, tx, ty, px, py i
 	if !g.monsterHasSimulationTarget(i) {
 		return false
 	}
-	if isMeleeOnlyMonster(typ) {
+	if isMeleeOnlyMonster(typ) && !g.patchedStateRuntime(typ) {
 		return false
 	}
 	if !g.monsterHasLOSTarget(i, typ, tx, ty) {
@@ -3725,7 +3774,12 @@ func (g *game) monsterCheckMissileRange(i int, typ int16, dist, tx, ty, px, py i
 	}
 
 	d := int((dist - 64*fracUnit) >> fracBits)
-	if !monsterHasMeleeAttack(typ) {
+	hasMelee := monsterHasMeleeAttack(typ)
+	if g.patchedStateRuntime(typ) {
+		actor, _ := g.definitionThing(typ)
+		hasMelee = actor.MeleeState != 0
+	}
+	if !hasMelee {
 		d -= 128
 	}
 
@@ -4021,7 +4075,7 @@ func (g *game) monsterMoveInDir(i int, typ int16, dir monsterMoveDir) bool {
 	probe := g.probeMonsterMove(i, typ, nx, ny)
 	tmfloor, tmceil, probeLines, ok := probe.tmfloor, probe.tmceil, probe.probeLines, probe.ok
 	if !ok {
-		if probe.floatOK && monsterCanFloat(typ) {
+		if probe.floatOK && g.monsterCanFloat(typ) {
 			z, floorZ, ceilZ := g.thingSupportState(i, g.m.Things[i])
 			if z < probe.tmfloor {
 				z += 4 * fracUnit
@@ -4076,7 +4130,7 @@ func (g *game) monsterMoveInDir(i int, typ int16, dir monsterMoveDir) bool {
 	z, _, _ := g.thingSupportState(i, g.m.Things[i])
 	g.setThingPosFixed(i, nx, ny)
 	g.setThingSupportState(i, z, tmfloor, tmceil)
-	if monsterCanFloat(typ) {
+	if g.monsterCanFloat(typ) {
 		if i >= 0 && i < len(g.thingInFloat) {
 			g.thingInFloat[i] = false
 		}
@@ -4092,7 +4146,7 @@ func (g *game) monsterMoveInDir(i int, typ int16, dir monsterMoveDir) bool {
 		}
 	}
 	g.checkWalkSpecialLinesForActorWithCandidates(prevX, prevY, nx, ny, i, false, probeLines)
-	if !monsterCanFloat(typ) {
+	if !g.monsterCanFloat(typ) {
 		tx, ty := g.thingPosFixed(i, g.m.Things[i])
 		if tx == nx && ty == ny {
 			_, floorZ, ceilZ := g.thingSupportState(i, g.m.Things[i])
@@ -4597,6 +4651,9 @@ func monsterLeavesCorpse(typ int16) bool {
 }
 
 func (g *game) monsterVisibleAfterDeath(i int, typ int16) bool {
+	if g.patchedStateRuntime(typ) && i >= 0 && i < len(g.thingCollected) {
+		return !g.thingCollected[i]
+	}
 	if g == nil || i < 0 || i >= len(g.thingDead) || !g.thingDead[i] {
 		return true
 	}
@@ -5384,7 +5441,7 @@ func (g *game) moveMonsterToward(i int, typ int16, x, y, tx, ty, step int64) {
 		g.setThingPosFixed(i, nx, ny)
 		g.setThingSupportState(i, z, tmfloor, tmceil)
 		g.checkWalkSpecialLinesForActorWithCandidates(prevX, prevY, nx, ny, i, false, probeLines)
-		if !monsterCanFloat(typ) {
+		if !g.monsterCanFloat(typ) {
 			tx, ty := g.thingPosFixed(i, g.m.Things[i])
 			if tx == nx && ty == ny {
 				_, floorZ, ceilZ := g.thingSupportState(i, g.m.Things[i])
@@ -5399,7 +5456,7 @@ func (g *game) moveMonsterToward(i int, typ int16, x, y, tx, ty, step int64) {
 		g.setThingPosFixed(i, x+dx, y)
 		g.setThingSupportState(i, z, tmfloor, tmceil)
 		g.checkWalkSpecialLinesForActorWithCandidates(prevX, prevY, x+dx, y, i, false, probeLines)
-		if !monsterCanFloat(typ) {
+		if !g.monsterCanFloat(typ) {
 			tx, ty := g.thingPosFixed(i, g.m.Things[i])
 			if tx == x+dx && ty == y {
 				_, floorZ, ceilZ := g.thingSupportState(i, g.m.Things[i])
@@ -5414,7 +5471,7 @@ func (g *game) moveMonsterToward(i int, typ int16, x, y, tx, ty, step int64) {
 		g.setThingPosFixed(i, x, y+dy)
 		g.setThingSupportState(i, z, tmfloor, tmceil)
 		g.checkWalkSpecialLinesForActorWithCandidates(prevX, prevY, x, y+dy, i, false, probeLines)
-		if !monsterCanFloat(typ) {
+		if !g.monsterCanFloat(typ) {
 			tx, ty := g.thingPosFixed(i, g.m.Things[i])
 			if tx == x && ty == y+dy {
 				_, floorZ, ceilZ := g.thingSupportState(i, g.m.Things[i])
@@ -5515,6 +5572,10 @@ func (g *game) probeMonsterMove(i int, typ int16, x, y int64) monsterMoveProbeRe
 }
 
 func (g *game) probeMonsterMoveWithDropoff(i int, typ int16, x, y int64, allowDropoff bool) (result monsterMoveProbeResult) {
+	if flags, ok := g.definitionFlags(i); ok && flags&0x1000 != 0 {
+		floor, ceil, _ := g.subsectorFloorCeilAt(x, y)
+		return monsterMoveProbeResult{tmfloor: floor, tmceil: ceil, tmdrop: floor, checkPosOK: true, ok: true}
+	}
 	if g.m == nil || len(g.m.Sectors) == 0 || i < 0 || i >= len(g.m.Things) {
 		return monsterMoveProbeResult{}
 	}
@@ -5564,13 +5625,18 @@ func (g *game) probeMonsterMoveWithDropoff(i int, typ int16, x, y int64, allowDr
 	if tmfloor-z > stepHeight {
 		return monsterMoveProbeResult{tmfloor: tmfloor, tmceil: tmceil, tmdrop: tmdrop, probeLines: probeLines, checkPosOK: true, floatOK: floatOK}
 	}
-	if !allowDropoff && !isPlayerBodyThingType(typ) && !g.thingCanDropOff(i, typ) && !monsterCanFloat(typ) && tmfloor-tmdrop > stepHeight {
+	if !allowDropoff && !isPlayerBodyThingType(typ) && !g.thingCanDropOff(i, typ) && !g.monsterCanFloat(typ) && tmfloor-tmdrop > stepHeight {
 		return monsterMoveProbeResult{tmfloor: tmfloor, tmceil: tmceil, tmdrop: tmdrop, probeLines: probeLines, checkPosOK: true, floatOK: floatOK}
 	}
 	return monsterMoveProbeResult{tmfloor: tmfloor, tmceil: tmceil, tmdrop: tmdrop, probeLines: probeLines, checkPosOK: true, floatOK: floatOK, ok: true}
 }
 
 func (g *game) boomNonSolidMover(i int) bool {
+	if g.boomMomentumDropoff {
+		if flags, ok := g.definitionFlags(i); ok {
+			return flags&2 == 0
+		}
+	}
 	if !g.boomMomentumDropoff || g.m == nil || i < 0 || i >= len(g.m.Things) {
 		return false
 	}
@@ -5619,7 +5685,11 @@ func (g *game) probeSkullFlyMove(i int, typ int16, x, y int64) skullFlyProbeResu
 			return lineAttackTarget{}, false
 		}
 		oth := g.m.Things[other]
-		if !thingTypeIsShootable(oth.Type) && !isPickupType(oth.Type) && !thingTypeBlocksActorMovement(oth.Type, true) {
+		if flags, patched := g.definitionFlags(other); patched {
+			if flags&(1|2|4) == 0 { // PIT_CheckThing ignores inert, non-solid bodies.
+				return lineAttackTarget{}, false
+			}
+		} else if !g.thingTypeIsShootable(oth.Type) && !isPickupType(oth.Type) && !thingTypeBlocksActorMovement(oth.Type, true) {
 			return lineAttackTarget{}, false
 		}
 		ox, oy := g.thingPosFixed(other, oth)
@@ -5736,7 +5806,7 @@ func (g *game) probeSkullFlyMove(i int, typ int16, x, y int64) skullFlyProbeResu
 	if tmfloor-z > stepHeight {
 		return skullFlyProbeResult{tmfloor: tmfloor, tmceil: tmceil, probeLines: probeLines}
 	}
-	if !g.thingCanDropOff(i, typ) && !monsterCanFloat(typ) && tmfloor-tmdrop > stepHeight {
+	if !g.thingCanDropOff(i, typ) && !g.monsterCanFloat(typ) && tmfloor-tmdrop > stepHeight {
 		return skullFlyProbeResult{tmfloor: tmfloor, tmceil: tmceil, probeLines: probeLines}
 	}
 	return skullFlyProbeResult{tmfloor: tmfloor, tmceil: tmceil, probeLines: probeLines, ok: true}
@@ -5829,6 +5899,9 @@ func monsterCanDropOff(typ int16) bool {
 }
 
 func (g *game) thingCanDropOff(i int, typ int16) bool {
+	if flags, ok := g.definitionFlags(i); ok {
+		return flags&0x400 != 0
+	}
 	if monsterCanDropOff(typ) {
 		return true
 	}

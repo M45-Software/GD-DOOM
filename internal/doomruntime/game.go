@@ -437,6 +437,8 @@ func (g *game) wallDepthColumnAt(x int) scene.WallDepthColumn {
 
 type game struct {
 	actorDefinitions     map[int16]actorDefinition
+	definitionActors     map[int16]bool
+	thingDefinitionFlags []uint32
 	patchedStates        map[int]doomMonsterStateDef
 	definitionErr        error
 	stateTransitionCount int
@@ -1431,6 +1433,7 @@ func newGameWithActorDefinitions(m *mapdata.Map, opts Options, clearRNG bool, de
 	g := &game{
 		actorDefinitions:  definitions,
 		patchedStates:     stateOverrides(opts.DehackedDefinitions),
+		definitionActors:  definitionActorTypes(opts.DehackedDefinitions),
 		m:                 m,
 		restartTemplate:   cloneMapForRestart(m),
 		opts:              opts,
@@ -1622,6 +1625,11 @@ func newGameWithActorDefinitions(m *mapdata.Map, opts Options, clearRNG bool, de
 	if strings.TrimSpace(g.opts.RecordDemoPath) != "" {
 		g.demoRecord = make([]DemoTic, 0, 4096)
 	}
+	if boomMomentumDropoffEnabled(m, opts) && len(g.m.Blockmap) >= 0x10000 {
+		level := *g.m
+		level.BlockMap = buildBoomBlockmap(g.m)
+		g.m = &level
+	}
 	g.initPhysics()
 	g.initTimedDoorSpecials()
 	g.boomMomentumDropoff = boomMomentumDropoffEnabled(m, opts)
@@ -1683,6 +1691,9 @@ func newGameWithActorDefinitions(m *mapdata.Map, opts Options, clearRNG bool, de
 	for i := range g.thingSectorCache {
 		th := g.m.Things[i]
 		g.thingAmbush[i] = int(th.Flags)&thingFlagAmbush != 0
+		if flags, ok := g.definitionBaseFlags(th.Type); ok {
+			g.thingAmbush[i] = g.thingAmbush[i] || flags&0x20 != 0
+		}
 		g.thingX[i] = int64(th.X) << fracBits
 		g.thingY[i] = int64(th.Y) << fracBits
 		g.thingAngleState[i] = thingSpawnAngle(th.Angle)
@@ -1695,7 +1706,7 @@ func newGameWithActorDefinitions(m *mapdata.Map, opts Options, clearRNG bool, de
 			g.thingCeilState[i] = g.sectorCeil[sec]
 		}
 		g.thingZState[i] = g.thingFloorState[i]
-		if thingSpawnsOnCeiling(th.Type) && sec >= 0 && sec < len(g.sectorCeil) {
+		if g.thingSpawnsOnCeiling(th.Type) && sec >= 0 && sec < len(g.sectorCeil) {
 			if info, ok := demoTraceThingInfoForType(th.Type); ok {
 				height := info.height
 				if patchedHeight, patched := g.actorProperty(th.Type, "Height"); patched {
@@ -4869,7 +4880,7 @@ func (g *game) setHUDMessage(msg string, tics int) {
 
 func (g *game) applyThingSpawnFiltering() {
 	for i, th := range g.m.Things {
-		if !thingSpawnsInSession(th, g.opts.SkillLevel, g.opts.GameMode, g.opts.ShowNoSkillItems, g.opts.ShowAllItems, g.opts.NoMonsters) {
+		if !g.thingSpawnsInSession(th, g.opts.SkillLevel, g.opts.GameMode, g.opts.ShowNoSkillItems, g.opts.ShowAllItems, g.opts.NoMonsters) {
 			g.thingCollected[i] = true
 		}
 	}
@@ -11569,7 +11580,7 @@ func (g *game) appendMonsterCutoutItems(camX, camY, camAng, focal, focalV, near 
 			doomRow:         g.boomSpriteLightRowAt(sec, ref.fullBright, txFixed, tyFixed),
 			tex:             ref.tex,
 			flip:            flip,
-			shadow:          monsterUsesShadow(th.Type),
+			shadow:          g.monsterUsesShadow(th.Type),
 			clipTop:         clipTop,
 			clipBottom:      clipBottom,
 			dstX:            dstX,
@@ -11653,7 +11664,7 @@ func (g *game) appendMonsterThinkerDebugCutoutItem(i int, th mapdata.Thing, ref 
 }
 
 func (g *game) monsterRenderBaseZ(i int, th mapdata.Thing, x, y int64) int64 {
-	if monsterCanFloat(th.Type) && (i < 0 || i >= len(g.thingDead) || !g.thingDead[i]) {
+	if g.monsterCanFloat(th.Type) && (i < 0 || i >= len(g.thingDead) || !g.thingDead[i]) {
 		z, _, _ := g.thingSupportState(i, th)
 		return z
 	}
@@ -13526,7 +13537,7 @@ func (g *game) monsterFrameLetter(i int, th mapdata.Thing, tic int) byte {
 			return seq[len(seq)-1]
 		}
 	}
-	if monsterUsesExactDoomStateMachine(th.Type) && i >= 0 && i < len(g.thingDoomState) {
+	if g.monsterUsesExactDoomStateMachine(th.Type) && i >= 0 && i < len(g.thingDoomState) {
 		if frame, ok := monsterDoomStateFrameLetter(g.thingDoomState[i]); ok {
 			return frame
 		}
@@ -21005,7 +21016,7 @@ func (g *game) rebuildThingBlockmap() {
 		}
 	}
 	for i, th := range g.m.Things {
-		if !thingTypeUsesBlockmap(th.Type) {
+		if !g.thingTypeUsesBlockmap(th.Type) {
 			continue
 		}
 		x, y := g.thingPosFixed(i, th)

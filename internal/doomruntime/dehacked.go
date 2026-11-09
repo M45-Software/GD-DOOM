@@ -47,12 +47,23 @@ func compileActorDefinitions(defs *dehacked.Definitions) (map[int16]actorDefinit
 	slices.Sort(keys)
 	for _, key := range keys {
 		parts := strings.Split(key, "/")
-		if len(parts) != 3 || (parts[0] != "thing" && parts[0] != "frame") {
+		if len(parts) != 3 || (parts[0] != "thing" && parts[0] != "frame" && parts[0] != "strings") {
 			return nil, fmt.Errorf("DeHackEd gameplay does not yet support %s", key)
 		}
 		slot, err := strconv.Atoi(parts[1])
 		if err != nil || slot < 0 || slot >= dehacked.NumStates {
 			return nil, fmt.Errorf("invalid DeHackEd gameplay field %s", key)
+		}
+		if parts[0] == "strings" {
+			if !supportedDefinitionString(parts[2]) {
+				return nil, fmt.Errorf("unsupported presentation string %s", parts[2])
+			}
+			if value, ok := vanilla.Strings[parts[2]]; ok {
+				actual.Strings[parts[2]] = value
+			} else {
+				delete(actual.Strings, parts[2])
+			}
+			continue
 		}
 		if parts[0] == "frame" {
 			if err := validatePatchedState(slot, parts[2], actual.States); err != nil {
@@ -75,23 +86,32 @@ func compileActorDefinitions(defs *dehacked.Definitions) (map[int16]actorDefinit
 		}
 		switch member {
 		case "SpawnHealth", "ReactionTime", "PainChance", "Speed", "Radius", "Height", "Mass":
-		case "SpawnState", "SeeState", "PainState", "MissileState":
-			if !monsterUsesExactDoomStateMachine(typ) {
-				return nil, fmt.Errorf("DeHackEd state roots are not supported for Thing %d yet", slot+1)
-			}
+		case "SpawnState", "SeeState", "PainState", "MeleeState", "MissileState", "DeathState", "XDeathState", "RaiseState", "Flags", "SeeSound", "PainSound", "DeathSound", "ActiveSound", "AttackSound":
 		default:
 			return nil, fmt.Errorf("DeHackEd gameplay does not yet support %s", key)
 		}
-		value := int32(reflect.ValueOf(actual.Things[slot]).FieldByName(member).Int())
+		value := int32(0)
+		if member == "Flags" {
+			value = int32(actual.Things[slot].Flags)
+			if actual.Things[slot].Flags&uint32(1|8|0x800|0x2000|0x8000|0x10000|0x1000000|0xc000000|0xf0000000) != 0 {
+				return nil, fmt.Errorf("DeHackEd actor flags include unsupported pickup/sector/projectile/translation extensions")
+			}
+		} else {
+			value = int32(reflect.ValueOf(actual.Things[slot]).FieldByName(member).Int())
+		}
 		valid := value >= 0
 		switch member {
 		case "SpawnHealth", "Mass":
 			valid = value > 0
 		case "PainChance":
 			valid = value >= 0 && value <= 256
-		case "SpawnState", "SeeState", "PainState", "MissileState":
+		case "Flags":
+			valid = true
+		case "SeeSound", "PainSound", "DeathSound", "ActiveSound", "AttackSound":
+			valid = value == 0 || definitionSoundEvent(defs, dehacked.SoundID(value)) >= 0
+		case "SpawnState", "SeeState", "PainState", "MeleeState", "MissileState", "DeathState", "XDeathState", "RaiseState":
 			state := int(value)
-			_, valid = monsterDoomStateDef(state)
+			valid = definitionStateSet[state]
 			if value == 0 && member != "SpawnState" {
 				valid = true
 			}
@@ -110,6 +130,12 @@ func compileActorDefinitions(defs *dehacked.Definitions) (map[int16]actorDefinit
 	// Also check the resolved data, rather than trusting only explicit-write keys.
 	actual.Defined, vanilla.Defined = nil, nil
 	if !reflect.DeepEqual(actual, vanilla) {
+		a, b := reflect.ValueOf(actual), reflect.ValueOf(vanilla)
+		for field := 0; field < a.NumField(); field++ {
+			if !reflect.DeepEqual(a.Field(field).Interface(), b.Field(field).Interface()) {
+				return nil, fmt.Errorf("DeHackEd gameplay definitions contain unsupported changes in %s", a.Type().Field(field).Name)
+			}
+		}
 		return nil, fmt.Errorf("DeHackEd gameplay definitions contain unsupported changes")
 	}
 	if err := validateReachableStateActions(defs); err != nil {
@@ -130,12 +156,20 @@ func (g *game) actorProperty(typ int16, field string) (int32, bool) {
 }
 
 func (g *game) monsterSpawnHealth(typ int16) int {
+	if g.patchedStateRuntime(typ) {
+		actor, _ := g.definitionThing(typ)
+		return int(actor.SpawnHealth)
+	}
 	if n, ok := g.actorProperty(typ, "SpawnHealth"); ok {
 		return int(n)
 	}
 	return monsterSpawnHealth(typ)
 }
 func (g *game) shootableThingSpawnHealth(typ int16) int {
+	if g.patchedStateRuntime(typ) {
+		actor, _ := g.definitionThing(typ)
+		return int(actor.SpawnHealth)
+	}
 	if n, ok := g.actorProperty(typ, "SpawnHealth"); ok {
 		return int(n)
 	}
@@ -148,6 +182,10 @@ func (g *game) demoTraceSpawnReactionTime(typ int16) int {
 	return demoTraceSpawnReactionTime(typ)
 }
 func (g *game) monsterPainChance(typ int16) int {
+	if g.patchedStateRuntime(typ) {
+		actor, _ := g.definitionThing(typ)
+		return int(actor.PainChance)
+	}
 	if n, ok := g.actorProperty(typ, "PainChance"); ok {
 		return int(n)
 	}

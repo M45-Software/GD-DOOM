@@ -234,6 +234,19 @@ func TestBoomRNGDemoCapture(t *testing.T) {
 			if os.Getenv("GD_RNG_COMBAT_ONLY") != "" {
 				fmt.Fprintf(out, ":%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d", m.Target, m.TargetType, m.Tracer, m.TracerType, m.Movedir, m.Movecount, m.ReactionTime, m.Threshold, m.LastLook, m.Radius, m.Height, m.FloorZ, m.CeilingZ)
 			}
+			if os.Getenv("GD_RNG_DEHACKED_ACTORS") != "" {
+				selected := false
+				for _, value := range strings.Split(os.Getenv("GD_DEHACKED_FLAG_TYPES"), ",") {
+					if value == strconv.Itoa(m.Type) {
+						selected = true
+					}
+				}
+				if selected {
+					fmt.Fprintf(out, ":%d", uint32(m.Flags))
+				} else {
+					fmt.Fprint(out, ":-")
+				}
+			}
 			fmt.Fprint(out, ";")
 		}
 		fmt.Fprint(out, ",")

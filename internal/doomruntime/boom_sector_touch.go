@@ -56,7 +56,7 @@ func (g *game) updateBoomThingTouch(i int) {
 		return
 	}
 	th := g.m.Things[i]
-	if !thingTypeUsesBlockmap(th.Type) || (i < len(g.thingCollected) && g.thingCollected[i]) || playerSlotFromThingType(th.Type) != 0 {
+	if (!g.thingTypeUsesBlockmap(th.Type) && !g.patchedStateRuntime(th.Type)) || (i < len(g.thingCollected) && g.thingCollected[i]) || playerSlotFromThingType(th.Type) != 0 {
 		g.updateBoomActorTouch(i, nil)
 		return
 	}

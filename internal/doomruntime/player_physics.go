@@ -1036,6 +1036,10 @@ func (g *game) checkPositionForActorWithThingPolicy(x, y, radius int64, blockMon
 }
 
 func (g *game) checkPositionForActorWithPickupTouch(x, y, radius int64, blockMonsterLines bool, moverThingIdx int, moverIsMonster bool, skipThingBlock, touchPickups bool) (int64, int64, int64, bool) {
+	if flags, ok := g.definitionFlags(moverThingIdx); ok && flags&0x1000 != 0 {
+		floor, ceil, _ := g.subsectorFloorCeilAt(x, y)
+		return floor, ceil, floor, true
+	}
 	g.movementProbeThing = moverThingIdx
 	if moverThingIdx >= 0 {
 		if moverThingIdx >= len(g.thingProbeSpecialLines) {
@@ -1484,6 +1488,9 @@ func monsterCorpseBlocksMovement(typ int16, phase int) bool {
 }
 
 func (g *game) monsterCorpseBlocksMovement(i int) bool {
+	if flags, ok := g.definitionFlags(i); ok {
+		return flags&2 != 0
+	}
 	if g == nil || g.m == nil || i < 0 || i >= len(g.m.Things) {
 		return false
 	}
@@ -1585,7 +1592,11 @@ func (g *game) blockLinesIterator(x, y int, fn func(int) bool) bool {
 		cell = cell[1:]
 	}
 	for _, lineWord := range cell {
-		if !fn(int(lineWord)) {
+		line := int(lineWord)
+		if g.boomMomentumDropoff {
+			line = int(uint16(lineWord))
+		}
+		if !fn(line) {
 			return false
 		}
 	}

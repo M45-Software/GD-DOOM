@@ -1,0 +1,469 @@
+{
+  "passed": true,
+  "comparisons": 42,
+  "compared_tics": 20160,
+  "cases": {
+    "zombie": {
+      "checks": {
+        "baseline": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "378702089ceca5f7f45383f8e507fb31d9485d73ac10c86e1d583801d4ff6020",
+          "dsda_hash": "378702089ceca5f7f45383f8e507fb31d9485d73ac10c86e1d583801d4ff6020"
+        },
+        "save": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "378702089ceca5f7f45383f8e507fb31d9485d73ac10c86e1d583801d4ff6020",
+          "dsda_hash": "378702089ceca5f7f45383f8e507fb31d9485d73ac10c86e1d583801d4ff6020"
+        },
+        "keyframe": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "378702089ceca5f7f45383f8e507fb31d9485d73ac10c86e1d583801d4ff6020",
+          "dsda_hash": "378702089ceca5f7f45383f8e507fb31d9485d73ac10c86e1d583801d4ff6020"
+        }
+      },
+      "native_resurrection_tic": 150,
+      "wad_sha256": "b21764547f32929c93be6b8ed23efc283774542b5739e9b294656c9bf30647c1",
+      "patch_sha256": "47959fe7a8167b09de3adf5eaca4ef6b175213f4077b1c79f41537e915753a22",
+      "demo_sha256": "b40250ba1dd9015a2e50c74764da7e66b3416bc2cab944769c898ea50c93df92"
+    },
+    "shotgun": {
+      "checks": {
+        "baseline": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "2ffaabc06c8b6802dd567bb5284e49fa23c34e7aa151d4e68a945d71e4b941b3",
+          "dsda_hash": "2ffaabc06c8b6802dd567bb5284e49fa23c34e7aa151d4e68a945d71e4b941b3"
+        },
+        "save": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "2ffaabc06c8b6802dd567bb5284e49fa23c34e7aa151d4e68a945d71e4b941b3",
+          "dsda_hash": "2ffaabc06c8b6802dd567bb5284e49fa23c34e7aa151d4e68a945d71e4b941b3"
+        },
+        "keyframe": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "2ffaabc06c8b6802dd567bb5284e49fa23c34e7aa151d4e68a945d71e4b941b3",
+          "dsda_hash": "2ffaabc06c8b6802dd567bb5284e49fa23c34e7aa151d4e68a945d71e4b941b3"
+        }
+      },
+      "native_resurrection_tic": 150,
+      "wad_sha256": "a6663c2facb164f8f41994c4e5972520deeeb3ddc438284e59b342c1cd10aa78",
+      "patch_sha256": "47618f633a9a26a83cff19527957d53846f2512fbaaec07f8826f62d2785ce7d",
+      "demo_sha256": "b40250ba1dd9015a2e50c74764da7e66b3416bc2cab944769c898ea50c93df92"
+    },
+    "revenant": {
+      "checks": {
+        "baseline": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "e5621d6b8b59b1e77b605542485e4b623d409492b1ed27b82258c1f7d0c7a5dd",
+          "dsda_hash": "e5621d6b8b59b1e77b605542485e4b623d409492b1ed27b82258c1f7d0c7a5dd"
+        },
+        "save": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "e5621d6b8b59b1e77b605542485e4b623d409492b1ed27b82258c1f7d0c7a5dd",
+          "dsda_hash": "e5621d6b8b59b1e77b605542485e4b623d409492b1ed27b82258c1f7d0c7a5dd"
+        },
+        "keyframe": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "e5621d6b8b59b1e77b605542485e4b623d409492b1ed27b82258c1f7d0c7a5dd",
+          "dsda_hash": "e5621d6b8b59b1e77b605542485e4b623d409492b1ed27b82258c1f7d0c7a5dd"
+        }
+      },
+      "native_resurrection_tic": 150,
+      "wad_sha256": "bc59088ffc7ae71091fbab2c7b2d490daf44d1c0fa400151a9d0431e4bead370",
+      "patch_sha256": "d11f394c17e89e0793a2f24c75700e44183e4bac41e1bdb5e7e2ce4c5348a4be",
+      "demo_sha256": "b40250ba1dd9015a2e50c74764da7e66b3416bc2cab944769c898ea50c93df92"
+    },
+    "mancubus": {
+      "checks": {
+        "baseline": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "387633d972534e6269fe4557c689a559e4a2f5829287cbe43c15d7cf16dee86e",
+          "dsda_hash": "387633d972534e6269fe4557c689a559e4a2f5829287cbe43c15d7cf16dee86e"
+        },
+        "save": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "387633d972534e6269fe4557c689a559e4a2f5829287cbe43c15d7cf16dee86e",
+          "dsda_hash": "387633d972534e6269fe4557c689a559e4a2f5829287cbe43c15d7cf16dee86e"
+        },
+        "keyframe": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "387633d972534e6269fe4557c689a559e4a2f5829287cbe43c15d7cf16dee86e",
+          "dsda_hash": "387633d972534e6269fe4557c689a559e4a2f5829287cbe43c15d7cf16dee86e"
+        }
+      },
+      "native_resurrection_tic": 150,
+      "wad_sha256": "1785517f5ec2132dbde71ee8e7fabf1dcc780ceafb89a02ea4637792bf47df42",
+      "patch_sha256": "9c6fda3f47d54efa54ca6cd68981892d3ab53be971682fcef74fe424c896de22",
+      "demo_sha256": "b40250ba1dd9015a2e50c74764da7e66b3416bc2cab944769c898ea50c93df92"
+    },
+    "chaingun": {
+      "checks": {
+        "baseline": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "eb657d0d6103b43718e49f1f3c232d8b51c9c091d4b83ed2b2ab98e7bbd207f4",
+          "dsda_hash": "eb657d0d6103b43718e49f1f3c232d8b51c9c091d4b83ed2b2ab98e7bbd207f4"
+        },
+        "save": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "eb657d0d6103b43718e49f1f3c232d8b51c9c091d4b83ed2b2ab98e7bbd207f4",
+          "dsda_hash": "eb657d0d6103b43718e49f1f3c232d8b51c9c091d4b83ed2b2ab98e7bbd207f4"
+        },
+        "keyframe": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "eb657d0d6103b43718e49f1f3c232d8b51c9c091d4b83ed2b2ab98e7bbd207f4",
+          "dsda_hash": "eb657d0d6103b43718e49f1f3c232d8b51c9c091d4b83ed2b2ab98e7bbd207f4"
+        }
+      },
+      "native_resurrection_tic": 150,
+      "wad_sha256": "9c85a18f718e59a11d3a696e29fde34ec71c06c3271c33b756fcb7334ab88789",
+      "patch_sha256": "b3ffde5a6f32f3ebcddf92b7c425c4f9a6aa3172f602dc1a069f24c81e9b8694",
+      "demo_sha256": "b40250ba1dd9015a2e50c74764da7e66b3416bc2cab944769c898ea50c93df92"
+    },
+    "imp": {
+      "checks": {
+        "baseline": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "ef73647b9df999bc43a96f104ea058d1d656dc6dc77789512bec2fa82263d61f",
+          "dsda_hash": "ef73647b9df999bc43a96f104ea058d1d656dc6dc77789512bec2fa82263d61f"
+        },
+        "save": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "ef73647b9df999bc43a96f104ea058d1d656dc6dc77789512bec2fa82263d61f",
+          "dsda_hash": "ef73647b9df999bc43a96f104ea058d1d656dc6dc77789512bec2fa82263d61f"
+        },
+        "keyframe": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "ef73647b9df999bc43a96f104ea058d1d656dc6dc77789512bec2fa82263d61f",
+          "dsda_hash": "ef73647b9df999bc43a96f104ea058d1d656dc6dc77789512bec2fa82263d61f"
+        }
+      },
+      "native_resurrection_tic": 150,
+      "wad_sha256": "45adb74dffcfbecfab75f8c6174357dbb5c582a405fa372b2f809d2a7f88a11e",
+      "patch_sha256": "a9b57ea3f7e0054539db81e3b92cc5b772bf7507d233cceb4437af0c0e259040",
+      "demo_sha256": "b40250ba1dd9015a2e50c74764da7e66b3416bc2cab944769c898ea50c93df92"
+    },
+    "demon": {
+      "checks": {
+        "baseline": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "fc174426c9ba8ecad75336d5b5e3527d4ee593da726da3fd2927be810574785f",
+          "dsda_hash": "fc174426c9ba8ecad75336d5b5e3527d4ee593da726da3fd2927be810574785f"
+        },
+        "save": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "fc174426c9ba8ecad75336d5b5e3527d4ee593da726da3fd2927be810574785f",
+          "dsda_hash": "fc174426c9ba8ecad75336d5b5e3527d4ee593da726da3fd2927be810574785f"
+        },
+        "keyframe": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "fc174426c9ba8ecad75336d5b5e3527d4ee593da726da3fd2927be810574785f",
+          "dsda_hash": "fc174426c9ba8ecad75336d5b5e3527d4ee593da726da3fd2927be810574785f"
+        }
+      },
+      "native_resurrection_tic": 150,
+      "wad_sha256": "28d3c15dabf97d9c39589cf0708aa1e0c91b29de8b1c646e0fc42fcd003a47e8",
+      "patch_sha256": "463077b8c60373e8965ec99737be66c2e1402a539d157cd3779e869b2a83012b",
+      "demo_sha256": "b40250ba1dd9015a2e50c74764da7e66b3416bc2cab944769c898ea50c93df92"
+    },
+    "spectre": {
+      "checks": {
+        "baseline": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "08d320d3b424113837abdbb3ca56673f6d26edd2019a59958d7db9ed3fdee185",
+          "dsda_hash": "08d320d3b424113837abdbb3ca56673f6d26edd2019a59958d7db9ed3fdee185"
+        },
+        "save": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "08d320d3b424113837abdbb3ca56673f6d26edd2019a59958d7db9ed3fdee185",
+          "dsda_hash": "08d320d3b424113837abdbb3ca56673f6d26edd2019a59958d7db9ed3fdee185"
+        },
+        "keyframe": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "08d320d3b424113837abdbb3ca56673f6d26edd2019a59958d7db9ed3fdee185",
+          "dsda_hash": "08d320d3b424113837abdbb3ca56673f6d26edd2019a59958d7db9ed3fdee185"
+        }
+      },
+      "native_resurrection_tic": 150,
+      "wad_sha256": "73bbdeade1287ae399495619918b353e07711417f67cf885037ec74011e6cd0e",
+      "patch_sha256": "caa9b12e2158cb0e02a2066baad16e18bf06e0860a54349fbb3763e24529c404",
+      "demo_sha256": "b40250ba1dd9015a2e50c74764da7e66b3416bc2cab944769c898ea50c93df92"
+    },
+    "caco": {
+      "checks": {
+        "baseline": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "e8819d1f7d62abf92907d6da8a98b5a4eb7689be7e761059f23f399afd65df58",
+          "dsda_hash": "e8819d1f7d62abf92907d6da8a98b5a4eb7689be7e761059f23f399afd65df58"
+        },
+        "save": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "e8819d1f7d62abf92907d6da8a98b5a4eb7689be7e761059f23f399afd65df58",
+          "dsda_hash": "e8819d1f7d62abf92907d6da8a98b5a4eb7689be7e761059f23f399afd65df58"
+        },
+        "keyframe": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "e8819d1f7d62abf92907d6da8a98b5a4eb7689be7e761059f23f399afd65df58",
+          "dsda_hash": "e8819d1f7d62abf92907d6da8a98b5a4eb7689be7e761059f23f399afd65df58"
+        }
+      },
+      "native_resurrection_tic": 150,
+      "wad_sha256": "4b49bae580e27dc3ce7beef8ac11b6193eabaf0f9efdc0cac5b54f666037341d",
+      "patch_sha256": "09d3855ce7d929ae1f6c92e73acf9ad34e9eba608b24b0358abc9996387c80f2",
+      "demo_sha256": "b40250ba1dd9015a2e50c74764da7e66b3416bc2cab944769c898ea50c93df92"
+    },
+    "baron": {
+      "checks": {
+        "baseline": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "b60ae7489fd3e26c6e8b11e060a7376d70c30a0f42b35d2bb531aa688a97b60a",
+          "dsda_hash": "b60ae7489fd3e26c6e8b11e060a7376d70c30a0f42b35d2bb531aa688a97b60a"
+        },
+        "save": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "b60ae7489fd3e26c6e8b11e060a7376d70c30a0f42b35d2bb531aa688a97b60a",
+          "dsda_hash": "b60ae7489fd3e26c6e8b11e060a7376d70c30a0f42b35d2bb531aa688a97b60a"
+        },
+        "keyframe": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "b60ae7489fd3e26c6e8b11e060a7376d70c30a0f42b35d2bb531aa688a97b60a",
+          "dsda_hash": "b60ae7489fd3e26c6e8b11e060a7376d70c30a0f42b35d2bb531aa688a97b60a"
+        }
+      },
+      "native_resurrection_tic": 150,
+      "wad_sha256": "cc8f97b48bbd1ab1f8329206f00cfab09714d555a41546fdbd388a7de906ab22",
+      "patch_sha256": "7912162727e84ae746a8dffc694ae43a199c1c17ddf4b867aa00b3894055b548",
+      "demo_sha256": "b40250ba1dd9015a2e50c74764da7e66b3416bc2cab944769c898ea50c93df92"
+    },
+    "knight": {
+      "checks": {
+        "baseline": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "b59b82405547b9f648c5d0dbfe7705fd2d81a5cff973e4f36c0c18d800c1f3d0",
+          "dsda_hash": "b59b82405547b9f648c5d0dbfe7705fd2d81a5cff973e4f36c0c18d800c1f3d0"
+        },
+        "save": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "b59b82405547b9f648c5d0dbfe7705fd2d81a5cff973e4f36c0c18d800c1f3d0",
+          "dsda_hash": "b59b82405547b9f648c5d0dbfe7705fd2d81a5cff973e4f36c0c18d800c1f3d0"
+        },
+        "keyframe": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "b59b82405547b9f648c5d0dbfe7705fd2d81a5cff973e4f36c0c18d800c1f3d0",
+          "dsda_hash": "b59b82405547b9f648c5d0dbfe7705fd2d81a5cff973e4f36c0c18d800c1f3d0"
+        }
+      },
+      "native_resurrection_tic": 150,
+      "wad_sha256": "06d649788d4c76e597b33f503352af19a071984e9742d6f4f63fcd07e276cd12",
+      "patch_sha256": "a1fb7eae181eee7d7c4f9f232fc58d11debf6a5ac15932c6c52a65bb69f3f840",
+      "demo_sha256": "b40250ba1dd9015a2e50c74764da7e66b3416bc2cab944769c898ea50c93df92"
+    },
+    "arach": {
+      "checks": {
+        "baseline": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "160c3e407d8efe67fd71623ede6cc86de4370ef397a64c9fd0ee8caccba3b7f4",
+          "dsda_hash": "160c3e407d8efe67fd71623ede6cc86de4370ef397a64c9fd0ee8caccba3b7f4"
+        },
+        "save": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "160c3e407d8efe67fd71623ede6cc86de4370ef397a64c9fd0ee8caccba3b7f4",
+          "dsda_hash": "160c3e407d8efe67fd71623ede6cc86de4370ef397a64c9fd0ee8caccba3b7f4"
+        },
+        "keyframe": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "160c3e407d8efe67fd71623ede6cc86de4370ef397a64c9fd0ee8caccba3b7f4",
+          "dsda_hash": "160c3e407d8efe67fd71623ede6cc86de4370ef397a64c9fd0ee8caccba3b7f4"
+        }
+      },
+      "native_resurrection_tic": 150,
+      "wad_sha256": "d5241dd25c18786a7b95dce9cd2d6f279bfcbf5f981934e035d55e3d7f94fde9",
+      "patch_sha256": "7fd6af5463161b6bedde44da940762ebc2f37ad1f96a788b24b80f103bdf8522",
+      "demo_sha256": "b40250ba1dd9015a2e50c74764da7e66b3416bc2cab944769c898ea50c93df92"
+    },
+    "pain": {
+      "checks": {
+        "baseline": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "0609a2589a8978f9cec309b3f837f5a77c22afb7d1994c02a6dcbe230a7e3c5c",
+          "dsda_hash": "0609a2589a8978f9cec309b3f837f5a77c22afb7d1994c02a6dcbe230a7e3c5c"
+        },
+        "save": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "0609a2589a8978f9cec309b3f837f5a77c22afb7d1994c02a6dcbe230a7e3c5c",
+          "dsda_hash": "0609a2589a8978f9cec309b3f837f5a77c22afb7d1994c02a6dcbe230a7e3c5c"
+        },
+        "keyframe": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "0609a2589a8978f9cec309b3f837f5a77c22afb7d1994c02a6dcbe230a7e3c5c",
+          "dsda_hash": "0609a2589a8978f9cec309b3f837f5a77c22afb7d1994c02a6dcbe230a7e3c5c"
+        }
+      },
+      "native_resurrection_tic": 156,
+      "wad_sha256": "4619517893626b60fb17beb33681b51edaa1fc2b987aecdf337ce57e3443cff5",
+      "patch_sha256": "238ce68393aad35560c52ef612d4c11f12ba9abcc66020a9321ab7ab49cfbf8c",
+      "demo_sha256": "b40250ba1dd9015a2e50c74764da7e66b3416bc2cab944769c898ea50c93df92"
+    },
+    "wolf": {
+      "checks": {
+        "baseline": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "d344ffccc724f6d7bd7d7ccda312fedb135a89662b5bacbb38dd4b2d23bfecd6",
+          "dsda_hash": "d344ffccc724f6d7bd7d7ccda312fedb135a89662b5bacbb38dd4b2d23bfecd6"
+        },
+        "save": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "d344ffccc724f6d7bd7d7ccda312fedb135a89662b5bacbb38dd4b2d23bfecd6",
+          "dsda_hash": "d344ffccc724f6d7bd7d7ccda312fedb135a89662b5bacbb38dd4b2d23bfecd6"
+        },
+        "keyframe": {
+          "passed": true,
+          "rows": 480,
+          "matched": 480,
+          "failures": [],
+          "gd_hash": "d344ffccc724f6d7bd7d7ccda312fedb135a89662b5bacbb38dd4b2d23bfecd6",
+          "dsda_hash": "d344ffccc724f6d7bd7d7ccda312fedb135a89662b5bacbb38dd4b2d23bfecd6"
+        }
+      },
+      "native_resurrection_tic": 150,
+      "wad_sha256": "ba10b0392056422256f5a9a36537dfe3c1cb301828072b3096d659251a04c633",
+      "patch_sha256": "d232b12cc7cc3c6479d1129a30cf839d05bcdf92edf902afdbebbce114a281a4",
+      "demo_sha256": "b40250ba1dd9015a2e50c74764da7e66b3416bc2cab944769c898ea50c93df92"
+    }
+  },
+  "source_sha256": "c99cace52937556d4aa8b4cea3f572ba5bc5dbd1f7b147f9821222ca3125d264",
+  "reference_sha256": "3e42a3955db4858c365ec1d0949f34e6e39e4f65f84c2dda75d82aa89b34d976",
+  "iwad_sha256": "10d67824b11025ddd9198e8cfc87ca335ee6e2d3e63af4180fa9b8a471893255",
+  "capture_sha256": "b17948c6f831b6b96edbc632ec2382273723ab61310d31164254c9c5d4ce9eaf",
+  "script_sha256": "60e5785597a1a7830c758703106626e04d0a5d659e0a2054ab083234e0769169",
+  "observer_sha256": "0d82fb0beb48cce1599ed2ae8dca8f51d254357c138c50b3dc1ecea80e055d86",
+  "dependencies": {
+    "verify_dehacked_actors.py": "aef36e959bf75fff7cc5691e8a0268e0e5d94318fe6dc1e062dd25b50aacc584",
+    "verify_boom_rng.py": "9a5e44496e31b6e8c60e2969646cc2965bc3325d41852abc6dbef746ce11b597",
+    "verify_boom_transfers.py": "263701fc218e952a6ced8f2978806f9d76834d662d99a402b28f4fd637ac630b",
+    "verify_boom_community_coop_campaign.py": "672d2fa4b4e7e3607e3628cdc85226c7a662c631eecd96d56d3640db7bffb46f",
+    "make_boom_legacy_wad.py": "cc798b198662a8b70d4e2762d14fb18543f81fa6f9ba4930a9eee6ecc6480f47"
+  },
+  "scope": "Require native-observed death and resurrection of each patched raisable actor.\n\nThe player fires for fifty commands, then stops. A non-solid Keen waits 150\ntics before running VileChase. Observers only read state; no injected damage,\nforced corpse state, or forced resurrection is used.\n"
+}

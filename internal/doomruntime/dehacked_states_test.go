@@ -97,9 +97,9 @@ func TestDehackedStateRootsAndCanonicalSprite(t *testing.T) {
 func TestDehackedStateValidationAndActionBudget(t *testing.T) {
 	for _, patch := range []string{
 		"Frame 174\nDuration = 0\nNext frame = 174\n",
-		"Frame 174\nDuration = -2\n", "Frame 174\nNext frame = 763\n",
-		"Frame 174\nSprite number = 1\n", "[CODEPTR]\nFRAME 174 = VileChase\n",
-		"Thing 25\nInitial frame = 174\n",
+		"Frame 174\nDuration = -2\n", "Frame 174\nNext frame = 281\n",
+		"Frame 174\nSprite number = 1\n", "[CODEPTR]\nFRAME 174 = Fire\n",
+		"Thing 1\nInitial frame = 174\n",
 	} {
 		if err := ValidateDehackedDefinitions(gameplayDefinitions(t, patch)); err == nil {
 			t.Fatalf("accepted unsupported/unsafe patch %q", patch)
@@ -216,7 +216,7 @@ func TestDehackedCrossTypeSkullRequiresDamageIntegration(t *testing.T) {
 }
 
 func TestDehackedPublicConstructorsRejectBeforeInitialization(t *testing.T) {
-	defs := gameplayDefinitions(t, "[CODEPTR]\nFRAME 763 = VileChase\n")
+	defs := gameplayDefinitions(t, "[CODEPTR]\nFRAME 281 = Fire\n")
 	opts := Options{Headless: true, DehackedDefinitions: defs}
 	before := doomrand.Capture()
 	rt, meta := NewRuntime(predictionTestMap(), opts, nil)

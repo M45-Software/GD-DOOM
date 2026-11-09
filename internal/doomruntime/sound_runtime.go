@@ -115,6 +115,10 @@ const (
 	soundEventSectorMoveStart
 	soundEventPlatStart
 	soundEventPlatStop
+	soundEventHoof
+	soundEventMetal
+	soundEventSkelSwing
+	soundEventSkelPunch
 	soundEventCount
 )
 
@@ -386,6 +390,14 @@ func debugLogVanillaPitch(ev soundEvent, mode string) {
 
 func soundEventDebugName(ev soundEvent) string {
 	switch ev {
+	case soundEventHoof:
+		return "Hoof"
+	case soundEventMetal:
+		return "Metal"
+	case soundEventSkelSwing:
+		return "SkelSwing"
+	case soundEventSkelPunch:
+		return "SkelPunch"
 	case soundEventSectorMove:
 		return "SectorMove"
 	case soundEventSectorMoveStart:
@@ -506,6 +518,14 @@ func isMonsterVocalSound(ev soundEvent) bool {
 // the pc-speaker bank (keyed by DS name) can be looked up.
 func soundEventDSName(ev soundEvent) (string, bool) {
 	switch ev {
+	case soundEventHoof:
+		return "DSHOOF", true
+	case soundEventMetal:
+		return "DSMETAL", true
+	case soundEventSkelSwing:
+		return "DSSKESWG", true
+	case soundEventSkelPunch:
+		return "DSSKEPCH", true
 	case soundEventSectorMove, soundEventSectorMoveStart:
 		return "DSSTNMOV", true
 	case soundEventPlatStart:
@@ -702,6 +722,14 @@ func soundEventDSName(ev soundEvent) (string, bool) {
 
 func (s *soundSystem) sampleForEvent(ev soundEvent) (PCMSample, bool) {
 	switch ev {
+	case soundEventHoof:
+		return s.bank.Hoof, len(s.bank.Hoof.Data) > 0
+	case soundEventMetal:
+		return s.bank.Metal, len(s.bank.Metal.Data) > 0
+	case soundEventSkelSwing:
+		return s.bank.SkelSwing, len(s.bank.SkelSwing.Data) > 0
+	case soundEventSkelPunch:
+		return s.bank.SkelPunch, len(s.bank.SkelPunch.Data) > 0
 	case soundEventSectorMove, soundEventSectorMoveStart:
 		return s.bank.SectorMove, true
 	case soundEventPlatStart:

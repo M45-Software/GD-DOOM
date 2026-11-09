@@ -1500,12 +1500,12 @@ func (g *game) projectileThingHitAtPosition(p projectile, nx, ny, z int64) (proj
 			if i < 0 || i >= len(g.thingCollected) || g.thingCollected[i] {
 				return false
 			}
-			shootable := thingTypeIsShootable(th.Type) && i < len(g.thingHP) && g.thingHP[i] > 0
+			shootable := g.thingTypeIsShootable(th.Type) && i < len(g.thingHP) && g.thingHP[i] > 0
 			corpseSolid := false
 			if isMonster(th.Type) && i < len(g.thingHP) && g.thingHP[i] <= 0 {
 				corpseSolid = g.monsterCorpseBlocksMovement(i)
 			}
-			solid := g.thingBlocksInSession(i) && (!isMonster(th.Type) && thingTypeBlocksActorMovement(th.Type, true))
+			solid := g.thingBlocksInSession(i) && (g.patchedStateRuntime(th.Type) || !isMonster(th.Type) && thingTypeBlocksActorMovement(th.Type, true))
 			if !shootable && !corpseSolid && !solid {
 				return false
 			}

@@ -39,6 +39,7 @@ type NativeCampaign struct {
 }
 
 func NewNativeCampaign(game *NativeMeshGame, opts Options, next NextMapFunc) *NativeCampaign {
+	opts = applyDefinitionPresentationOptions(opts)
 	c := &NativeCampaign{Game: game, session: &sessionGame{g: game.g, current: game.g.m.Name, opts: opts}, next: next, recordingOptions: opts}
 	c.musicLump, _ = music.MapLumpName(string(game.g.m.Name))
 	return c

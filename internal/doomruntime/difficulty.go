@@ -102,6 +102,11 @@ func thingSpawnsForGameMode(t mapdata.Thing, mode string) bool {
 }
 
 func thingSpawnsInSession(t mapdata.Thing, skill int, mode string, showNoSkillItems bool, showAllItems bool, noMonsters bool) bool {
+	// P_SpawnMapThing handles player starts before skill/mode filtering.
+	// Earlier starts become dolls even when their map skill bits exclude UV.
+	if isPlayerBodyThingType(t.Type) {
+		return true
+	}
 	if isPickupType(t.Type) && showAllItems {
 		return true
 	}
@@ -140,7 +145,7 @@ func (g *game) thingActiveInSession(i int) bool {
 	if g.m.Things[i].Type == 3006 && g.m.Things[i].Flags == 0 {
 		return true
 	}
-	return thingSpawnsInSession(g.m.Things[i], g.opts.SkillLevel, g.opts.GameMode, g.opts.ShowNoSkillItems, g.opts.ShowAllItems, g.opts.NoMonsters)
+	return g.thingSpawnsInSession(g.m.Things[i], g.opts.SkillLevel, g.opts.GameMode, g.opts.ShowNoSkillItems, g.opts.ShowAllItems, g.opts.NoMonsters)
 }
 
 func (g *game) thingBlocksInSession(i int) bool {
@@ -149,6 +154,9 @@ func (g *game) thingBlocksInSession(i int) bool {
 	}
 	if i < len(g.thingCollected) && g.thingCollected[i] {
 		return false
+	}
+	if flags, ok := g.definitionFlags(i); ok {
+		return flags&2 != 0
 	}
 	if i < len(g.thingDead) && g.thingDead[i] {
 		// P_KillMobj leaves a barrel's MF_SOLID flag set throughout its BEXP
@@ -175,5 +183,5 @@ func (g *game) thingBlocksInSession(i int) bool {
 	if _, ok := doomSolidMapThingTypes[th.Type]; ok && (int(th.Flags)&skillMask) == 0 {
 		return thingSpawnsForGameMode(th, g.opts.GameMode)
 	}
-	return thingSpawnsInSession(th, g.opts.SkillLevel, g.opts.GameMode, g.opts.ShowNoSkillItems, g.opts.ShowAllItems, g.opts.NoMonsters)
+	return g.thingSpawnsInSession(th, g.opts.SkillLevel, g.opts.GameMode, g.opts.ShowNoSkillItems, g.opts.ShowAllItems, g.opts.NoMonsters)
 }

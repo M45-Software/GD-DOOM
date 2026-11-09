@@ -106,6 +106,7 @@ func (g *game) optionsMenuLabels() ([]string, []string, int) {
 }
 
 func NewRuntime(m *mapdata.Map, opts Options, nextMap runtimehost.NextMapFunc) (session.Runtime, runtimehost.Meta) {
+	opts = applyDefinitionPresentationOptions(opts)
 	if err := ValidateDehackedOptions(opts); err != nil {
 		return failedDefinitionRuntime(m, opts, err)
 	}

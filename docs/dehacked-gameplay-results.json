@@ -7,10 +7,10 @@
     "verify_boom_transfers.py": "263701fc218e952a6ced8f2978806f9d76834d662d99a402b28f4fd637ac630b",
     "make_boom_legacy_wad.py": "cc798b198662a8b70d4e2762d14fb18543f81fa6f9ba4930a9eee6ecc6480f47"
   },
-  "source_sha256": "a9654221e8d0d3993936d8b486d2df0f0bba36678624cd8a43a519fdbce50c35",
+  "source_sha256": "f84eb63a45561a16e723ceca326d41c68c1add0a3188586d4d758acbc5dc8ff6",
   "iwad_sha256": "10d67824b11025ddd9198e8cfc87ca335ee6e2d3e63af4180fa9b8a471893255",
-  "reference_sha256": "deb83c51dacb35d88cd9c4cb6e8957389b14db1940dfe54853e1ad331ab72be6",
-  "capture_sha256": "c776524f8f38605c160d02a1fd1c9f04eab22d7c8901e4a0a9136860e15fbdf8",
+  "reference_sha256": "3e42a3955db4858c365ec1d0949f34e6e39e4f65f84c2dda75d82aa89b34d976",
+  "capture_sha256": "b17948c6f831b6b96edbc632ec2382273723ab61310d31164254c9c5d4ce9eaf",
   "script_sha256": "4e490154c792d4f8abdd4ecb9398eaaa24f12ad7717a38e4f08cf0cd39bf39f8",
   "cases": {
     "baseline": {

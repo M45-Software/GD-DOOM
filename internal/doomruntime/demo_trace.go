@@ -412,9 +412,9 @@ func (g *game) demoTraceMobjs() []demoTraceMobj {
 			z, floorZ, ceilZ = g.monsterSupportHeights(i, th)
 		} else if i >= 0 && i < len(g.thingSupportValid) && g.thingSupportValid[i] {
 			z, floorZ, ceilZ = g.thingSupportState(i, th)
-		} else if thingSpawnsOnCeiling(th.Type) {
+		} else if g.thingSpawnsOnCeiling(th.Type) {
 			z, floorZ, ceilZ = g.thingSupportState(i, th)
-		} else if thingTypeIsShootable(th.Type) {
+		} else if g.thingTypeIsShootable(th.Type) {
 			z, floorZ, ceilZ = g.thingSupportState(i, th)
 		} else if sec >= 0 && sec < len(g.sectorCeil) {
 			ceilZ = g.sectorCeil[sec]
@@ -423,7 +423,7 @@ func (g *game) demoTraceMobjs() []demoTraceMobj {
 		if i >= 0 && i < len(g.thingGibbed) && g.thingGibbed[i] {
 			radius, height = 0, 0
 		}
-		if thingTypeIsShootable(th.Type) {
+		if g.thingTypeIsShootable(th.Type) {
 			height = g.thingCurrentHeight(i, th)
 		}
 		target, targetType := demoTraceThingTarget(g, i)
@@ -1138,6 +1138,9 @@ const (
 )
 
 func demoTraceThingHealth(g *game, i int, typ int16) int {
+	if g.patchedStateRuntime(typ) && i >= 0 && i < len(g.thingHP) {
+		return g.thingHP[i]
+	}
 	if thingTypeIsShootable(typ) && i >= 0 && i < len(g.thingHP) {
 		return g.thingHP[i]
 	}
@@ -1148,6 +1151,9 @@ func demoTraceThingHealth(g *game, i int, typ int16) int {
 }
 
 func demoTraceThingTics(g *game, i int, typ int16) int {
+	if g.patchedStateRuntime(typ) && i >= 0 && i < len(g.thingStateTics) {
+		return g.thingStateTics[i]
+	}
 	if typ == 87 {
 		// MT_BOSSTARGET stays in S_NULL with an infinite duration.
 		return -1
@@ -1203,6 +1209,9 @@ func demoTraceThingTics(g *game, i int, typ int16) int {
 }
 
 func demoTraceThingState(g *game, i int, typ int16) int {
+	if g.patchedStateRuntime(typ) && i >= 0 && i < len(g.thingDoomState) {
+		return g.thingDoomState[i]
+	}
 	if typ == 87 {
 		return 0 // S_NULL: invisible boss-brain landing marker.
 	}
@@ -1618,6 +1627,9 @@ func demoTraceThingMomZ(g *game, i int) int64 {
 }
 
 func demoTraceThingFlags(g *game, i int, th mapdata.Thing) int {
+	if flags, ok := g.definitionFlags(i); ok {
+		return int(flags)
+	}
 	if isPlayerBodyThingType(th.Type) {
 		flags := demoTraceFlagDropoff | 0x800 // MF_PICKUP
 		if th.Type == detachedPlayerBodyType {
