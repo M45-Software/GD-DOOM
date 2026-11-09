@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"gddoom/internal/demo"
 	"gddoom/internal/doomrand"
+	"gddoom/internal/launchcatalog"
 	"gddoom/internal/mapdata"
 	"gddoom/internal/wad"
 	"os"
@@ -87,6 +88,21 @@ func TestBoomRNGDemoCapture(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	opts := Options{Headless: true, DemoScript: script, DemoQuitOnComplete: true}
+	if os.Getenv("GD_DEHACKED_CAPTURE") == "1" {
+		var paths []string
+		if value := os.Getenv("GD_DEHACKED_FILES"); value != "" {
+			paths = strings.Split(value, ",")
+		}
+		defs, _, err := launchcatalog.LoadDehacked(wf, paths, false)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := ValidateDehackedDefinitions(defs); err != nil {
+			t.Fatal(err)
+		}
+		opts.DehackedDefinitions = defs
+	}
 	var sg *sessionGame
 	var g *game
 	if campaign {
@@ -98,12 +114,12 @@ func TestBoomRNGDemoCapture(t *testing.T) {
 			next, err := mapdata.LoadMap(wf, name)
 			return next, name, err
 		}
-		rt, meta := NewRuntime(m, Options{Headless: true, DemoScript: script, DemoQuitOnComplete: true}, next)
+		rt, meta := NewRuntime(m, opts, next)
 		defer meta.Close()
 		sg = rt.(*sessionGame)
 		g = sg.g
 	} else {
-		g = newGame(m, Options{Headless: true, DemoScript: script})
+		g = newGame(m, opts)
 	}
 	f, err := os.Create(os.Getenv("GD_RNG_OUT"))
 	if err != nil {
@@ -170,7 +186,7 @@ func TestBoomRNGDemoCapture(t *testing.T) {
 				t.Fatalf("invalid membership before checkpoint %d", tic)
 			}
 			rng := doomrand.Capture()
-			blob, err := encodeSnapshot(magic, saveFile{Version: version, Game: state, RNG: saveRNGState{Extended: rng, MenuIndex: rng.MenuIndex, PlayIndex: rng.PlayIndex}})
+			blob, err := encodeSnapshot(magic, saveFile{DehackedDigest: definitionDigest(g.opts), Version: version, Game: state, RNG: saveRNGState{Extended: rng, MenuIndex: rng.MenuIndex, PlayIndex: rng.PlayIndex}})
 			if err != nil {
 				t.Fatal(err)
 			}

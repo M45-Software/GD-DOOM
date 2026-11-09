@@ -71,6 +71,9 @@ func newNativeMeshGame(m *mapdata.Map, opts Options, resetRNG bool) *NativeMeshG
 	opts.SourcePortMode = true
 	opts.SFXVolume = 0 // The host attaches native audio without initializing Ebiten audio.
 	g := newGameWithRNG(m, opts, resetRNG)
+	if g.definitionErr != nil {
+		return &NativeMeshGame{g: g}
+	}
 	g.syncRenderState()
 	n := &NativeMeshGame{g: g, lightRows: doomShadeRows()}
 	for row := range n.lightRamp {
@@ -83,6 +86,9 @@ func newNativeMeshGame(m *mapdata.Map, opts Options, resetRNG bool) *NativeMeshG
 
 // Tick advances exactly one Doom tic (35 Hz). The external host owns timing.
 func (n *NativeMeshGame) Tick(in NativeMeshInput) {
+	if n.g.definitionErr != nil {
+		return
+	}
 	g := n.g
 	if g.chatComposeOpen {
 		in = NativeMeshInput{Map: in.Map}
@@ -136,6 +142,9 @@ func (n *NativeMeshGame) Tick(in NativeMeshInput) {
 }
 
 func (n *NativeMeshGame) Frame(alpha float64) NativeMeshFrame {
+	if n.g.definitionErr != nil {
+		return NativeMeshFrame{Message: n.g.definitionErr.Error()}
+	}
 	g := n.g
 	alpha = math.Max(0, math.Min(1, alpha))
 	g.renderAlpha = alpha

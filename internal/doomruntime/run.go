@@ -106,6 +106,9 @@ func (g *game) optionsMenuLabels() ([]string, []string, int) {
 }
 
 func NewRuntime(m *mapdata.Map, opts Options, nextMap runtimehost.NextMapFunc) (session.Runtime, runtimehost.Meta) {
+	if err := ValidateDehackedOptions(opts); err != nil {
+		return failedDefinitionRuntime(m, opts, err)
+	}
 	sg := runtimehost.Init(runtimehost.Initializer[*sessionGame]{
 		Base: func() *sessionGame {
 			return &sessionGame{

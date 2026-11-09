@@ -619,6 +619,9 @@ func RunParse(args []string, stdout io.Writer, stderr io.Writer) int {
 	configFlag := fs.String("config", defaultConfigPath, "path to config toml file (default: config.toml)")
 	wadPath := fs.String("wad", defaultWAD, "path to IWAD file")
 	filePaths := fs.String("file", "", "comma-separated PWAD overlay paths")
+	var dehPaths launchcatalog.DehackedPaths
+	fs.Var(&dehPaths, "deh", "DeHackEd/BEX patch paths; repeat or separate with commas, applied after embedded patches")
+	noEmbeddedDeh := fs.Bool("nodeh", false, "skip embedded DEHACKED lumps")
 	mapName := fs.String("map", defaultMap, "map name (E#M# or MAP##); empty selects first valid map")
 	details := fs.Bool("details", defaultDetails, "print decoded gameplay-relevant map details")
 	render := fs.Bool("render", defaultRender, "launch Ebiten automap renderer")
@@ -1032,6 +1035,8 @@ func RunParse(args []string, stdout io.Writer, stderr io.Writer) int {
 			demoTracePath:              resolvedDemoTracePath,
 			inputBindings:              defaultInputBindings,
 			pwadPaths:                  resolvedFilePaths,
+			dehPaths:                   []string(dehPaths),
+			noEmbeddedDeh:              *noEmbeddedDeh,
 			configPath:                 configPath,
 		}
 		picker, perr := newIWADPickerGame(pickerChoices, resolvedMusicBackend, buildCfg.pcSpeakerVariant, func(path string, profile pickerProfile, sfxIndex int, pcSpeakerVariantIndex int, synthIndex int) (*renderBundle, error) {
@@ -1101,6 +1106,15 @@ func RunParse(args []string, stdout io.Writer, stderr io.Writer) int {
 	if err != nil {
 		fmt.Fprintf(stderr, "open wad: %v\n", err)
 		return 1
+	}
+	defs, dehErr := loadGameplayDehacked(wf, []string(dehPaths), *noEmbeddedDeh, stderr)
+	if dehErr != nil {
+		fmt.Fprintf(stderr, "DeHackEd: %v\n", dehErr)
+		return 1
+	}
+	if defs != nil && networkActive {
+		fmt.Fprintln(stderr, "DeHackEd network sessions are not supported yet")
+		return 2
 	}
 	wadHash := hashWADStackSHA1(wadPaths)
 	var watchSession *netplay.Viewer
@@ -1329,6 +1343,7 @@ func RunParse(args []string, stdout io.Writer, stderr io.Writer) int {
 			AutoDetail:                 *autoDetail,
 			InitialGammaLevel:          *gammaLevel,
 			WADHash:                    wadHash,
+			DehackedDefinitions:        defs,
 			WADSources:                 buildWADSources(wadPaths),
 			Debug:                      *debug,
 			DebugEvents:                *debugEvents,
@@ -1781,6 +1796,8 @@ func RunParse(args []string, stdout io.Writer, stderr io.Writer) int {
 			demoTracePath:              resolvedDemoTracePath,
 			inputBindings:              defaultInputBindings,
 			pwadPaths:                  resolvedFilePaths,
+			dehPaths:                   []string(dehPaths),
+			noEmbeddedDeh:              *noEmbeddedDeh,
 			configPath:                 configPath,
 		}
 		bundle, berr := buildRenderBundle(resolvedWADPath, buildCfg, stderr)
@@ -2013,6 +2030,8 @@ type renderBuildConfig struct {
 	demoTracePath              string
 	inputBindings              runtimecfg.InputBindings
 	pwadPaths                  []string
+	dehPaths                   []string
+	noEmbeddedDeh              bool
 	configPath                 string
 }
 
@@ -2158,6 +2177,10 @@ func buildRenderBundle(resolvedWADPath string, cfg renderBuildConfig, stderr io.
 	if err != nil {
 		return nil, fmt.Errorf("open wad: %w", err)
 	}
+	defs, err := loadGameplayDehacked(wf, cfg.dehPaths, cfg.noEmbeddedDeh, stderr)
+	if err != nil {
+		return nil, fmt.Errorf("DeHackEd: %w", err)
+	}
 	wadHash := hashWADStackSHA1(wadPaths)
 	dsr := sound.ImportDigitalSounds(wf)
 	musicSoundFontChoices := detectAvailableSoundFonts("soundfonts")
@@ -2293,6 +2316,7 @@ func buildRenderBundle(resolvedWADPath string, cfg renderBuildConfig, stderr io.
 		AutoDetail:                 cfg.autoDetail,
 		InitialGammaLevel:          cfg.gammaLevel,
 		WADHash:                    wadHash,
+		DehackedDefinitions:        defs,
 		WADSources:                 buildWADSources(wadPaths),
 		Debug:                      cfg.debug,
 		DebugEvents:                cfg.debugEvents,

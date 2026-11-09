@@ -162,7 +162,7 @@ func (g *game) tickMonsterRaiseOrHeal(i int, th mapdata.Thing) {
 		return
 	}
 	if monsterUsesExactDoomStateMachine(th.Type) {
-		state := monsterDoomSeeState(th.Type)
+		state := g.monsterDoomSeeState(th.Type)
 		if th.Type == 68 {
 			// S_BSPI_RAISE7 enters RUN1, whose A_BabyMetal calls A_Chase.
 			// The sight delay belongs to A_Look after target reacquisition.

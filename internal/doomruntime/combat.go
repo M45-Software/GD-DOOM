@@ -104,6 +104,7 @@ func (g *game) initThingCombatState() {
 			continue
 		}
 		if info, ok := demoTraceThingInfoForType(th.Type); ok {
+			info = g.dehackedSpawnInfo(th.Type, info)
 			if i >= 0 && i < len(g.thingReactionTics) {
 				g.thingReactionTics[i] = info.reaction
 				if reaction, patched := g.actorProperty(th.Type, "ReactionTime"); patched {
@@ -128,7 +129,7 @@ func (g *game) initThingCombatState() {
 					g.thingStateTics[i] = spawnTics
 				}
 				if i >= 0 && i < len(g.thingDoomState) && monsterUsesExactDoomStateMachine(th.Type) {
-					g.thingDoomState[i] = monsterInitialDoomState(th.Type)
+					g.thingDoomState[i] = g.monsterInitialDoomState(th.Type)
 				}
 				if i >= 0 && i < len(g.thingStatePhase) {
 					g.thingStatePhase[i] = 0
@@ -163,7 +164,12 @@ func (g *game) initThingCombatState() {
 			}
 		}
 		if i >= 0 && i < len(g.thingDoomState) && monsterUsesExactDoomStateMachine(th.Type) {
-			g.thingDoomState[i] = monsterInitialDoomState(th.Type)
+			g.thingDoomState[i] = g.monsterInitialDoomState(th.Type)
+		}
+		if g.patchedStateRuntime(th.Type) {
+			if def, ok := g.monsterDoomStateDef(g.monsterInitialDoomState(th.Type)); ok && def.tics <= 0 {
+				g.thingStateTics[i] = def.tics
+			}
 		}
 		if i >= 0 && i < len(g.thingStatePhase) {
 			g.thingStatePhase[i] = 0
@@ -686,6 +692,9 @@ func (g *game) monsterShootZ(i int, typ int16) int64 {
 		return 8 * fracUnit
 	}
 	z, _, _ := g.thingSupportState(i, g.m.Things[i])
+	if g.patchedStateRuntime(g.m.Things[i].Type) {
+		typ = g.m.Things[i].Type
+	}
 	return z + (g.monsterHeight(typ) >> 1) + 8*fracUnit
 }
 
@@ -1611,7 +1620,7 @@ func (g *game) damageMonsterFromWithInflictorZ(thingIdx int, damage int, sourceP
 						g.thingJustHit[thingIdx] = true
 					}
 					if monsterUsesExactDoomStateMachine(thingType) {
-						g.setExactDoomMonsterState(thingIdx, thingType, monsterDoomPainState(thingType))
+						g.setExactDoomMonsterState(thingIdx, thingType, g.monsterDoomPainState(thingType))
 						if thingIdx >= 0 && thingIdx < len(g.thingAttackFireTics) {
 							g.thingAttackFireTics[thingIdx] = -1
 						}
@@ -1871,9 +1880,9 @@ func (g *game) wakeDormantMonsterFromDamage(i int, typ int16) {
 	// state's A_Chase action can in turn enter S_SKULL_ATK1 in the same tic.
 	if g != nil && monsterUsesExactDoomStateMachine(typ) && i >= 0 &&
 		i < len(g.thingDoomState) &&
-		(g.thingDoomState[i] == monsterInitialDoomState(typ) ||
+		(g.thingDoomState[i] == g.monsterInitialDoomState(typ) ||
 			(g.thingDoomState[i] == noDoomMonsterState && i < len(g.thingState) && g.thingState[i] == monsterStateSpawn)) {
-		g.setExactDoomMonsterState(i, typ, monsterDoomSeeState(typ))
+		g.setExactDoomMonsterState(i, typ, g.monsterDoomSeeState(typ))
 		return
 	}
 	// Every walking monster with a see state follows this transition, not

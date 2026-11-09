@@ -436,7 +436,10 @@ func (g *game) wallDepthColumnAt(x int) scene.WallDepthColumn {
 }
 
 type game struct {
-	actorDefinitions map[int16]actorDefinition
+	actorDefinitions     map[int16]actorDefinition
+	patchedStates        map[int]doomMonsterStateDef
+	definitionErr        error
+	stateTransitionCount int
 
 	boomVoodooBodies                   []int
 	boomFrictions                      []boomFrictionThinker
@@ -1379,7 +1382,14 @@ func newGame(m *mapdata.Map, opts Options) *game {
 // newGameWithRNG builds a fresh level. A single-player rebirth reloads the
 // level without M_ClearRandom, unlike a brand-new game or demo session.
 func newGameWithRNG(m *mapdata.Map, opts Options, clearRNG bool) *game {
-	return newGameWithActorDefinitions(m, opts, clearRNG, nil)
+	if err := validateDehackedNetworkOptions(opts); err != nil {
+		return &game{m: m, opts: opts, definitionErr: err}
+	}
+	actors, err := compileActorDefinitions(opts.DehackedDefinitions)
+	if err != nil {
+		return &game{m: m, opts: opts, definitionErr: err}
+	}
+	return newGameWithActorDefinitions(m, opts, clearRNG, actors)
 }
 
 func newGameWithActorDefinitions(m *mapdata.Map, opts Options, clearRNG bool, definitions map[int16]actorDefinition) *game {
@@ -1420,6 +1430,7 @@ func newGameWithActorDefinitions(m *mapdata.Map, opts Options, clearRNG bool, de
 	p, localSlot, starts, localPlayerThingIndex := spawnPlayer(m, opts.PlayerSlot)
 	g := &game{
 		actorDefinitions:  definitions,
+		patchedStates:     stateOverrides(opts.DehackedDefinitions),
 		m:                 m,
 		restartTemplate:   cloneMapForRestart(m),
 		opts:              opts,
@@ -2778,6 +2789,9 @@ func (g *game) shouldCaptureCursor() bool {
 }
 
 func (g *game) Update() error {
+	if g.definitionErr != nil {
+		return g.definitionErr
+	}
 	defer g.clearSampledInput()
 	g.updateMeshExperiment()
 	if g.opts.AuthorityClient != nil {
@@ -13467,6 +13481,10 @@ func monsterDeathAnimTotalTicsForMode(typ int16, xdeath bool) int {
 }
 
 func (g *game) monsterFrameLetter(i int, th mapdata.Thing, tic int) byte {
+	if state, ok := g.patchedVisualState(i, th); ok {
+		return byte('A' + (state.Frame & 0x7fff))
+	}
+
 	if isPlayerBodyThingType(th.Type) {
 		return g.voodooFrameLetter(i)
 	}
@@ -13588,7 +13606,7 @@ func (g *game) monsterSpriteNameForView(i int, th mapdata.Thing, tic int, viewX,
 	if ref, flip, ok := g.monsterSpriteRefForView(i, th, tic, viewX, viewY); ok && ref != nil {
 		return ref.key, flip
 	}
-	prefix, ok := monsterSpritePrefix(th.Type)
+	prefix, ok := g.monsterStateSpritePrefix(i, th)
 	if !ok {
 		return g.monsterSpriteName(th.Type, tic), false
 	}
@@ -13626,7 +13644,7 @@ func (g *game) monsterSpriteRefForView(i int, th mapdata.Thing, tic int, viewX, 
 	if g.possession != nil && g.possession.thing == i {
 		return nil, false, false
 	}
-	prefix, ok := monsterSpritePrefix(th.Type)
+	prefix, ok := g.monsterStateSpritePrefix(i, th)
 	if !ok {
 		ref, ok := g.spriteRenderRef(g.monsterSpriteName(th.Type, tic))
 		return ref, false, ok

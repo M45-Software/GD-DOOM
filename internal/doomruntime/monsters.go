@@ -1505,6 +1505,9 @@ func (g *game) monsterAttackTargetPos(i int) (x, y, z, height, radius int64, ok 
 }
 
 func (g *game) monsterHasLOSTarget(i int, typ int16, x, y int64) bool {
+	if g != nil && g.m != nil && i >= 0 && i < len(g.m.Things) && g.patchedStateRuntime(g.m.Things[i].Type) {
+		typ = g.m.Things[i].Type
+	}
 	if g == nil || i < 0 {
 		return false
 	}
@@ -1864,7 +1867,7 @@ func (g *game) tickNightmareRespawn(i int, th mapdata.Thing) {
 	g.thingStateTics[idx] = monsterSpawnStateTics(th.Type)
 	g.thingReactionTics[idx] = 18
 	if monsterUsesExactDoomStateMachine(th.Type) {
-		g.thingDoomState[idx] = monsterInitialDoomState(th.Type)
+		g.thingDoomState[idx] = g.monsterInitialDoomState(th.Type)
 	}
 	g.thingCollected[i] = true
 	g.updateBoomThingTouch(i)
@@ -2103,7 +2106,7 @@ func (g *game) syncExactDoomMonsterCompatState(i int, typ int16) {
 	if i < len(g.thingAttackTics) {
 		if compatState == monsterStateAttack {
 			g.thingAttackTics[i] = monsterDoomAttackRemainingTics(state)
-			if def, ok := monsterDoomStateDef(state); ok && i < len(g.thingStateTics) && g.thingStateTics[i] > 0 {
+			if def, ok := g.monsterDoomStateDef(state); ok && i < len(g.thingStateTics) && g.thingStateTics[i] > 0 {
 				g.thingAttackTics[i] += g.thingStateTics[i] - def.tics
 			}
 		} else {
@@ -2113,7 +2116,7 @@ func (g *game) syncExactDoomMonsterCompatState(i int, typ int16) {
 	if i < len(g.thingPainTics) {
 		if compatState == monsterStatePain {
 			g.thingPainTics[i] = monsterDoomPainRemainingTics(state)
-			if def, ok := monsterDoomStateDef(state); ok && i < len(g.thingStateTics) && g.thingStateTics[i] > 0 {
+			if def, ok := g.monsterDoomStateDef(state); ok && i < len(g.thingStateTics) && g.thingStateTics[i] > 0 {
 				g.thingPainTics[i] += g.thingStateTics[i] - def.tics
 			}
 		} else {
@@ -2130,10 +2133,14 @@ func (g *game) setExactDoomMonsterState(i int, typ int16, state int) {
 }
 
 func (g *game) setExactDoomMonsterStateDepth(i int, typ int16, state int, depth int) {
+	if g != nil && g.opts.DehackedDefinitions != nil && (len(g.patchedStates) > 0 || g.hasPatchedStateRoots(typ)) {
+		g.setPatchedMonsterState(i, typ, state, depth)
+		return
+	}
 	if g == nil || i < 0 || depth > 16 {
 		return
 	}
-	def, ok := monsterDoomStateDef(state)
+	def, ok := g.monsterDoomStateDef(state)
 	if !ok {
 		if i < len(g.thingDoomState) {
 			g.thingDoomState[i] = noDoomMonsterState
@@ -2154,6 +2161,9 @@ func (g *game) runExactDoomMonsterAction(i int, typ int16, state int, action doo
 	if g == nil || g.m == nil || i < 0 || i >= len(g.m.Things) {
 		return
 	}
+	if g.patchedStateRuntime(typ) && g.runPatchedAttackAction(i, typ, action) {
+		return
+	}
 	tx, ty := g.thingPosFixed(i, g.m.Things[i])
 	targetX, targetY := int64(0), int64(0)
 	dist := int64(0)
@@ -2171,7 +2181,7 @@ func (g *game) runExactDoomMonsterAction(i int, typ int16, state int, action doo
 				g.thingAggro[i] = true
 			}
 			g.emitMonsterSeeSound(i, typ, tx, ty)
-			g.setExactDoomMonsterStateDepth(i, typ, monsterDoomSeeState(typ), depth+1)
+			g.setExactDoomMonsterStateDepth(i, typ, g.monsterDoomSeeState(typ), depth+1)
 		}
 	case doomMonsterActionChase:
 		g.runExactDoomMonsterChaseAction(i, typ, tx, ty, targetX, targetY, dist, depth)
@@ -2193,7 +2203,7 @@ func (g *game) runExactDoomMonsterAction(i int, typ int16, state int, action doo
 			g.faceMonsterToward(i, tx, ty, ax, ay)
 		}
 		if !g.chaingunnerRefireKeepsAttack(i, typ, tx, ty) {
-			g.setExactDoomMonsterStateDepth(i, typ, monsterDoomSeeState(typ), depth+1)
+			g.setExactDoomMonsterStateDepth(i, typ, g.monsterDoomSeeState(typ), depth+1)
 		}
 	case doomMonsterActionPain:
 		g.emitSoundEventAt(monsterPainSoundEvent(typ), tx, ty)
@@ -2211,7 +2221,7 @@ func (g *game) runExactDoomMonsterAction(i int, typ int16, state int, action doo
 			g.faceMonsterToward(i, tx, ty, ax, ay)
 		}
 		if !g.spiderRefireKeepsAttack(i, typ, tx, ty) {
-			g.setExactDoomMonsterStateDepth(i, typ, monsterDoomSeeState(typ), depth+1)
+			g.setExactDoomMonsterStateDepth(i, typ, g.monsterDoomSeeState(typ), depth+1)
 		}
 	}
 }
@@ -2238,7 +2248,7 @@ func (g *game) runExactDoomMonsterChaseAction(i int, typ int16, tx, ty, targetX,
 			}
 			return
 		}
-		g.setExactDoomMonsterStateDepth(i, typ, monsterInitialDoomState(typ), depth+1)
+		g.setExactDoomMonsterStateDepth(i, typ, g.monsterInitialDoomState(typ), depth+1)
 		return
 	}
 	if i < len(g.thingJustAtk) && g.thingJustAtk[i] {
@@ -2251,8 +2261,8 @@ func (g *game) runExactDoomMonsterChaseAction(i int, typ int16, tx, ty, targetX,
 	if g.monsterCanMeleeTarget(i, typ, dist, tx, ty, targetX, targetY) {
 		return
 	}
-	if g.monsterCanTryMissileNow(i) && g.monsterCheckMissileRange(i, typ, dist, tx, ty, targetX, targetY) {
-		g.setExactDoomMonsterStateDepth(i, typ, monsterDoomMissileState(typ), depth+1)
+	if g.monsterDoomMissileState(typ) != 0 && g.monsterCanTryMissileNow(i) && g.monsterCheckMissileRange(i, typ, dist, tx, ty, targetX, targetY) {
+		g.setExactDoomMonsterStateDepth(i, typ, g.monsterDoomMissileState(typ), depth+1)
 		if i < len(g.thingJustAtk) {
 			g.thingJustAtk[i] = true
 		}
@@ -2296,7 +2306,7 @@ func (g *game) tickExactDoomMonster(i int, th mapdata.Thing) bool {
 		}
 		state := monsterCompatToDoomState(th.Type, compatState, compatPhase, attackPhase)
 		if state == noDoomMonsterState {
-			state = monsterInitialDoomState(th.Type)
+			state = g.monsterInitialDoomState(th.Type)
 		}
 		if state != noDoomMonsterState {
 			if i < len(g.thingStateTics) && g.thingStateTics[i] <= 0 {
@@ -2310,8 +2320,8 @@ func (g *game) tickExactDoomMonster(i int, th mapdata.Thing) bool {
 			g.syncExactDoomMonsterCompatState(i, th.Type)
 		}
 	}
-	if i < len(g.thingStateTics) && g.thingStateTics[i] == 0 {
-		def, ok := monsterDoomStateDef(g.thingDoomState[i])
+	if i < len(g.thingStateTics) && g.thingStateTics[i] == 0 && !g.patchedStateRuntime(th.Type) {
+		def, ok := g.monsterDoomStateDef(g.thingDoomState[i])
 		if ok {
 			g.thingStateTics[i] = def.tics
 		}
@@ -2322,7 +2332,7 @@ func (g *game) tickExactDoomMonster(i int, th mapdata.Thing) bool {
 	if g.thingStateTics[i] != -1 {
 		g.thingStateTics[i]--
 		if g.thingStateTics[i] == 0 {
-			def, ok := monsterDoomStateDef(g.thingDoomState[i])
+			def, ok := g.monsterDoomStateDef(g.thingDoomState[i])
 			if ok {
 				g.setExactDoomMonsterState(i, th.Type, def.next)
 			}
@@ -2602,7 +2612,7 @@ func (g *game) resetLostSoulCharge(i int, typ int16) {
 		g.thingResumeChaseNow[i] = false
 	}
 	if monsterUsesExactDoomStateMachine(typ) {
-		g.setExactDoomMonsterState(i, typ, monsterInitialDoomState(typ))
+		g.setExactDoomMonsterState(i, typ, g.monsterInitialDoomState(typ))
 		return
 	}
 	if i < len(g.thingStatePhase) {

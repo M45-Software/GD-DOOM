@@ -55,6 +55,9 @@ func run() (runErr error) {
 	noVsync := flag.Bool("no-vsync", false, "disable vsync and default draw cap (an explicit or saved -fps still applies)")
 	wadPath := flag.String("wad", "DOOM1.WAD", "IWAD path")
 	filePaths := flag.String("file", "", "comma-separated PWAD overlay paths, in load order")
+	var dehPaths launchcatalog.DehackedPaths
+	flag.Var(&dehPaths, "deh", "DeHackEd/BEX patch paths; repeat or separate with commas, applied after embedded patches")
+	noEmbeddedDeh := flag.Bool("nodeh", false, "skip embedded DEHACKED lumps")
 	mapName := flag.String("map", "", "level name for direct launch (default: start at the menu)")
 	width := flag.Int("width", 1280, "window width")
 	height := flag.Int("height", 800, "window height")
@@ -162,6 +165,19 @@ func run() (runErr error) {
 	if err != nil {
 		return err
 	}
+	defs, diagnostics, err := launchcatalog.LoadDehacked(wf, []string(dehPaths), *noEmbeddedDeh)
+	for _, diagnostic := range diagnostics {
+		fmt.Fprintln(os.Stderr, diagnostic.Error())
+	}
+	if err != nil {
+		return err
+	}
+	if err := doomruntime.ValidateDehackedDefinitions(defs); err != nil {
+		return err
+	}
+	if defs != nil && (broadcast != "" || watch != "") {
+		return fmt.Errorf("DeHackEd network sessions are not supported yet")
+	}
 	maps := mapdata.AvailableMapNames(wf)
 	menuSpecified := false
 	flag.Visit(func(f *flag.Flag) {
@@ -200,6 +216,7 @@ func run() (runErr error) {
 	if err != nil {
 		return err
 	}
+	opts.DehackedDefinitions = defs
 	opts.WADSources = launchcatalog.BuildWADSources(wadPaths)
 	opts.WADHash = launchcatalog.HashWADStackSHA1(wadPaths)
 	opts.MusicPlayerCatalog, opts.MusicPlayerTrackLoader = launchcatalog.BuildMusicPlayerCatalog(wadPaths[0])

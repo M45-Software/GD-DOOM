@@ -974,6 +974,11 @@ func (w saveBinaryWriter) saveFile(v saveFile) error {
 			return err
 		}
 	}
+	if version >= 46 {
+		if err := w.str(v.DehackedDigest); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -2104,6 +2109,14 @@ func (r saveBinaryReader) saveFile() (saveFile, error) {
 	if version >= 45 {
 		if v.Game.ThingBlockOrder, err = readI64Slice(r); err != nil {
 			return v, err
+		}
+	}
+	if version >= 46 {
+		if v.DehackedDigest, err = r.str(); err != nil {
+			return v, err
+		}
+		if len(v.DehackedDigest) != 0 && len(v.DehackedDigest) != 64 {
+			return v, fmt.Errorf("invalid DeHackEd digest")
 		}
 	}
 	return v, nil

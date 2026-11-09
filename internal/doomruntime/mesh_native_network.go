@@ -12,6 +12,9 @@ func (c *NativeCampaign) Watching() bool {
 // Tick retains the original command, snapshot and intermission wire formats.
 // Only received commands advance a watcher; local movement never drives it.
 func (c *NativeCampaign) Tick(in NativeMeshInput, skip bool) error {
+	if c.Game.g.definitionErr != nil {
+		return c.Game.g.definitionErr
+	}
 	if err := c.PollNetwork(); err != nil {
 		return err
 	}

@@ -44,6 +44,9 @@ type AuthorityPlayerState struct {
 // No slot is active until AddPlayer succeeds. Network connection objects and
 // local demo controls are excluded so the caller alone controls simulation time.
 func NewAuthority(m *mapdata.Map, opts Options) (*Authority, error) {
+	if opts.DehackedDefinitions != nil {
+		return nil, fmt.Errorf("DeHackEd authority sessions are not supported yet")
+	}
 	if m == nil || len(m.Sectors) == 0 {
 		return nil, fmt.Errorf("authority requires a map with sectors")
 	}

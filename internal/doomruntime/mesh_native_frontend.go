@@ -34,6 +34,9 @@ func (c *NativeCampaign) StartFrontend() {
 // TickFrontend uses the main host's 35-Hz page timer and attract sequence.
 // Attract playback continues behind menus, which capture user input.
 func (c *NativeCampaign) TickFrontend() error {
+	if c.Game.g.definitionErr != nil {
+		return c.Game.g.definitionErr
+	}
 	sg := c.session
 	if !sg.frontend.Active {
 		return nil

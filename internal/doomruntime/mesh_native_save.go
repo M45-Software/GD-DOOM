@@ -99,6 +99,9 @@ func (c *NativeCampaign) LoadKeyframe(data []byte) error {
 
 func (c *NativeCampaign) applyNativeSnapshot(file saveFile) error {
 	sg := c.session
+	if file.DehackedDigest != definitionDigest(sg.opts) {
+		return fmt.Errorf("save DeHackEd definitions do not match the current session")
+	}
 	if sg.opts.NewGameLoader == nil {
 		return fmt.Errorf("save load requires NewGameLoader")
 	}

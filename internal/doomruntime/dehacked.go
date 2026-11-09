@@ -16,13 +16,16 @@ import (
 // quirks which are not represented by the original C definition tables.
 type actorDefinition map[string]int32
 
-// newGameWithDefinitions is the internal entry point for the first gameplay
-// integration stage. Validation precedes map initialization and RNG changes.
-// Public loading, campaign transitions, saves and netplay require definition
-// identity/propagation and are deliberately not exposed through Options yet.
+// newGameWithDefinitions validates before map initialization and RNG changes.
+// Launchers install the same immutable set in Options so rebuilds and campaign
+// transitions retain it. Network sessions require further compatibility work.
 func newGameWithDefinitions(m *mapdata.Map, opts Options, defs *dehacked.Definitions) (*game, error) {
 	actors, err := compileActorDefinitions(defs)
 	if err != nil {
+		return nil, err
+	}
+	opts.DehackedDefinitions = defs
+	if err := validateDehackedNetworkOptions(opts); err != nil {
 		return nil, err
 	}
 	return newGameWithActorDefinitions(m, opts, true, actors), nil
@@ -44,13 +47,24 @@ func compileActorDefinitions(defs *dehacked.Definitions) (map[int16]actorDefinit
 	slices.Sort(keys)
 	for _, key := range keys {
 		parts := strings.Split(key, "/")
-		if len(parts) != 3 || parts[0] != "thing" {
+		if len(parts) != 3 || (parts[0] != "thing" && parts[0] != "frame") {
 			return nil, fmt.Errorf("DeHackEd gameplay does not yet support %s", key)
 		}
 		slot, err := strconv.Atoi(parts[1])
-		if err != nil || slot < 0 || slot >= len(vanilla.Things) {
+		if err != nil || slot < 0 || slot >= dehacked.NumStates {
 			return nil, fmt.Errorf("invalid DeHackEd gameplay field %s", key)
 		}
+		if parts[0] == "frame" {
+			if err := validatePatchedState(slot, parts[2], actual.States); err != nil {
+				return nil, err
+			}
+			reflect.ValueOf(&actual.States[slot]).Elem().FieldByName(parts[2]).Set(reflect.ValueOf(vanilla.States[slot]).FieldByName(parts[2]))
+			continue
+		}
+		if slot >= len(vanilla.Things) {
+			return nil, fmt.Errorf("invalid Thing slot %d", slot)
+		}
+
 		typ := int16(vanilla.Things[slot].EditorNumber)
 		if !isMonster(typ) && !isBarrelThingType(typ) {
 			return nil, fmt.Errorf("DeHackEd gameplay does not yet support Thing %d", slot+1)
@@ -61,6 +75,10 @@ func compileActorDefinitions(defs *dehacked.Definitions) (map[int16]actorDefinit
 		}
 		switch member {
 		case "SpawnHealth", "ReactionTime", "PainChance", "Speed", "Radius", "Height", "Mass":
+		case "SpawnState", "SeeState", "PainState", "MissileState":
+			if !monsterUsesExactDoomStateMachine(typ) {
+				return nil, fmt.Errorf("DeHackEd state roots are not supported for Thing %d yet", slot+1)
+			}
 		default:
 			return nil, fmt.Errorf("DeHackEd gameplay does not yet support %s", key)
 		}
@@ -71,6 +89,12 @@ func compileActorDefinitions(defs *dehacked.Definitions) (map[int16]actorDefinit
 			valid = value > 0
 		case "PainChance":
 			valid = value >= 0 && value <= 256
+		case "SpawnState", "SeeState", "PainState", "MissileState":
+			state := int(value)
+			_, valid = monsterDoomStateDef(state)
+			if value == 0 && member != "SpawnState" {
+				valid = true
+			}
 		case "Speed":
 			valid = value >= 0 && value <= 32767
 		}
@@ -87,6 +111,12 @@ func compileActorDefinitions(defs *dehacked.Definitions) (map[int16]actorDefinit
 	actual.Defined, vanilla.Defined = nil, nil
 	if !reflect.DeepEqual(actual, vanilla) {
 		return nil, fmt.Errorf("DeHackEd gameplay definitions contain unsupported changes")
+	}
+	if err := validateReachableStateActions(defs); err != nil {
+		return nil, err
+	}
+	if err := validateZeroStateChains(defs); err != nil {
+		return nil, err
 	}
 	return actors, nil
 }
@@ -162,4 +192,32 @@ func (g *game) demoTraceThingBounds(typ int16) (int64, int64) {
 		height = int64(n)
 	}
 	return radius, height
+}
+
+// ValidateDehackedDefinitions checks the runtime subset before launching.
+func ValidateDehackedDefinitions(defs *dehacked.Definitions) error {
+	_, err := compileActorDefinitions(defs)
+	return err
+}
+
+func definitionDigest(opts Options) string {
+	if opts.DehackedDefinitions == nil {
+		return ""
+	}
+	return opts.DehackedDefinitions.Digest()
+}
+
+// ValidateDehackedOptions also prevents patched sessions from entering network
+// protocols which do not yet negotiate a resolved-definition identity.
+func ValidateDehackedOptions(opts Options) error {
+	if err := ValidateDehackedDefinitions(opts.DehackedDefinitions); err != nil {
+		return err
+	}
+	return validateDehackedNetworkOptions(opts)
+}
+func validateDehackedNetworkOptions(opts Options) error {
+	if opts.DehackedDefinitions != nil && (opts.CoopPeers != nil || opts.LiveTicSource != nil || opts.LiveTicSink != nil || opts.AuthorityClient != nil) {
+		return fmt.Errorf("DeHackEd network sessions are not supported yet")
+	}
+	return nil
 }

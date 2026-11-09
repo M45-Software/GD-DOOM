@@ -25,10 +25,10 @@ import (
 )
 
 const (
-	saveGameVersion     = 45
+	saveGameVersion     = 46
 	saveGamePrefix      = "dsg"
 	saveGameQuickPrefix = "quicksave"
-	keyframeVersion     = 32
+	keyframeVersion     = 33
 	saveGameDirName     = "saves"
 )
 
@@ -59,6 +59,7 @@ type saveMandatoryKeyframeSink interface {
 }
 
 type saveFile struct {
+	DehackedDigest string
 	CoopCheckpoint []byte
 	Version        int
 	Description    string
@@ -1081,6 +1082,7 @@ func (sg *sessionGame) marshalSaveGame(description string) ([]byte, error) {
 	}
 	rngState := doomrand.Capture()
 	file := saveFile{
+		DehackedDigest: definitionDigest(sg.opts),
 		CoopCheckpoint: coop,
 		Version:        saveGameVersion,
 		Description:    description,
@@ -1111,6 +1113,7 @@ func (sg *sessionGame) marshalNetplayKeyframe() ([]byte, error) {
 	}
 	rngState := doomrand.Capture()
 	file := saveFile{
+		DehackedDigest: definitionDigest(sg.opts),
 		CoopCheckpoint: coop,
 		Version:        keyframeVersion,
 		Description:    "Netplay Keyframe",
@@ -1178,12 +1181,18 @@ func (sg *sessionGame) loadSnapshot(data []byte, magic []byte, version int) (sav
 	if file.Version < version-3 || file.Version > version {
 		return saveFile{}, fmt.Errorf("incompatible save version: %d", file.Version)
 	}
+	if file.DehackedDigest != definitionDigest(sg.opts) {
+		return saveFile{}, fmt.Errorf("save DeHackEd definitions do not match the current session")
+	}
 	return file, nil
 }
 
 func (sg *sessionGame) applyLoadedSnapshot(file saveFile, warning string) error {
 	if sg == nil {
 		return errNoSavedGame
+	}
+	if file.DehackedDigest != definitionDigest(sg.opts) {
+		return fmt.Errorf("save DeHackEd definitions do not match the current session")
 	}
 	if sg.opts.NewGameLoader == nil {
 		return fmt.Errorf("save load requires NewGameLoader")

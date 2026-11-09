@@ -96,7 +96,7 @@ func TestDehackedNightmareReactionOverride(t *testing.T) {
 
 func TestDehackedGameplayRejectsUnsupportedBeforeRNGChanges(t *testing.T) {
 	for _, text := range []string{
-		"Frame 174\nDuration = 5\n", "Thing 2\nBits = SOLID\n",
+		"Frame 763\nDuration = 5\n", "Thing 2\nBits = SOLID\n",
 		"Thing 2\nID # = 3004\n", "Thing 1\nHit points = 123\n",
 		"Thing 2\nMass = 0\n", "Thing 2\nSpeed = -1\n",
 		"Thing 2\nPain chance = 257\n", "Thing 31\nPain chance = 256\n", "[STRINGS]\nHUSTR_1 = changed\n",

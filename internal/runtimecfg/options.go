@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"gddoom/internal/audiofx"
+	"gddoom/internal/dehacked"
 	"gddoom/internal/demo"
 	"gddoom/internal/gameplay"
 	"gddoom/internal/lobby"
@@ -257,6 +258,8 @@ type VoiceSettings struct {
 }
 
 type Options struct {
+	DehackedDefinitions *dehacked.Definitions
+
 	BoomGameOptions *demo.GameOptions
 	// Headless suppresses device-backed audio and render asset preparation for
 	// callers that drive the simulation directly without an Ebitengine game loop.

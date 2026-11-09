@@ -350,3 +350,14 @@ Voice runtime notes:
 Supported commercial Doom-family game/add-on fingerprints tracked by the runtime are documented in [`commercial-wads.md`](../commercial-wads.md).
 
 That file is for recognition and compatibility lookup. It is not a promise that GD-DOOM fully supports every non-Doom title listed there.
+
+## DeHackEd/BEX patches
+
+`-deh patch.deh` loads an external patch; repeat the flag or separate paths with
+commas to apply several in order. Embedded `DEHACKED` lumps load first in WAD
+order. `-nodeh` skips embedded patches and retains explicit `-deh` files.
+
+Only actor properties and selected live monster states/actions are currently
+supported. Unsupported patch changes produce an error. See the
+[DeHackEd support scope](dehacked-support.md) for supported fields, checkpoint
+requirements and current limitations.

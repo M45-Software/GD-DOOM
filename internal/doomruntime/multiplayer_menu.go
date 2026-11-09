@@ -53,7 +53,7 @@ type authorityMenuState struct {
 }
 
 func (sg *sessionGame) multiplayerMenuAvailable() bool {
-	return sg != nil && sg.nativePatches == nil && (sg.opts.AuthorityJoin != nil || sg.opts.AuthorityClient != nil)
+	return sg != nil && sg.opts.DehackedDefinitions == nil && sg.nativePatches == nil && (sg.opts.AuthorityJoin != nil || sg.opts.AuthorityClient != nil)
 }
 
 // Keep the shared frontend's stock action IDs stable while placing Multiplayer
@@ -356,6 +356,10 @@ func (sg *sessionGame) cancelAuthorityJoin() {
 	go func() { reply := <-attempt.result; leaveAuthorityConnection(reply.result.Client, nil) }()
 }
 func (sg *sessionGame) beginAuthorityJoin() {
+	if sg.opts.DehackedDefinitions != nil {
+		sg.multiplayer.status = "DEHACKED NETWORK PLAY IS UNAVAILABLE"
+		return
+	}
 	menu := &sg.multiplayer
 	if menu.lobby.page == authorityLobbyPageNone {
 		menu.joinLabel = ""
@@ -422,6 +426,9 @@ func (sg *sessionGame) pollAuthorityJoin() {
 	}
 }
 func (sg *sessionGame) installAuthorityJoin(result runtimecfg.AuthorityJoinResult) error {
+	if sg.opts.DehackedDefinitions != nil {
+		return fmt.Errorf("DeHackEd network sessions are not supported yet")
+	}
 	if result.Client == nil || result.Map == nil || result.MapLoader == nil || string(result.Map.Name) != result.Manifest.Map {
 		return fmt.Errorf("server returned an incomplete session")
 	}

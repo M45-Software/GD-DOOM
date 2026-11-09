@@ -1,10 +1,10 @@
-# DeHackEd/BEX foundations
+# DeHackEd/BEX support (partial)
 
-The `internal/dehacked` package implements patchable definition data and a
-transactional text parser. The gameplay engine now has an internal actor-property
-integration stage; **the launcher does not load patches yet**. This does not make
-patched WADs playable or claim Sunlust MAP30 gameplay/demo parity. State/action
-dispatch, resource loading, saves and multiplayer integration remain subsequent work.
+The engine loads external DeHackEd/BEX patches and embedded `DEHACKED` lumps,
+with session-local definitions, actor properties and selected live monster
+states/actions. **This is a supported subset, not complete DeHackEd support.**
+Unsupported changes fail explicitly. Sunlust MAP30's `VileChase` state loop,
+patched flags and strings still require further integration.
 
 ## Definition model
 
@@ -164,28 +164,95 @@ keeps Doom's fixed 18-tic reaction delay. An explicitly patched zero pain chance
 still consumes the native pain RNG roll. Zero-speed monsters keep successful-walk
 RNG/timing. Ceiling spawns use patched height. Sessions do not mutate shared tables.
 
-This stage rejects unsupported fields, including explicit writes of default
-values, rather than silently ignoring them. Player/projectile/pickup definitions,
-editor-number changes, flags, states/actions, resources, strings, weapons and
-other rules are not enabled. Supported runtime ranges are positive health/mass,
-nonnegative reaction/dimensions, pain chance 0–256 and walking speed 0–32767;
-the parser preserves the broader original 32-bit values independently.
+Unsupported fields, including explicit writes of their default values, fail
+validation. Supported scalar ranges are positive health/mass, nonnegative
+reaction/dimensions, pain chance 0–256 and walking speed 0–32767; the parser
+preserves the broader original 32-bit values independently.
 
-The constructor is internal: there is no patch option in the public launcher,
-authority or session APIs. Campaign propagation, save/keyframe identity and
-network compatibility are still prerequisites for exposing patched sessions.
-Focused gameplay tests cover movement, wall collision, damage/pain RNG, overkill,
-corpse/raised dimensions, barrel zero bounds, nightmare spawn/respawn behavior,
-rejection before RNG changes, and unpatched session isolation. Vanilla definitions
-produce the same initial save state and RNG as the existing unpatched constructor.
-Runtime/app/network/parser suites pass. These are Go gameplay regressions;
-independent DSDA gameplay/demo parity has not yet been established.
+## Patched states and actions
+
+The exact live-state machines for zombiemen, shotgun guys, chaingunners,
+arachnotrons, cacodemons and lost souls consume patched `Duration`, `Next frame`
+and classic/BEX code pointers. Their spawn, see, pain and missile state roots can
+redirect to another supported live state. State zero removes an actor on entry;
+a zero missile-state root disables missile attacks. A zero initial-state root is
+not supported. The destination state's canonical sprite/frame metadata follows
+redirects, including redirects to another monster's live states.
+
+Implemented actions are `NULL`, `Look`, `Chase`, `FaceTarget`, `Pain`, `PosAttack`,
+`SPosAttack`, `CPosAttack`, `CPosRefire`, `HeadAttack`, `BspiAttack`, `SpidRefire` and
+`SkullAttack`. Attack substitutions dispatch the code pointer independently of
+the actor's map type. `SkullAttack` is restricted to lost souls until actor damage
+and zero-damage collision behavior are integrated; reachable-state validation
+also catches indirect cross-type assignments.
+
+Actions run on state entry, not initial spawning. Zero-tic chains execute within
+the same tic, including chains longer than the previous 16-frame recursion cap.
+Duration `-1` remains infinite. Pure zero-tic cycles are rejected during validation;
+a bounded transition budget reports action-driven recursion as a runtime error.
+Durations below `-1` remain parser data but are not enabled in gameplay.
+
+Death/raise states, other actor families, projectile/effect/player/weapon states,
+Sprite/Frame edits, flags, editor-number changes, resources, strings and other
+rules are not enabled yet. Barrel pain/speed modifications remain unsupported.
+
+## Launcher, campaign and checkpoints
+
+Both launchers accept repeated or comma-separated `-deh` paths. All embedded
+`DEHACKED` lumps load in WAD/directory order, followed by external patches in
+argument order. This follows DSDA 0.27.5's explicit-content order. `-nodeh` skips
+embedded patches while retaining explicit external patches. No sidecar or
+autoload-directory search is performed. External `INCLUDE` paths resolve relative
+to the including file; embedded includes have no filesystem resolver. The entire
+stack is limited to 16 MiB of read patch data and 100,000 changes.
+
+```sh
+go run . -wad DOOM2.WAD -file maps.wad -deh monsters.deh -deh extra.bex
+# Skip embedded patches, but still apply the explicitly requested patch.
+go run . -wad DOOM2.WAD -file maps.wad -nodeh -deh monsters.deh
+```
+
+Classic patch blocks should have blank separator lines for native compatibility.
+Runtime capability errors are reported before starting gameplay, including when
+launching through the IWAD picker. The public runtime constructors also surface
+unsupported definitions before allocating gameplay resources or changing RNG.
+
+Definitions travel through `Options` into new levels, rebirths and restored games.
+Save version 46 and keyframe version 33 carry the resolved definition digest;
+loading requires the same definitions to be loaded again. Saves do not bundle
+external patch files. A mismatch is rejected before installing the snapshot or
+changing RNG in either host. Network sessions are explicitly unavailable for
+patched games until resolved-definition negotiation exists. The authority
+compatibility ID is `gd-doom-authority-dev-35` for the new checkpoint format.
+
+Focused Go tests cover actor properties, state roots, code-pointer RNG classes,
+zero-tic/infinite/null states, recursion limits, loader order/includes, launcher
+errors, both hosts' checkpoint identity, and rejection before RNG changes.
+The affected runtime/app/network/launcher/session suites pass; Raylib launcher
+tests and an actual headless launcher demo also pass. These checks do not retag
+older vanilla corpus or Boom campaign receipts with the new source identity.
+
+Independent gameplay verification uses generated Boom 2.02 demos against the
+existing DSDA combat/RNG observer. The [gameplay results](dehacked-gameplay-results.json)
+record **60 passing comparisons and 9,600 matched tics**, with the final source,
+executable, fixture and script hashes. Every observed
+combat, weapon, sector and gameplay RNG column is compared after each command,
+both directly and with checkpoint reconstruction at commands 23 and 67. This is
+separate from the parser/table comparison above and does not establish renderer,
+full campaign or arbitrary patched community-demo parity.
+
+```sh
+python3 -B scripts/verify_dehacked_gameplay.py \
+  --iwad /path/to/doom2.wad \
+  --reference /path/to/dsda-with-dsda_rng_demo_probe \
+  --out /tmp/gddoom-dehacked-gameplay
+```
 
 ## Next integration milestone
 
-Load external patches and embedded lumps in a verified order, carry the immutable
-definitions through session construction, and adapt actor/state/weapon consumers.
-State actions must work on patched actor types rather than selecting behavior
-solely by map Thing number. Then add patch identity to save/keyframe/network
-compatibility and verify actual Sunlust MAP30 gameplay against DSDA before
-attempting the complete original campaign and cold checkpoints.
+Extend state/action dispatch to the remaining actors and death/raise/effect paths,
+starting with Commander Keen and cross-type `VileChase`. Wire flags, sprite/frame
+changes, strings and resource/weapon consumers before testing the unchanged
+Sunlust MAP30 patch. Then verify its actual demo against DSDA and expand to
+campaign transitions and cold checkpoints. Network definition negotiation remains
+separate work.

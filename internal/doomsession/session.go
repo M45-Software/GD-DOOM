@@ -53,6 +53,9 @@ type Session struct {
 }
 
 func Run(m *mapdata.Map, opts Options, nextMap NextMapFunc) error {
+	if err := doomruntime.ValidateDehackedOptions(opts); err != nil {
+		return err
+	}
 	sess := New(m, opts, nextMap)
 	defer sess.Close()
 	return RunSession(sess)
