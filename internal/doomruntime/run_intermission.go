@@ -558,13 +558,9 @@ func (sg *sessionGame) finishIntermission() {
 	sg.currentTemplate = cloneMapForRestart(im.nextMap)
 	sg.rebuildGameWithPersistentSettings(im.nextMap)
 	if !sg.applyCoopCarryover(sg.g, old) && sg.levelCarryover != nil && sg.g != nil {
-		sg.g.applyLevelCarryover(*sg.levelCarryover)
+		sg.g.applySinglePlayerCampaignCarryover(*sg.levelCarryover, old)
 
 		sg.levelCarryover = nil
-		if sg.g.opts.DemoScript != nil {
-			// P_SpawnPlayer raises the carried weapon using P_SetupPsprites.
-			sg.g.bringUpWeapon()
-		}
 	}
 	sg.queueTransition(transitionLevel, 0)
 	sg.playMusicForMap(im.nextMap.Name)

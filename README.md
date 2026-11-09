@@ -82,6 +82,10 @@ Generated two-player NoMo coverage also traverses all 17 released Surge maps
 against DSDA, including deaths, rebirths and cold campaign checkpoints.
 See the [generated co-op fixture notes](docs/boom-support.md#generated-community-co-op-campaign-without-gameplay-patches)
 for its source attribution and scope.
+Tezur0’s original Surge UV-Max campaign also has full DSDA comparisons across
+all 19 visited maps, with cold save/keyframe restores through combat, death exits
+and campaign screens. The inherited MAP31/MAP32 require the original Doom II
+IWAD. See the [UV-Max verification notes](docs/boom-support.md#original-surge-uv-max-campaign-and-cold-checkpoints).
 
 Repeated columns and sprite rows share compact draw commands, and nearby
 sprites reuse horizontal visibility spans until clipping changes. These reduce

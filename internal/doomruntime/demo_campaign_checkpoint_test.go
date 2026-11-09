@@ -60,6 +60,63 @@ func singleCampaignCheckpointSession(t *testing.T, phase string) *sessionGame {
 	return sg
 }
 
+func TestSingleCampaignColdLoadRebirthAndLivingViewRecovery(t *testing.T) {
+	for _, dead := range []bool{false, true} {
+		for _, keyframe := range []bool{false, true} {
+			name := map[bool]string{false: "living", true: "dead"}[dead] +
+				map[bool]string{false: "/save", true: "/keyframe"}[keyframe]
+			t.Run(name, func(t *testing.T) {
+				sg := singleCampaignCheckpointSession(t, "level")
+				g := sg.g
+				g.p.deltaViewHeight = -5 * fracUnit / 8
+				g.weaponAttackDown, g.useButtonDown = false, false
+				g.inventory.ReadyWeapon = weaponShotgun
+				g.stats.Shells = 17
+				if dead {
+					g.stats.Health, g.isDead = 0, true
+				}
+				g.syncPlayerMobjHealth()
+				next, err := sg.opts.NewGameLoader("MAP07")
+				if err != nil {
+					t.Fatal(err)
+				}
+				sg.startIntermission(next, next.Name, false)
+				var data []byte
+				if keyframe {
+					data, err = sg.marshalNetplayKeyframe()
+				} else {
+					data, err = sg.marshalSaveGame("transition")
+				}
+				if err != nil {
+					t.Fatal(err)
+				}
+				opts := sg.opts
+				opts.DemoScript = nil
+				restored := &sessionGame{opts: opts, nextMap: sg.nextMap}
+				if keyframe {
+					err = restored.unmarshalNetplayKeyframe(data)
+				} else {
+					err = restored.unmarshalSaveGame(data)
+				}
+				if err != nil {
+					t.Fatal(err)
+				}
+				restored.finishIntermission()
+				g = restored.g
+				if dead {
+					if g.stats.Health != 100 || g.stats.Bullets != 50 || g.stats.Shells != 0 ||
+						g.inventory.ReadyWeapon != weaponPistol || !g.weaponAttackDown || !g.useButtonDown || g.p.deltaViewHeight != 0 {
+						t.Fatal("dead player did not rebirth with pistol defaults and held-button suppression")
+					}
+				} else if g.stats.Health != 73 || g.stats.Shells != 17 ||
+					g.inventory.ReadyWeapon != weaponShotgun || g.weaponAttackDown || g.useButtonDown || g.p.deltaViewHeight != -5*fracUnit/8 {
+					t.Fatal("living player lost carried inventory, latches or view recovery")
+				}
+			})
+		}
+	}
+}
+
 func TestSingleCampaignColdCheckpointContinuation(t *testing.T) {
 	for _, phase := range []string{"level", "intermission", "finale", "worlddone"} {
 		for _, keyframe := range []bool{false, true} {

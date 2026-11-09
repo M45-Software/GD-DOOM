@@ -175,10 +175,7 @@ func (c *NativeCampaign) finishLevel() error {
 		game.g.weaponAttackDown, game.g.useButtonDown = old.weaponAttackDown, old.useButtonDown
 	}
 	if !sg.applyCoopCarryover(game.g, old) && sg.levelCarryover != nil {
-		game.g.applyLevelCarryover(*sg.levelCarryover)
-		if continuing {
-			game.g.bringUpWeapon()
-		}
+		game.g.applySinglePlayerCampaignCarryover(*sg.levelCarryover, old)
 		game.g.syncRenderState()
 	}
 	c.Game = game

@@ -7,6 +7,21 @@ import (
 	"gddoom/internal/mapdata"
 )
 
+func TestLineAttackEndpointTruncatesFractionalMeleeRange(t *testing.T) {
+	g := &game{}
+	actor := lineAttackActor{x: -52805490, y: -1203067}
+	// Surge's original UV-Max chainsaw shot: the extra range quantum
+	// must not move a negative ray component by one fixed-point unit.
+	// Native trace at command 94: fine angle 7992, dx=4145280,
+	// dy=-639232. Use the independently observed endpoint as the oracle.
+	angle := uint32(7992 << doomAngleToFineShift)
+	x, y := g.lineAttackEnd(actor, angle, 64*fracUnit+1)
+	wantX, wantY := int64(-48660210), int64(-1842299)
+	if x != wantX || y != wantY {
+		t.Fatalf("endpoint=(%d,%d), want (%d,%d)", x, y, wantX, wantY)
+	}
+}
+
 func TestDamageWakeHandlesDeadProjectileShooterBeforeChasing(t *testing.T) {
 	t.Cleanup(doomrand.Clear)
 	for _, playerDead := range []bool{true, false} {

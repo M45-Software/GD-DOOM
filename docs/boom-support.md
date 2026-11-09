@@ -1926,10 +1926,10 @@ and the MAP17 intermission ending. Each cold save/keyframe replay restores at
 **103 checkpoints** around map/phase and death/rebirth boundaries and within
 screens. The report requires all requested cases to finish; only both consoles
 in baseline/save/keyframe modes can report `full_suite: true`.
-The six-case matrix passes against DSDA with Freedoom 0.13.0: **97,500 active
+At the dev-32 milestone, the six-case matrix passed against DSDA with Freedoom 0.13.0: **97,500 active
 comparisons**, **103,140 campaign-command comparisons** and **412 cold restores**.
-The existing 18-case archived community co-op, 30-case co-op transition and
-36-case finale matrices also pass: **90 DSDA replay cases** in total.
+The 18-case archived community co-op, 30-case co-op transition and
+36-case finale matrices also passed: **90 DSDA replay cases** in total.
 
 This campaign exposed living-player view recovery and reborn attack/use latches
 that must survive or reset at map loads respectively. It also covers boss-brain
@@ -1953,12 +1953,77 @@ a cast finale. Custom text, pixels, audio, cosmetic RNG and decoration animation
 remain outside this comparison profile. Archived human co-op and full combat
 campaign coverage remain separate milestones.
 
+## Original Surge UV-Max campaign and cold checkpoints
+
+`scripts/verify_boom_surge_campaign.py` replays **Tezur0’s original 53:37
+UV-Max campaign**, recorded with DSDA-Doom 0.14.0 at complevel 9. The archive is
+[`srall-5337.zip`](https://dsdarchive.com/files/demos/surge/53710/srall-5337.zip),
+SHA-256 `3f3d3e7f0579519e0c50133e74031d6fffeb4a4cee72d889072668782db2c8d8`.
+The unchanged LMP, including its original footer, has SHA-256
+`a31f58899a0884d10e442c97ccbf336cb21c9a2622de7f558e313247a068e71c`.
+The verifier checks its Boom 202 header, UV skill, single-player roster,
+enabled monsters and **114,375 original commands**. No replacement commands,
+injected exits, generated partner or synthetic ending are used.
+
+The route visits **19 maps**: MAP01–MAP15, MAP31, MAP32, MAP16 and MAP17.
+Surge supplies MAP01–MAP17 and has no DeHackEd lump. Its MAP18 is incomplete
+and is not visited. **MAP31/MAP32 come from the Doom II IWAD**, so the full
+run requires the audited original Doom II 1.9 file, SHA-256
+`10d67824b11025ddd9198e8cfc87ca335ee6e2d3e63af4180fa9b8a471893255`.
+The local copy at `/home/dist/github/GD-DOOM/wads/DOOM2.WAD` matches this hash.
+Freedoom is suitable only for the explicitly bounded MAP01–MAP15 diagnostic;
+its different secret maps cannot establish full original-recording parity.
+The script also records hashes of the inherited secret-map geometry and things.
+
+Native coverage must reproduce all 19 per-map times from the original text
+file, the full map order, every intermission, MAP06/MAP11/MAP15/MAP31 story
+screens, and 100% kills and all available secrets on each map. The full run
+contains **112,976 active frames**, **1,315 intermission commands** and **84
+story commands**. It includes the natural MAP10 death exit at command 53,267
+and MAP11 rebirth at command 53,421. Its original ending is MAP17 intermission,
+not a cast finale.
+
+There are **166 checkpoint locations**: before/after map, phase and death/rebirth
+boundaries, inside intermissions/stories and every 1,750 active tics during
+sustained fights. Save and keyframe modes create a new session before loading
+each checkpoint, then compare every remaining command against the independent
+native reference. The complete baseline/save/keyframe matrix compares
+**338,928 active frames**, **343,125 campaign commands** and **332 cold restores**.
+All three modes pass. The existing two original Sunlust campaign recordings
+also pass in baseline/save/keyframe modes, and all six archived community co-op
+recordings retain baseline parity.
+Reports bind cached native traces to executable, observer and input hashes;
+verification stops at the first difference and rejects source/verifier changes.
+A partial requested matrix cannot report a complete full suite.
+
+Two runtime corrections were exposed by this recording. Chainsaw rays now
+truncate fractional range before computing their endpoint, matching Doom’s
+`P_LineAttack` while preserving the original range for slope and backoff math.
+Single-player death exits rebirth into the next level with pistol defaults and
+attack/use suppression. Living players retain view recovery and input latches.
+Both runtime hosts use the same carryover rules, including after a cold screen
+checkpoint. These changes require simulation ID `gd-doom-authority-dev-33`;
+save/keyframe formats remain 43/30.
+
+```sh
+python3 scripts/verify_boom_surge_campaign.py \
+  --iwad /home/dist/github/GD-DOOM/wads/DOOM2.WAD \
+  --reference /path/to/instrumented/dsda-doom --out /tmp/gddoom-surge-uvmax
+```
+
+`--through 94428` is an explicitly labelled original-command diagnostic ending
+before MAP31 loads. Its report always has `diagnostic_only: true` and
+`full_suite: false`. Full verification retains the entire recording. This is
+single-player combat campaign evidence; it does not replace an original human
+co-op campaign. Cosmetic RNG, decoration animation, custom text content, pixels
+and audio remain outside the canonical comparison profile.
+
 ## Remaining work
 
 The next milestones are:
 
-1. Expand complete-map combat coverage beyond the verified Sunlust and
-   Speed of Doom routes.
+1. Broaden combat campaign coverage beyond the verified full Surge recording
+   and the Sunlust/Speed of Doom routes.
    Two real MAP01–10 community campaigns now cover intermission/finale
    checkpoints. Add other map sets and actual campaigns reaching episodic or
    MAP30 endgame finales, keeping movement, combat, lifecycle and movers as
@@ -1987,7 +2052,10 @@ not full combat RNG parity, every map route, or large-fight performance. The map
 audit detects unknown specials; it does not detect every unsupported interaction.
 
 These changes advance the multiplayer simulation ID to
-`gd-doom-authority-dev-32`. Deploy matching clients and servers. Boss-brain
+`gd-doom-authority-dev-33`. Deploy matching clients and servers. Chainsaw ray
+endpoint truncation changes combat simulation without adding saved fields.
+Single-player campaign loads also correct death-exit rebirth and living view
+recovery. Boss-brain
 telefrag dispatch, retained barrel thrust and environmental doll damage change
 simulation behavior without adding saved fields. The corpse
 height-clipping, mover target, trigger, teleport, chase-target and damage-source

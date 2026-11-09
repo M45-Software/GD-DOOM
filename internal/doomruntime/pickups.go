@@ -107,6 +107,25 @@ func (g *game) applyLevelCarryover(carry playerLevelCarryover) {
 	g.clearWeaponOverlay()
 }
 
+// G_DoLoadLevel rebirths dead players before P_SpawnPlayer. Living players
+// retain their inventory, input latches and view recovery across the load.
+// The old game is also available after restoring a campaign screen checkpoint.
+func (g *game) applySinglePlayerCampaignCarryover(carry playerLevelCarryover, old *game) {
+	reborn := carry.Stats.Health <= 0 || old != nil && (old.isDead || old.playerReborn)
+	if !reborn {
+		g.applyLevelCarryover(carry)
+	}
+	if g.opts.DemoScript != nil {
+		if reborn {
+			g.weaponAttackDown, g.useButtonDown = true, true
+		} else if old != nil {
+			g.weaponAttackDown, g.useButtonDown = old.weaponAttackDown, old.useButtonDown
+			g.p.deltaViewHeight = old.p.deltaViewHeight
+		}
+		g.bringUpWeapon()
+	}
+}
+
 // Match Doom's G_PlayerFinishLevel behavior for map transitions:
 // keep weapons/ammo/health/armor, but clear cards and temporary powers.
 func (g *game) finishLevelForCarryover() {

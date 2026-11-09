@@ -723,7 +723,11 @@ func (g *game) monsterLineAttackActor(i int, typ int16) lineAttackActor {
 }
 
 func (g *game) lineAttackEnd(actor lineAttackActor, angle uint32, distance int64) (int64, int64) {
-	return actor.x + fixedMul(distance, doomFineCosine(angle)), actor.y + fixedMul(distance, doomFineSineAtAngle(angle))
+	// P_AimLineAttack/P_LineAttack truncate the range to whole map units
+	// before multiplying by the fine-angle vector. MELEERANGE+1 keeps its
+	// fractional quantum for slope/backoff calculations, but not this endpoint.
+	units := distance >> fracBits
+	return actor.x + units*doomFineCosine(angle), actor.y + units*doomFineSineAtAngle(angle)
 }
 
 // P_PathTraverse uses its nudged origin for cell traversal, intercepts and
