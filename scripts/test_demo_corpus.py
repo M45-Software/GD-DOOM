@@ -11,10 +11,12 @@ import tempfile
 import unittest
 from unittest import mock
 import zipfile
+from concurrent.futures import Future
 
 import demo_trace_compare_all as runner
 import demo_trace_trim as trimmer
 import fetch_compet_n as corpus
+import verify_compet_n_full as full
 
 
 def demo_bytes(episode=1, map_number=1):
@@ -30,6 +32,67 @@ def demo_zip(member, data):
 
 
 class CorpusTests(unittest.TestCase):
+    def test_resume_rejects_changed_tools_or_input_and_keeps_error_results(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory)/'result.json'
+            self.assertIsNone(runner.resume_result(path, 'tools', 'demo'))
+            result = {'run_identity_sha256': 'tools', 'demo_sha256': 'demo', 'status': 'error'}
+            runner.atomic_json(path, result)
+            self.assertEqual(runner.resume_result(path, 'tools', 'demo'), result)
+            for tools, demo in [('different tools', 'demo'), ('tools', 'different demo')]:
+                with self.assertRaises(ValueError):
+                    runner.resume_result(path, tools, demo)
+            self.assertFalse(path.with_suffix('.json.tmp').exists())
+
+    def test_full_audit_exclusions_require_same_failure_and_never_hide_rng(self):
+        error = {'demo_sha256': 'crash', 'status': 'error', 'exit_code': 139}
+        old = {'crash': {'raw_result': {'status': 'error', 'exit_code': 139}},
+               'door': {'raw_result': {'status': 'mismatch', 'exit_code': 1}}}
+        self.assertEqual(full.outcome(error, old, 'Tracing reference runtime:'), 'documented_exclusion')
+        self.assertEqual(full.outcome(error, old, 'Tracing reference runtime: Tracing GD-DOOM:'), 'unexplained_failure')
+        self.assertEqual(full.outcome(dict(error, exit_code=1), old, 'Tracing reference runtime:'), 'unexplained_failure')
+        door = {'demo_sha256': 'door', 'status': 'mismatch', 'exit_code': 1,
+                'gameplay_rng_audited': True, 'gameplay_rng_mismatch': None,
+                'report': 'mismatch line=1083 path=root.specials[0].topheight\nleft_gametic=1082\nright_gametic=1082\n'}
+        self.assertEqual(full.outcome(door, old), 'documented_exclusion')
+        self.assertEqual(full.outcome(dict(door, gameplay_rng_mismatch={'gametic': 1082}), old), 'unexplained_failure')
+        self.assertEqual(full.outcome(dict(door, report='mismatch line=3 path=root.player\n'), old), 'unexplained_failure')
+        matched = dict(door, status='match')
+        self.assertEqual(full.outcome(matched, old), 'strict_match')
+
+    def test_full_inventory_rejects_missing_legacy_input_or_skipped_archive(self):
+        historical = json.loads((runner.ROOT/'demos/COMPET-N-results.json').read_text())
+        old = historical['current_runtime_verification']
+        rows = old['records'] + old['excluded_records']
+        manifest = {'demos': rows, 'skipped': [], 'archive_sha256': historical['corpus']['archive_sha256']}
+        self.assertEqual(len(full.validate_inventory(manifest, historical)), 4646)
+        for changed in [dict(manifest, demos=rows[:-1]), dict(manifest, skipped=['legacy.zip']),
+                        dict(manifest, demos=rows[:-1]+rows[:1])]:
+            with self.assertRaises(ValueError):
+                full.validate_inventory(changed, historical)
+
+    def test_completion_notification_is_persistent_and_records_delivery(self):
+        with tempfile.TemporaryDirectory() as directory:
+            out = Path(directory)
+            runner.atomic_json(out/'results.json', {'complete': True})
+            with mock.patch.object(full.subprocess, 'run', return_value=subprocess.CompletedProcess([], 0, '', '')) as send:
+                full.notify(out, 'Finished', 'All recordings accounted for')
+            command = send.call_args.args[0]
+            self.assertEqual(command[0], 'notify-send')
+            self.assertIn('--expire-time=0', command)
+            self.assertIn(str(out/'results.json'), command[-1])
+            self.assertTrue(json.loads((out/'notification.json').read_text())['sent'])
+
+    def test_full_audit_does_not_claim_completion_for_partial_results(self):
+        with tempfile.TemporaryDirectory() as directory:
+            out = Path(directory)
+            (out/'replays').mkdir()
+            runner.atomic_json(out/'manifest.json', {'demos': [{'sha256': 'one'}]})
+            runner.atomic_json(out/'replays/summary.json', {'results': [{'demo_sha256': 'one'}]})
+            with self.assertRaises(ValueError):
+                full.finish(out, {'source': 'source'})
+            self.assertFalse((out/'results.json').exists())
+
     def test_semantic_ceiling_results_preserve_strict_failure_and_require_rng(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -144,11 +207,14 @@ class CorpusTests(unittest.TestCase):
                         mock.patch.object(runner, "ThreadPoolExecutor") as executor, \
                         mock.patch.object(runner.sys, "argv", ["runner", "--manifest", str(manifest),
                             "--gd-bin", str(tools[0]), "--ref-bin", str(tools[0]),
-                            "--out-root", str(root / "out"), *filters]):
-                    def capture_queue(compare, demos):
-                        scheduled.extend(demo.stem for demo in demos)
-                        return []
-                    executor.return_value.__enter__.return_value.map.side_effect = capture_queue
+                            "--out-root", str(root / ("filtered" if filters else "all")), *filters]):
+                    def capture_queue(compare, demo):
+                        scheduled.append(demo.stem)
+                        future = Future()
+                        future.set_result({"demo": str(demo), "status": "match", "report": "traces match lines=1\n",
+                                           "replay_map_error": None, "gameplay_rng_mismatch": None})
+                        return future
+                    executor.return_value.__enter__.return_value.submit.side_effect = capture_queue
                     self.assertEqual(runner.main(), 0)
                 self.assertEqual(scheduled, expected)
 

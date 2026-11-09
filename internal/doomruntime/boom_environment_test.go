@@ -97,9 +97,16 @@ func TestBoomFrictionBinarySnapshotRoundTrip(t *testing.T) {
 	g.thingFriction[0] = 63078
 	g.thingMoveFactor[0] = 847
 	state := captureGameSaveState(g)
-	for _, version := range []int{saveGameVersion, keyframeVersion, 30, 17} {
-		file := saveFile{Version: version, Game: state}
-		data, err := encodeSnapshot(boomSnapshotMagic(file.Version), file)
+	for _, tc := range []struct {
+		version int
+		magic   []byte
+		current bool
+	}{
+		{saveGameVersion, saveGameMagic, true}, {keyframeVersion, keyframeMagic, true},
+		{30, saveGameMagic, false}, {17, keyframeMagic, false},
+	} {
+		file := saveFile{Version: tc.version, Game: state}
+		data, err := encodeSnapshot(tc.magic, file)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -109,7 +116,7 @@ func TestBoomFrictionBinarySnapshotRoundTrip(t *testing.T) {
 		}
 		restored := environmentFixtureGame(t, "MAP01")
 		restoreGameSaveState(restored, loaded.Game)
-		if version == saveGameVersion || version == keyframeVersion {
+		if tc.current {
 			if restored.p.friction != g.p.friction || restored.p.movefactor != g.p.movefactor || restored.thingFriction[0] != g.thingFriction[0] || restored.thingMoveFactor[0] != g.thingMoveFactor[0] {
 				t.Fatal("friction state lost")
 			}

@@ -282,6 +282,7 @@ type billboardPlaneOccluderSpan struct {
 }
 
 type hitscanPuff struct {
+	angle    uint32
 	x        int64
 	y        int64
 	z        int64
@@ -985,6 +986,7 @@ type game struct {
 	demoWorldDone                 bool
 	demoFinaleActive              bool
 	demoFinaleCommercial          bool
+	effectMover                   *boomEffectMover
 	teleportMoveSerial            uint64
 	demoDoneReported              bool
 	demoBenchStarted              bool
@@ -3081,8 +3083,6 @@ func (g *game) updateDemoIntermission(script *DemoScript) error {
 		_, useHeld, attackHeld := demoTicCommand(tc)
 		g.demoIntermissionSkip = (attackHeld && !g.weaponAttackDown) || (useHeld && !g.useButtonDown)
 		g.weaponAttackDown, g.useButtonDown = attackHeld, useHeld
-	} else if !g.demoFinaleCommercial {
-		g.writeDemoTraceTic(g.demoTick - 1)
 	}
 	return nil
 }
@@ -11177,14 +11177,18 @@ func (g *game) tickHitscanPuffs() {
 	if len(g.hitscanPuffs) == 0 {
 		return
 	}
-	keep := g.hitscanPuffs[:0]
-	for _, p := range g.hitscanPuffs {
+	keep := 0
+	// A moving effect can spawn teleport fog. P_RunThinkers reaches those
+	// newly appended thinkers this same tic; retain and advance them too.
+	for i := 0; i < len(g.hitscanPuffs); i++ {
+		p := g.hitscanPuffs[i]
 		if !g.tickHitscanPuff(&p) {
 			continue
 		}
-		keep = append(keep, p)
+		g.hitscanPuffs[keep] = p
+		keep++
 	}
-	g.hitscanPuffs = keep
+	g.hitscanPuffs = g.hitscanPuffs[:keep]
 }
 
 func (g *game) tickHitscanPuffByOrder(order int64) {
@@ -11210,7 +11214,7 @@ func (g *game) tickHitscanPuff(p *hitscanPuff) bool {
 		return false
 	}
 	if p.momx != 0 || p.momy != 0 {
-		g.moveBoomEffectXY(&p.x, &p.y, p.z, &p.momx, &p.momy, &p.floorz, &p.ceilz, 20*fracUnit, 16*fracUnit)
+		g.moveBoomEffect(&boomEffectMover{&p.x, &p.y, &p.z, &p.momx, &p.momy, &p.momz, &p.floorz, &p.ceilz, &p.angle, 20 * fracUnit, true}, 16*fracUnit)
 	}
 	// P_MobjThinker skips Z movement for stationary effects on their floor,
 	// even when a closed sector leaves less room than their height.

@@ -109,6 +109,15 @@ semantic comparison cases, separate from the eighteen remaining exclusions.
 
 `DOOM2-MAP27-LV27-045-39985710cb55.lmp` manually reopens a timed door at tic 1082. Original `P_SpawnDoorCloseIn30` leaves `topheight` and `topwait` uninitialized; manual reopening then uses allocator residue as the live destination and wait (captured values 1330266433 and 16908801). Emulating those allocator contents is excluded. The raw **strict mismatch** and matching gameplay RNG remain recorded.
 
+A [2026-11-09 follow-up](map27-door-regression-results.json) fixed a separate
+countdown discrepancy exposed when the original fields contain zero. Original
+Doom and DSDA transition only when the decremented counter equals zero;
+GD-DOOM also transitioned on negative counts. The corrected engine matches a
+fresh original-reference replay for all **2,244 tics**, including independently
+audited gameplay RNG. Arbitrary nonzero allocator residue remains outside this
+proof; the historical exclusion and full-corpus results retain their original
+source identities and outcomes.
+
 ## Accounting and future exclusions
 
 Each recording is identified by its input hash and IWAD. Passing state and RNG

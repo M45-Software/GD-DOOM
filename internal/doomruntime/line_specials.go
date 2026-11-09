@@ -1351,7 +1351,8 @@ func (g *game) activateTeleportLine(lineIdx int, side int, info mapdata.Teleport
 	if info.MonsterOnly && (isPlayer || actorIdx >= 0 && actorIdx < len(g.m.Things) && isVoodooDollType(g.m.Things[actorIdx].Type)) {
 		return false
 	}
-	if !isPlayer && (g == nil || g.m == nil || actorIdx < 0 || actorIdx >= len(g.m.Things)) {
+	effect := !isPlayer && actorIdx == boomEffectActor && g.effectMover != nil
+	if !isPlayer && !effect && (g == nil || g.m == nil || actorIdx < 0 || actorIdx >= len(g.m.Things)) {
 		return false
 	}
 	if info.Silent && (info.LineToLine || info.MonsterOnly) && g.m.Linedefs[lineIdx].Tag == 0 {
@@ -1370,7 +1371,12 @@ func (g *game) activateTeleportLine(lineIdx int, side int, info mapdata.Teleport
 	actorCeilZ := g.p.ceilz
 	actorAngle := g.p.angle
 	actorRadius := int64(playerRadius)
-	if !isPlayer {
+	if effect {
+		e := g.effectMover
+		actorLabel = "effect"
+		actorX, actorY, actorZ = *e.x, *e.y, *e.z
+		actorFloorZ, actorCeilZ, actorAngle, actorRadius = *e.floorz, *e.ceilz, *e.angle, e.radius
+	} else if !isPlayer {
 		actor := g.m.Things[actorIdx]
 		actorLabel = "thing"
 		actorType = actor.Type
@@ -1387,13 +1393,9 @@ func (g *game) activateTeleportLine(lineIdx int, side int, info mapdata.Teleport
 			continue
 		}
 		for i, th := range g.m.Things {
-			if th.Type != teleportThingType {
-				continue
-			}
-			// Check if this is a missile (skip missiles for teleport)
-			// In Doom, missiles are typically things with specific types or flags
-			// Missiles should not be teleported according to original Doom behavior
-			if int(th.Flags)&0x10000 != 0 { // MF_MISSILE flag check (0x10000 = 65536)
+			// EV_Teleport searches live thinkers. Spawn-filtered markers
+			// remain in the map data but never become destination mobjs.
+			if th.Type != teleportThingType || i < len(g.thingCollected) && g.thingCollected[i] {
 				continue
 			}
 			if g.thingSectorCached(i, th) != sec {
@@ -1456,6 +1458,11 @@ func (g *game) activateTeleportLine(lineIdx int, side int, info mapdata.Teleport
 					g.authorityRules.Scores[g.localSlot].MovementEpoch++
 				}
 				g.p.angle = destAngle
+			} else if effect {
+				e := g.effectMover
+				*e.x, *e.y, *e.z, *e.floorz, *e.ceilz = tx, ty, tmfloor, tmfloor, tmceil
+				*e.angle = destAngle
+				*e.momx, *e.momy, *e.momz = 0, 0, 0
 			} else {
 				g.setThingPosFixed(actorIdx, tx, ty)
 				g.setThingSupportState(actorIdx, tmfloor, tmfloor, tmceil)

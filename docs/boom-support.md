@@ -2002,8 +2002,8 @@ truncate fractional range before computing their endpoint, matching Doom’s
 Single-player death exits rebirth into the next level with pistol defaults and
 attack/use suppression. Living players retain view recovery and input latches.
 Both runtime hosts use the same carryover rules, including after a cold screen
-checkpoint. These changes require simulation ID `gd-doom-authority-dev-33`;
-save/keyframe formats remain 43/30.
+checkpoint. These corrections were introduced with simulation ID
+`gd-doom-authority-dev-33` and save/keyframe formats 43/30.
 
 ```sh
 python3 scripts/verify_boom_surge_campaign.py \
@@ -2018,31 +2018,111 @@ single-player combat campaign evidence; it does not replace an original human
 co-op campaign. Cosmetic RNG, decoration animation, custom text content, pixels
 and audio remain outside the canonical comparison profile.
 
+## Original Speed of Doom UV-Max campaign and cold checkpoints
+
+`scripts/verify_boom_sod_campaign.py` verifies **Kinetic’s original 2:41:26
+UV-Max D2All**, recorded with DSDA-Doom 0.27.5 at complevel 9. The archive is
+[`sodallm24126.zip`](https://dsdarchive.com/files/demos/sodfinal/91587/sodallm24126.zip),
+SHA-256 `1915f3fe37a0c6076cc1d77eaa32815b2ad76b6948b1df7183016cb2e1bea5a7`.
+The unchanged LMP, including its original footer, has SHA-256
+`b9f604f03f09a1ae611b1c3e0af0c8d49ac38ee71442d7938d11e3a1a389bd13`.
+The verifier audits its solo UV Boom 202 header, enabled monsters and all
+**341,051 original commands**. It requires the original Doom II 1.9 IWAD
+identified in the Surge notes above.
+
+The route visits all **32 standard maps**, including MAP31/MAP32 between MAP15
+and MAP16, and ends in MAP30 intermission. MAP33 is outside the recording.
+Speed of Doom’s pinned DeHackEd lump contains only map titles and story strings;
+the audit rejects gameplay sections. The original strings patch is applied in
+the native reference. An independent run without those text substitutions gives
+byte-identical canonical world and phase traces. No actor/weapon patch support
+is needed for this recording.
+
+Coverage requires the complete map order, every intermission, story screens
+following MAP06/MAP11/MAP15/MAP20/MAP31, 100% kills and secrets on every map,
+and the original total time. The reference contains **339,681 active frames**,
+**1,327 intermission commands** and **43 story commands**. It includes natural
+death exits on MAP11 and MAP20. There are no recorded MAP30 cast-finale commands;
+no synthetic tail is added or claimed as original campaign evidence.
+
+All three modes pass. Each cold mode rebuilds a new session at **377 checkpoint
+locations**: 266 active gameplay locations, 96 intermission locations and
+15 story locations. These include sustained fights, map/phase and
+death/rebirth boundaries, screen interiors and the compatibility interactions
+identified below. The full matrix compares **1,019,043 active frames** and
+**1,023,153 campaign commands**, with **754 cold restores**. The original Surge
+UV-Max campaign and both Sunlust MAP01–10 campaigns retain baseline/save/keyframe
+parity, all six archived community co-op baselines pass, and the runtime, app
+and netgame unit tests pass.
+
+The recording exposed these runtime corrections:
+
+- Fatal lost-soul hits retain Boom’s dropped-pickup movement probe.
+- `ML_PASSUSE` continues the same use ray through flagged specials.
+- Arch-vile blast REJECT tests use the fire’s retained linked subsector.
+- Moving blood and impact effects process eligible walk specials, preserving
+  Doom’s projectile type exclusions. Newly spawned fog advances that same tic.
+- A player telefragging their own doll retains a live self-attacker reference;
+  the death camera skips turning toward that same body.
+- Doll slides retain the pending local split-step remainder.
+- Teleport searches skip destination markers that never spawned in the session.
+- Mancubus volleys create both shots when the first explodes during its spawn
+  check, and apply the original spread momentum to an already exploded shot.
+- Conveyors use a corpse’s current gravity state. Fallen Keens and floating
+  monster corpses can ride the floor; dead lost souls retain their exception.
+
+Cold restores also preserve each actor’s collision-link order. Restoring map or
+thinker order can change which victim a rocket blast visits first, assigning
+random death timings to different actors even when the RNG draw count matches.
+Save **45** / keyframe **32** add that order; save 44 / keyframe 31 add effect
+teleport angles. Both fields also round-trip through the authority binary codec.
+Supported older snapshots load with their original defaults and cannot
+reconstruct fields they never stored. These changes use simulation ID
+`gd-doom-authority-dev-34`.
+
+```sh
+python3 scripts/verify_boom_sod_campaign.py \
+  --iwad /home/dist/github/GD-DOOM/wads/DOOM2.WAD \
+  --reference /path/to/instrumented/dsda-doom \
+  --out /tmp/gddoom-sod-uvmax --jobs 3
+```
+
+The default matrix includes baseline, cold save and cold keyframe modes.
+`--mode` selects a partial matrix, which cannot report `full_suite: true`.
+`--jobs` runs up to three independent replay processes with separate traces.
+Cached native references bind executable, observer and input hashes; the report
+also guards runtime and verifier sources against changes during replay.
+The optional native observer `GD_COOP_CANONICAL_OUT` writes full indexed rows
+for diagnosing long recordings; `GD_COOP_CANONICAL_FROM` bounds its starting
+command. Enabling it was checked against the original compact traces without
+changing a canonical row. Cosmetic RNG, decoration animation, literal text,
+pixels and audio remain outside this gameplay comparison. The Go observer also
+reports boss landing markers in their permanent `S_NULL` state. The markers
+remain in every comparison.
+
 ## Remaining work
 
 The next milestones are:
 
-1. Broaden combat campaign coverage beyond the verified full Surge recording
-   and the Sunlust/Speed of Doom routes.
-   Two real MAP01–10 community campaigns now cover intermission/finale
-   checkpoints. Add other map sets and actual campaigns reaching episodic or
-   MAP30 endgame finales, keeping movement, combat, lifecycle and movers as
-   regressions. Death/rebirth checkpoints and
-   generated normal/secret transitions now have DSDA comparisons; MAP02 covers
-   a complete crusher/resurrection route with binary checkpoint continuation.
-2. Broaden community co-op coverage beyond the verified Sunlust and Speed of Doom
-   recordings: obtain a complete Boom multi-map co-op recording without gameplay
-   patches, and cover more combat/death/exit combinations. A bounded Sunlust
-   prefix is useful regression evidence but cannot replace that full recording.
-   Generated two-player coverage now traverses all 17 released Surge maps with
-   deaths/rebirths and cold campaign checkpoints, without gameplay patches;
-   it likewise does not replace an original human co-op combat recording.
+1. Obtain a complete original Boom multi-map human co-op combat recording without
+   gameplay patches, and verify its combat, deaths, exits and cold campaign
+   checkpoints. The existing Sunlust/Speed of Doom human recordings cover
+   individual maps; the bounded Sunlust campaign prefix and generated two-player
+   Surge MAP01–MAP17 route do not replace a complete human co-op campaign.
    Generated normal/secret campaigns, episodic/MAP30 finales and full-roster
    checkpoints already have DSDA comparisons. Native authority save/rollback
    remains separate from client replication baselines.
-3. Broaden complex-map progression and large-fight performance coverage.
-   Custom local weapon priorities now have DSDA comparisons. GL nodes and
-   mixer-wide sound parity remain separate follow-up work.
+2. Broaden complex-map progression and measure large-fight performance separately
+   from trace generation and cold load overhead. Custom local weapon priorities
+   already have DSDA comparisons. GL nodes and mixer-wide sound parity remain
+   separate follow-up work.
+3. Broaden original combat-campaign coverage beyond full Surge and Speed of Doom
+   and the Sunlust MAP01–10 routes. Keep movement, combat, lifecycle, movers and
+   cold restores as regressions, and add other map sets and recorded episodic or
+   endgame finale commands. Speed of Doom reaches MAP30 intermission; its
+   recording contains no cast-finale continuation. Death/rebirth checkpoints,
+   generated normal/secret transitions and the complete MAP02 crusher/resurrection
+   route already have DSDA comparisons.
 
 Unusual interactions beyond the fixtures remain unverified. Maps may load
 while unsupported actions behave incorrectly.
@@ -2051,22 +2131,23 @@ The no-monsters comparisons establish the recorded movement/progression paths,
 not full combat RNG parity, every map route, or large-fight performance. The map
 audit detects unknown specials; it does not detect every unsupported interaction.
 
-These changes advance the multiplayer simulation ID to
-`gd-doom-authority-dev-33`. Deploy matching clients and servers. Chainsaw ray
-endpoint truncation changes combat simulation without adding saved fields.
+These changes use multiplayer simulation ID `gd-doom-authority-dev-34`.
+Deploy matching clients and servers. Save 45/keyframe 32 preserve actor
+collision-link ordering; save 44/keyframe 31 preserve effect teleport angles.
+Chainsaw ray endpoint truncation changes combat simulation without adding saved fields.
 Single-player campaign loads also correct death-exit rebirth and living view
 recovery. Boss-brain
 telefrag dispatch, retained barrel thrust and environmental doll damage change
 simulation behavior without adding saved fields. The corpse
 height-clipping, mover target, trigger, teleport, chase-target and damage-source
-corrections change simulation behavior without adding saved fields;
-save/keyframe versions remain 43/30. Door lighting
+corrections change simulation behavior without adding saved fields. Door lighting
 adds the controlling line reference to owned and displaced door snapshots.
 Sector identities extend the sound-event schema. Explicit ceiling ownership
 and retained doors extend the mover schema; displaced ceilings remain in the
-ordered mover state. Save version 43 reads versions 40–42;
-keyframe version 30 reads versions 27–29. Save 43/keyframe 30 add single-player
-recorded campaign checkpoints in attachment version 3. Save 42/keyframe 29 add
+ordered mover state. Save version 45 reads previous versions 42–44;
+keyframe version 32 reads previous versions 29–31. Older formats cannot recover
+collision-link ordering or effect angles that were never stored.
+Save 43/keyframe 30 add single-player recorded campaign checkpoints in attachment version 3. Save 42/keyframe 29 add
 cast and queued episode-victory state in attachment version 2. Save 41/keyframe 28 add the recorded
 co-op session attachment; older formats cannot reconstruct a complete recorded
 roster or campaign cursor. Save 40/keyframe 27 added the pending

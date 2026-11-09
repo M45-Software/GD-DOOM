@@ -10,9 +10,77 @@ import (
 
 	"gddoom/internal/doomrand"
 	"gddoom/internal/mapdata"
+	"gddoom/internal/sessionflow"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
+
+func TestEpisodeFinaleDemoTraceWritesOneFramePerCommand(t *testing.T) {
+	for _, boom := range []bool{false, true} {
+		t.Run(fmt.Sprintf("boom=%t", boom), func(t *testing.T) {
+			g := boomTouchFixture(t)
+			g.boomMomentumDropoff = boom
+			g.demoFinaleActive = true
+			g.opts.DemoScript = &DemoScript{Tics: make([]DemoTic, 3)}
+			g.opts.DemoTracePath = t.TempDir() + "/finale.jsonl"
+			g.demoTrace = newDemoTraceWriter(g.opts, "E1M8")
+			if g.demoTrace == nil {
+				t.Fatal("trace writer missing")
+			}
+			defer g.demoTrace.Close()
+			sg := &sessionGame{g: g, finale: sessionflow.Finale{Active: true}}
+			for range g.opts.DemoScript.Tics {
+				if err := g.updateDemoIntermission(g.opts.DemoScript); err != nil {
+					t.Fatal(err)
+				}
+				sg.tickFinale()
+			}
+			data, err := os.ReadFile(g.opts.DemoTracePath)
+			if err != nil {
+				t.Fatal(err)
+			}
+			lines := strings.Split(strings.TrimSpace(string(data)), "\n")
+			if len(lines) != 5 { // Two metadata records and three command frames.
+				t.Fatalf("trace records=%d want=5", len(lines))
+			}
+			for i, line := range lines[2:] {
+				var frame struct {
+					Gametic int `json:"gametic"`
+				}
+				if err := json.Unmarshal([]byte(line), &frame); err != nil {
+					t.Fatal(err)
+				}
+				if frame.Gametic != i {
+					t.Fatalf("frame=%d gametic=%d", i, frame.Gametic)
+				}
+			}
+		})
+	}
+}
+
+func TestVanillaEpisodeFinaleDemoIgnoresButtonsAndHoldsEndingArt(t *testing.T) {
+	g := boomTouchFixture(t)
+	g.boomMomentumDropoff = false
+	g.demoFinaleActive = true
+	g.opts.DemoScript = &DemoScript{Tics: make([]DemoTic, 600)}
+	for i := range g.opts.DemoScript.Tics {
+		g.opts.DemoScript.Tics[i].Buttons = demoButtonAttack | demoButtonUse
+	}
+	sg := &sessionGame{g: g, finale: sessionflow.Finale{Active: true, Text: "END"}}
+	for tic := range g.opts.DemoScript.Tics {
+		if err := g.updateDemoIntermission(g.opts.DemoScript); err != nil {
+			t.Fatal(err)
+		}
+		sg.tickFinale()
+		want := sessionflow.FinaleStageText
+		if tic+1 > 3*sessionflow.FinaleTextSpeed+sessionflow.FinaleTextWaitTics {
+			want = sessionflow.FinaleStagePicture
+		}
+		if sg.finale.Stage != want || !sg.finale.Active || g.demoWorldDone {
+			t.Fatalf("tic=%d stage=%d want=%d active=%t worlddone=%t", tic, sg.finale.Stage, want, sg.finale.Active, g.demoWorldDone)
+		}
+	}
+}
 
 func TestExplodedRevenantMissileRetainsTracerAcrossSave(t *testing.T) {
 	for _, deferred := range []bool{false, true} {
@@ -948,4 +1016,19 @@ func TestDemoTraceDroppedItemUsesCachedSupportState(t *testing.T) {
 	if got, want := mobjs[1].CeilingZ, int64(248*fracUnit); got != want {
 		t.Fatalf("ceilingz=%d want=%d", got, want)
 	}
+}
+
+func TestBossLandingMarkerTraceUsesPermanentNullState(t *testing.T) {
+	g := newGame(&mapdata.Map{Name: "MAP30", Sectors: []mapdata.Sector{{CeilingHeight: 128}},
+		Things: []mapdata.Thing{{Type: 1, X: -256}, {Type: 87, X: 64, Flags: 7}}}, Options{Headless: true})
+	for _, m := range g.demoTraceMobjs() {
+		if m.Type != 27 {
+			continue
+		}
+		if m.State != 0 || m.Tics != -1 || m.X != 64*fracUnit {
+			t.Fatalf("boss landing marker=%+v", m)
+		}
+		return
+	}
+	t.Fatal("boss landing marker omitted from canonical state")
 }

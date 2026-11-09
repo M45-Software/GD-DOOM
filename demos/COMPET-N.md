@@ -146,3 +146,117 @@ cases, and separates the thirteen unused-ceiling cases from the remaining
 eighteen exclusions. Historical raw captures and operational audit receipts
 are retained locally; public results contain portable technical identifiers
 without personal paths, host details, or conversation excerpts.
+
+## Post-Boom vanilla regression audit (2026-11-09)
+
+A targeted audit of the Boom branch attempted **187 recordings** against the
+original Linux Doom 1.10 reference: **186 strict state and gameplay RNG matches**,
+one previously documented reference-crash exclusion, and zero unexplained
+failures. The successful comparisons cover **782,366 tics** through original
+termination or first player death, including the death tic. This is a new
+regression selection; the full 4,646-recording sweep above remains evidence for
+v0.1.1, dated 2026-10-02.
+
+The selection includes all 101 ordinary validation fixtures (including the
+25 repository demos and shareware fixtures), 68 additional per-map UV-Max
+recordings, 17 further samples covering all nine COMPET-N categories in both
+commercial games, and an E4M8 Max follow-up. All 68 Ultimate Doom/Doom II
+starting maps have successful UV-Max comparisons. The bonus
+`DOOMU-E4M8-U48GLICH-bdc56641f6c7.lmp` crashes the original reference before
+GD-DOOM playback; its exact SHA matches the existing exclusion. It retains
+status `error` and has no state/RNG pass. The additional original
+`DOOMU-E4M8-U4M8-219-be97b0d74754.lmp` matches strictly.
+
+The audit found and fixed vanilla behavior affected by the Boom work:
+
+- Revenant homing missiles in vanilla demos use the recorded gametic, including
+  pause commands. Boom retains its completed-world-tic/basetic phase. The
+  recorded-pause MAP29 regression now matches all 14,407 compared tics.
+- Episode finales write one trace frame per recorded command.
+- Vanilla episode finales ignore recorded buttons and hold the ending art
+  until the recording ends, preserving original Doom's finale behavior.
+
+Regression tests cover the differing vanilla/Boom tracer phases, duplicate
+finale frames, held finale buttons, and the art hold beyond the interactive
+frontend's timeout. Gameplay, app, networking, RNG and campaign Go tests and
+all fourteen Python corpus checks pass. On the same source, the full original
+32-map Speed of Doom baseline still matches DSDA: 341,051 commands and 339,681
+active-world frames. That additional Boom check is a baseline replay; this
+vanilla audit does not add a new cold-checkpoint proof.
+
+The [portable per-recording report](vanilla-boom-regression-results.json)
+records source, engine, IWAD, harness and result hashes. It also serves as a
+replay manifest after importing the complete corpus into `tmp/compet-n` and
+placing the IWADs at the standard paths:
+
+```bash
+xvfb-run -a python3 -B scripts/demo_trace_compare_all.py \
+  --manifest demos/vanilla-boom-regression-results.json --jobs 4 \
+  --semantic-unused-ceiling-fields \
+  --discard-matching-traces --compress-retained-traces \
+  --out-root tmp/vanilla-boom-regression
+```
+
+No recording in this audit required the optional unused-ceiling policy. The
+known original-reference crash still produces an error and a nonzero suite
+exit; classify it separately by its exact input SHA, as in the existing
+[exclusion guide](COMPET-N-exclusions.md).
+
+## Full-corpus runner and desktop notification
+
+`scripts/verify_compet_n_full.py` validates the exact 4,646-recording inventory
+against the published input identities, including the twelve recovered legacy
+recordings. It builds and pins the current engine, copies and verifies the
+reference, IWADs and demos, then replays every input. The historical pass totals
+are not reused. Start with the complete importer manifest and original IWADs:
+
+```bash
+python3 -B scripts/verify_compet_n_full.py \
+  --manifest tmp/compet-n/manifest.json --wad-root wads \
+  --reference ../doom-source/linuxdoom-1.10/linux/linuxxdoom \
+  --out tmp/compet-n-full --jobs 12 --notify
+```
+
+On Linux, `--notify` sends a persistent `notify-send` desktop notification when
+all attempts finish, including counts of strict matches, semantic-only matches,
+documented exclusions and unexplained failures. An incomplete/stopped run gets
+a separate notification. The run can also be launched as a user service with
+`systemd-run --user` to continue independently of the terminal or chat.
+
+The output directory contains `replays/progress.json` for live counts,
+`replay.log`, immutable input/source receipts, per-demo results and retained
+compressed mismatch traces. Final classified counts are in `results.json`;
+notification delivery status is in `notification.json`. Existing exclusions
+are accepted only for the same input SHA and documented failure signature.
+They never count as passes, and unexpected failures remain visible.
+
+To resume, rerun the same command with `--resume`. Completed attempts are reused
+only when the pinned engine, inputs, tools, selection and comparison policy
+match. Interrupted attempts run again. Error results remain errors; remove a
+specific attempt's `replays/DEMO-STEM/result.json` before resuming to explicitly
+retry it. Source changes requiring a new engine need a fresh output directory.
+
+## MAP27 countdown follow-up (2026-11-09)
+
+The full post-Boom audit completed all 4,646 attempts on source
+`95e3cd1c4a996390957b0b4acb0a0432c3385eeabfa86b0a8470bfb182bb495a`:
+4,621 strict matches, seven semantic-only matches, seventeen documented
+reference crashes, and one flagged MAP27 door mismatch. That last recording
+is the known uninitialized-door case, but this capture first diverged in
+`direction` at tic 1084 rather than the historical `topheight` signature.
+The [complete per-recording audit](vanilla-boom-full-results.json) preserves
+every original outcome and links the later targeted fix separately.
+
+The zero-valued reference fields exposed an additional countdown bug in
+GD-DOOM: waiting doors changed state after the counter became negative.
+Original Doom and DSDA change state only when the decrement reaches exactly
+zero. Both ordinary waiting and five-minute initial waiting now use that
+condition. Regression tests cover positive, zero and negative counts in
+vanilla and Boom modes, and the runtime/app/network Go suites pass.
+
+On the corrected source, a fresh strict replay of the complete MAP27 recording
+matches **all 2,244 tics and gameplay RNG**. The
+[follow-up receipt](map27-door-regression-results.json) pins the new source,
+engine, reference, IWAD and raw-result hashes. This targeted follow-up does not
+relabel the earlier full-corpus run or establish parity with arbitrary original
+C allocator contents; see the [timed-door exclusion](COMPET-N-exclusions.md).

@@ -500,12 +500,22 @@ func (sg *sessionGame) tickFinale() bool {
 		if g.boomMomentumDropoff {
 			skip = g.demoIntermissionSkip
 			g.demoIntermissionSkip = false
+		} else if !g.demoFinaleCommercial {
+			// Vanilla F_Ticker ignores episode-finale command buttons.
+			skip = false
 		}
 		if sg.finale.Stage == sessionflow.FinaleStageCast && sg.anyIntermissionSkipInput() {
 			sg.finale.KillCast()
 			sg.playFinaleCue(sg.finale.Cast.Cue)
 		}
-		g.demoWorldDone = sg.tickFinaleAdvance(skip)
+		if !g.boomMomentumDropoff && !g.demoFinaleCommercial && sg.finale.Stage == sessionflow.FinaleStagePicture {
+			// Original Doom holds the ending art until the demo stream ends.
+			// The interactive frontend's picture timeout does not apply here.
+			sg.finale.Tic++
+			g.demoWorldDone = false
+		} else {
+			g.demoWorldDone = sg.tickFinaleAdvance(skip)
+		}
 		g.writeDemoTraceTic(g.demoTick - 1)
 		return false
 	}

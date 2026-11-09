@@ -683,7 +683,7 @@ func (g *game) demoTraceMobjs() []demoTraceMobj {
 				X:            p.x,
 				Y:            p.y,
 				Z:            p.z,
-				Angle:        0,
+				Angle:        p.angle,
 				MomX:         p.momx,
 				MomY:         p.momy,
 				MomZ:         p.momz,
@@ -1148,6 +1148,10 @@ func demoTraceThingHealth(g *game, i int, typ int16) int {
 }
 
 func demoTraceThingTics(g *game, i int, typ int16) int {
+	if typ == 87 {
+		// MT_BOSSTARGET stays in S_NULL with an infinite duration.
+		return -1
+	}
 	if isPlayerBodyThingType(typ) && i >= 0 {
 		return g.thingStateTics[i]
 	}
@@ -1199,6 +1203,9 @@ func demoTraceThingTics(g *game, i int, typ int16) int {
 }
 
 func demoTraceThingState(g *game, i int, typ int16) int {
+	if typ == 87 {
+		return 0 // S_NULL: invisible boss-brain landing marker.
+	}
 	if isPlayerBodyThingType(typ) && i >= 0 {
 		if g.thingGibbed[i] {
 			return demoTraceStateGibs

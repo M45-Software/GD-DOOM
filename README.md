@@ -87,6 +87,10 @@ all 19 visited maps, with cold save/keyframe restores through combat, death exit
 and campaign screens. The inherited MAP31/MAP32 require the original Doom II
 IWAD. See the [UV-Max verification notes](docs/boom-support.md#original-surge-uv-max-campaign-and-cold-checkpoints).
 
+Kinetic’s original Speed of Doom UV-Max D2All also matches DSDA across all 32
+standard maps, with cold combat and campaign checkpoints through its MAP30
+intermission ending. See the [Speed of Doom campaign notes](docs/boom-support.md#original-speed-of-doom-uv-max-campaign-and-cold-checkpoints).
+
 Repeated columns and sprite rows share compact draw commands, and nearby
 sprites reuse horizontal visibility spans until clipping changes. These reduce
 CPU raster preparation and the geometry sent to the GPU, including the work
@@ -184,6 +188,14 @@ original-reference crashes and one door using uninitialized memory.
 [Per-recording results](demos/COMPET-N-results.json) ·
 [Exclusions](demos/COMPET-N-exclusions.md) ·
 [Desync investigation](desync-work.md)
+
+A **2026-11-09 post-Boom audit** completed all **4,646 recordings**: 4,621 strict
+matches, seven semantic-only matches, seventeen documented reference crashes,
+and one MAP27 door mismatch. The countdown fix then passed a fresh strict
+2,244-tic replay of MAP27. See the
+[full audit results](demos/vanilla-boom-full-results.json) and
+[MAP27 follow-up](demos/COMPET-N.md#map27-countdown-follow-up-2026-11-09)
+for the separate source identities and replay scopes.
 
 ## Quick start
 

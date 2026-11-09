@@ -1,0 +1,4857 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-09",
+  "branch": "codex/boom-simple-maps",
+  "scope": "Targeted post-Boom vanilla regression selection; not a new full 4,646-recording corpus sweep.",
+  "replay_window": "Original termination or first player death, including the death tic.",
+  "selection": {
+    "recordings": 187,
+    "repository_demos": 25,
+    "ordinary_validation_fixtures": 101,
+    "additional_uv_max_per_map": 68,
+    "additional_category_samples": 17,
+    "additional_e4m8_max_followup": 1,
+    "starting_maps": 68,
+    "uv_max_maps_with_passes": 68,
+    "categories": 9
+  },
+  "results": {
+    "strict_matches": 186,
+    "semantic_only_matches": 0,
+    "documented_reference_crash_exclusions": 1,
+    "unexplained_failures": 0,
+    "compared_tics": 782366
+  },
+  "comparison_policy": {
+    "strict_results_preserved": true,
+    "semantic_mode": "Only unused topheight on downward type-2 lowerAndCrush ceilings; independent gameplay RNG remains strict.",
+    "exclusions_are_passes": false
+  },
+  "evidence": {
+    "replay_harness_sha256": "2bb06bc5c2dfac97994ed424f9f6891fdd43ffa842387bb1a6bedceb246030ce",
+    "trace_comparator_sha256": "5edfb80bfc82dca1f43305e556e35ecfb0c01d98932e2c2994434ffcb466ad60",
+    "trace_trimmer_sha256": "239e21a096b8a1965a2743aaf8f9ac2338b04b5f3102cb3b6be4ebaf6faa7423",
+    "reference_zone_mib": 16,
+    "internal_go_source_sha256": "95e3cd1c4a996390957b0b4acb0a0432c3385eeabfa86b0a8470bfb182bb495a",
+    "source_hash_method": "SHA-256 over sorted internal/**/*.go: repository-relative path + NUL + contents",
+    "engine_binary_sha256": "338a8522918a2b47a972ce4930681428f292ea06309be3b638b5ecdfdaa1387b",
+    "reference_engine": "Original Linux Doom 1.10",
+    "reference_binary_sha256": "44c76e71a442cab22b42bff99c499c097ef4e4b06a5d034d9458f8d9ff2b1a7b",
+    "raw_summaries_sha256": {
+      "verified": "7bc94b3456a98f8bfae3296271f3c24f95fc08f57f5db04a8c7340580375c353",
+      "followup": "ba9025a57d00045052413d21d2a7890baebd216f31e5def1b79300405bb1e351"
+    },
+    "application_files_sha256": {
+      "main.go": "dacf54c155da9413e325a1e764bc3b7fae58f6582ae53e0072f653da919f8032",
+      "cmd/gddoom/main.go": "4a8bf21fbc39e26ee73fff2539df7182e72d029a9c98bb3acf2306e365877a1d",
+      "go.mod": "f2e193b432053e06e321590c9c9c57f0b327e4620cabaeb8c7f5c825f4f6abe0",
+      "go.sum": "faaa9848069390e8cb3d073ac0071172f06a5b2957a14e2adaa2a19b02958b8f"
+    },
+    "iwads_sha256": {
+      "DOOM2.WAD": "10d67824b11025ddd9198e8cfc87ca335ee6e2d3e63af4180fa9b8a471893255",
+      "DOOMU.WAD": "6fdf361847b46228cfebd9f3af09cd844282ac75f3edbb61ca4cb27103ce2e7f",
+      "DOOM1.WAD": "1d7d43be501e67d927e415e0b8f3e29c3bf33075e859721816f652a526cac771"
+    },
+    "test_logs_sha256": {
+      "verified-unit.log": "b428e878118c77f4e24cb61ac612ed4b81c9dfdeb6bbe24a1bfdd8187b0d5383",
+      "corpus-tests-final.log": "e51b513d625ee98e5d8325ef2d9364fd47b35b9fffa88517bac633767d173baf"
+    }
+  },
+  "demos": [
+    {
+      "game": "doom2",
+      "sha256": "7f12e85cdfbf71d66bd3fe7f66031642811c624c257b18b3406dbf8eae913081",
+      "map": "MAP30",
+      "tics": 57755,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/l30-1840.zip",
+          "demo_member": "L30-1840.LMP",
+          "category": "max"
+        },
+        {
+          "archive_member": "compet-n/doom2/max/lv301840.zip",
+          "demo_member": "L30-1840.LMP",
+          "category": "max"
+        }
+      ],
+      "validation_set": "pain_targetless",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP30-L30-1840-7f12e85cdfbf.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "4b98c714c1ff67c59946ae3afcd6e1ae3a2363aef9c82079a7163c99312c3335",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 34071
+    },
+    {
+      "game": "doom2",
+      "sha256": "70482c9ebbd7f2e693e68cf44a0bee400f42b245654a2470bdb6d70adc2db440",
+      "map": "MAP29",
+      "tics": 14407,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv29-632.zip",
+          "demo_member": "LV29-632.LMP",
+          "category": "max"
+        }
+      ],
+      "validation_set": "recorded_pause",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP29-LV29-632-70482c9ebbd7.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "ae06c2a3a026b3b013229bd21bc08d57f59ab06eafb7bcabf45fa1c14daa2fc1",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 14407
+    },
+    {
+      "game": "doom",
+      "sha256": "fccc0a63c1f9897ee812053154fcd92428a74523115f1f374ba2ac2e9ba89012",
+      "map": "E2M5",
+      "tics": 15027,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e2m5-655.zip",
+          "demo_member": "E2M5-655.LMP",
+          "category": "max"
+        }
+      ],
+      "validation_set": "recorded_pause",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E2M5-E2M5-655-fccc0a63c1f9.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "95c09ef527d4965a7db54fc2a11249327ddc0948488f26e7d431a9e7890ceb1c",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 15027
+    },
+    {
+      "game": "doom",
+      "sha256": "efee2f57ca937975c335461ec64cdf228a0fd4aee024ab70a3ea19ce3d81214a",
+      "map": "E4M1",
+      "tics": 23591,
+      "skill": 4,
+      "respawn": true,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/respawn/090-r4m1.zip",
+          "demo_member": "090-R4M1.LMP",
+          "category": "respawn"
+        }
+      ],
+      "validation_set": "recorded_pause",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E4M1-090-R4M1-efee2f57ca93.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "16080983a4610fbf9495fee097adf805e44f8cec2cd6bd927208d9cc9eb46eaa",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 23533
+    },
+    {
+      "game": "doom",
+      "sha256": "cf10b08fd3669bf211d3a68848cfbb448113185268c0c024c2192d867a7fb0c4",
+      "map": "E3M1",
+      "tics": 123548,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/ep3-5532.zip",
+          "demo_member": "EP3-5532.LMP",
+          "category": "max"
+        }
+      ],
+      "validation_set": "recorded_pause",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E3M1-EP3-5532-cf10b08fd366.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "924cfd6e19b6041b208246dfc9c3e4e0e6fb37c57389c9e889573089db060d72",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 123548
+    },
+    {
+      "game": "doom",
+      "sha256": "e4d98f59b80964e058e3b0b6c7ae55ae97e74eae7273ef66c9129cef2c59cbff",
+      "map": "E1M1",
+      "tics": 526,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/pacifist/e1m1-009.zip",
+          "demo_member": "E1M1-009.LMP",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom/pacifist/p1m1-009.zip",
+          "demo_member": "p1m1-009.lmp",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom/speed/e1m1-009.zip",
+          "demo_member": "E1M1-009.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E1M1-E1M1-009-e4d98f59b809.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "21f725a254e27873438e28abc5c205f5a3843559f441e99269d24a112785d850",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 526
+    },
+    {
+      "game": "doom",
+      "sha256": "c8d0aea3fb6b6fd9bd2702afc62d37a4a42cde9b91682a04dfc5d08ffa45e512",
+      "map": "E1M2",
+      "tics": 863,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/e1m2-022.zip",
+          "demo_member": "e1m2-022.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E1M2-e1m2-022-c8d0aea3fb6b.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "62dd796848c2684a9bd78b8c431250961a7e5b73ace68d78b2874f4147a6ab1c",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 863
+    },
+    {
+      "game": "doom",
+      "sha256": "845559972ba7969a1eec775a62f573a379f3009106d5748fde20830f7cd1dfe8",
+      "map": "E1M3",
+      "tics": 1639,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/e1m3-040.zip",
+          "demo_member": "e1m3-040.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E1M3-e1m3-040-845559972ba7.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "f8601099a2019bfebdd33c3549c240f935461085e61778a03fb263c141567562",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1639
+    },
+    {
+      "game": "doom",
+      "sha256": "4c92b897bd010813c7a36b1877e66438e55b133a181e5593aeee317690d12dc0",
+      "map": "E1M4",
+      "tics": 567,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/pacifist/e1m4b013.zip",
+          "demo_member": "E1M4-013.LMP",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom/speed/e1m4b013.zip",
+          "demo_member": "E1M4-013.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E1M4-E1M4-013-4c92b897bd01.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "ecd17ab535b4527241f7550d0437d80f1a4412cfa89315a9f93b622976e1fc79",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 567
+    },
+    {
+      "game": "doom",
+      "sha256": "055e4f0f5e82e01c5b1689d81d3ec46d67523f6c87a56b025a7217b0a4492076",
+      "map": "E1M5",
+      "tics": 2174,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/e1m5-055.zip",
+          "demo_member": "E1M5-055.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E1M5-E1M5-055-055e4f0f5e82.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "9e4a7f383655a7bf614fc0f624f6458f27192ce80097a3b0745b762da10f6e6e",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2174
+    },
+    {
+      "game": "doom",
+      "sha256": "cf53c6a7349977ca4cde8be249fd5c83973a552cebaf00195564b009f6137c3d",
+      "map": "E1M6",
+      "tics": 2172,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/e1m6-056.zip",
+          "demo_member": "e1m6-056.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E1M6-e1m6-056-cf53c6a73499.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "5055db178d7dc197b36924b86f7409c3448dc546de0cf00f13f147dd8740648f",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2172
+    },
+    {
+      "game": "doom",
+      "sha256": "835a3309c0e1d780418eb10bd3f6b0238d5797bd7e88bbdc768269faeafaf3dd",
+      "map": "E1M7",
+      "tics": 2712,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/e1m7-115.zip",
+          "demo_member": "e1m7-115.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E1M7-e1m7-115-835a3309c0e1.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "1cd16fd7cb417081a346ebc4ae82469762e1b1363fe8069eab3f2a34a9ea46a5",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2712
+    },
+    {
+      "game": "doom",
+      "sha256": "89263fa1e0fd36ca20b471986cf9130813fcde162bb1ee7123089f1bfa477130",
+      "map": "E1M8",
+      "tics": 905,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/e1m8-023.zip",
+          "demo_member": "e1m8-023.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E1M8-e1m8-023-89263fa1e0fd.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "ab70b6293580489e71bdd152bdc93b664f1f7cab753a9924650b30f6f14a41d3",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 905
+    },
+    {
+      "game": "doom",
+      "sha256": "79867cd24c8f59c87e854964ca82fd9a9cce8ccda5a4978d5e464c724bf78e29",
+      "map": "E1M9",
+      "tics": 1371,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/e1m9-030.zip",
+          "demo_member": "E1M9-030.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E1M9-E1M9-030-79867cd24c8f.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "3071cd9d1fe26612c1e77d5c8921bfc779575d7d976da69fc083dfb4b9f71954",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1371
+    },
+    {
+      "game": "doom",
+      "sha256": "536151c943bfc8246730ad034082cf85c1bdb828af4a7a5bef58d5768d3a843b",
+      "map": "E2M1",
+      "tics": 1595,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/e2m1-039.zip",
+          "demo_member": "E2M1-039.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E2M1-E2M1-039-536151c943bf.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "da96743921f61fd165f4dd25ed04ee18c332753c6fa6e7317c58a7492c1db186",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1595
+    },
+    {
+      "game": "doom",
+      "sha256": "80096004af34b363a5ed1544d7fb0746733568cbc0af21ddd1e29cfa0fa43604",
+      "map": "E2M2",
+      "tics": 839,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/pacifist/e2m2-015.zip",
+          "demo_member": "E2M2-015.LMP",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom/pacifist/p2m2-015.zip",
+          "demo_member": "p2m2-015.lmp",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom/speed/e2m2-015.zip",
+          "demo_member": "E2M2-015.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E2M2-E2M2-015-80096004af34.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "df611b78d3819caa2b1ea2f64380b2949204410e57928bdb0fd9c8d90be4315e",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 839
+    },
+    {
+      "game": "doom",
+      "sha256": "02115a9ad72121dc31380ed4b457f9dec6e0bc597df5210fa9bac8057727b2e0",
+      "map": "E2M3",
+      "tics": 988,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/e2m3-026.zip",
+          "demo_member": "E2M3-026.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E2M3-E2M3-026-02115a9ad721.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "c67762fa1686b209ca38bd472d6e7da64876de711156e2466f1e8a00126d2179",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 988
+    },
+    {
+      "game": "doom",
+      "sha256": "7217b9fd1173b273138dd73919cc2ffecdbcde62f68aa1301c8e0d790dc019b0",
+      "map": "E2M4",
+      "tics": 1592,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/e2m4-039.zip",
+          "demo_member": "e2m4-039.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E2M4-e2m4-039-7217b9fd1173.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "3de4b77547693bc5fb60b229409ff60deb99dec3cf8f142a8dbe1147c8589bc3",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1592
+    },
+    {
+      "game": "doom",
+      "sha256": "5e7ab9de0f3493c941a3abb082a2756045950409ee23365e2a8da71844b756df",
+      "map": "E2M5",
+      "tics": 1213,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/pacifist/e2m5-027.zip",
+          "demo_member": "e2m5-027.lmp",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom/speed/e2m5-027.zip",
+          "demo_member": "e2m5-027.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E2M5-e2m5-027-5e7ab9de0f34.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "67a84e4a7faad21b186ebd7d8ab9664cc01ae6eb0d2ca803ead3b65fba4b4c02",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1213
+    },
+    {
+      "game": "doom",
+      "sha256": "e482d3e4fd32c68a19c24e24237bed799bdd37976a5e4f6a4baeb9b1c3e3421b",
+      "map": "E2M6",
+      "tics": 1110,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/pacifist/p2m6-028.zip",
+          "demo_member": "p2m6-028.LMP",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom/speed/p2m6-028.zip",
+          "demo_member": "p2m6-028.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E2M6-p2m6-028-e482d3e4fd32.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "8d9157ee85fb8c4eefcb77acf9b464093bcacd56daa2266d935659efd3e87122",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1110
+    },
+    {
+      "game": "doom",
+      "sha256": "514a3ce54637e814507513430edcd8631040022e8c3fb42b3de0e3209c81eba9",
+      "map": "E2M7",
+      "tics": 676,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/e2m7-015.zip",
+          "demo_member": "e2m7-015.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E2M7-e2m7-015-514a3ce54637.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "24efc17f6ec220624da9940c5d14f7633a0597c2d89704b87bf32314faf5bfe9",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 676
+    },
+    {
+      "game": "doom",
+      "sha256": "56ebf2ef355d89db73146667bf1b408a79b5725b2dda7bbde9df48776260f5ef",
+      "map": "E2M8",
+      "tics": 2086,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/ep2mi8-z.zip",
+          "demo_member": "EP2MI8-Z.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E2M8-EP2MI8-Z-56ebf2ef355d.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "7fe2cfb3f3d7652a1eb4bf9b20299dd88c939b170935f054386b15f950efb254",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2086
+    },
+    {
+      "game": "doom",
+      "sha256": "9980a6b1126434f700b0420baa27a46527e2b8a0a50f602e370f35d0f102d57b",
+      "map": "E2M9",
+      "tics": 853,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/pacifist/e2m9-006.zip",
+          "demo_member": "E2M9-006.LMP",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom/speed/e2m9-006.zip",
+          "demo_member": "E2M9-006.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E2M9-E2M9-006-9980a6b11264.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "00d303e2f3e021d5f58607e0d1963c7f289e3ecb0f8465fc355d2ca19dc9143a",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 853
+    },
+    {
+      "game": "doom",
+      "sha256": "eaa21245c2f43143dbd8c6c24ce3cacedfa8fbc9611e3101cbc77b9cb702326d",
+      "map": "E3M1",
+      "tics": 1109,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/e3m1-031.zip",
+          "demo_member": "DAMNIT2.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E3M1-DAMNIT2-eaa21245c2f4.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "d48824e49dceec1929166dd74fc629686fda6c78a840c01221fda160340ce2b0",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1086
+    },
+    {
+      "game": "doom",
+      "sha256": "9126f6f9503accd532fd2e4f0c17578069cf59c0e7f170cd772c109906bdaa37",
+      "map": "E3M2",
+      "tics": 477,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/pacifist/e3m2-012.zip",
+          "demo_member": "e3m2-012.lmp",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom/speed/e3m2-012.zip",
+          "demo_member": "e3m2-012.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E3M2-e3m2-012-9126f6f9503a.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "84010dac74a01433dd1acf5070e684408dc701c1f4ea87ca3f4b8ddead0d05d1",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 477
+    },
+    {
+      "game": "doom",
+      "sha256": "4cbfb895ec39c9031840571df5189ab46e3a369befb9fdfee5ce547694c22638",
+      "map": "E3M3",
+      "tics": 904,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/pacifist/e3m3-022.zip",
+          "demo_member": "e3m3-022.lmp",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom/speed/e3m3-022.zip",
+          "demo_member": "e3m3-022.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E3M3-e3m3-022-4cbfb895ec39.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "4904bf737f9c6f7b976d455906af85788631ca9855b716172396fe71419bdada",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 904
+    },
+    {
+      "game": "doom",
+      "sha256": "f3896c472509411c11682060d29c3fd0af3be7da123fd2d245d9d1d553565f04",
+      "map": "E3M4",
+      "tics": 1599,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/e3m4-038.zip",
+          "demo_member": "e3m4-038.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E3M4-e3m4-038-f3896c472509.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "7d93a422f82836ff1a4d0eb20bd5f0e54cc4268d48463030fd5507f605072ad7",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1599
+    },
+    {
+      "game": "doom",
+      "sha256": "29fa077e4ee3e4307ebbc64446947af3e08f01ec4476dbbd570b312d32b2b100",
+      "map": "E3M5",
+      "tics": 951,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/e3m5-023.zip",
+          "demo_member": "E3M5-023.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E3M5-E3M5-023-29fa077e4ee3.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "cba264f855fba7000454851fc4aa94312b23f1651422e9da380fb7c87812a86a",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 951
+    },
+    {
+      "game": "doom",
+      "sha256": "43c10694a3ce4ad2442b63834b948535cd568b8527b046cbd685ae3d333259ee",
+      "map": "E3M6",
+      "tics": 395,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/pacifist/e3m6s006.zip",
+          "demo_member": "E3M6-006.LMP",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom/pacifist/p3m6-006.zip",
+          "demo_member": "p3m6-006.lmp",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom/speed/e3m6s006.zip",
+          "demo_member": "E3M6-006.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E3M6-E3M6-006-43c10694a3ce.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "9678f2057a8a0a84da3f67c69b2e888c3eb75e17388c8f36cd97c14293d77d07",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 395
+    },
+    {
+      "game": "doom",
+      "sha256": "3a4683d8db1e96e8370a352f3e9870072ac0ec0b49c3777eccafac866c99a88f",
+      "map": "E3M7",
+      "tics": 1978,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/pacifist/e3m7-055.zip",
+          "demo_member": "e3m7-055.lmp",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom/speed/e3m7-055.zip",
+          "demo_member": "e3m7-055.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E3M7-e3m7-055-3a4683d8db1e.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "06468b4ca466d7fea1c45e5996dbd40591c0585ed8539530d1c9316baf1b3b1f",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1978
+    },
+    {
+      "game": "doom",
+      "sha256": "b7f5def688b2127779830f7f0bac520a678577cb4b3471469ae176df231e15bc",
+      "map": "E3M8",
+      "tics": 1164,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/e3m8-030.zip",
+          "demo_member": "e3m8-030.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E3M8-e3m8-030-b7f5def688b2.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "b0902bf9f4ce23a33e870beac24e8c573b30a70cec8ff4aaca16ce49e3ebacee",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1164
+    },
+    {
+      "game": "doom",
+      "sha256": "e5fa0953b3588097b3493148c627aa4994899627fac9810f69a2b393982bd522",
+      "map": "E3M9",
+      "tics": 2328,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/e3m9-104.zip",
+          "demo_member": "e3m9-104.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E3M9-e3m9-104-e5fa0953b358.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "117329493ce1c9366709d496bc25abc187c08060a3d24965df5288f39947bf5e",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2328
+    },
+    {
+      "game": "doom",
+      "sha256": "3b9c4bafea6784770bc4c49c9aa8802d2ead401f7d4f6ab03e5eb349432a346f",
+      "map": "E4M1",
+      "tics": 1107,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/u4m1-025.zip",
+          "demo_member": "U4M1-025.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E4M1-U4M1-025-3b9c4bafea67.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "46b7cbd5e6cb0807930527cdd7d139d0cabac90253148a6a348bcd071c95a556",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1107
+    },
+    {
+      "game": "doom",
+      "sha256": "e7a2c3d42ec4bac34d8b41206008f376910c87f9835264d369c1a3c87a55e911",
+      "map": "E4M2",
+      "tics": 668,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/u4m2-016.zip",
+          "demo_member": "U4M2-016.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E4M2-U4M2-016-e7a2c3d42ec4.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "b98562bdbc1d940c468806aa4f48e02421e4de33abc9a3f650e0bad3c9453ca4",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 668
+    },
+    {
+      "game": "doom",
+      "sha256": "c8b682076c0ff1a22262fbc034e3e722e5aa86ed58e01a7128061ad673e13018",
+      "map": "E4M3",
+      "tics": 596,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/pacifist/p4m3-010.zip",
+          "demo_member": "p4m3-010.lmp",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom/pacifist/u4m3-010.zip",
+          "demo_member": "U4M3-010.LMP",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom/speed/u4m3-010.zip",
+          "demo_member": "U4M3-010.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E4M3-p4m3-010-c8b682076c0f.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "fcb45411a17b370f37c1262c143642621bb2942396339787decdfff903648751",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 596
+    },
+    {
+      "game": "doom",
+      "sha256": "cae77b0550325ae938254ffccf27a93d18a1f0cb7e798c808dd6adfd2d42146f",
+      "map": "E4M4",
+      "tics": 1413,
+      "skill": 3,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": true,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/u4m4-036.zip",
+          "demo_member": "U4M4N035.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E4M4-U4M4N035-cae77b055032.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "21be8a1615112fc1669a51c8516c5ffd4b3012561104dfb07e7697864feddfae",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1413
+    },
+    {
+      "game": "doom",
+      "sha256": "d199b1cfedaadda09a0b118a48712aa6d9c8c8f55e76c36682612f207ff4ba4a",
+      "map": "E4M5",
+      "tics": 1175,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/u4m5-027.zip",
+          "demo_member": "U4M5-027.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E4M5-U4M5-027-d199b1cfedaa.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "222ee63831ec1b76b5a674f0d0f91fc5dcf8ff096762decb9a0cb2eb4dcee78c",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1175
+    },
+    {
+      "game": "doom",
+      "sha256": "aa05085fff038d3a548868d292c74ce4bcde17660040f00bff42e2dc0303c030",
+      "map": "E4M6",
+      "tics": 3310,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/u4m6-114.zip",
+          "demo_member": "u4m6-114.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E4M6-u4m6-114-aa05085fff03.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "c90a5bc2d5c0b69c2a495fec56f093b787e30bc428291b1ca6a63c4fad74d211",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 3310
+    },
+    {
+      "game": "doom",
+      "sha256": "5d65cc9e43c0dc8e5c24519f6df1505820abff4b25f9ad4e0c008642defdf99c",
+      "map": "E4M7",
+      "tics": 473,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/u4m7-009.zip",
+          "demo_member": "u4m7-009.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E4M7-u4m7-009-5d65cc9e43c0.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "c5414fc8187d6c096b5578d4779de3e1fc628a5396bbbcdafcc4d125667273a6",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 473
+    },
+    {
+      "game": "doom",
+      "sha256": "f5e7f91672af21ac0095f17980d5e5aedc4f65a180a8a6360b4ff68b8f975649",
+      "map": "E4M8",
+      "tics": 2001,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/u4m8-049.zip",
+          "demo_member": "U4M8-049.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E4M8-U4M8-049-f5e7f91672af.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "504a11272bc0d1547eac673a1c9474c8892dfff747893e5b788a97ee6c25b913",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2001
+    },
+    {
+      "game": "doom",
+      "sha256": "9a7a77a7610e1b25abe67265005410d2088aa9a54b08da13ff06b1f529c753cd",
+      "map": "E4M9",
+      "tics": 400,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/pacifist/u4m9-008.zip",
+          "demo_member": "u4m9-008.lmp",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom/speed/u4m9-008.zip",
+          "demo_member": "u4m9-008.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E4M9-u4m9-008-9a7a77a7610e.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "91b3106bc7b6095e80f024764f8859b0fa010d9e8bc23eded4abc8a0bca21d8d",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 400
+    },
+    {
+      "game": "doom2",
+      "sha256": "c65756cb7e754cdec72ceda9b96304fe7029b7b9686369e71491c9f2554f4e1b",
+      "map": "MAP01",
+      "tics": 497,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/pacifist/lv01-b07.zip",
+          "demo_member": "LV01-B07.LMP",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom2/speed/lv01-b07.zip",
+          "demo_member": "LV01-B07.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP01-LV01-B07-c65756cb7e75.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "5dc3f67ec146c1aad458b45e0cd60658b034c79e4ef1f14b06c83915c67ce0c6",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 497
+    },
+    {
+      "game": "doom2",
+      "sha256": "8cbeab62ee086210f09a3a354746eb65bfff107a4f3baf03ac2b914b2ce8a2ca",
+      "map": "MAP02",
+      "tics": 1527,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv02-041.zip",
+          "demo_member": "lv02-041.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP02-lv02-041-8cbeab62ee08.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "735f7ca6353a89caff917c9008e9d59edb98da908dfad7168e0647070a1f29d3",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1527
+    },
+    {
+      "game": "doom2",
+      "sha256": "8117d7a8f52d788c4137b1d7b342142326ddbfd0000321a428a935759a6dd0eb",
+      "map": "MAP03",
+      "tics": 706,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv03-018.zip",
+          "demo_member": "lv03-019.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP03-lv03-019-8117d7a8f52d.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "f6a1dd1b719a008cf026b8207d5dccc61e999287a850f26809cb87273120a5d0",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 706
+    },
+    {
+      "game": "doom2",
+      "sha256": "59dc53eff23d8eb491ea3c9d8037c75a3b06970494ae128206add783323a287a",
+      "map": "MAP04",
+      "tics": 1143,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv04-028.zip",
+          "demo_member": "lv04-028.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP04-lv04-028-59dc53eff23d.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "307b8baca368e651c38fc0cfac7049a4b1d9ebdd745e32b657fdb59006a0d0da",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1143
+    },
+    {
+      "game": "doom2",
+      "sha256": "0527d7d1238363e26de9cec4bc3865ea77de036091a02a3e3980c0f66e17ab34",
+      "map": "MAP05",
+      "tics": 940,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv05-023.zip",
+          "demo_member": "lv05-023.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP05-lv05-023-0527d7d12383.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "b9c7ce741449d339a0c3131162255ae39f671983079314dd761611e0ecddc0bb",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 940
+    },
+    {
+      "game": "doom2",
+      "sha256": "ee63d63d8dce26d4206504e5cfae8dc3afdd540883ef606e76ed0aae51a51b0e",
+      "map": "MAP06",
+      "tics": 1990,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv06-054.zip",
+          "demo_member": "LV06-054.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP06-LV06-054-ee63d63d8dce.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "4ffb87d138fab79bd9bd76b34d182617459ec9506e443299f922508955dcbac7",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1990
+    },
+    {
+      "game": "doom2",
+      "sha256": "8c777253d4fa319a6e3fae2d97096fd17e8ad4ccb79c666d2ddadbffedf3e269",
+      "map": "MAP07",
+      "tics": 535,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv07-006.zip",
+          "demo_member": "lv07-008.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP07-lv07-008-8c777253d4fa.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "4c99c6bde50ea5787cc766efbe4c8be4b85f5e1b185f541a033a4f76eab97c45",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 535
+    },
+    {
+      "game": "doom2",
+      "sha256": "a88bd87fa514ce0586601b9ad6f44c6fde2c0a1e6a10bcea6e89bde4f963d3fb",
+      "map": "MAP08",
+      "tics": 1036,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv08-023.zip",
+          "demo_member": "Lv08-023.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP08-Lv08-023-a88bd87fa514.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "6e7b6512af98612295542ffba0f5bb4766980e3fe78dbfaba6b874eaa1e57ebc",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1036
+    },
+    {
+      "game": "doom2",
+      "sha256": "f7593a864af8a782e939ee219c5971b666da78dc1d9401d2ae6a30501cc6fc55",
+      "map": "MAP09",
+      "tics": 2436,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv09-101.zip",
+          "demo_member": "lv09-101.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP09-lv09-101-f7593a864af8.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "f0ef745bf793d7dc7bfe1169a2228ddf125ab5a19f53664715eb641bc4ecf03b",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1640
+    },
+    {
+      "game": "doom2",
+      "sha256": "06350d3dc155ab8f195dd10d701a5c35ced7a9471bfdbeb5935f7d77f6373d28",
+      "map": "MAP10",
+      "tics": 967,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv10-025.zip",
+          "demo_member": "LV10-025.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP10-LV10-025-06350d3dc155.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "ebd4fa24adef663f562caa4381c1057d5558f8939c04fa5f4e93113d0634939c",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 967
+    },
+    {
+      "game": "doom2",
+      "sha256": "39e8ef82e096d83d66705d4724c5eb761ea6ea435904234cfe63eb6041ca5ebc",
+      "map": "MAP11",
+      "tics": 1367,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv11-036.zip",
+          "demo_member": "LV11-036.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP11-LV11-036-39e8ef82e096.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "5a69c0cc2c1029d85aba5855f85e754fbc16cc99cc964371a975f24daba85ee6",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1367
+    },
+    {
+      "game": "doom2",
+      "sha256": "f029737d66934819f3eea826011e0de97be9df9abfb80b9d82cff1d9b412fbe4",
+      "map": "MAP12",
+      "tics": 1598,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv12-042.zip",
+          "demo_member": "LV12-042.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP12-LV12-042-f029737d6693.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "08f5edb61721d36da6110d8933fb6b2f14bc28b9dcb6756d9851eec5cb8ba0cf",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1598
+    },
+    {
+      "game": "doom2",
+      "sha256": "08afcc64ac1a8029eafba6e1eedca37fb88e0344c265c913c3e6c6162c4f28ae",
+      "map": "MAP13",
+      "tics": 2288,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv13-103.zip",
+          "demo_member": "lv13-103.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP13-lv13-103-08afcc64ac1a.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "8f7fa532ceb61e7f67eb4932ce09e11c593ed98a9616a0d22a3183e440b305e8",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2288
+    },
+    {
+      "game": "doom2",
+      "sha256": "9b81dbf334a50c9df6b43a1a890be3cdc5395879c20c07d352ce6d37784d027d",
+      "map": "MAP14",
+      "tics": 864,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/pacifist/lv14-020.zip",
+          "demo_member": "lv14-020.lmp",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom2/speed/lv14-020.zip",
+          "demo_member": "lv14-020.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP14-lv14-020-9b81dbf334a5.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "ca19eb33fa4047507625d98f496e192f3c5d4cf0a60550c5ff15ba7643b23b3a",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 864
+    },
+    {
+      "game": "doom2",
+      "sha256": "acec5b2d8b743306b71082d654fc049b57c5cd99fbb47fed58f248fec6714bb2",
+      "map": "MAP15",
+      "tics": 1175,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv15s030.zip",
+          "demo_member": "lv15s030.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP15-lv15s030-acec5b2d8b74.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "e8f864d8d0fe75b9dbff0155386fe86dc3dcd49115101a09fca599fd28c10154",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1175
+    },
+    {
+      "game": "doom2",
+      "sha256": "8fa40ed4b1dd1ce93bd62cdfc587c7b521ce24164e2a11e029b8ed827d00d87f",
+      "map": "MAP16",
+      "tics": 582,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/pacifist/lv16-011.zip",
+          "demo_member": "lv16-011.lmp",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom2/pacifist/pa16-011.zip",
+          "demo_member": "pa16-011.lmp",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom2/speed/lv16-011.zip",
+          "demo_member": "lv16-011.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP16-lv16-011-8fa40ed4b1dd.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "6661163c9392ddd5cf7d33dd5b0659fca8da3e03f0998015998194b686385d9a",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 582
+    },
+    {
+      "game": "doom2",
+      "sha256": "5f0b51e3b4a100f3010ed091948d32df47e19fe2839e4cf317380fa81ca4cb0d",
+      "map": "MAP17",
+      "tics": 4475,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv17-201.zip",
+          "demo_member": "lv17-201.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP17-lv17-201-5f0b51e3b4a1.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "fda90d625cf4ee4c986999d2201a925ddce0d850274d51913378b07252fde012",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 4475
+    },
+    {
+      "game": "doom2",
+      "sha256": "2dc7c2cd2e1b6d1156e2110b224bbde648fd89181470ee3a1487ed3da88c927f",
+      "map": "MAP18",
+      "tics": 831,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/pacifist/lv18-022.zip",
+          "demo_member": "LV18-022.LMP",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom2/pacifist/pa18-022.zip",
+          "demo_member": "PA18-022.LMP",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom2/speed/lv18-022.zip",
+          "demo_member": "LV18-022.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP18-LV18-022-2dc7c2cd2e1b.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "013475056afcec3801a25f66cd0ecad0ffe8f7c6c034266399c3c4a26a49f192",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 831
+    },
+    {
+      "game": "doom2",
+      "sha256": "6521960e513fc1fd1bd7a3999e589fd48e17e3d985c363a2fed3188cb6068839",
+      "map": "MAP19",
+      "tics": 1449,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv19-036.zip",
+          "demo_member": "lv19-036.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP19-lv19-036-6521960e513f.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "8408eebb4ddaf4153fd675ac8ce0f7ee6bb4f71050721b32a4b5296791d1eb7b",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1449
+    },
+    {
+      "game": "doom2",
+      "sha256": "2812e85d19f3adfd5802d66535491ab5efe3c71632295e7dd1dd51e0b3d05108",
+      "map": "MAP20",
+      "tics": 1421,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv20-034.zip",
+          "demo_member": "lv20-034.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP20-lv20-034-2812e85d19f3.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "96b1f4b965bd0122784c4676be01033ca69bb7b5fe1adaa46a07cb0f65853288",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1421
+    },
+    {
+      "game": "doom2",
+      "sha256": "0510c4e959bceb3b484b2de75c89888f8d4116182a7914c895bf891e2d80b049",
+      "map": "MAP21",
+      "tics": 1044,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv21-017.zip",
+          "demo_member": "lv21-017.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP21-lv21-017-0510c4e959bc.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "914778898ce3b7d0de83354e08b0714371c8c15831fae1e43cd236f2417919bb",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1044
+    },
+    {
+      "game": "doom2",
+      "sha256": "52b9a7ee6d608396c6ebdb808ce7e6cd1cc9e8f98aaf1098b1cc00610e89897b",
+      "map": "MAP22",
+      "tics": 1481,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv22-037.zip",
+          "demo_member": "lv22-037.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP22-lv22-037-52b9a7ee6d60.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "0c36c2f7be131550fd0270a8a3c115d3301d5ce2f34d31ccb8eb4b0fded1ccc9",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1481
+    },
+    {
+      "game": "doom2",
+      "sha256": "16788a3c55e5bc45e80f574b6195744e608953e72a0b33dbe0c02aeea49f3e53",
+      "map": "MAP23",
+      "tics": 1943,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv23-045.zip",
+          "demo_member": "LV23-045.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP23-LV23-045-16788a3c55e5.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "b2ddbe8602de7579ac9bacd58ac8b5383b9edbf59fb9a8f12cf0800b48dca050",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1329
+    },
+    {
+      "game": "doom2",
+      "sha256": "24cd903da0c69dec8806cf93c2e56036701f2436fabe3231fcdbdd821ec15520",
+      "map": "MAP24",
+      "tics": 1347,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/pacifist/lv24-034.zip",
+          "demo_member": "lv24-034.lmp",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom2/speed/lv24-034.zip",
+          "demo_member": "lv24-034.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP24-lv24-034-24cd903da0c6.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "82d91b55de4702ffb3d1535c57fd8bfa10b1b000b3bb4e98f710f1cd0c0e4d22",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1347
+    },
+    {
+      "game": "doom2",
+      "sha256": "3677c89f893d0f39abd92705ec6ab84467d061a4eaf35737fdd3ecec5e6f9335",
+      "map": "MAP25",
+      "tics": 1707,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv25-043.zip",
+          "demo_member": "lv25-043.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP25-lv25-043-3677c89f893d.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "fa93f767418e1ddb4811d11fb637cc1ec709ba16f3dbd82bb81942c06f4b7051",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1707
+    },
+    {
+      "game": "doom2",
+      "sha256": "99143d7684e5a9e21f74128da5237bdfa277ded495c2cd8a2fa89d081792d6e9",
+      "map": "MAP26",
+      "tics": 1717,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv26-042.zip",
+          "demo_member": "LV26-042.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP26-LV26-042-99143d7684e5.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "0d9ca48dd3e0f41aefabcaad74dbb558247be7b6ab28fb58035de537908fba9e",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1717
+    },
+    {
+      "game": "doom2",
+      "sha256": "79ac2fd8199878232d029ceacf43de08600bbc4cfd2bb8bfe71f433db1ec4206",
+      "map": "MAP27",
+      "tics": 645,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/pacifist/lv27-012.zip",
+          "demo_member": "LV27-012.LMP",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom2/speed/lv27-012.zip",
+          "demo_member": "LV27-012.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP27-LV27-012-79ac2fd81998.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "2c5ae0fb9983c2c7f77e297a2d74775162ff68a6972c2a4c62e8741cbb0c1fc7",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 645
+    },
+    {
+      "game": "doom2",
+      "sha256": "46a37db974ec50c7dba95dff52666baab8c2498004b8d50ffd83b4dad4f3de98",
+      "map": "MAP28",
+      "tics": 1617,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv28-042.zip",
+          "demo_member": "LV28-042.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP28-LV28-042-46a37db974ec.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "14e7dc671b5c067b155a0a58a1d7fe8a8625cb91916882821172ab6389b949b2",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1617
+    },
+    {
+      "game": "doom2",
+      "sha256": "c9e66576798d176df0098f3495f926ba73f709ac97eecba7d55fb9eddae6ad1a",
+      "map": "MAP29",
+      "tics": 3578,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv29-138.zip",
+          "demo_member": "lv29-138.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP29-lv29-138-c9e66576798d.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "219cce7fa3767414efae60e40089fe70131ce63f16b79d8a42c6895f811bd02d",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 3578
+    },
+    {
+      "game": "doom2",
+      "sha256": "b72564f61b6e4565149552368f8ebbd2cf7b2c0ebaa8e61ad31c56d883d6acb4",
+      "map": "MAP30",
+      "tics": 1288,
+      "skill": 4,
+      "respawn": true,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/respawn/re30-030.zip",
+          "demo_member": "re30-030.lmp",
+          "category": "respawn"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP30-re30-030-b72564f61b6e.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "11c1f99d9f8cb6367760065544902fe488431364426a5c8a6739f2a46b0850a5",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1288
+    },
+    {
+      "game": "doom2",
+      "sha256": "376622f73c60b887e8cec5cbb7ff0c519ab2afff674ed800be6abe9f186759b9",
+      "map": "MAP31",
+      "tics": 1322,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/pacifist/lv31-029.zip",
+          "demo_member": "LV31-029.LMP",
+          "category": "pacifist"
+        },
+        {
+          "archive_member": "compet-n/doom2/speed/lv31-029.zip",
+          "demo_member": "LV31-029.LMP",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP31-LV31-029-376622f73c60.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "41a6e74572cd2498542ab3bedb2d15339de13ab53d4df9efc44ca35a003f68be",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1322
+    },
+    {
+      "game": "doom2",
+      "sha256": "1a09640196b2687d8b4c467f50ac3ca58b850335f9acb8fa23d14a9169617157",
+      "map": "MAP32",
+      "tics": 609,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv32-011.zip",
+          "demo_member": "lv32-011.lmp",
+          "category": "speed"
+        }
+      ],
+      "validation_set": "quick",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP32-lv32-011-1a09640196b2.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "9ce4807f7e08c04e9dd80d73210290a484e8f9857e6033791ad7403813fa29d9",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 609
+    },
+    {
+      "sha256": "7f32ed06308fc14d7fbe87baf9e318f3500516d724ce69a32b339d588ba1fe1b",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "DOOM1-DEMO1.lmp",
+      "wad": "DOOM1.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "51b3f549e93539799e7cebbacbfc09d585422f55cb9f75f1487275a1e0eff8bf",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 4973
+    },
+    {
+      "sha256": "74ee530c2c35046469bafd92d0cd49ab0a5dee76872c1a91e682aef9bc4410e9",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "DOOM1-DEMO2.lmp",
+      "wad": "DOOM1.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "eac67e36c23656179b26c3c6c47e10bdae2a9990f224e61cc22092bec1df3c0a",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 3778
+    },
+    {
+      "sha256": "61850b2201e283fa0a946cf091101a321e7a6219800a4f66448c949bc6144bce",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "DOOM1-DEMO3.lmp",
+      "wad": "DOOM1.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "d4d8edb0145b977c994a47091cde25012dfcd4fd637908bfac5a5588f382325c",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2079
+    },
+    {
+      "sha256": "0e7188178012482c7a56cc11e702f70ea71830bdfb6a43a63a3108f117bba6e5",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "DOOM2-DEMO1.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "22af8b769de7ddd080dae1f86309c8bd3cf4a43585a8721f212a09f019116f1e",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1063
+    },
+    {
+      "sha256": "2efc786b8200297e5660f25f5ab51643ceaa0875213d7a17e5c18b924ded49cd",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "DOOM2-DEMO2.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "b6440af4bc6288b3ac5fcee190eaef61b60f6d146eb44f9c0cc7a49420a10dd3",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1949
+    },
+    {
+      "sha256": "448d2f2bf825839aeee0d6100ca154758b6efe75bf0cb4e3bb419c5e423a590b",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "DOOM2-DEMO3.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "d514aca29eadf1d609d11ba68917ee629fe445b44fe67f48f32cac81c3485f18",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 4359
+    },
+    {
+      "sha256": "7c3817081eb5cf32a118195492dd8b134e7617f142ecd1eed028cdfa60927679",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "DOOMU-DEMO1.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "fb97611b21979a164ee73bfd743b25de0262e745d8d73e2d9ba2b26d1ae162d4",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1632
+    },
+    {
+      "sha256": "a2f526018429f399c490acb2100ac5dbf474ae056398b490e81a6fed2bf45c3d",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "DOOMU-DEMO2.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "16a671208ce1be8432eb9ed65e08ffa55ba8a1649fe96ced834d009c4d9f1812",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2270
+    },
+    {
+      "sha256": "e8f765a3a2005ddbb851433329f942d1ecdc02c38bc4c6986f71a54a590f3c76",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "DOOMU-DEMO3.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "c5e508e94ea6afdde9c6e6370dad45a014e59ef63b3e9a05d462b2a7a57dc374",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 3633
+    },
+    {
+      "sha256": "583c5e479c884a1f8c1064f56aad63415c7bf0c53717bec72511f50d0b06a759",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "doom2-uvmax-late/DOOM2-MAP21-UVMAX.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "0ae0907523a8a51e8cfba5bdfe56ea18cb37c4d215c96b6c9b47e8206e5883e8",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 4591
+    },
+    {
+      "sha256": "db4b5df80711aaaa9d0316691a08459ae678bba5b37307fac3e98e39c6209e14",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "doom2-uvmax-late/DOOM2-MAP22-UVMAX.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "d8e97380448dd3987cfe88fbd9f63d61097004bfac9084c8572e342a70210894",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2199
+    },
+    {
+      "sha256": "80ff02e9630e0fc9be7cb330f6f7d4bf1d98e6b720a983dca8b2266acea96807",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "doom2-uvmax-late/DOOM2-MAP24-UVMAX.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "632fb20fd75596a0b1c0bf530dc5a7b41ad1cac7ae4e719246b111af00a3b6c9",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 8607
+    },
+    {
+      "sha256": "2bd26fc8d753057890168702ede13ad098729b52e905732c91a2deaf7472d06a",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "doom2-uvmax-late/DOOM2-MAP26-UVMAX-237.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "3b23a39ba5d358e88ff47458d259239686ff3fba052ebee773229fb0a793ee45",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2972
+    },
+    {
+      "sha256": "3f13caa3f2978de3f632c010555e6f601a3a66908dc026fd9690dd81ed8bcec7",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "doom2-uvmax-late/DOOM2-MAP26-UVMAX.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "b055509395261b00bc41742350f4a1d44124d4d9ae56ea1c9c54230d38b06a09",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 3244
+    },
+    {
+      "sha256": "10f316d7165d5741ef76277c6b2a02188b1465785799ed0d4bf8135d662f77bd",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "doom2-uvmax-late/DOOM2-MAP27-UVMAX.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "bd603e588d7ea4b0dd5d81ac187173d0383bdc11d8a1baec546d6f8ecd803a9f",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1820
+    },
+    {
+      "sha256": "5f11be8312e42119fb21a8f36e28514b00c14359ae54951c5fd4614f346b391e",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "doom2-uvmax-late/DOOM2-MAP28-UVMAX.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "1e98a3b7fd95c95802e32b032b35a8504ad57586f8b5d6f5a3cdacc9f09bd411",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 5109
+    },
+    {
+      "sha256": "f17768a6e2c57e76376fee4a2de23518890e9a98421a6712efad243c3d994488",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "doom2-uvmax-late/DOOM2-MAP29-UVMAX.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "a4d7edbec4193119648bba6a7ae8cdd8cad2af773661ae4c5b9c7e05d7995b68",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 8124
+    },
+    {
+      "sha256": "5e2f395fbda6e2d48700c3da1374ef0fc73f1ccf11a96355370ccdf7a35a9dda",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "doom2-uvmax-late/DOOM2-MAP30-UVMAX.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "7ed84effb3b1235c88e75a1615640d3cc01f3177b6551b740cff49fae832e39e",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1264
+    },
+    {
+      "sha256": "5acf3d54f15a1b94bf4b052f449e8e3b399fee495c6d682576cab7422163b489",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "grate.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "b7eaed7c1d89afbdff759565b79030e418215040d2a0c02103e6cf559bfbc8b9",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1800
+    },
+    {
+      "sha256": "bf07a4a09eb3a5d6d0e4bc50b4bfc45565953ac2b33512bd97f67c4d5d4c1863",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "historical/DOOM1-E1M1-OUTPUT-1966.lmp",
+      "wad": "DOOM1.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "9dcaf167b0936932b003cfc35a6c239327dadf0c996edee8cc07ea2ab1a897ac",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 488
+    },
+    {
+      "sha256": "46123db3c838dd91a0eb8e36a7fcb09b3fd8e45206791aa4a324189857e4e632",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "historical/DOOM1-E1M1-OUTPUT-2110.lmp",
+      "wad": "DOOM1.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "516a24f5d587598d9cf2963c7e0583d44fb72e11df43ad52a61f99255dbf6c72",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 524
+    },
+    {
+      "sha256": "51e109c25afb48530f02e4ce62cf3bc4484c9816bf3692f8738a1df3bff7382f",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "historical/DOOM1-E1M1-OUTPUT-2198.lmp",
+      "wad": "DOOM1.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "b358698fe430be18cb6adc28aa065b8c333cfaf8543e9dad85057528ad4c3183",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 546
+    },
+    {
+      "sha256": "bc4ad2e036fe32d35853ebfa740b17c45a07ace8aa5449f3051c46429485c40e",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "historical/DOOM1-E1M1-SKY-TEST.lmp",
+      "wad": "DOOM1.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "c90153d9acfc1ac840e4e0cdd02e5fe7c0c306a8ba2248f1239eb94215291914",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 647
+    },
+    {
+      "sha256": "695aad9ded3342429530c9ed42ed5979aa1801587d221dfdd9258ef8d958b1d3",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "historical/DOOM2-MAP04-GRATE-OLD.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "9ae9b2e6b3bfae84fc1846c46cb4f6e82e73e325595a552ced87a96f57ba4dc6",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 777
+    },
+    {
+      "sha256": "12c68074c9f125e05e885c732b4985635e1abf5a53b82c00d12142feea949e93",
+      "validation_set": "repository",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "masked.lmp",
+      "wad": "DOOM1.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "4bc24e2eae0afae0f39fe0d089118caf7d5aa7c7cd734ad9e3aa2199e63bfa1a",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 950
+    },
+    {
+      "game": "doom2",
+      "sha256": "36af161bc6a58477c0ecd39d5ee0b82058a283ad58a7311bbe7ba2e6d78d57cb",
+      "map": "MAP09",
+      "tics": 8567,
+      "skill": 5,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/nmare/nm09-356.zip",
+          "demo_member": "NM09-356.LMP",
+          "category": "nmare"
+        }
+      ],
+      "validation_set": "save_skull_lift",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP09-NM09-356-36af161bc6a5.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "eba8468e2b954e65d1e9292e602767a58680e81efcc4bc5504fc1458ef87c3fb",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 8567
+    },
+    {
+      "game": "doom",
+      "sha256": "ac3685d65286287aa004dd2532697f930f77865ed7584e2a96c0b62a6abe5811",
+      "map": "E3M2",
+      "tics": 8506,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e3m2-339.zip",
+          "demo_member": "E3M2-339.LMP",
+          "category": "max"
+        }
+      ],
+      "validation_set": "save_skull_lift",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E3M2-E3M2-339-ac3685d65286.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "df6eb5821c518d67d36256b8105306d58bea40e35d6dc05836f7e636b68e1a77",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 8506
+    },
+    {
+      "game": "doom",
+      "sha256": "7cd5d07f7290a4e716cd4c4cebb335aee7ae49ed91017671f44404c53fc1edab",
+      "map": "E3M3",
+      "tics": 8223,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e3m3-330.zip",
+          "demo_member": "E3M3-330.LMP",
+          "category": "max"
+        }
+      ],
+      "validation_set": "save_skull_lift",
+      "regression_selection": "ordinary-validation-v102.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E3M3-E3M3-330-7cd5d07f7290.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "5041c4636226bf73c8510862341b77495ed38516ccb57a5bcfa9792118d8449e",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 8223
+    },
+    {
+      "game": "doom",
+      "sha256": "9dc2471f0890eba44ac29dded1af3b4ddfed60b347264be3a784bcfdb1688a99",
+      "map": "E1M1",
+      "tics": 1277,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e1m1-029.zip",
+          "demo_member": "e1m1-029.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E1M1-e1m1-029-9dc2471f0890.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "db8f2047308a6ae78493f5561e8757f032be6e18945aa0570874c6dcd350efd7",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1277
+    },
+    {
+      "game": "doom",
+      "sha256": "3f170018c72f11adf50190e29e95103d9f61b2ecc81126a2f8e4645682a82822",
+      "map": "E1M2",
+      "tics": 3504,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e1m2-138.zip",
+          "demo_member": "e1m2-138.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E1M2-e1m2-138-3f170018c72f.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "474d3d865a45ed18afaa5bbb258686231e6747f1f91007fd7a466653c6acb96c",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 3504
+    },
+    {
+      "game": "doom",
+      "sha256": "04ea7009df144f77694fe968d7ba04d6dd02a6b94b92f41871c10678b68a8453",
+      "map": "E1M3",
+      "tics": 5187,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e1m3-224.zip",
+          "demo_member": "e1m3-224.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E1M3-e1m3-224-04ea7009df14.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "6922875a8835d16be9b2f1dc9149096067f731b1f3b6fb54d467ab28337a2bf1",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 5187
+    },
+    {
+      "game": "doom",
+      "sha256": "438fd80d00b8ae1709fdf9d44b87bec93c884f2ee2aedd060f27e388ca0e0e0f",
+      "map": "E1M4",
+      "tics": 742,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e1m4-131.zip",
+          "demo_member": "e1m4-imp.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E1M4-e1m4-imp-438fd80d00b8.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "3d7e608b91c29ceb68286b03b655589b75de8fdf609b7cddfc1a4622f2d98936",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 742
+    },
+    {
+      "game": "doom",
+      "sha256": "2fc85630a0fa44e1aac1185cf57ace51313436add73e2e85278400b3d804baad",
+      "map": "E1M5",
+      "tics": 5259,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e1m5-228.zip",
+          "demo_member": "e1m5-228.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E1M5-e1m5-228-2fc85630a0fa.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "b9f8af7277efebd2cf36e8f201e783367ce13c4f8b7940a88198fd8a5dc626a9",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 5259
+    },
+    {
+      "game": "doom",
+      "sha256": "caa949c1f3f6bfa48713faac78cc92669682381b46dd190b087b2a1855c00b86",
+      "map": "E1M6",
+      "tics": 6840,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e1m6-313.zip",
+          "demo_member": "e1m6-313.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E1M6-e1m6-313-caa949c1f3f6.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "dc70e78aa89fad06909da9161ba664ce9e7ceb50db6d4f4890333e17d811d413",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 6840
+    },
+    {
+      "game": "doom",
+      "sha256": "86ac5bbd69087bf9dc73131a9dffcc813c39f57c2f41bb1dffe5eb88b6341f1e",
+      "map": "E1M7",
+      "tics": 5252,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e1m7-224.zip",
+          "demo_member": "E1M7-224.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E1M7-E1M7-224-86ac5bbd6908.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "7389ffa1c0918b36fca46354cf40e560445d1cbcda44fc9f1f32bf07d159ae79",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 5252
+    },
+    {
+      "game": "doom",
+      "sha256": "3b5bde79c47f9ee45636e62132abd8dfb5de4919e7806a3b13c936cd46d46345",
+      "map": "E1M8",
+      "tics": 2635,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e1m8-110.zip",
+          "demo_member": "E1M8-110.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E1M8-E1M8-110-3b5bde79c47f.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "bc0776c55eb22239792cf001d881efb95d223d51fafc2ccd5475d6e87c609cdd",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2635
+    },
+    {
+      "game": "doom",
+      "sha256": "42c346ef6b132a4fb5065e9464584317b5210e9f70461bf2fdd29b592da0fe81",
+      "map": "E1M9",
+      "tics": 4833,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e1m9-216.zip",
+          "demo_member": "e1m9-216.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E1M9-e1m9-216-42c346ef6b13.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "8f2d87045c4ad962c95e9d115e8b638021a92c40d92d5731180ac37eb4fe3212",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 4833
+    },
+    {
+      "game": "doom",
+      "sha256": "37310b961da6851a2fccc6d6be5a96ee45b920a8eb988f370fbfdad9efb86499",
+      "map": "E2M1",
+      "tics": 3193,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e2m1-125.zip",
+          "demo_member": "e2m1-125.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E2M1-e2m1-125-37310b961da6.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "561bc8bd542606b76e614982815f15ab5a69f0597c45838643c6fcf2d9a25bf3",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 3193
+    },
+    {
+      "game": "doom",
+      "sha256": "0e46806e03d06750787c434b5817b50f7fbd5fa7264bc3742e6628675945eba3",
+      "map": "E2M2",
+      "tics": 7123,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e2m2-315.zip",
+          "demo_member": "e2m2-315.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E2M2-e2m2-315-0e46806e03d0.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "80f273ce9de6fc47b9ddbb3e2183ddfc24b99b4515edbce21078714d40b8776a",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 7123
+    },
+    {
+      "game": "doom",
+      "sha256": "e7cb97a834fe17571953c86449193e101fbf139bab53a8afbb2770b9152935aa",
+      "map": "E2M3",
+      "tics": 4956,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e2m3-217.zip",
+          "demo_member": "e2m3-217.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E2M3-e2m3-217-e7cb97a834fe.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "f274c891a354bf4f8edd7d28ba35aa007c659fc9f552409bb09cba487529a238",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 4956
+    },
+    {
+      "game": "doom",
+      "sha256": "0625a847cb60123d9a17ae4562d25645da5cdbc0c626f370f893efee37d7b336",
+      "map": "E2M4",
+      "tics": 9162,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e2m4-411.zip",
+          "demo_member": "e2m4-411.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E2M4-e2m4-411-0625a847cb60.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "56d6995ed6f8b8ee261d64d1315f8f28719a0c16a8ae1bddf57888793d4ec1b7",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 9162
+    },
+    {
+      "game": "doom",
+      "sha256": "2c6948b148e0e0d16d1e6d82a183d33a572943c918d4419dd8d1ddd5ed3e493f",
+      "map": "E2M5",
+      "tics": 9825,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e2m5-435.zip",
+          "demo_member": "e2m5-435.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E2M5-e2m5-435-2c6948b148e0.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "cc7201de3d111ca9030b55ccabfe9831e314a1be37c11ab3f8809cf7fe977a56",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 9825
+    },
+    {
+      "game": "doom",
+      "sha256": "3a0dad81ba6d790468465c97a44bdf189e6c807de53918be205d86d8e8b487a3",
+      "map": "E2M6",
+      "tics": 8961,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e2m6-413.zip",
+          "demo_member": "e2m6-413.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E2M6-e2m6-413-3a0dad81ba6d.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "86434d7e5ed7885e447fba661636bea7b48ee4692f55862ad177232d9eefa0bd",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 8961
+    },
+    {
+      "game": "doom",
+      "sha256": "1280e4ad0eaea2f6466d595a856a37642152ef5efd315896d326153448709c69",
+      "map": "E2M7",
+      "tics": 7939,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e2m7-344.zip",
+          "demo_member": "e2m7-344.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E2M7-e2m7-344-1280e4ad0eae.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "d8c5739c881c308de65b722400ac57d7d7d461e246d506c175e62c621a79b758",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 7939
+    },
+    {
+      "game": "doom",
+      "sha256": "aacce0041c3e8181a327114175558f8ef8164d893fb67a788df6c187be45a1c7",
+      "map": "E2M8",
+      "tics": 1149,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e2m8-031.zip",
+          "demo_member": "e2m8-031.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E2M8-e2m8-031-aacce0041c3e.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "5ac676a7d5a3758171b730980d38c72f3b7374821db53b8f1b882501d3889389",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1149
+    },
+    {
+      "game": "doom",
+      "sha256": "7251ecde55e792a10acb1fbc16f83e42c91d5ed668ef90f0e813c3c93536650c",
+      "map": "E2M9",
+      "tics": 1987,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e2m9-049.zip",
+          "demo_member": "e2m9-049.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E2M9-e2m9-049-7251ecde55e7.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "e1efb5d227271f1a36abe7357d29324fc74cca1c3ab33b4b87868b90286018b1",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1987
+    },
+    {
+      "game": "doom",
+      "sha256": "d7ab86e64a617caf17bb1ad980bead2718df6cbad42892faa923cc029e794ed5",
+      "map": "E3M1",
+      "tics": 2332,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e3m1-102.zip",
+          "demo_member": "e3m1-102.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E3M1-e3m1-102-d7ab86e64a61.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "033b1951d6efaaec27a76db5ae96f14fa671d0db3009acde6e13252e34fca21d",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2332
+    },
+    {
+      "game": "doom",
+      "sha256": "7143fea78dc9cf65f1807ce828a635c1c20c403e727a9a6fc4e46c038188a667",
+      "map": "E3M2",
+      "tics": 4281,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e3m2-155.zip",
+          "demo_member": "e3m2-155.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E3M2-e3m2-155-7143fea78dc9.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "c5ac89c661f00c519e0ff0f9914089de7fb16872fe33fa0ef1653af8205383ac",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 4281
+    },
+    {
+      "game": "doom",
+      "sha256": "88f5d27f9c03fbec10f5e074e76c929e3b6373d4b4df316e35c08aa3ffb38445",
+      "map": "E3M3",
+      "tics": 4918,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e3m3-212.zip",
+          "demo_member": "E3M3-216.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E3M3-E3M3-216-88f5d27f9c03.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "45064c33074a404f0ed921fa7c785dc09392ee9cf46254d0237713b4f652de84",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 4918
+    },
+    {
+      "game": "doom",
+      "sha256": "a9b02e49a4ee4db5f003e4f9b342f49a95b321996f838f17f5d3a399367387af",
+      "map": "E3M4",
+      "tics": 9285,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e3m4-416.zip",
+          "demo_member": "e3m4-416.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E3M4-e3m4-416-a9b02e49a4ee.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "669fdc804cb02da464344ae896cd29a31465ba91e25d38e54c763d28b7495045",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 9285
+    },
+    {
+      "game": "doom",
+      "sha256": "d38186ff56dee13d464dba7ef58075bf1c82b889b7cff228ae0b343b4bf72fc3",
+      "map": "E3M5",
+      "tics": 7004,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e3m5-308.zip",
+          "demo_member": "e3m5-308.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E3M5-e3m5-308-d38186ff56de.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "e1a4e9de90fc88646af835a17357e6460da071045b1cced40d14e5e53a5eb0a2",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 7004
+    },
+    {
+      "game": "doom",
+      "sha256": "9d9b33de4c2dd185d1f4a1865d817cced395a5914cb23ee5c43824b7b63c990d",
+      "map": "E3M6",
+      "tics": 6860,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e3m6-258.zip",
+          "demo_member": "e3m6-258.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E3M6-e3m6-258-9d9b33de4c2d.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "4b12f179e15f6e97d17076392f483314a9fb95559fe66f312879780e796d912f",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 6860
+    },
+    {
+      "game": "doom",
+      "sha256": "c1f70c1ea7ceb3f5757f9a24241289e026778f79fbd59720166d5965f7629707",
+      "map": "E3M7",
+      "tics": 4410,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e3m7-201.zip",
+          "demo_member": "e3m7-201.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E3M7-e3m7-201-c1f70c1ea7ce.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "dc3b7da7337b2ac1d728dec384bf279d9d49ed2d318b31953d40fab984388005",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 4410
+    },
+    {
+      "game": "doom",
+      "sha256": "662c940150033b0a918fa91a97bc9037a8667a090ae9b7ff16bd864c586bcfc5",
+      "map": "E3M8",
+      "tics": 2128,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e3m8-045.zip",
+          "demo_member": "E3M8-045.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E3M8-E3M8-045-662c94015003.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "cda799f95cde472bc58295b40d618667a6a5d98a22a6bb16dacd54bcc63bd4c5",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2128
+    },
+    {
+      "game": "doom",
+      "sha256": "7ed2bcfc2f8a563838d48c8b3067b5a2158392aa98883b022714b123a64b534c",
+      "map": "E3M9",
+      "tics": 5059,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e3m9-217.zip",
+          "demo_member": "e3m9-217.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E3M9-e3m9-217-7ed2bcfc2f8a.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "9373490d9aea2ae3a408cde41511c7f1945c5e877087bde2f0332de16eba4cdb",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 5059
+    },
+    {
+      "game": "doom",
+      "sha256": "a2b38fa63744f2950b3458b0e857e7a6d7222d415e92cf8c5bfd106ab987bc4f",
+      "map": "E4M1",
+      "tics": 4426,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e4m1-156.zip",
+          "demo_member": "U4M1-156.LMP",
+          "category": "max"
+        },
+        {
+          "archive_member": "compet-n/doom/max/u4m1-156.zip",
+          "demo_member": "U4M1-156.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E4M1-U4M1-156-a2b38fa63744.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "fb15665a279ccbb0ad6902422adc24b90f3014c7cb78d1e01b56555a2bfc161f",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 4426
+    },
+    {
+      "game": "doom",
+      "sha256": "8206f2e170c8026ebb296295b0405f420728f079ce4af26a3605c135ef3a0b5a",
+      "map": "E4M2",
+      "tics": 3070,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e4m2-123.zip",
+          "demo_member": "U4M2-123.LMP",
+          "category": "max"
+        },
+        {
+          "archive_member": "compet-n/doom/max/u4m2-123.zip",
+          "demo_member": "U4M2-123.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E4M2-U4M2-123-8206f2e170c8.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "3a90a8f1f79f5a5706c9be6068dc886017ffa3456a5640b6291928bdea006f49",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 3070
+    },
+    {
+      "game": "doom",
+      "sha256": "04104ecf9a7cbc9056eda8b1d3b520450f436b0678ce8b40a71d6c39450f4c9d",
+      "map": "E4M3",
+      "tics": 6016,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e4m3-244.zip",
+          "demo_member": "u4m3-244.lmp",
+          "category": "max"
+        },
+        {
+          "archive_member": "compet-n/doom/max/u4m3-244.zip",
+          "demo_member": "u4m3-244.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E4M3-u4m3-244-04104ecf9a7c.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "9d22b2dbedb12b105cd40e805d8c6aa08bc2dc9e61a9c6a467b9216639794dbe",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 6016
+    },
+    {
+      "game": "doom",
+      "sha256": "4ee974af1dfacdaaf0d252fd927d8e01252844e8a8c66e56660c9af8bca16a27",
+      "map": "E4M4",
+      "tics": 3371,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/u4m4-134.zip",
+          "demo_member": "u4m4-134.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E4M4-u4m4-134-4ee974af1dfa.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "e9be8e38c673c360e40bc5cf69c41c154f820827b1f62deb01bf8fed0159775f",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 3371
+    },
+    {
+      "game": "doom",
+      "sha256": "1a025ce479ebe4a191a150c1c20e6b25b1b16e707eb891f90796e4cee9437f71",
+      "map": "E4M5",
+      "tics": 4502,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/u4m5-154.zip",
+          "demo_member": "u4m5-154.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E4M5-u4m5-154-1a025ce479eb.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "ce80af1c33d3ac2c13e853ba0b6c51d2220f7b8ebb20dfb641e09f091e4ff35a",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 4502
+    },
+    {
+      "game": "doom",
+      "sha256": "2b6cedbcc7e30267c95d456b460c27c318b7a6271724c1f659afc0e5bc1fe94d",
+      "map": "E4M6",
+      "tics": 6286,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e4m6-256.zip",
+          "demo_member": "u4m6-256.lmp",
+          "category": "max"
+        },
+        {
+          "archive_member": "compet-n/doom/max/u4m6-256.zip",
+          "demo_member": "u4m6-256.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E4M6-u4m6-256-2b6cedbcc7e3.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "c46e3496c23ca80bf1a5a5eb97fd4aa926c028f8f79e7ac3e2383d01caa5d5e6",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 6286
+    },
+    {
+      "game": "doom",
+      "sha256": "4851ef55f4c9a0d41beb018fa2e3424d760480b785afaf47459be0dd1f4ede8f",
+      "map": "E4M7",
+      "tics": 5752,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e4m7-238.zip",
+          "demo_member": "u4m7-238.lmp",
+          "category": "max"
+        },
+        {
+          "archive_member": "compet-n/doom/max/u4m7-238.zip",
+          "demo_member": "u4m7-238.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E4M7-u4m7-238-4851ef55f4c9.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "e65a1878b2ec7217ca558048bd8cce886ce3f9503cf4bbc3dc48a8a96445cba3",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 5752
+    },
+    {
+      "game": "doom",
+      "sha256": "bdc56641f6c7745387492f9551c82bc49856d71a5326197da708ab2b709f569b",
+      "map": "E4M8",
+      "tics": 2663,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/u4m8-219.zip",
+          "demo_member": "U48GLICH.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E4M8-U48GLICH-bdc56641f6c7.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "error",
+      "gameplay_rng_audited": false,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "44d08eca0f11dd3843f5d7a3b594f1146d6a7ada6e04a09fec4b2d2e072773fa",
+      "reference_config_sha256": "889daca4215f2040493ca0c8535c216851dfe8875b38f0e83877b7cec3465621",
+      "compared_tics": 0,
+      "exit_code": 139,
+      "exclusion": "Original reference crash in bonus E4M8 glitch recording; exact SHA documented in COMPET-N-results.json and COMPET-N-exclusions.md. No state/RNG pass claimed."
+    },
+    {
+      "game": "doom",
+      "sha256": "097acdea2dddc3d95e237f5d08f53d0417af71175af5a38c4b601f3d82b8b762",
+      "map": "E4M9",
+      "tics": 5101,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/e4m9-219.zip",
+          "demo_member": "u4m9-219.lmp",
+          "category": "max"
+        },
+        {
+          "archive_member": "compet-n/doom/max/u4m9-219.zip",
+          "demo_member": "u4m9-219.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOMU-E4M9-u4m9-219-097acdea2ddd.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "21df4128c189d9e846446cc1dd4843a198910d46385187ed0ed80abf65de4adc",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 5101
+    },
+    {
+      "game": "doom2",
+      "sha256": "793e469278d832136211d1c2b091c7fa8db37e01e68240093b38b5b93244bcdc",
+      "map": "MAP01",
+      "tics": 1571,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv01-039.zip",
+          "demo_member": "lv01-039.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP01-lv01-039-793e469278d8.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "611bf869d47788711610ab415cef7f7917e906829447d59a0f2268f9df2d8d8a",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1571
+    },
+    {
+      "game": "doom2",
+      "sha256": "bccb93db36b0873dd0822ac181ce2200cc9256d90ae0efafed2d35f57c5af1be",
+      "map": "MAP02",
+      "tics": 2372,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv02-103.zip",
+          "demo_member": "LV02-103.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP02-LV02-103-bccb93db36b0.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "a6524691f853cd1df590f386cdf0c469d0ce8417cf9728cb6ae216db07654b3b",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2372
+    },
+    {
+      "game": "doom2",
+      "sha256": "35aca1f4daf9cdb9b7ea0848fb4ce2aea10120c2c78d888583f491cb48d34c39",
+      "map": "MAP03",
+      "tics": 2996,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv03-119.zip",
+          "demo_member": "lv03-119.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP03-lv03-119-35aca1f4daf9.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "50881c28f7d18730bc6c573104029dd2f8bd547dc751759b1348c7e898c12e98",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2996
+    },
+    {
+      "game": "doom2",
+      "sha256": "c3854c84a5139f2a01b6814dbabd5f8f2ab7f76581e6bbc4f0245480e3f34054",
+      "map": "MAP04",
+      "tics": 2233,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv04-059.zip",
+          "demo_member": "LV04-059.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP04-LV04-059-c3854c84a513.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "7643d0c0695bc5a3657a6c20fbf32800b60a2e3d9aa86441bfb7913826ab72d6",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2233
+    },
+    {
+      "game": "doom2",
+      "sha256": "8d7d577c1fa2a40b40f701f03d6be10ed06323f7fa02e256f189e84b53244cb4",
+      "map": "MAP05",
+      "tics": 4772,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv05-210.zip",
+          "demo_member": "LV05-210.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP05-LV05-210-8d7d577c1fa2.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "ee6cc7cae9fb8830c667801aaeaea43b825f70b664b7da4611f26b7085376b37",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 4772
+    },
+    {
+      "game": "doom2",
+      "sha256": "7a8053a669e98c9ee11e82e638c37defb33f9dee6905b99f052d5209c85137dd",
+      "map": "MAP06",
+      "tics": 5067,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv06-222.zip",
+          "demo_member": "LV06-222.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP06-LV06-222-7a8053a669e9.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "8f64a0d740f1ee1bcd2cf0c1904fc687c3d0d76d7ffb19344c4dd88b85569427",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 5067
+    },
+    {
+      "game": "doom2",
+      "sha256": "85b5349a88baceb6627cf2ea63808107d511c026f38472f2fa0a7cdfa145704d",
+      "map": "MAP07",
+      "tics": 1981,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv07-046.zip",
+          "demo_member": "LV07-046.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP07-LV07-046-85b5349a88ba.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "08de601c4d87a79e7210ebf6134e5b46efe37c1677806d84934790d910d08eef",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1981
+    },
+    {
+      "game": "doom2",
+      "sha256": "4c2f0fafc93a427b9466ce1c37a294f1ee704605b42ade76a2926beac6854784",
+      "map": "MAP08",
+      "tics": 5636,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv08-237.zip",
+          "demo_member": "LV08-237.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP08-LV08-237-4c2f0fafc93a.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "4f06758b57e879dc555af757214a3c438cdc4d016d4d443eea1bed1cd542a7a3",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 5163
+    },
+    {
+      "game": "doom2",
+      "sha256": "7a5e14bdb2d9a9ba84322c5d6f036176f341093afc56bf5f9c3b21bfc6fc5a3c",
+      "map": "MAP09",
+      "tics": 9115,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv09-413.zip",
+          "demo_member": "LV09-413.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP09-LV09-413-7a5e14bdb2d9.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "38e11f38d658903bc6526d63318aea2282681bb0961d812ff8d6303ea9f85212",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 6281
+    },
+    {
+      "game": "doom2",
+      "sha256": "173e7015f8f854aebcd491eb1f7823d01bad6d60feb5cd739e483014f3ff38fd",
+      "map": "MAP10",
+      "tics": 10048,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv10-443.zip",
+          "demo_member": "lv10-443.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP10-lv10-443-173e7015f8f8.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "f72f7a1a0850999c871a08d92f24be9a8f0ed4830e48cff68cadbe21cafd618c",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 10048
+    },
+    {
+      "game": "doom2",
+      "sha256": "8eb27c7fd52bc08ce67e8a9e9722b6488c1f15c17499db169be6495dcfe88570",
+      "map": "MAP11",
+      "tics": 4603,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv11-205.zip",
+          "demo_member": "lv11-205.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP11-lv11-205-8eb27c7fd52b.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "1c35efbc84df20bdbb39f2d2fae90116247ba08f79419d88673f786c18e393df",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 4603
+    },
+    {
+      "game": "doom2",
+      "sha256": "efde295975e863635f1ee4a1eb5f8aa646961015e3e67767b7b93b5c866ff9bd",
+      "map": "MAP12",
+      "tics": 8275,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv12-350.zip",
+          "demo_member": "LV12-350.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP12-LV12-350-efde295975e8.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "02a604ae7f966f07a7d2370927c8eeee6d44dfe550006b45c0e3096715e1a31e",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 8275
+    },
+    {
+      "game": "doom2",
+      "sha256": "7bf5dd6683a4c1fc74631c563fc7184972869e726e72eee71c69d92749a4c16f",
+      "map": "MAP13",
+      "tics": 11319,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv13-509.zip",
+          "demo_member": "lv13-509.lmp",
+          "category": "max"
+        },
+        {
+          "archive_member": "compet-n/doom2/speed/lv13-509.zip",
+          "demo_member": "lv13-509.lmp",
+          "category": "speed"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP13-lv13-509-7bf5dd6683a4.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "fb62b5d19c689d06d85645186e0f86ed17f39104ee9b22796496176a9c7ae301",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 11319
+    },
+    {
+      "game": "doom2",
+      "sha256": "e1ae717ba43c07a43481b4d561b64a290c5bc5d7009797d1f2af39aa4ac5df79",
+      "map": "MAP14",
+      "tics": 3843,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv14-146.zip",
+          "demo_member": "lv14-146.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP14-lv14-146-e1ae717ba43c.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "b98ad7e815e67e6e7ac93df4bc071f9855eabe8b773850f41331ddc8232bddce",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 3740
+    },
+    {
+      "game": "doom2",
+      "sha256": "fd760b536d91673375fe47cd80b7f4698efcbf1a5b3c62a030784e573f08b0e7",
+      "map": "MAP15",
+      "tics": 12146,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv15-542.zip",
+          "demo_member": "LV15-542.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP15-LV15-542-fd760b536d91.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "5af1433b94e527a05df9832d7ce8ca46b3651d71b4cc8b75ca20a29566289526",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 12146
+    },
+    {
+      "game": "doom2",
+      "sha256": "5abcfc9a215f462e6a57a062b24308cc1a2229887d925d45d821127f440e24a3",
+      "map": "MAP16",
+      "tics": 5970,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv16-246.zip",
+          "demo_member": "lv16-246.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP16-lv16-246-5abcfc9a215f.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "d31fd592bcebc5ff947f9e0ae55de7edd32f085e8170de2658f88a69e5a88136",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 5970
+    },
+    {
+      "game": "doom2",
+      "sha256": "393d9c317be60dc1c1d6a5c829f75f46ea6a0f68606506b82eaaaf03c5eaa414",
+      "map": "MAP17",
+      "tics": 9178,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv17-415.zip",
+          "demo_member": "lv17-415.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP17-lv17-415-393d9c317be6.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "f8a74745d9bdd2304f1d9768d6aff5501975ff0bc7e06f7ae05d8e05b5b6f199",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 9178
+    },
+    {
+      "game": "doom2",
+      "sha256": "57a7acc265b246f91f907dfa21a0613cbdc12ac2d494192abca0b413cf087267",
+      "map": "MAP18",
+      "tics": 6799,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv18-256.zip",
+          "demo_member": "lv18-256.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP18-lv18-256-57a7acc265b2.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "02d084ce362b7f3222e4f8ad004d809ff1873ae12a1b8f41f93491a1a9f82d2a",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 6799
+    },
+    {
+      "game": "doom2",
+      "sha256": "77a17232227cf5acc2f27e9612a59cc79fcab7e7b94a7ac332868841d90db664",
+      "map": "MAP19",
+      "tics": 10750,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv19-505.zip",
+          "demo_member": "lv19-505.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP19-lv19-505-77a17232227c.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "9b72f22bb2d73056bdd1c03c012df8fdca7368ddab476b4739dafa6c32f90a8b",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 10750
+    },
+    {
+      "game": "doom2",
+      "sha256": "a8455c3fd79af97b731dd63cf63db799691368fd6a418a2cfe90774cb6666b4e",
+      "map": "MAP20",
+      "tics": 6310,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv20-242.zip",
+          "demo_member": "lv20-242.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP20-lv20-242-a8455c3fd79a.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "e411567d76f23cf8604de6de803cd9bad126b0cf7528b5ba97faf344295d6fcc",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 6310
+    },
+    {
+      "game": "doom2",
+      "sha256": "43fc18f3f2a64329d27b8dd64f3383a643d74d18d5281851d6eb0bde2815022e",
+      "map": "MAP21",
+      "tics": 4967,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv21-219.zip",
+          "demo_member": "LV21-219.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP21-LV21-219-43fc18f3f2a6.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "3529ccf8113feb972ccc558d60f7036561e8ea95fe6e30aaf3085527b56f5715",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 4967
+    },
+    {
+      "game": "doom2",
+      "sha256": "7fded9785651c5e4a6fbf6cd300d332c7abd581f000bc1fbd3e316149c2d2dc8",
+      "map": "MAP22",
+      "tics": 2633,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv22-110.zip",
+          "demo_member": "lv22-110.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP22-lv22-110-7fded9785651.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "1cc3c0bd16cf91f0aa2f878e0fecc4215597765f726070769370234ae3363dde",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2633
+    },
+    {
+      "game": "doom2",
+      "sha256": "a503f94dabcda1ea8e35f621ac027fc59c81d7ffad5e4a1b7c976a141e49f9af",
+      "map": "MAP23",
+      "tics": 4627,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv23-208.zip",
+          "demo_member": "lv23-208.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP23-lv23-208-a503f94dabcd.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "47b2a91d01af5b3847c9d85021e351183b9c05ca155dc74fbfd997a7f8b124cb",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 3602
+    },
+    {
+      "game": "doom2",
+      "sha256": "5446758d3ac88f9d0e577b163f0460510fbf771d0c7aee7d21440b68280d7398",
+      "map": "MAP24",
+      "tics": 9312,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv24-417.zip",
+          "demo_member": "LV24-417.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP24-LV24-417-5446758d3ac8.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "08ff472d5d9a1e0b951a1b50755e6d740816d0f29aa78371d44823e3d869b776",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 9312
+    },
+    {
+      "game": "doom2",
+      "sha256": "e5cd8843f6fca2499b479bd989f8be0c0c7fbcb13e988f443d0c653833fd6c93",
+      "map": "MAP25",
+      "tics": 3234,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv25-129.zip",
+          "demo_member": "LV25-129.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP25-LV25-129-e5cd8843f6fc.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "67f987d48622b46d24b8a77326578b2773f2ce9bc08eb4fd1ad2757254570d12",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 3234
+    },
+    {
+      "game": "doom2",
+      "sha256": "692706b304c60343986ade16df02b3c52ee172d1191a26ca97d85f685a62fbec",
+      "map": "MAP26",
+      "tics": 6804,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv26-309.zip",
+          "demo_member": "lv26-309.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP26-lv26-309-692706b304c6.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "e7706742b11a74b24cdb6990649a7ab63b1bb08337c7d30b25b26fc356f1f0f2",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 3863
+    },
+    {
+      "game": "doom2",
+      "sha256": "06ce660258d8e0b2890e7724c39f9d7ed60a0cc4470bdc91454ed1fddf1cdb54",
+      "map": "MAP27",
+      "tics": 9017,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv27-411.zip",
+          "demo_member": "lv27-411.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP27-lv27-411-06ce660258d8.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "d16bbad7864e3d3fc4be2125bcd553c4a555005bca5b38849e3c96eb77973f97",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2524
+    },
+    {
+      "game": "doom2",
+      "sha256": "33c10cd281093567c552f0ecb8243794ab8d01ab22a88d0d155ee43a4169e285",
+      "map": "MAP28",
+      "tics": 2094,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv28-044.zip",
+          "demo_member": "LV28-044.LMP",
+          "category": "max"
+        },
+        {
+          "archive_member": "compet-n/doom2/speed/lv28-044.zip",
+          "demo_member": "LV28-044.LMP",
+          "category": "speed"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP28-LV28-044-33c10cd28109.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "9236995c5910f2ded40962f829bac0b7b74669130b31c3feade3928d9c8eb947",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2094
+    },
+    {
+      "game": "doom2",
+      "sha256": "61b14c3517f310aa122c2d38feb7ae30c84139a326ed322c8ddf732a8c361058",
+      "map": "MAP29",
+      "tics": 8869,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv29-405.zip",
+          "demo_member": "lv29-405.lmp",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP29-lv29-405-61b14c3517f3.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "914c6665bb6288dd0d0b8143170204879af6fc3580314de0bd3e5efb9bc2d9bb",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 8869
+    },
+    {
+      "game": "doom2",
+      "sha256": "8a1b468cb7185e9118daee9435a3169bc802832333c485184269e464b4ac1c99",
+      "map": "MAP30",
+      "tics": 1455,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv30-030.zip",
+          "demo_member": "LV30-030.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP30-LV30-030-8a1b468cb718.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "c4bb98ad4b3ca50525b4c9b8cf20d121cdc75450eec5eaced51624ed9ecda63c",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1455
+    },
+    {
+      "game": "doom2",
+      "sha256": "d27d2c569e7a717556a8937016949ccf9b8e4d531cf4200f35cf7a05b4d7d759",
+      "map": "MAP31",
+      "tics": 4975,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv31-218.zip",
+          "demo_member": "LV31-218.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP31-LV31-218-d27d2c569e7a.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "a5fd31d6868d4e7f4797b294de16f6438acfec3f8fba49aa5cb9682ef5a5f350",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 4975
+    },
+    {
+      "game": "doom2",
+      "sha256": "16523a7233c6ca3c11bea4427867562741c01a9d3ca87e83f90c4feadd8ce60d",
+      "map": "MAP32",
+      "tics": 1337,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv32-035.zip",
+          "demo_member": "LV32-035.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "combat.json",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP32-LV32-035-16523a7233c6.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "feb84dbfa8b18b7bb7603f443218ed47ce8bc6c78e9283800e8ad30f43994f70",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 1337
+    },
+    {
+      "game": "doom",
+      "sha256": "298625ea5a29529f05b854b92880186b3734a7d4ae319cf24f3ca239c5e3276b",
+      "map": "E1M3",
+      "tics": 2108,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/speed/e1m3c041.zip",
+          "demo_member": "E1M3-041.LMP",
+          "category": "speed"
+        }
+      ],
+      "regression_selection": "category-speed",
+      "path": "../tmp/compet-n/demos/DOOMU-E1M3-E1M3-041-298625ea5a29.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "d9a32f0d9535d31fd2b6d895022745a1e11886c3cf61a06e799da3f6542ef5cd",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2108
+    },
+    {
+      "game": "doom",
+      "sha256": "d8d1073aa58b2f08245e10b7702e5c66be8dd1c8a7df2b27ba0678f57a82aab9",
+      "map": "E4M2",
+      "tics": 2102,
+      "skill": 5,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/nmare/n4m2-057.zip",
+          "demo_member": "N4M2-057.LMP",
+          "category": "nmare"
+        }
+      ],
+      "regression_selection": "category-nmare",
+      "path": "../tmp/compet-n/demos/DOOMU-E4M2-N4M2-057-d8d1073aa58b.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "7e0aaccd48a0c8bc8ca4b00461c3fa0ad5b42fe4c44ffba76c92a208031b26fd",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2102
+    },
+    {
+      "game": "doom",
+      "sha256": "68e41ec0ef00bad9636be729b7c623ab9961037bb94e5bcd210c650f30737d06",
+      "map": "E2M3",
+      "tics": 2120,
+      "skill": 5,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/nm100s/n2s3-056.zip",
+          "demo_member": "N2S3-056.LMP",
+          "category": "nm100s"
+        }
+      ],
+      "regression_selection": "category-nm100s",
+      "path": "../tmp/compet-n/demos/DOOMU-E2M3-N2S3-056-68e41ec0ef00.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "93736a4b85193bcee23032c09ba761278f7e4a29ee0cb8600128456c648bc66e",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2120
+    },
+    {
+      "game": "doom",
+      "sha256": "f3be4f9261792a2c160a90b9cdfd3e1d8dac401d76171d13ecb31f2c5088b74d",
+      "map": "E1M1",
+      "tics": 2363,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/tyson/t1m1-053.zip",
+          "demo_member": "T1M1-053.LMP",
+          "category": "tyson"
+        }
+      ],
+      "regression_selection": "category-tyson",
+      "path": "../tmp/compet-n/demos/DOOMU-E1M1-T1M1-053-f3be4f926179.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "c2a339ab56772f70b705ec854370e565ddd16a1ba5125e2a9206d82800fa8027",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2363
+    },
+    {
+      "game": "doom",
+      "sha256": "e61866b67bba17486fac036c8805bb8aabf71fd252bf83a03925ecd3f2c538ac",
+      "map": "E1M9",
+      "tics": 2101,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/pacifist/p1m9-050.zip",
+          "demo_member": "p1m9-050.lmp",
+          "category": "pacifist"
+        }
+      ],
+      "regression_selection": "category-pacifist",
+      "path": "../tmp/compet-n/demos/DOOMU-E1M9-p1m9-050-e61866b67bba.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "d99b16eec6a78a227741d413eb0d883b9e7d088ae88fc9e8496ee18a07b01543",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2101
+    },
+    {
+      "game": "doom",
+      "sha256": "616ec26d9629e7fb016b0a1da37dbdb8a94a2f4e52d333bdc18dc3e6dbf39995",
+      "map": "E2M9",
+      "tics": 2106,
+      "skill": 4,
+      "respawn": false,
+      "fast": true,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/fast/f2m9-048.zip",
+          "demo_member": "f2m9-048.LMP",
+          "category": "fast"
+        }
+      ],
+      "regression_selection": "category-fast",
+      "path": "../tmp/compet-n/demos/DOOMU-E2M9-f2m9-048-616ec26d9629.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "40c3afac70cbaaf75cc8a3e96da50649589e51c9787e3059d05d60f0f5bcccb1",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2106
+    },
+    {
+      "game": "doom",
+      "sha256": "78d634fab5ee8b4e39eb35faa60d8af893787933309184fe3695967096c11ffc",
+      "map": "E1M1",
+      "tics": 2186,
+      "skill": 4,
+      "respawn": true,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/respawn/r1m1-043.zip",
+          "demo_member": "R1M1-043.LMP",
+          "category": "respawn"
+        }
+      ],
+      "regression_selection": "category-respawn",
+      "path": "../tmp/compet-n/demos/DOOMU-E1M1-R1M1-043-78d634fab5ee.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "6d5a1ae91053b1341b75f84bb3a44fe0dc385bd632743164c5b317b0ee74dcbb",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2186
+    },
+    {
+      "game": "doom",
+      "sha256": "19867666a951c588d185929a3280b1fc34377e5a8e5e502353b0efdefa197dcd",
+      "map": "E3M7",
+      "tics": 2268,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": true,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/nomo/u3710274.zip",
+          "demo_member": "u3710274.lmp",
+          "category": "nomo"
+        }
+      ],
+      "regression_selection": "category-nomo",
+      "path": "../tmp/compet-n/demos/DOOMU-E3M7-u3710274-19867666a951.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "beac90b45e06f0f1acc002e3254e9f9cbdcc2b867846442d78f5166c948e53b7",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2268
+    },
+    {
+      "game": "doom2",
+      "sha256": "6b37e164957f9b3e3d651b59b89c10dd5fbc37d1c377a0a12aeb2b7be7ff5fb8",
+      "map": "MAP04",
+      "tics": 2102,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/speed/lv04-036.zip",
+          "demo_member": "LV04-036.LMP",
+          "category": "speed"
+        }
+      ],
+      "regression_selection": "category-speed",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP04-LV04-036-6b37e164957f.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "9b225a750cabf2ba108e835f532012c2674aa9fa64c0f405673bb6c6957a0865",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2102
+    },
+    {
+      "game": "doom2",
+      "sha256": "e13d8409bd5cbe1dad41f52e6452aabb812a0ec5fb3a4277d328620b8698878e",
+      "map": "MAP30",
+      "tics": 2128,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/max/lv30-036.zip",
+          "demo_member": "LV30-036.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "category-max",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP30-LV30-036-e13d8409bd5c.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "775dc029b19b995fbbf6cca64e6305488765ac6f647fa346cb3505c527f8ca34",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2128
+    },
+    {
+      "game": "doom2",
+      "sha256": "5fda3a8f4770504641eb1558d395867175e1ab5e04eeb69567a9c29a7dcae4c1",
+      "map": "MAP08",
+      "tics": 2109,
+      "skill": 5,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/nmare/nm08-031.zip",
+          "demo_member": "NM08-031.LMP",
+          "category": "nmare"
+        }
+      ],
+      "regression_selection": "category-nmare",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP08-NM08-031-5fda3a8f4770.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "6d90746647a3476a1e4ac9a78585f70c00ecd099a7de89758180f1780a5dcc93",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2109
+    },
+    {
+      "game": "doom2",
+      "sha256": "45f64290ed23939371368b6ff022012b718acc2911f652fea0ce619c3b3b004d",
+      "map": "MAP31",
+      "tics": 2162,
+      "skill": 5,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/nm100s/ns31-057.zip",
+          "demo_member": "NS31-057.LMP",
+          "category": "nm100s"
+        }
+      ],
+      "regression_selection": "category-nm100s",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP31-NS31-057-45f64290ed23.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "cf0791085cc2c53c76eae8ef8f67ba02b0f628254233e653a83dbcd4b48d6143",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2162
+    },
+    {
+      "game": "doom2",
+      "sha256": "250dbde68f8f66485d2085727bff7780e15f55fa5f8bef5a5c902215bbe73ec6",
+      "map": "MAP01",
+      "tics": 2162,
+      "skill": 4,
+      "respawn": false,
+      "fast": true,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/tyson/tf01-059.zip",
+          "demo_member": "tf01-059.lmp",
+          "category": "tyson"
+        }
+      ],
+      "regression_selection": "category-tyson",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP01-tf01-059-250dbde68f8f.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "67947bb00e5d7ae11f6ea8c93d30a5c0ccb4d458a84a61da3e24713b524f9b3b",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2162
+    },
+    {
+      "game": "doom2",
+      "sha256": "d4ff021ba83514b43e1326521023b338253b7bc46c4d6b201746bd769ab428e2",
+      "map": "MAP19",
+      "tics": 2103,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/pacifist/pa19-052.zip",
+          "demo_member": "PA19-052.LMP",
+          "category": "pacifist"
+        }
+      ],
+      "regression_selection": "category-pacifist",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP19-PA19-052-d4ff021ba835.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "b2b96f086a9cb65b991ad93419c3bfc8edd8054ae190504fa24bee3e4111ad5f",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2103
+    },
+    {
+      "game": "doom2",
+      "sha256": "a3b650c3a7b1d64234bb8e849f85daca24c4f6da7baaa4d8f8797d7eeeb5962d",
+      "map": "MAP07",
+      "tics": 2113,
+      "skill": 4,
+      "respawn": false,
+      "fast": true,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/fast/fa07-051.zip",
+          "demo_member": "FA07-051.LMP",
+          "category": "fast"
+        }
+      ],
+      "regression_selection": "category-fast",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP07-FA07-051-a3b650c3a7b1.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "eff883aab872b6e338b902b0e5f021a38f1ff2bdfaf13acb36bed6f10a80df6d",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2113
+    },
+    {
+      "game": "doom2",
+      "sha256": "ddcf4591cef841fb48e9cdf1ee6257054934e889ba58a563cd8c2f0468957a76",
+      "map": "MAP07",
+      "tics": 2125,
+      "skill": 4,
+      "respawn": true,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/respawn/re07-055.zip",
+          "demo_member": "RE07-055.LMP",
+          "category": "respawn"
+        }
+      ],
+      "regression_selection": "category-respawn",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP07-RE07-055-ddcf4591cef8.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "2534c1f440a09ebdf1d77239590a38a48152cb4de341c723fa232fd55d827187",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2125
+    },
+    {
+      "game": "doom2",
+      "sha256": "edce762e512cefe64ddcb24ce11e7de9cd5af41f119f2a8b1081864d7ca5492f",
+      "map": "MAP09",
+      "tics": 2108,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": true,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom2/nomo/d0905857.zip",
+          "demo_member": "d0905857.lmp",
+          "category": "nomo"
+        }
+      ],
+      "regression_selection": "category-nomo",
+      "path": "../tmp/compet-n/demos/DOOM2-MAP09-d0905857-edce762e512c.lmp",
+      "wad": "wads/DOOM2.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "35fdf71451b199134ac7bdde358c983f115907e698758797e63802afd7eb58ce",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 2108
+    },
+    {
+      "game": "doom",
+      "sha256": "be97b0d74754117fade5443fe241c9857045094209601537e0d94ba31300d2f8",
+      "map": "E4M8",
+      "tics": 4935,
+      "skill": 4,
+      "respawn": false,
+      "fast": false,
+      "nomonsters": false,
+      "sources": [
+        {
+          "archive_member": "compet-n/doom/max/u4m8-219.zip",
+          "demo_member": "U4M8-219.LMP",
+          "category": "max"
+        }
+      ],
+      "regression_selection": "e4m8-max-reference-crash-followup",
+      "path": "../tmp/compet-n/demos/DOOMU-E4M8-U4M8-219-be97b0d74754.lmp",
+      "wad": "wads/DOOMU.WAD",
+      "strict_status": "match",
+      "gameplay_rng_audited": true,
+      "gameplay_rng_mismatch": null,
+      "raw_result_sha256": "1983fdbd64a915c9094ae9c4dfcc36b2b4408d1aeb4b9ea56f615f3d361f4b0f",
+      "reference_config_sha256": "5253afd70fc27b2c4dd99b0ba8f418fbe16a27b41377dc5930159fe1f1f3d8ab",
+      "compared_tics": 4935
+    }
+  ],
+  "boom_safety_check": {
+    "campaign": "Original Speed of Doom UV-Max, all 32 maps",
+    "mode": "baseline",
+    "passed": true,
+    "source": "95e3cd1c4a996390957b0b4acb0a0432c3385eeabfa86b0a8470bfb182bb495a",
+    "commands": 341051,
+    "active_frames": 339681,
+    "raw_result_sha256": "3f4879692b7327e33fceaf6d657c69f954deaacb0cb68530baf67a1635ec43fc",
+    "reference_binary_sha256": "deb83c51dacb35d88cd9c4cb6e8957389b14db1940dfe54853e1ad331ab72be6"
+  }
+}

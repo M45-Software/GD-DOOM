@@ -962,6 +962,18 @@ func (w saveBinaryWriter) saveFile(v saveFile) error {
 			return err
 		}
 	}
+	if version >= 44 {
+		for _, p := range v.Game.HitscanPuffs {
+			if err := w.u32(p.Angle); err != nil {
+				return err
+			}
+		}
+	}
+	if version >= 45 {
+		if err := w.i64Slice(v.Game.ThingBlockOrder); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -2079,6 +2091,18 @@ func (r saveBinaryReader) saveFile() (saveFile, error) {
 		}
 		v.CoopCheckpoint = make([]byte, int(n))
 		if err := r.read(v.CoopCheckpoint); err != nil {
+			return v, err
+		}
+	}
+	if version >= 44 {
+		for i := range v.Game.HitscanPuffs {
+			if v.Game.HitscanPuffs[i].Angle, err = r.u32(); err != nil {
+				return v, err
+			}
+		}
+	}
+	if version >= 45 {
+		if v.Game.ThingBlockOrder, err = readI64Slice(r); err != nil {
 			return v, err
 		}
 	}

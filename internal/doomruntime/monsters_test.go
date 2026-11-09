@@ -1219,6 +1219,34 @@ func TestLostSoulChargeHitsExplodingBarrelUntilRemoved(t *testing.T) {
 	}
 }
 
+func TestBoomLostSoulFatalHitLeavesChargeOnDroppedWeapon(t *testing.T) {
+	original := doomrand.Capture()
+	t.Cleanup(func() { doomrand.Restore(original) })
+	for _, boom := range []bool{false, true} {
+		t.Run(fmt.Sprint("boom=", boom), func(t *testing.T) {
+			doomrand.Clear()
+			g := newGame(&mapdata.Map{
+				Things:  []mapdata.Thing{{Type: 3006, Flags: 7}, {Type: 9, X: 32, Flags: 7}},
+				Sectors: []mapdata.Sector{{CeilingHeight: 128}},
+			}, Options{Headless: true})
+			g.isDead, g.boomMomentumDropoff = true, boom
+			g.thingHP[1] = 1
+			g.thingSkullFly[0] = true
+			g.setThingMomentum(0, 20*fracUnit, 0, -fracUnit/3)
+			g.hitSkullFlyTarget(0, 3006, lineAttackTarget{kind: lineAttackTargetThing, idx: 1})
+			if !g.thingDead[1] || len(g.m.Things) != 3 || g.m.Things[2].Type != 2001 {
+				t.Fatal("fatal charge did not produce a shotgun drop")
+			}
+			if g.thingSkullFly[0] != boom {
+				t.Fatalf("charging=%v; Boom must reset the drop rather than the skull", g.thingSkullFly[0])
+			}
+			if boom && (g.movementProbeThing != 2 || g.thingMomZ[0] != -fracUnit/3) {
+				t.Fatal("drop did not replace the collision actor or changed skull vertical momentum")
+			}
+		})
+	}
+}
+
 func TestLostSoulChaseSlamUsesNestedMoveFloatState(t *testing.T) {
 	doomrand.SetState(0, 140)
 	g := &game{

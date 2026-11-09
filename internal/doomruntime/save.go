@@ -25,10 +25,10 @@ import (
 )
 
 const (
-	saveGameVersion     = 43
+	saveGameVersion     = 45
 	saveGamePrefix      = "dsg"
 	saveGameQuickPrefix = "quicksave"
-	keyframeVersion     = 30
+	keyframeVersion     = 32
 	saveGameDirName     = "saves"
 )
 
@@ -126,6 +126,7 @@ type gameSaveState struct {
 	PlayerViewZ          int64
 	ThingCollected       []bool
 	ThingDropped         []bool
+	ThingBlockOrder      []int64
 	ThingThinkerOrder    []int64
 	ThingSpawnPoint      []mapdata.Thing
 	ThingX               []int64
@@ -428,6 +429,7 @@ type projectileImpactSaveState struct {
 }
 
 type hitscanPuffSaveState struct {
+	Angle    uint32
 	X        int64
 	Y        int64
 	Z        int64
@@ -1366,6 +1368,7 @@ func captureGameSaveState(g *game) gameSaveState {
 		PlayerViewZ:          g.playerViewZ,
 		ThingCollected:       append([]bool(nil), g.thingCollected...),
 		ThingDropped:         append([]bool(nil), g.thingDropped...),
+		ThingBlockOrder:      append([]int64(nil), g.thingBlockOrder...),
 		ThingThinkerOrder:    append([]int64(nil), g.thingThinkerOrder...),
 		ThingSpawnPoint:      append([]mapdata.Thing(nil), g.thingSpawnPoint...),
 		ThingX:               append([]int64(nil), g.thingX...),
@@ -1516,6 +1519,9 @@ func restoreGameSaveState(g *game, s gameSaveState) {
 	g.playerViewZ = s.PlayerViewZ
 	g.thingCollected = restoreSaveSlice(g.thingCollected, s.ThingCollected)
 	g.thingDropped = restoreSaveSlice(g.thingDropped, s.ThingDropped)
+	if len(s.ThingBlockOrder) != 0 {
+		g.thingBlockOrder = restoreSaveSlice(g.thingBlockOrder, s.ThingBlockOrder)
+	}
 	g.thingThinkerOrder = restoreSaveSlice(g.thingThinkerOrder, s.ThingThinkerOrder)
 	g.thingThinkerIndexDirty = true
 	g.thingSpawnPoint = restoreSaveSlice(g.thingSpawnPoint, s.ThingSpawnPoint)
@@ -2224,6 +2230,7 @@ func captureHitscanPuffs(src []hitscanPuff) []hitscanPuffSaveState {
 	dst := make([]hitscanPuffSaveState, len(src))
 	for i, puff := range src {
 		dst[i] = hitscanPuffSaveState{
+			Angle:    puff.angle,
 			X:        puff.x,
 			Y:        puff.y,
 			Z:        puff.z,
@@ -2251,6 +2258,7 @@ func restoreHitscanPuffs(src []hitscanPuffSaveState) []hitscanPuff {
 	dst := make([]hitscanPuff, len(src))
 	for i, puff := range src {
 		dst[i] = hitscanPuff{
+			angle:    puff.Angle,
 			x:        puff.X,
 			y:        puff.Y,
 			z:        puff.Z,

@@ -65,9 +65,15 @@ func (g *game) tickBoomCarry(c boomCarryThinker) {
 		}
 		x, y := g.thingPosFixed(i, th)
 		z, _, _ := g.thingSupportState(i, th)
+		noGravity := monsterCanFloat(th.Type) || thingSpawnsOnCeiling(th.Type)
+		if isMonster(th.Type) && i < len(g.thingDead) && g.thingDead[i] {
+			// P_KillMobj clears MF_NOGRAVITY except for lost souls. A
+			// fallen Keen or floating-monster corpse can ride the floor.
+			noGravity = th.Type == 3006
+		}
 		// Successful XY moves refresh thingSectorCache. Reuse that BSP result
 		// across conveyors, retaining the live-radius boundary intersection.
-		if ((!monsterCanFloat(th.Type) && !thingSpawnsOnCeiling(th.Type) && z <= floor) || z < water) && g.boomActorTouchesSectorWithCenter(x, y, g.thingCurrentRadius(i, th), c.sector, g.thingSectorCached(i, th)) {
+		if ((!noGravity && z <= floor) || z < water) && g.boomActorTouchesSectorWithCenter(x, y, g.thingCurrentRadius(i, th), c.sector, g.thingSectorCached(i, th)) {
 			g.thingMomX[i] = boomFixed(g.thingMomX[i] + c.vector.x)
 			g.thingMomY[i] = boomFixed(g.thingMomY[i] + c.vector.y)
 		}
@@ -199,7 +205,12 @@ func (g *game) damageVoodooDoll(i, amount int, x, y, z int64, hasInflictor bool,
 		g.p = player{x: px, y: py, z: pz, floorz: floor, ceilz: ceil, momx: g.thingMomX[i], momy: g.thingMomY[i], momz: g.thingMomZ[i], subsector: -1, sector: -1, viewHeight: playerViewHeight}
 		g.playerMobjHealth = g.thingHP[i]
 		hasSource := sourceThing >= 0 || sourcePlayer || source.Slot != 0
-		g.damagePlayerBodyWithSource(amount, "Ouch!", x, y, hasInflictor, sourceThing, z, i, hasSource)
+		applied := g.damagePlayerBodyWithSource(amount, "Ouch!", x, y, hasInflictor, sourceThing, z, i, hasSource)
+		if applied && sourcePlayer && sourceThing < 0 && len(g.authorityPlayers) == 0 {
+			// A player telefragging its own doll keeps a pointer to the
+			// controlled mobj, including after that teleport moves it.
+			g.statusAttackerThing = selfAttackerThing
+		}
 		g.thingHP[i] = g.playerMobjHealth
 		g.setThingMomentum(i, g.p.momx, g.p.momy, g.p.momz)
 		g.thingDead[i] = g.thingHP[i] <= 0

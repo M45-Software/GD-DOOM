@@ -113,6 +113,6 @@ func (g *game) archVileBlast(source int, sx, sy int64) bool {
 	angle := g.thingWorldAngle(source, g.m.Things[source])
 	fx.x = x - fixedMul(24*fracUnit, doomFineCosine(angle))
 	fx.y = y - fixedMul(24*fracUnit, doomFineSineAtAngle(angle))
-	g.radiusAttackAt(fx.x, fx.y, fx.z, 16*fracUnit, -1, 70, "Arch-Vile blast", false, source)
+	g.radiusAttackAtInSubsector(fx.x, fx.y, fx.z, 16*fracUnit, -1, 70, "Arch-Vile blast", false, source, fx.subsector-1)
 	return true
 }

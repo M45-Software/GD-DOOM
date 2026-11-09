@@ -5,4 +5,5 @@ const (
 	lineSoundBlock = 0x0040
 	lineNeverSee   = 0x0080
 	mlMapped       = 0x0100
+	mlPassUse      = 0x0200
 )

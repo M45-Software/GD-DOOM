@@ -21,7 +21,7 @@ func (g *game) tickDeadPlayerTurnTowardAttacker() {
 	if g == nil || !g.isDead || !g.statusHasAttacker {
 		return
 	}
-	if g.coopDemoActive() && g.demoCoopAttackers[g.localSlot] == -g.localSlot {
+	if g.statusAttackerThing == selfAttackerThing || g.coopDemoActive() && g.demoCoopAttackers[g.localSlot] == -g.localSlot {
 		return
 	}
 	attackerX, attackerY := g.statusAttackerPosition()
@@ -612,7 +612,9 @@ func (g *game) tickDoor(sec int, d *doorThinker) {
 	switch d.direction {
 	case 0:
 		d.topCountdown--
-		if d.topCountdown <= 0 {
+		// T_VerticalDoor tests !--topcountdown. A wait starting at zero
+		// becomes negative and stays waiting, as with a reopened timed door.
+		if d.topCountdown == 0 {
 			switch d.typ {
 			case doorBlazeRaise, doorNormal:
 				d.direction = -1
@@ -624,7 +626,7 @@ func (g *game) tickDoor(sec int, d *doorThinker) {
 		}
 	case 2:
 		d.topCountdown--
-		if d.topCountdown <= 0 && d.typ == doorRaiseIn5Mins {
+		if d.topCountdown == 0 && d.typ == doorRaiseIn5Mins {
 			d.direction = 1
 			d.typ = doorNormal
 			g.emitDoorSectorSound(sec, doorThinkerMoveEvent(d, d.direction))

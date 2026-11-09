@@ -65,7 +65,7 @@ func TestBoomTracerUsesLogicPhaseWithoutDemoCursor(t *testing.T) {
 	defer doomrand.Restore(old)
 	for phase := uint32(0); phase < 4; phase++ {
 		doomrand.SetLogicTic(phase)
-		g := &game{p: player{x: 128 * fracUnit, y: 128 * fracUnit}, stats: playerStats{Health: 100}, demoTick: 0}
+		g := &game{p: player{x: 128 * fracUnit, y: 128 * fracUnit}, stats: playerStats{Health: 100}, boomMomentumDropoff: true, demoTick: 0}
 		p := projectile{kind: projectileTracer, tracerPlayer: true, z: 32 * fracUnit, vx: 10 * fracUnit}
 		g.tickProjectileSpecial(&p)
 		if got := p.vy != 0; got != (phase == 0) {

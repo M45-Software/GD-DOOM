@@ -115,3 +115,61 @@ func TestBoomVoodooCrossesPlayerOnlyGeneralizedFloorTrigger(t *testing.T) {
 		t.Fatal("voodoo movement replaced main player position")
 	}
 }
+
+func TestVoodooSelfDamageRetainsLiveControlledAttacker(t *testing.T) {
+	g := boomConveyorGame()
+	g.damageVoodooDoll(0, 10000, g.p.x, g.p.y, g.p.z, true, -1, true)
+	if !g.isDead || g.statusAttackerThing != selfAttackerThing {
+		t.Fatalf("dead=%v attacker=%d", g.isDead, g.statusAttackerThing)
+	}
+	g.setPlayerPosFixed(100*fracUnit, 200*fracUnit)
+	g.p.angle = doomAng270
+	g.tickDeadPlayerTurnTowardAttacker()
+	if g.p.angle != doomAng270 {
+		t.Fatal("self attacker rotated death camera")
+	}
+	x, y := g.statusAttackerPosition()
+	if x != g.p.x || y != g.p.y {
+		t.Fatalf("attacker=(%d,%d) player=(%d,%d)", x, y, g.p.x, g.p.y)
+	}
+}
+
+func TestVoodooSlideKeepsSplitMoveRemainder(t *testing.T) {
+	g := newGame(&mapdata.Map{Name: "MAP01",
+		Things:   []mapdata.Thing{{Type: 1, X: -20}, {Type: 1, X: -512}},
+		Vertexes: []mapdata.Vertex{{Y: 256}, {Y: -256}},
+		Linedefs: []mapdata.Linedef{{V1: 0, V2: 1, SideNum: [2]int32{0, -1}}},
+		Sidedefs: []mapdata.Sidedef{{Sector: 0}}, Sectors: []mapdata.Sector{{CeilingHeight: 128}},
+	}, Options{Headless: true})
+	g.setThingMomentum(0, 30*fracUnit, 10*fracUnit, 0)
+	g.tickMonsterMomentum(0, g.m.Things[0])
+	// The first slide reaches the wall and retains its tangential momentum.
+	// The still-pending half-step hits again and slides along that wall too.
+	_, y := g.thingPosFixed(0, g.m.Things[0])
+	if y <= 15*fracUnit || g.thingMomX[0] != 0 {
+		t.Fatalf("split remainder discarded: y=%d momentum=(%d,%d)", y, g.thingMomX[0], g.thingMomY[0])
+	}
+}
+
+func TestBoomConveyorCarriesFallenNoGravityMonsterCorpses(t *testing.T) {
+	for _, typ := range []int16{3005, 71, 72, 3006} {
+		for _, dead := range []bool{false, true} {
+			g := boomTouchFixture(t)
+			i := g.appendRuntimeThing(mapdata.Thing{Type: typ, X: -128, Flags: 7}, false)
+			g.ensureMonsterAIState()
+			g.thingDead[i] = dead
+			if dead {
+				g.thingHP[i] = -1
+			}
+			g.setThingSupportState(i, 0, 0, 128*fracUnit)
+			g.tickBoomCarry(boomCarryThinker{sector: 0, vector: boomScrollVector{x: fracUnit}})
+			want := int64(0)
+			if dead && typ != 3006 {
+				want = fracUnit
+			}
+			if g.thingMomX[i] != want {
+				t.Fatalf("type=%d dead=%v carry=%d want=%d", typ, dead, g.thingMomX[i], want)
+			}
+		}
+	}
+}

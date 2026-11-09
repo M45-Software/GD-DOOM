@@ -15,7 +15,10 @@ func (g *game) teleportLineGeometry(index int) physLine {
 func (g *game) activateSilentLineTeleport(lineIdx int, info mapdata.TeleportInfo, actorIdx int, isPlayer bool) bool {
 	source := g.teleportLineGeometry(lineIdx)
 	actorX, actorY, actorZ, actorFloor := g.p.x, g.p.y, g.p.z, g.p.floorz
-	if !isPlayer {
+	if actorIdx == boomEffectActor && g.effectMover != nil {
+		e := g.effectMover
+		actorX, actorY, actorZ, actorFloor = *e.x, *e.y, *e.z, *e.floorz
+	} else if !isPlayer {
 		th := g.m.Things[actorIdx]
 		actorX, actorY = g.thingPosFixed(actorIdx, th)
 		actorZ, actorFloor, _ = g.thingSupportState(actorIdx, th)
@@ -76,7 +79,9 @@ func (g *game) activateSilentLineTeleport(lineIdx int, info mapdata.TeleportInfo
 			return false
 		}
 		radius := int64(playerRadius)
-		if !isPlayer {
+		if actorIdx == boomEffectActor && g.effectMover != nil {
+			radius = g.effectMover.radius
+		} else if !isPlayer {
 			radius = thingTypeRadius(g.m.Things[actorIdx].Type)
 		}
 		if !g.teleportStompDestinationThings(x, y, radius, actorIdx, isPlayer, actorX, actorY) {
@@ -112,6 +117,11 @@ func (g *game) finishSilentTeleport(actorIdx int, isPlayer bool, x, y, z, floor,
 		if g.authorityRules != nil && g.localSlot >= 1 && g.localSlot <= 4 {
 			g.authorityRules.Scores[g.localSlot].MovementEpoch++
 		}
+	} else if actorIdx == boomEffectActor && g.effectMover != nil {
+		e := g.effectMover
+		*e.x, *e.y, *e.z, *e.floorz, *e.ceilz = x, y, z, floor, ceil
+		*e.angle += rotation
+		*e.momx, *e.momy = rotate(*e.momx, *e.momy)
 	} else {
 		mx, my := rotate(g.thingMomX[actorIdx], g.thingMomY[actorIdx])
 		mz := g.thingMomZ[actorIdx]
@@ -135,6 +145,9 @@ func boomMomentumDropoffEnabled(m *mapdata.Map, opts Options) bool {
 		return v == 201 || v == 202
 	}
 	for _, l := range m.Linedefs {
+		if l.Flags&mlPassUse != 0 {
+			return true
+		}
 		if l.Tag != 0 {
 			if info := mapdata.LookupLineSpecial(l.Special); info.Door != nil && !info.Door.UsesTag {
 				return true

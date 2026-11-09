@@ -299,7 +299,17 @@ func (g *game) spawnMonsterProjectile(thingIdx int, typ int16) bool {
 }
 
 func (g *game) spawnMonsterProjectileAngleOffset(thingIdx int, typ int16, angleOffset uint32) bool {
+	impacts := len(g.projectileImpacts)
 	if !g.spawnMonsterProjectile(thingIdx, typ) {
+		if angleOffset != 0 && len(g.projectileImpacts) > impacts {
+			// A_FatAttack adjusts the returned mobj after P_CheckMissileSpawn,
+			// including one already in its explosion state.
+			fx := &g.projectileImpacts[impacts]
+			fx.angle += angleOffset
+			speed := monsterProjectileSpeed(typ, g.fastMonstersActive())
+			fx.momx = fixedMul(speed, doomFineCosine(fx.angle))
+			fx.momy = fixedMul(speed, doomFineSineAtAngle(fx.angle))
+		}
 		return false
 	}
 	p := &g.projectiles[len(g.projectiles)-1]
@@ -1106,8 +1116,9 @@ func (g *game) advanceProjectileImpactTic(fx *projectileImpact) bool {
 	}
 	if fx.momx != 0 || fx.momy != 0 {
 		ox, oy := fx.x, fx.y
-		g.moveBoomEffectXY(&fx.x, &fx.y, fx.z, &fx.momx, &fx.momy, &fx.floorz, &fx.ceilz,
-			demoTraceProjectileImpactRadius(fx.kind, fx.sourceType), height)
+		var momz int64
+		g.moveBoomEffect(&boomEffectMover{&fx.x, &fx.y, &fx.z, &fx.momx, &fx.momy, &momz, &fx.floorz, &fx.ceilz, &fx.angle, demoTraceProjectileImpactRadius(fx.kind, fx.sourceType),
+			projectileCanTriggerWalkSpecial(projectile{kind: fx.kind, sourceType: fx.sourceType})}, height)
 		if fx.x != ox || fx.y != oy {
 			fx.subsector = g.subSectorAtFixed(fx.x, fx.y) + 1
 		}
@@ -1667,9 +1678,13 @@ func (g *game) tickProjectileSpecial(p *projectile) {
 	if p.kind != projectileTracer {
 		return
 	}
-	// DSDA uses gametic minus basetic, including across maps and saves.
-	// The demo command cursor is absent in live play and includes paused tics.
-	if doomrand.LogicTic()&3 != 0 {
+	// Boom tests gametic minus basetic, preserved by the logic clock across
+	// saves. Vanilla demos test gametic itself, including recorded pause tics.
+	phase := doomrand.LogicTic()
+	if !g.boomMomentumDropoff && g.demoTick > 0 {
+		phase = uint32(g.demoTick - 1)
+	}
+	if phase&3 != 0 {
 		return
 	}
 	g.spawnTracerSmokeTrail(p.x, p.y, p.z, p.vx, p.vy)

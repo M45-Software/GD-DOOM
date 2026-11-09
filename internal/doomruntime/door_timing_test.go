@@ -1,10 +1,54 @@
 package doomruntime
 
 import (
+	"fmt"
 	"testing"
 
 	"gddoom/internal/mapdata"
 )
+
+func TestDoorWaitCountdownMatchesDoomZeroTransition(t *testing.T) {
+	for _, boom := range []bool{false, true} {
+		for _, tc := range []struct {
+			name                  string
+			typ                   doorType
+			waitingDir, movingDir int
+		}{
+			{"normal", doorNormal, 0, -1},
+			{"blaze", doorBlazeRaise, 0, -1},
+			{"close-wait-open", doorClose30ThenOpen, 0, 1},
+			{"generalized-close-wait-open", doorGenCloseWaitOpen, 0, 1},
+			{"initial-wait", doorRaiseIn5Mins, 2, 1},
+		} {
+			for _, countdown := range []int{2, 1, 0, -1} {
+				t.Run(fmt.Sprintf("boom=%t/%s/countdown=%d", boom, tc.name, countdown), func(t *testing.T) {
+					g := newDoorTimingGame(1)
+					g.boomMomentumDropoff = boom
+					d := &doorThinker{sector: 1, typ: tc.typ, direction: tc.waitingDir, topCountdown: countdown}
+					g.tickDoor(1, d)
+					wantDir := tc.waitingDir
+					if countdown == 1 {
+						wantDir = tc.movingDir
+					}
+					if d.direction != wantDir || d.topCountdown != countdown-1 {
+						t.Fatalf("direction/countdown=%d/%d want=%d/%d", d.direction, d.topCountdown, wantDir, countdown-1)
+					}
+					if countdown <= 0 {
+						// Zero wait fields can arise when a vanilla timed door is
+						// manually reopened. Negative counts keep waiting.
+						g.tickDoor(1, d)
+						if d.direction != tc.waitingDir || d.topCountdown != countdown-2 {
+							t.Fatalf("nonpositive countdown resumed movement: %+v", d)
+						}
+					}
+					if tc.waitingDir == 2 && countdown == 1 && d.typ != doorNormal {
+						t.Fatal("five-minute door did not become a normal door on expiration")
+					}
+				})
+			}
+		}
+	}
+}
 
 func TestTaggedDoorSkipsSectorsWithOtherMovers(t *testing.T) {
 	for _, mover := range []string{"floor", "platform", "stopped-platform", "ceiling", "stopped-ceiling"} {

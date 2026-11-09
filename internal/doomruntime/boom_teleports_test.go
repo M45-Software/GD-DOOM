@@ -217,3 +217,29 @@ func TestSilentSwitchTeleportUsesActualMonsterAndSwitchLifetime(t *testing.T) {
 		}
 	}
 }
+
+func TestTeleportDestinationSkipsUnspawnedMarkers(t *testing.T) {
+	for _, special := range []uint16{39, 97, 125, 126, 207, 208, 268, 269} {
+		for _, flags := range []int16{0, skillEasyBits, skillMask | thingFlagNotSingle} {
+			g := newGame(&mapdata.Map{Name: "MAP01",
+				Things: []mapdata.Thing{{Type: 1, X: -128}, {Type: 3001, X: -64, Flags: 7},
+					{Type: teleportThingType, X: 64, Flags: flags}, {Type: teleportThingType, X: 128, Flags: 7}},
+				Vertexes: []mapdata.Vertex{{}, {Y: 128}},
+				Linedefs: []mapdata.Linedef{{V1: 0, V2: 1, Special: special, Tag: 7, Flags: mlTwoSided, SideNum: [2]int32{0, 0}}},
+				Sidedefs: []mapdata.Sidedef{{Sector: 0}}, Sectors: []mapdata.Sector{{CeilingHeight: 128, Tag: 7}},
+			}, Options{SkillLevel: 4, Headless: true})
+			info := *mapdata.LookupLineSpecial(special).Teleport
+			if !g.activateTeleportLine(0, 0, info, 1, false) {
+				t.Fatalf("special=%d flags=%d failed live destination", special, flags)
+			}
+			x, _ := g.thingPosFixed(1, g.m.Things[1])
+			if x != 128*fracUnit {
+				t.Fatalf("special=%d flags=%d used unspawned marker: x=%d", special, flags, x)
+			}
+			g.thingCollected[3] = true
+			if g.activateTeleportLine(0, 0, info, 1, false) {
+				t.Fatalf("special=%d accepted absent destinations", special)
+			}
+		}
+	}
+}

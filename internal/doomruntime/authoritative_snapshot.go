@@ -326,7 +326,8 @@ func (g *game) applyValidatedAuthorityReplica(r authorityReplica) {
 	s.ShowGrid, s.ShowLegend = g.showGrid, g.showLegend
 	s.PaletteLUTEnabled, s.GammaLevel, s.CRTEnabled = g.paletteLUTEnabled, g.gammaLevel, g.crtEnabled
 	s.HUDMessagesEnabled = g.hudMessagesEnabled
-	g.thingBlockOrder = restoreSaveSlice(g.thingBlockOrder, r.ThingBlockOrder)
+	// The replica root carries the validated collision order.
+	s.ThingBlockOrder = r.ThingBlockOrder
 	restoreGameSaveState(g, s)
 	g.thingTelefragTick = restoreSaveSlice(g.thingTelefragTick, r.ThingTelefragTick)
 	g.thingTargetPlayerSlot = restoreSaveSlice(g.thingTargetPlayerSlot, r.ThingTargetPlayerSlot)

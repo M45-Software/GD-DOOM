@@ -2082,6 +2082,12 @@ func (g *game) spawnMonsterDrop(thingIdx int, thingType int16) {
 	}, true)
 	g.setThingPosFixed(idx, srcX, srcY)
 	g.setThingSupportState(idx, srcFloorZ, srcFloorZ, srcCeilZ)
+	if g.boomMomentumDropoff {
+		// P_SpawnMobj links the drop through P_CreateSecNodeList. Boom
+		// leaves tmthing pointing at that pickup, including inside damage
+		// callbacks made by a charging lost soul's collision probe.
+		g.movementProbeThing = idx
+	}
 }
 
 func monsterPainSoundEvent(typ int16) soundEvent {

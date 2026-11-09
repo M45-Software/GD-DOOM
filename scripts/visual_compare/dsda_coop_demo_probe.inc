@@ -77,6 +77,28 @@ static void GD_CoopLineDetail(const char *path)
  fprintf(detail,"]\n");fclose(detail);
 }
 
+/* Optional indexed full rows for long-campaign diagnosis. The compact digest
+ * still hashes the same row, and these writes do not alter simulation state. */
+static void GD_CoopCanonicalFrame(const char *row,size_t size,int command,int campaign,int line_state)
+{
+ const char *path=getenv("GD_COOP_CANONICAL_OUT");static FILE *rows,*index;
+ const char *from=getenv("GD_COOP_CANONICAL_FROM");long offset;
+ if(!path||(from&&command<atoi(from)))return;
+ if(!rows){
+  size_t length=strlen(path)+sizeof(".index.csv");char *name=malloc(length);
+  if(!name)I_Error("canonical index path");
+  snprintf(name,length,"%s.index.csv",path);index=fopen(name,"w");free(name);
+  rows=fopen(path,"w");if(!rows||!index)I_Error("canonical trace output");
+  if(campaign)fprintf(rows,"demotic,map,");
+  fprintf(rows,"tic,players,bodies,items,sectors");
+  if(line_state)fprintf(rows,",line_md5");
+  fprintf(rows,",playindex,seeds\n");fprintf(index,"demotic,offset,length\n");
+ }
+ offset=ftell(rows);if(offset<0)I_Error("canonical trace offset");
+ if(fwrite(row,1,size,rows)!=size)I_Error("canonical trace write");
+ fprintf(index,"%d,%ld,%zu\n",command,offset,size);fflush(rows);fflush(index);
+}
+
 static void GD_CoopDiagnosticLimit(int command)
 {
  /* Explicit diagnostic prefix only; campaign verification leaves this unset. */
@@ -142,6 +164,7 @@ static void GD_CoopDemoFrame(void)
  if(compact){
   struct MD5Context context;unsigned char hash[16];
   fclose(out);out=destination;
+  GD_CoopCanonicalFrame(row,row_size,gametic-first+1,campaign,line_state);
   if(getenv("GD_COOP_DETAIL_COMMAND")&&atoi(getenv("GD_COOP_DETAIL_COMMAND"))==gametic-first+1){
    size_t length=strlen(path)+sizeof(".detail.csv");char *detail_path=malloc(length);FILE *detail;
    if(!detail_path)I_Error("co-op detail path");snprintf(detail_path,length,"%s.detail.csv",path);

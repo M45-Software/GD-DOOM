@@ -2,7 +2,7 @@
 """Compare every repository demo and audit gameplay RNG independently."""
 
 import argparse
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import gzip
 import hashlib
 import json
@@ -76,6 +76,21 @@ def comparison_passes(result):
 def sha256(path):
     with path.open("rb") as file:
         return hashlib.file_digest(file, "sha256").hexdigest()
+
+
+def atomic_json(path, value):
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(json.dumps(value, indent=2) + "\n")
+    temporary.replace(path)
+
+
+def resume_result(path, identity, demo_sha):
+    if not path.exists():
+        return None
+    result = json.loads(path.read_text())
+    if result.get("run_identity_sha256") != identity or result.get("demo_sha256") != demo_sha:
+        raise ValueError(f"Result belongs to different inputs/tools: {path}")
+    return result
 
 
 def immutable_snapshot(contents, directory, prefix, mode=0o755):
@@ -198,6 +213,8 @@ def main():
     parser.add_argument("--jobs", type=int, default=1, help="Concurrent comparisons (large traces use substantial RAM)")
     parser.add_argument("--demo", action="append", help="Select demo stems; repeat to select several")
     parser.add_argument("--manifest", type=Path, help="Use an external corpus manifest instead of repository demos")
+    parser.add_argument("--resume", action="store_true",
+                        help="Reuse completed results only when all pinned input/tool identities match")
     parser.add_argument("--discard-matching-traces", action="store_true",
                         help="Delete large matching traces after RNG audit; keep logs and mismatches")
     parser.add_argument("--compress-retained-traces", action="store_true",
@@ -236,10 +253,30 @@ def main():
     harness, comparator, trimmer = pinned_replay_tools(ROOT / ".tmp")
     hashes = {str(path): sha256(path) for path in {args.ref_bin, gd_bin, harness, comparator, trimmer, *wads.values()}}
     args.out_root.mkdir(parents=True, exist_ok=True)
+    identity = {"input_sha256": hashes, "runner_sha256": sha256(Path(__file__)),
+                "manifest_sha256": sha256(args.manifest.resolve()) if args.manifest else None,
+                "semantic_unused_ceiling_fields": args.semantic_unused_ceiling_fields,
+                "demos": {str(d): sha256(d) for d in demos}}
+    identity_sha = hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
+    identity_file = args.out_root / "run.json"
+    if identity_file.exists():
+        if not args.resume:
+            parser.error("Output already has a run identity; use --resume or a fresh output directory")
+        if json.loads(identity_file.read_text()) != identity:
+            parser.error("Resume rejected: engine, inputs, tools, selection, or comparison policy changed")
+    else:
+        if any(args.out_root.glob("*/result.json")):
+            parser.error("Existing results lack a pinned run identity; use a fresh output directory")
+        atomic_json(identity_file, identity)
 
     def compare(demo):
         out = args.out_root / demo.stem
         out.mkdir(parents=True, exist_ok=True)
+        if args.resume:
+            cached = resume_result(out / "result.json", identity_sha, identity["demos"][str(demo)])
+            if cached is not None:
+                print(f"{demo.stem}: resumed {cached['status']}", flush=True)
+                return cached
         command = [str(harness), "--gd-bin", str(gd_bin),
                    "--ref-bin", str(args.ref_bin), "--wad", str(wads[demo]),
                    "--demo-lump", "check", "--demo", str(demo), "--out", str(out),
@@ -283,15 +320,29 @@ def main():
             result["matching_traces_discarded"] = True
         if args.compress_retained_traces:
             result["retained_trace_files"] = compress_retained_traces(out)
-        (out / "result.json").write_text(json.dumps(result, indent=2) + "\n")
+        result["run_identity_sha256"] = identity_sha
+        atomic_json(out / "result.json", result)
         first = map_error or (report.splitlines()[0] if report else "see harness.log")
         rng_report = (rng_diff or "match") if result["gameplay_rng_audited"] else "not audited"
         semantic_report = ("; semantic=" + result["semantic_comparison"]["status"]) if "semantic_comparison" in result else ""
         print(f"{demo.stem}: {status}: {first}; RNG={rng_report}{semantic_report}", flush=True)
         return result
 
+    completed = {}
+    def progress():
+        counts = {}
+        for result in completed.values():
+            counts[result["status"]] = counts.get(result["status"], 0) + 1
+        atomic_json(args.out_root / "progress.json", {
+            "total": len(demos), "completed": len(completed), "status_counts": counts,
+            "complete": len(completed) == len(demos), "run_identity_sha256": identity_sha})
+    progress()
     with ThreadPoolExecutor(max_workers=args.jobs) as pool:
-        results = list(pool.map(compare, demos))
+        pending = {pool.submit(compare, demo): demo for demo in demos}
+        for future in as_completed(pending):
+            completed[pending[future]] = future.result()
+            progress()
+    results = [completed[demo] for demo in demos]
     summary = {"input_sha256": hashes, "results": results}
     if args.semantic_unused_ceiling_fields:
         summary["comparison_policy"] = {"strict_results_preserved": True,
@@ -299,7 +350,7 @@ def main():
     if args.manifest:
         summary["manifest"] = display_path(args.manifest.resolve())
         summary["manifest_sha256"] = sha256(args.manifest)
-    (args.out_root / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
+    atomic_json(args.out_root / "summary.json", summary)
     with (args.out_root / "summary.tsv").open("w") as file:
         file.write("demo\tstatus\tfirst_report\tfirst_rng_mismatch" + ("\tsemantic_status" if args.semantic_unused_ceiling_fields else "") + "\n")
         for item in results:

@@ -350,8 +350,21 @@ func (g *game) radiusAttackFromThing(spotIdx int, damage int) {
 }
 
 func (g *game) radiusAttackAt(sx, sy, sz, sheight int64, ignoreThing int, damage int, msg string, sourcePlayer bool, sourceThing int) {
+	g.radiusAttackAtInSubsector(sx, sy, sz, sheight, ignoreThing, damage, msg, sourcePlayer, sourceThing, -1)
+}
+
+func (g *game) radiusAttackAtInSubsector(sx, sy, sz, sheight int64, ignoreThing int, damage int, msg string, sourcePlayer bool, sourceThing int, linkedSubsector int) {
 	if g == nil || damage <= 0 {
 		return
+	}
+	spotSector, linked := g.subSectorSectorIndex(linkedSubsector)
+	canSeeBlast := func(x, y, z, height int64, sector int) bool {
+		if linked {
+			// A_VileAttack changes fire XY without relinking its mobj.
+			// P_CheckSight still indexes REJECT using the linked subsector.
+			return g.actorHasLOSInSectors(x, y, z, height, sx, sy, sz, sheight, sector, spotSector)
+		}
+		return g.actorHasLOS(x, y, z, height, sx, sy, sz, sheight)
 	}
 	sourceIdentity := g.authorityDamageOwner
 	if sourceIdentity.Slot == 0 && sourcePlayer && len(g.authorityPlayers) != 0 {
@@ -391,7 +404,7 @@ func (g *game) radiusAttackAt(sx, sy, sz, sheight int64, ignoreThing int, damage
 		hasLOS := false
 		damageToPlayer := 0
 		if playerDist < int64(damage) {
-			hasLOS = g.actorHasLOS(g.p.x, g.p.y, g.p.z, playerHeight, sx, sy, sz, sheight)
+			hasLOS = canSeeBlast(g.p.x, g.p.y, g.p.z, playerHeight, g.playerSector())
 			if hasLOS {
 				damageToPlayer = damage - int(playerDist)
 			}
@@ -465,7 +478,7 @@ func (g *game) radiusAttackAt(sx, sy, sz, sheight int64, ignoreThing int, damage
 		}
 		tz, _, _ := g.thingSupportState(i, th)
 		theight := g.thingCurrentHeight(i, th)
-		hasLOS := g.actorHasLOS(tx, ty, tz, theight, sx, sy, sz, sheight)
+		hasLOS := canSeeBlast(tx, ty, tz, theight, g.thingSectorCached(i, th))
 		if debugRadius {
 			rndBefore, prndBefore := doomrand.State()
 			fmt.Printf("gd-radius-debug tic=%d world=%d visit=%d idx=%d type=%d pos=(%d,%d,%d) dist=%d los=%t hp_before=%d state=%d tics=%d prnd_before=%d rnd_before=%d\n",

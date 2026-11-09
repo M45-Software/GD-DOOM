@@ -50,7 +50,7 @@ func (g *game) handleUse() {
 }
 
 func (g *game) useLines() {
-	lineIdx, tr := g.peekUseTargetLine()
+	_, tr := g.traceUseLines(true)
 	if tr == useTraceNone {
 		g.useText = "USE: no line"
 		g.useFlash = 35
@@ -62,21 +62,6 @@ func (g *game) useLines() {
 		g.emitSoundEvent(soundEventNoWay)
 		return
 	}
-	pi := -1
-	if lineIdx >= 0 && lineIdx < len(g.physForLine) {
-		pi = g.physForLine[lineIdx]
-	}
-	if pi < 0 || pi >= len(g.lines) {
-		g.useText = "USE: no line"
-		g.useFlash = 35
-		return
-	}
-	ld := g.lines[pi]
-	side := 0
-	if g.pointOnLineSide(g.p.x, g.p.y, ld) == 1 {
-		side = 1
-	}
-	g.useSpecialLine(ld.idx, side)
 }
 
 type useTraceResult int
@@ -88,6 +73,12 @@ const (
 )
 
 func (g *game) peekUseTargetLine() (int, useTraceResult) {
+	return g.traceUseLines(false)
+}
+
+// Boom's ML_PASSUSE continues the same ray after a special, even if that
+// activation failed. Previewing a target remains a read-only first-hit query.
+func (g *game) traceUseLines(activate bool) (int, useTraceResult) {
 	px := g.p.x
 	py := g.p.y
 	x2 := px + int64(useRange>>fracBits)*doomFineCosine(g.p.angle)
@@ -105,12 +96,13 @@ func (g *game) peekUseTargetLine() (int, useTraceResult) {
 			g.demoTick-1, g.worldTic, px, py, x2, y2, g.p.angle, len(intercepts))
 	}
 
+	selected := -1
 	for _, in := range intercepts {
 		if in.frac > fracUnit {
 			if debugUse {
 				fmt.Printf("use-debug tic=%d world=%d stop-frac=%d over-range\n", g.demoTick-1, g.worldTic, in.frac)
 			}
-			return -1, useTraceNone
+			break
 		}
 		pi := -1
 		if in.line >= 0 && in.line < len(g.physForLine) {
@@ -133,7 +125,20 @@ func (g *game) peekUseTargetLine() (int, useTraceResult) {
 			}
 			continue
 		}
-		return ld.idx, useTraceSpecial
+		if !activate {
+			return ld.idx, useTraceSpecial
+		}
+		if selected < 0 {
+			selected = ld.idx
+		}
+		side := g.pointOnLineSide(g.p.x, g.p.y, ld)
+		g.useSpecialLine(ld.idx, side)
+		if !g.boomMomentumDropoff || ld.flags&mlPassUse == 0 {
+			return selected, useTraceSpecial
+		}
+	}
+	if selected >= 0 {
+		return selected, useTraceSpecial
 	}
 	return -1, useTraceNone
 }

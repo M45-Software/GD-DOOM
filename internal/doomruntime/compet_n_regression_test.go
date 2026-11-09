@@ -493,6 +493,46 @@ func TestFloatingMonsterUsesRetainedDeadMonsterTarget(t *testing.T) {
 	}
 }
 
+func TestArchVileBlastRejectUsesLastLinkedFireSubsector(t *testing.T) {
+	original := doomrand.Capture()
+	t.Cleanup(func() { doomrand.Restore(original) })
+	g := newGame(&mapdata.Map{
+		Things:     []mapdata.Thing{{Type: 64, X: 64, Flags: 7}, {Type: 67, X: -32, Flags: 7}},
+		Sectors:    []mapdata.Sector{{CeilingHeight: 128}, {CeilingHeight: 128}},
+		SubSectors: []mapdata.SubSector{{FirstSeg: 0, SegCount: 1}, {FirstSeg: 1, SegCount: 1}},
+		Segs:       []mapdata.Seg{{Linedef: 0}, {Linedef: 1}},
+		Linedefs:   []mapdata.Linedef{{SideNum: [2]int32{0, -1}}, {SideNum: [2]int32{1, -1}}},
+		Sidedefs:   []mapdata.Sidedef{{Sector: 0}, {Sector: 1}},
+		Nodes:      []mapdata.Node{{DY: 128, ChildID: [2]uint32{0x80000000, 0x80000001}}},
+		// Sector 1 cannot see sector 0; sector 1 can see itself.
+		RejectMatrix: &mapdata.RejectMatrix{SectorCount: 2, Data: []byte{1 << 2}},
+	}, Options{Headless: true})
+	g.subSectorSec = []int{0, 1}
+	g.thingSectorCache = []int{0, 1}
+	g.p.x, g.p.y, g.p.z, g.p.angle = 8*fracUnit, 0, 0, 0
+	g.refreshPlayerSubsectorCache(g.p.x, g.p.y)
+	g.stats.Health = 1000
+	g.syncPlayerMobjHealth()
+	g.setMonsterTargetPlayer(0)
+	g.spawnArchVileFire(0)
+	if !g.archVileBlast(0, 64*fracUnit, 0) {
+		t.Fatal("arch-vile could not attack its visible target")
+	}
+	fx := g.archVileFireForSource(0)
+	if fx == nil || fx.subsector != 1 || g.subSectorAtFixed(fx.x, fx.y) != 1 {
+		t.Fatal("blast did not retain a sector link different from its coordinates")
+	}
+	if g.thingHP[1] != 600 {
+		t.Fatalf("blast ignored retained REJECT entry: health=%d", g.thingHP[1])
+	}
+	// Relinking that same explosion into its coordinate sector admits the
+	// otherwise identical 70-damage blast to the mancubus.
+	g.radiusAttackAtInSubsector(fx.x, fx.y, fx.z, 16*fracUnit, -1, 70, "blast", false, 0, 1)
+	if g.thingHP[1] != 530 {
+		t.Fatalf("relinked blast health=%d, want 530", g.thingHP[1])
+	}
+}
+
 func TestArchVileBlastPreservesLastLinkedFireSubsector(t *testing.T) {
 	g := &game{m: &mapdata.Map{
 		Things:     []mapdata.Thing{{Type: 64, X: 64}},

@@ -535,6 +535,32 @@ func TestRevenantAttackSpawnsTracerProjectile(t *testing.T) {
 	}
 }
 
+func TestRevenantTracerDemoClockAfterRecordedPause(t *testing.T) {
+	old := doomrand.Capture()
+	defer doomrand.Restore(old)
+	for _, boom := range []bool{false, true} {
+		for phase := uint32(0); phase < 4; phase++ {
+			t.Run(fmt.Sprintf("boom=%t/phase=%d", boom, phase), func(t *testing.T) {
+				// One paused command makes vanilla gametic differ from Boom's
+				// completed-world-tic clock. Exercise both directions of the gate.
+				doomrand.SetLogicTic(phase)
+				g := &game{p: player{x: 128 * fracUnit, y: 128 * fracUnit},
+					stats: playerStats{Health: 100}, boomMomentumDropoff: boom,
+					demoTick: int(phase) + 2}
+				p := projectile{kind: projectileTracer, tracerPlayer: true, z: 32 * fracUnit, vx: 10 * fracUnit}
+				g.tickProjectileSpecial(&p)
+				want := (phase+1)&3 == 0
+				if boom {
+					want = phase == 0
+				}
+				if got := p.vy != 0; got != want {
+					t.Fatalf("homed=%v want=%v", got, want)
+				}
+			})
+		}
+	}
+}
+
 func TestRevenantTracerHomesTowardPlayer(t *testing.T) {
 	g := &game{
 		p:        player{x: 128 * fracUnit, y: 128 * fracUnit, z: 0},
@@ -1466,6 +1492,24 @@ func TestBoomMissileSkyRemovalRequiresAboveBackCeiling(t *testing.T) {
 					t.Fatalf("explosion RNG draws=%d want=%d", got, boolToInt(wantExplosion))
 				}
 			})
+		}
+	}
+}
+
+func TestMancubusVolleyContinuesAfterImmediateSpawnExplosion(t *testing.T) {
+	for _, phase := range []int{1, 4, 7} {
+		g := newGame(&mapdata.Map{Name: "MAP01", Sectors: []mapdata.Sector{{CeilingHeight: 32}},
+			Things: []mapdata.Thing{{Type: 1, X: 256}, {Type: 67, Flags: 7}}}, Options{Headless: true})
+		g.thingAggro[1], g.thingTargetPlayer[1] = true, true
+		g.thingAttackPhase[1] = phase
+		if !g.monsterAttack(1, 67, 256*fracUnit) || len(g.projectileImpacts) != 2 || len(g.projectiles) != 0 {
+			t.Fatalf("phase=%d live=%d exploded=%d", phase, len(g.projectiles), len(g.projectileImpacts))
+		}
+		for i, fx := range g.projectileImpacts {
+			moving := i == 1 || phase == 7
+			if (fx.momx != 0 || fx.momy != 0) != moving {
+				t.Fatalf("phase=%d shot=%d impact momentum=(%d,%d)", phase, i, fx.momx, fx.momy)
+			}
 		}
 	}
 }

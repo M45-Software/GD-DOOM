@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-09",
+  "demo": "DOOM2-MAP27-LV27-045-39985710cb55.lmp",
+  "demo_sha256": "39985710cb5572ab6fefc605c440bc289ac3861db81327be0e91045d984972fc",
+  "source": {
+    "internal_go_source_sha256": "7a9fd86a3587eae0bb79e6d534944654374e5f6344d876fcd5a65738b9a5756d",
+    "previous_source": "95e3cd1c4a996390957b0b4acb0a0432c3385eeabfa86b0a8470bfb182bb495a"
+  },
+  "fix": "Door waits transition only when decrementing the counter reaches exactly zero. Zero/negative starting counts continue waiting, matching original Doom and DSDA.",
+  "verification": {
+    "strict_status": "match",
+    "compared_tics": 2244,
+    "gameplay_rng_audited": true,
+    "gameplay_rng_mismatch": null,
+    "reference_engine": "Original Linux Doom 1.10",
+    "reference_binary_sha256": "44c76e71a442cab22b42bff99c499c097ef4e4b06a5d034d9458f8d9ff2b1a7b",
+    "engine_binary_sha256": "24ac4b83113b146c981dd92f7220ac586ecfdcbb5eaf06554336e9d7f1609b83",
+    "iwad_sha256": "10d67824b11025ddd9198e8cfc87ca335ee6e2d3e63af4180fa9b8a471893255",
+    "raw_result_sha256": "64b80344bf3e52c04f51806d56bc512839508991372f15199e6e19359711f810",
+    "raw_summary_sha256": "39e73d3b1b391fc6e3230dad43ee6e338001df15b4622155c4e2ff3e8a1d3261",
+    "replay_harness_sha256": "2bb06bc5c2dfac97994ed424f9f6891fdd43ffa842387bb1a6bedceb246030ce",
+    "trace_comparator_sha256": "5edfb80bfc82dca1f43305e556e35ecfb0c01d98932e2c2994434ffcb466ad60",
+    "reference_zone_mib": 16
+  },
+  "tests": {
+    "countdown_regression": "pass; vanilla and Boom, ordinary/blazing/close-wait-open/generalized/initial waits, starting counts 2, 1, 0, -1",
+    "go_packages": [
+      "internal/doomruntime",
+      "internal/app",
+      "internal/netgame"
+    ],
+    "status": "pass",
+    "log_sha256": "4158c7fdff59dde10b8f6c007c8088fd6fe07191661ed4694d5725b2680a93aa"
+  },
+  "scope": "Fresh replay of this complete recording with zero-valued uninitialized reference door fields. Arbitrary original allocator residue remains unsupported. This is a targeted follow-up on a new source, not a rerun or relabeling of the full 4,646-recording audit."
+}

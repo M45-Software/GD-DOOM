@@ -2401,8 +2401,12 @@ func (g *game) tickMonsterMomentum(i int, th mapdata.Thing) {
 		}
 		if isVoodooDollType(th.Type) {
 			g.slideVoodooDoll(i, th)
-			momx, momy = g.thingMomX[i], g.thingMomY[i]
-			break
+			momx, momy, momz = g.thingMomX[i], g.thingMomY[i], g.thingMomZ[i]
+			tx, ty = g.thingPosFixed(i, th)
+			z, _, _ = g.thingSupportState(i, th)
+			// P_SlideMove changes the mobj, but P_XYMovement still runs
+			// the local split-step remainder from that new position.
+			continue
 		}
 
 		momx = 0
@@ -2645,6 +2649,13 @@ func (g *game) hitSkullFlyTarget(i int, typ int16, target lineAttackTarget) {
 	// that victim. Vanilla then clears its momentum and enters its spawn state
 	// rather than resetting the skull that initiated the collision.
 	if mover := g.movementProbeThing; mover >= 0 && mover < len(g.m.Things) {
+		if isPickupType(g.m.Things[mover].Type) {
+			// A fatal hitscanner hit can spawn a drop and replace Boom's
+			// tmthing. The pickup already has its initial spawn state;
+			// resetting it must not run monster look/chase actions.
+			g.setThingMomentum(mover, 0, 0, 0)
+			return
+		}
 		g.resetLostSoulCharge(mover, g.m.Things[mover].Type)
 	}
 }
@@ -4225,30 +4236,20 @@ func (g *game) monsterAttack(i int, typ int16, dist int64) bool {
 			phase = g.thingAttackPhase[i]
 		}
 		g.faceMonsterToward(i, sx, sy, targetX, targetY)
+		// P_SpawnMissile returns its mobj even when the half-step check
+		// explodes it. Each A_FatAttack still fires both shots.
 		switch phase {
 		case 1:
 			g.setThingWorldAngle(i, g.thingWorldAngle(i, g.m.Things[i])+fatSpread)
-			if !g.spawnMonsterProjectile(i, typ) {
-				return false
-			}
-			if !g.spawnMonsterProjectileAngleOffset(i, typ, fatSpread) {
-				return false
-			}
+			g.spawnMonsterProjectile(i, typ)
+			g.spawnMonsterProjectileAngleOffset(i, typ, fatSpread)
 		case 4:
 			g.setThingWorldAngle(i, g.thingWorldAngle(i, g.m.Things[i])-fatSpread)
-			if !g.spawnMonsterProjectile(i, typ) {
-				return false
-			}
-			if !g.spawnMonsterProjectileAngleOffset(i, typ, ^(fatSpread*2)+1) {
-				return false
-			}
+			g.spawnMonsterProjectile(i, typ)
+			g.spawnMonsterProjectileAngleOffset(i, typ, ^(fatSpread*2)+1)
 		case 7:
-			if !g.spawnMonsterProjectileAngleOffset(i, typ, ^fatSpreadHalf+1) {
-				return false
-			}
-			if !g.spawnMonsterProjectileAngleOffset(i, typ, fatSpreadHalf) {
-				return false
-			}
+			g.spawnMonsterProjectileAngleOffset(i, typ, ^fatSpreadHalf+1)
+			g.spawnMonsterProjectileAngleOffset(i, typ, fatSpreadHalf)
 		default:
 			return false
 		}
@@ -4727,13 +4728,22 @@ func (g *game) actorHasLOS(ax, ay, az, aheight, bx, by, bz, bheight int64) bool 
 	if g == nil {
 		return false
 	}
+	fromSector, toSector := -1, -1
+	if g.m != nil && g.m.RejectMatrix != nil {
+		fromSector, toSector = g.sectorAt(ax, ay), g.sectorAt(bx, by)
+	}
+	return g.actorHasLOSInSectors(ax, ay, az, aheight, bx, by, bz, bheight, fromSector, toSector)
+}
+
+func (g *game) actorHasLOSInSectors(ax, ay, az, aheight, bx, by, bz, bheight int64, fromSector, toSector int) bool {
+	if g == nil {
+		return false
+	}
 	// P_CheckSight always performs the REJECT-matrix fast rejection before
 	// tracing BSP lines. Radius attacks call this shared path directly, so
 	// skipping it lets explosions damage actors Doom knows cannot see the
 	// blast from their sectors.
 	if g.m != nil && g.m.RejectMatrix != nil {
-		fromSector := g.sectorAt(ax, ay)
-		toSector := g.sectorAt(bx, by)
 		if g.sightRejected(fromSector, toSector) {
 			return false
 		}
