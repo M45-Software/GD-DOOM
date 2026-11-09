@@ -94,7 +94,7 @@ func (g *game) archVileBlast(source int, sx, sy int64) bool {
 	}
 	g.damageMonsterTarget(source, 20, "Arch-Vile blast", sx, sy)
 	if target, ok := g.monsterTargetThingIdx(source); ok {
-		g.thingMomZ[target] = 1000 * fracUnit / int64(thingTypeMass(g.m.Things[target].Type))
+		g.thingMomZ[target] = 1000 * fracUnit / int64(g.thingTypeMass(g.m.Things[target].Type))
 	} else if len(g.authorityPlayers) > 0 {
 		if state := g.authoritativeMonsterPlayer(source); state != nil {
 			g.withAuthoritativePlayer(state, func() { g.p.momz = 10 * fracUnit })

@@ -1478,7 +1478,7 @@ func (g *game) monsterTargetPos(i int) (x, y, z, height, radius int64, ok bool) 
 	x, y = g.thingPosFixed(targetIdx, th)
 	z, _, _ = g.thingSupportState(targetIdx, th)
 	height = g.thingCurrentHeight(targetIdx, th)
-	radius = thingTypeRadius(th.Type)
+	radius = g.thingTypeRadius(th.Type)
 	return x, y, z, height, radius, true
 }
 
@@ -1547,7 +1547,7 @@ func (g *game) monsterHasLOSTarget(i int, typ int16, x, y int64) bool {
 		return false
 	}
 	z, _, _ := g.monsterSupportHeights(i, g.m.Things[i])
-	return g.actorHasLOS(x, y, z, monsterHeight(typ), tx, ty, tz, height)
+	return g.actorHasLOS(x, y, z, g.monsterHeight(typ), tx, ty, tz, height)
 }
 
 func (g *game) monsterIdleOrChaseTics(i int, typ int16) int {
@@ -1859,7 +1859,7 @@ func (g *game) tickNightmareRespawn(i int, th mapdata.Thing) {
 	}
 	g.setThingSupportState(idx, z, floor, ceil)
 	g.setThingWorldAngle(idx, thingSpawnAngle(spawn.Angle))
-	g.thingHP[idx] = monsterSpawnHealth(th.Type)
+	g.thingHP[idx] = g.monsterSpawnHealth(th.Type)
 	g.thingState[idx] = monsterStateSpawn
 	g.thingStateTics[idx] = monsterSpawnStateTics(th.Type)
 	g.thingReactionTics[idx] = 18
@@ -2672,7 +2672,7 @@ func (g *game) lostSoulChargeTargetAt(i int, th mapdata.Thing, x, y, z int64) (l
 		return lineAttackTarget{}, false
 	}
 	const maxThingBlockRadius = 32 * fracUnit
-	radius := monsterRadius(th.Type)
+	radius := g.monsterRadius(th.Type)
 	if len(g.authorityPlayers) > 0 {
 		for _, state := range g.authorityPlayers {
 			body, dead, _ := g.authoritativePlayerBody(state)
@@ -3990,11 +3990,15 @@ func (g *game) monsterMoveInDir(i int, typ int16, dir monsterMoveDir) bool {
 	if dir >= monsterDirNoDir {
 		return false
 	}
-	step := monsterMoveStep(typ, g.fastMonstersActive())
+	step := g.monsterMoveStep(typ, g.fastMonstersActive())
 	dx := fixedMul(step, monsterXSpeed[dir])
 	dy := fixedMul(step, monsterYSpeed[dir])
 	if dx == 0 && dy == 0 {
-		return false
+		// A patched stationary monster still performs P_TryMove at its
+		// current position. Its successful walk must retain chase RNG/timing.
+		if speed, patched := g.actorProperty(typ, "Speed"); !patched || speed != 0 {
+			return false
+		}
 	}
 
 	x, y := g.thingPosFixed(i, g.m.Things[i])
@@ -4387,7 +4391,7 @@ func (g *game) spawnPainLostSoul(sourceIdx int, angle uint32) bool {
 	src := g.m.Things[sourceIdx]
 	sx, sy := g.thingPosFixed(sourceIdx, src)
 	sz, _, _ := g.thingSupportState(sourceIdx, src)
-	prestep := 4*fracUnit + (3*(monsterRadius(src.Type)+monsterRadius(3006)))/2
+	prestep := 4*fracUnit + (3*(g.monsterRadius(src.Type)+g.monsterRadius(3006)))/2
 	x := sx + fixedMul(prestep, doomFineCosine(angle))
 	y := sy + fixedMul(prestep, doomFineSineAtAngle(angle))
 	z := sz + 8*fracUnit
@@ -4409,11 +4413,11 @@ func (g *game) spawnPainLostSoul(sourceIdx int, angle uint32) bool {
 	}
 	g.setThingPosFixed(idx, x, y)
 	g.setThingSupportState(idx, z, tmfloor, tmceil)
-	g.thingHP[idx] = monsterSpawnHealth(3006)
+	g.thingHP[idx] = g.monsterSpawnHealth(3006)
 	g.thingState[idx] = monsterStateSpawn
 	g.thingStatePhase[idx] = 0
 	g.thingStateTics[idx] = monsterSpawnStateTics(3006)
-	if g.boomMomentumDropoff && (z < tmfloor || z > tmceil-monsterHeight(3006)) {
+	if g.boomMomentumDropoff && (z < tmfloor || z > tmceil-g.monsterHeight(3006)) {
 		g.damageMonsterFrom(idx, 10000, false, sourceIdx, sx, sy, true)
 		return false
 	}
@@ -5064,7 +5068,7 @@ func (g *game) playerHasLOSMonster(i int, th mapdata.Thing) bool {
 	}
 	tx, ty := g.thingPosFixed(i, th)
 	tz, _, _ := g.monsterSupportHeights(i, th)
-	return g.actorHasLOS(g.p.x, g.p.y, g.p.z, playerHeight, tx, ty, tz, monsterHeight(th.Type))
+	return g.actorHasLOS(g.p.x, g.p.y, g.p.z, playerHeight, tx, ty, tz, g.monsterHeight(th.Type))
 }
 
 func (g *game) monsterHasLOSPlayer(typ int16, x, y int64) bool {
@@ -5108,7 +5112,7 @@ func (g *game) monsterHasLOSPlayerAt(i int, typ int16, x, y int64) bool {
 			break
 		}
 	}
-	ok := g.actorHasLOS(x, y, z, monsterHeight(typ), g.p.x, g.p.y, g.p.z, playerHeight)
+	ok := g.actorHasLOS(x, y, z, g.monsterHeight(typ), g.p.x, g.p.y, g.p.z, playerHeight)
 	if g == nil || runtimeDebugEnv("GD_DEBUG_MONSTER_LOOK") == "" {
 		return ok
 	}
@@ -5585,7 +5589,7 @@ func (g *game) probeSkullFlyMove(i int, typ int16, x, y int64) skullFlyProbeResu
 	}
 	g.movementProbeThing = i
 	const maxThingBlockRadius = 32 * fracUnit
-	radius := thingTypeRadius(typ)
+	radius := g.thingTypeRadius(typ)
 
 	visitPlayer := func() (lineAttackTarget, bool) {
 		slot := 0
@@ -5732,7 +5736,7 @@ func (g *game) touchedSpecialLinesForMonsterMove(i int, x, y int64) []int {
 	if g == nil || g.m == nil || i < 0 || i >= len(g.m.Things) {
 		return nil
 	}
-	radius := monsterRadius(g.m.Things[i].Type)
+	radius := g.monsterRadius(g.m.Things[i].Type)
 	tmboxTop := y + radius
 	tmboxBottom := y - radius
 	tmboxRight := x + radius

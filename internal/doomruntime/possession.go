@@ -144,7 +144,7 @@ func (g *game) tickPossessedMonster(i int, th mapdata.Thing) {
 			f /= n
 			s /= n
 		}
-		speed := monsterMoveStep(th.Type, g.fastMonstersActive())
+		speed := g.monsterMoveStep(th.Type, g.fastMonstersActive())
 		dx := int64(f*float64(fixedMul(speed, doomFineCosine(angle))) + s*float64(fixedMul(speed, doomFineCosine(angle-doomAng90))))
 		dy := int64(f*float64(fixedMul(speed, doomFineSineAtAngle(angle))) + s*float64(fixedMul(speed, doomFineSineAtAngle(angle-doomAng90))))
 		if dx != 0 || dy != 0 {
@@ -311,7 +311,7 @@ func (g *game) possessionEyeZ() (float64, bool) {
 	th := g.m.Things[i]
 	_, _, z := g.thingRenderPosFixed(i, th, g.renderAlpha)
 	_, _, ceil := g.thingSupportState(i, th)
-	eye := min(z+monsterHeight(th.Type)*3/4, ceil-4*fracUnit)
+	eye := min(z+g.monsterHeight(th.Type)*3/4, ceil-4*fracUnit)
 	return float64(eye) / fracUnit, true
 }
 

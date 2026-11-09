@@ -1,10 +1,10 @@
 # DeHackEd/BEX foundations
 
 The `internal/dehacked` package implements patchable definition data and a
-transactional text parser. **The launcher and gameplay engine do not consume
-these definitions yet.** This milestone does not make patched WADs playable or
-claim Sunlust MAP30 gameplay/demo parity. Runtime dispatch, resource loading,
-saves and multiplayer integration are subsequent work.
+transactional text parser. The gameplay engine now has an internal actor-property
+integration stage; **the launcher does not load patches yet**. This does not make
+patched WADs playable or claim Sunlust MAP30 gameplay/demo parity. State/action
+dispatch, resource loading, saves and multiplayer integration remain subsequent work.
 
 ## Definition model
 
@@ -146,6 +146,40 @@ table dumps/logs and guards source/reference/observer identities. Omitting
 `--sunlust-wad` runs the synthetic cases. It suppresses automatic IWAD patches
 and explicitly loads each test's unchanged patch files. Commercial IWADs and
 the external community patch are not bundled.
+
+## Actor-property gameplay integration
+
+`doomruntime.newGameWithDefinitions` validates a resolved patch set before map
+initialization or RNG changes, then installs an owned per-game property cache.
+It currently supports existing map monsters and barrels: spawn health, reaction
+time, pain chance, walking speed, radius, height and mass. Unwritten properties
+retain the existing engine behavior. Barrel pain/speed changes are rejected until
+their state/action consumers are integrated. Monster speed is converted from integer
+units; dimensions retain their original fixed-point values, including zero.
+
+These values feed actual spawn, walking, collision, aim/LOS, damage thrust,
+overkill thresholds, corpse dimensions, resurrection and respawn consumers.
+Nightmare still overrides initial reaction time with zero; nightmare respawning
+keeps Doom's fixed 18-tic reaction delay. An explicitly patched zero pain chance
+still consumes the native pain RNG roll. Zero-speed monsters keep successful-walk
+RNG/timing. Ceiling spawns use patched height. Sessions do not mutate shared tables.
+
+This stage rejects unsupported fields, including explicit writes of default
+values, rather than silently ignoring them. Player/projectile/pickup definitions,
+editor-number changes, flags, states/actions, resources, strings, weapons and
+other rules are not enabled. Supported runtime ranges are positive health/mass,
+nonnegative reaction/dimensions, pain chance 0–256 and walking speed 0–32767;
+the parser preserves the broader original 32-bit values independently.
+
+The constructor is internal: there is no patch option in the public launcher,
+authority or session APIs. Campaign propagation, save/keyframe identity and
+network compatibility are still prerequisites for exposing patched sessions.
+Focused gameplay tests cover movement, wall collision, damage/pain RNG, overkill,
+corpse/raised dimensions, barrel zero bounds, nightmare spawn/respawn behavior,
+rejection before RNG changes, and unpatched session isolation. Vanilla definitions
+produce the same initial save state and RNG as the existing unpatched constructor.
+Runtime/app/network/parser suites pass. These are Go gameplay regressions;
+independent DSDA gameplay/demo parity has not yet been established.
 
 ## Next integration milestone
 

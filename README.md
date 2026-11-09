@@ -167,8 +167,8 @@ or [cmd/musicwav](cmd/musicwav) for FM/PC speaker renders; see the
 ## Original Doom demo compatibility
 
 DeHackEd/BEX work has a [definition and parser foundation](docs/dehacked-support.md)
-with independent native table comparisons. It is not connected to gameplay or
-patch loading yet.
+with independent native table comparisons and an internal actor-property gameplay
+integration stage. Launcher patch loading and state/action integration are next.
 
 The completed COMPET-N sweep covers **4,646 single-player Ultimate Doom and
 Doom II recordings** across all 68 starting maps. Verified **2026-10-02**

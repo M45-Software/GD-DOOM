@@ -52,6 +52,12 @@ func (g *game) thingCurrentHeight(i int, th mapdata.Thing) int64 {
 	if g != nil && i >= 0 && i < len(g.thingGibbed) && g.thingGibbed[i] {
 		return 0
 	}
+	if height, ok := g.actorProperty(th.Type, "Height"); ok {
+		if i >= 0 && i < len(g.thingDead) && g.thingDead[i] && (isBarrelThingType(th.Type) || monsterLeavesCorpse(th.Type) || th.Type == 3006) {
+			return int64(height) >> 2
+		}
+		return int64(height)
+	}
 	if info, ok := demoTraceThingInfoForType(th.Type); ok && info.height > 0 {
 		if (isBarrelThingType(th.Type) || isPlayerBodyThingType(th.Type)) && i >= 0 && i < len(g.thingDead) && g.thingDead[i] {
 			return info.height >> 2
@@ -63,9 +69,9 @@ func (g *game) thingCurrentHeight(i int, th mapdata.Thing) int64 {
 	}
 	if isMonster(th.Type) {
 		if i >= 0 && i < len(g.thingDead) && g.thingDead[i] && (monsterLeavesCorpse(th.Type) || th.Type == 3006) {
-			return monsterHeight(th.Type) >> 2
+			return g.monsterHeight(th.Type) >> 2
 		}
-		return monsterHeight(th.Type)
+		return g.monsterHeight(th.Type)
 	}
 	return 16 * fracUnit
 }
@@ -74,11 +80,14 @@ func (g *game) thingCurrentRadius(i int, th mapdata.Thing) int64 {
 	if g != nil && i >= 0 && i < len(g.thingGibbed) && g.thingGibbed[i] {
 		return 0
 	}
+	if radius, ok := g.actorProperty(th.Type, "Radius"); ok {
+		return int64(radius)
+	}
 	if info, ok := demoTraceThingInfoForType(th.Type); ok && info.radius > 0 {
 		return info.radius
 	}
 	if isMonster(th.Type) {
-		return monsterRadius(th.Type)
+		return g.monsterRadius(th.Type)
 	}
 	return 20 * fracUnit
 }
@@ -462,7 +471,7 @@ func (g *game) radiusAttackAtInSubsector(sx, sy, sz, sheight int64, ignoreThing 
 			return
 		}
 		tx, ty := g.thingPosFixed(i, th)
-		radius := thingTypeRadius(th.Type)
+		radius := g.thingTypeRadius(th.Type)
 		dx := abs(tx - sx)
 		dy := abs(ty - sy)
 		tdist := dx

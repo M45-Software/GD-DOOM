@@ -53,7 +53,7 @@ func (g *game) archvileTryRaiseCorpse(vileIdx int) bool {
 		return false
 	}
 	vx, vy := g.thingPosFixed(vileIdx, g.m.Things[vileIdx])
-	step := monsterMoveStep(64, g.fastMonstersActive())
+	step := g.monsterMoveStep(64, g.fastMonstersActive())
 	tryX := vx + fixedMul(step, monsterXSpeed[dir])
 	tryY := vy + fixedMul(step, monsterYSpeed[dir])
 	corpseIdx := -1
@@ -69,7 +69,7 @@ func (g *game) archvileTryRaiseCorpse(vileIdx int) bool {
 			return true
 		}
 		cx, cy := g.thingPosFixed(i, th)
-		maxDist := thingTypeRadius(th.Type) + thingTypeRadius(64)
+		maxDist := g.thingTypeRadius(th.Type) + g.thingTypeRadius(64)
 		if abs(cx-tryX) > maxDist || abs(cy-tryY) > maxDist {
 			return true
 		}
@@ -79,7 +79,7 @@ func (g *game) archvileTryRaiseCorpse(vileIdx int) bool {
 		g.thingMomX[i], g.thingMomY[i] = 0, 0
 		radius := g.thingCurrentRadius(i, th)
 		if g.boomMomentumDropoff {
-			radius = thingTypeRadius(th.Type)
+			radius = g.thingTypeRadius(th.Type)
 		}
 		_, _, _, fits := g.checkPositionForActor(cx, cy, radius, true, i, true)
 		if !fits {
@@ -131,7 +131,7 @@ func (g *game) startMonsterRaise(i int) {
 	if g.boomMomentumDropoff {
 		g.thingGibbed[i] = false
 	}
-	g.thingHP[i] = monsterSpawnHealth(g.m.Things[i].Type)
+	g.thingHP[i] = g.monsterSpawnHealth(g.m.Things[i].Type)
 	g.thingState[i], g.thingStatePhase[i], g.thingStateTics[i] = monsterStateRaise, 0, seq.tics[0]
 	g.thingDoomState[i] = noDoomMonsterState
 	g.thingDeathTics[i], g.thingPainTics[i], g.thingAttackTics[i] = 0, 0, 0

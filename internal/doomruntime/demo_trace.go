@@ -419,7 +419,7 @@ func (g *game) demoTraceMobjs() []demoTraceMobj {
 		} else if sec >= 0 && sec < len(g.sectorCeil) {
 			ceilZ = g.sectorCeil[sec]
 		}
-		radius, height := demoTraceThingBounds(th.Type)
+		radius, height := g.demoTraceThingBounds(th.Type)
 		if i >= 0 && i < len(g.thingGibbed) && g.thingGibbed[i] {
 			radius, height = 0, 0
 		}

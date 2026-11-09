@@ -106,6 +106,9 @@ func (g *game) initThingCombatState() {
 		if info, ok := demoTraceThingInfoForType(th.Type); ok {
 			if i >= 0 && i < len(g.thingReactionTics) {
 				g.thingReactionTics[i] = info.reaction
+				if reaction, patched := g.actorProperty(th.Type, "ReactionTime"); patched {
+					g.thingReactionTics[i] = int(reaction)
+				}
 			}
 			if i >= 0 && i < len(g.thingLastLook) {
 				g.thingLastLook[i] = doomrand.PRandom(doomrand.Lastlook) & 3
@@ -136,7 +139,7 @@ func (g *game) initThingCombatState() {
 				g.thingLastLook[i] = doomrand.PRandom(doomrand.Lastlook) & 3
 			}
 			if i >= 0 && i < len(g.thingReactionTics) {
-				g.thingReactionTics[i] = demoTraceSpawnReactionTime(th.Type)
+				g.thingReactionTics[i] = g.demoTraceSpawnReactionTime(th.Type)
 			}
 		}
 		if g.opts.SkillLevel == 5 && i < len(g.thingReactionTics) {
@@ -145,7 +148,7 @@ func (g *game) initThingCombatState() {
 		if !thingTypeIsShootable(th.Type) {
 			continue
 		}
-		g.thingHP[i] = shootableThingSpawnHealth(th.Type)
+		g.thingHP[i] = g.shootableThingSpawnHealth(th.Type)
 		if isVoodooDollType(th.Type) {
 			g.thingDoomState[i], g.thingStateTics[i] = 149, -1
 		}
@@ -683,7 +686,7 @@ func (g *game) monsterShootZ(i int, typ int16) int64 {
 		return 8 * fracUnit
 	}
 	z, _, _ := g.thingSupportState(i, g.m.Things[i])
-	return z + (monsterHeight(typ) >> 1) + 8*fracUnit
+	return z + (g.monsterHeight(typ) >> 1) + 8*fracUnit
 }
 
 func (g *game) playerLineAttackActor() lineAttackActor {
@@ -1522,7 +1525,7 @@ func (g *game) damageMonsterFromWithInflictorZ(thingIdx int, damage int, sourceP
 				g.creditCoopUnownedKill(thingIdx)
 			}
 		}
-		xdeath := g.thingHP[thingIdx] < -monsterSpawnHealth(thingType) && monsterHasXDeath(thingType)
+		xdeath := g.thingHP[thingIdx] < -g.monsterSpawnHealth(thingType) && monsterHasXDeath(thingType)
 		// P_KillMobj clears MF_SKULLFLY along with MF_FLOAT.
 		if thingIdx < len(g.thingSkullFly) {
 			g.thingSkullFly[thingIdx] = false
@@ -1594,8 +1597,9 @@ func (g *game) damageMonsterFromWithInflictorZ(thingIdx int, damage int, sourceP
 			g.thingReactionTics[thingIdx] = 0
 		}
 		if isMonster(thingType) {
-			chance := monsterPainChance(thingType)
-			if chance > 0 {
+			chance := g.monsterPainChance(thingType)
+			_, patchedPainChance := g.actorProperty(thingType, "PainChance")
+			if chance > 0 || patchedPainChance {
 				roll := doomrand.PRandom(doomrand.Painchance)
 				// Doom evaluates P_Random before testing MF_SKULLFLY, so a
 				// charging Lost Soul consumes the pain roll but cannot enter
@@ -1693,7 +1697,7 @@ func (g *game) applyMonsterDamageThrust(thingIdx int, damage int, sourcePlayer b
 	}
 	tx, ty := g.thingPosFixed(thingIdx, g.m.Things[thingIdx])
 	tz, _, _ := g.thingSupportState(thingIdx, g.m.Things[thingIdx])
-	mass := thingTypeMass(g.m.Things[thingIdx].Type)
+	mass := g.thingTypeMass(g.m.Things[thingIdx].Type)
 	if mass <= 0 {
 		return
 	}
@@ -2006,7 +2010,7 @@ func (g *game) appendRuntimeThingWithSpawnRNG(th mapdata.Thing, dropped, spawnRN
 	g.thingMoveCount = append(g.thingMoveCount, 0)
 	g.thingJustAtk = append(g.thingJustAtk, false)
 	g.thingJustHit = append(g.thingJustHit, false)
-	g.thingReactionTics = append(g.thingReactionTics, demoTraceSpawnReactionTime(th.Type))
+	g.thingReactionTics = append(g.thingReactionTics, g.demoTraceSpawnReactionTime(th.Type))
 	if g.opts.SkillLevel == 5 {
 		g.thingReactionTics[len(g.thingReactionTics)-1] = 0
 	}

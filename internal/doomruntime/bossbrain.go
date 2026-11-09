@@ -297,7 +297,7 @@ func (g *game) resolveBossCube(cube bossSpawnCube) {
 	}
 	g.setThingPosFixed(idx, tx, ty)
 	g.setThingSupportState(idx, tz, floorZ, ceilZ)
-	g.thingHP[idx] = monsterSpawnHealth(typ)
+	g.thingHP[idx] = g.monsterSpawnHealth(typ)
 	g.ensureMonsterAIState()
 	g.thingState[idx] = monsterStateSpawn
 	g.thingStatePhase[idx] = 0
@@ -319,7 +319,7 @@ func (g *game) resolveBossCube(cube bossSpawnCube) {
 		}
 	}
 	tx, ty = g.thingPosFixed(idx, g.m.Things[idx])
-	if floor, ceil, ok := g.teleportDestinationHeights(tx, ty); ok && g.teleportStompDestinationThings(tx, ty, monsterRadius(typ), idx, false, tx, ty) {
+	if floor, ceil, ok := g.teleportDestinationHeights(tx, ty); ok && g.teleportStompDestinationThings(tx, ty, g.monsterRadius(typ), idx, false, tx, ty) {
 		g.setThingPosFixed(idx, tx, ty)
 		z, _, _ := g.thingSupportState(idx, g.m.Things[idx])
 		g.setThingSupportState(idx, z, floor, ceil)

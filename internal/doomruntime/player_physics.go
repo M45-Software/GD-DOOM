@@ -1365,7 +1365,7 @@ func (g *game) actorBlockedByThingsWithPickupTouch(x, y, radius int64, moverThin
 		tx, ty = g.thingPosFixed(i, th)
 		if actorsOverlapXY(x, y, radius, tx, ty, g.thingCurrentRadius(i, th)) {
 			if probeEnabled {
-				g.debugPlayerProbe(fmt.Sprintf("block thing=%d type=%d pos=(%d,%d) radius=%d kind=solid", i, th.Type, tx, ty, thingTypeRadius(th.Type)), x, y)
+				g.debugPlayerProbe(fmt.Sprintf("block thing=%d type=%d pos=(%d,%d) radius=%d kind=solid", i, th.Type, tx, ty, g.thingTypeRadius(th.Type)), x, y)
 			}
 			return true
 		}

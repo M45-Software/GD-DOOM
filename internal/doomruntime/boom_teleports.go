@@ -82,7 +82,7 @@ func (g *game) activateSilentLineTeleport(lineIdx int, info mapdata.TeleportInfo
 		if actorIdx == boomEffectActor && g.effectMover != nil {
 			radius = g.effectMover.radius
 		} else if !isPlayer {
-			radius = thingTypeRadius(g.m.Things[actorIdx].Type)
+			radius = g.thingTypeRadius(g.m.Things[actorIdx].Type)
 		}
 		if !g.teleportStompDestinationThings(x, y, radius, actorIdx, isPlayer, actorX, actorY) {
 			return false

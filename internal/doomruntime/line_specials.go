@@ -1383,7 +1383,7 @@ func (g *game) activateTeleportLine(lineIdx int, side int, info mapdata.Teleport
 		actorX, actorY = g.thingPosFixed(actorIdx, actor)
 		actorZ, actorFloorZ, actorCeilZ = g.thingSupportState(actorIdx, actor)
 		actorAngle = g.thingWorldAngle(actorIdx, actor)
-		actorRadius = thingTypeRadius(actor.Type)
+		actorRadius = g.thingTypeRadius(actor.Type)
 	}
 	// EV_Teleport scans tagged sectors first, then the thinker list within
 	// each sector. Map Things retain that spawn order; a destination in an

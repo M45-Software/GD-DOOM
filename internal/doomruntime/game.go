@@ -436,6 +436,8 @@ func (g *game) wallDepthColumnAt(x int) scene.WallDepthColumn {
 }
 
 type game struct {
+	actorDefinitions map[int16]actorDefinition
+
 	boomVoodooBodies                   []int
 	boomFrictions                      []boomFrictionThinker
 	boomPushers                        []boomPusherThinker
@@ -1377,6 +1379,10 @@ func newGame(m *mapdata.Map, opts Options) *game {
 // newGameWithRNG builds a fresh level. A single-player rebirth reloads the
 // level without M_ClearRandom, unlike a brand-new game or demo session.
 func newGameWithRNG(m *mapdata.Map, opts Options, clearRNG bool) *game {
+	return newGameWithActorDefinitions(m, opts, clearRNG, nil)
+}
+
+func newGameWithActorDefinitions(m *mapdata.Map, opts Options, clearRNG bool, definitions map[int16]actorDefinition) *game {
 	// Doom clears both random streams in G_InitNew before setting up a fresh
 	// level, including demo playback. Without this, hidden bootstrap/frontend
 	// builds leak prior RNG state into attract demos and other new sessions.
@@ -1413,6 +1419,7 @@ func newGameWithRNG(m *mapdata.Map, opts Options, clearRNG bool) *game {
 	}
 	p, localSlot, starts, localPlayerThingIndex := spawnPlayer(m, opts.PlayerSlot)
 	g := &game{
+		actorDefinitions:  definitions,
 		m:                 m,
 		restartTemplate:   cloneMapForRestart(m),
 		opts:              opts,
@@ -1679,7 +1686,11 @@ func newGameWithRNG(m *mapdata.Map, opts Options, clearRNG bool) *game {
 		g.thingZState[i] = g.thingFloorState[i]
 		if thingSpawnsOnCeiling(th.Type) && sec >= 0 && sec < len(g.sectorCeil) {
 			if info, ok := demoTraceThingInfoForType(th.Type); ok {
-				g.thingZState[i] = g.thingCeilState[i] - info.height
+				height := info.height
+				if patchedHeight, patched := g.actorProperty(th.Type, "Height"); patched {
+					height = int64(patchedHeight)
+				}
+				g.thingZState[i] = g.thingCeilState[i] - height
 			}
 		}
 		if sec >= 0 {

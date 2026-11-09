@@ -520,7 +520,7 @@ func (g *game) checkWalkSpecialLinesForActorWithCandidatesAndRadius(prevX, prevY
 	if radius < 0 && isPlayer {
 		radius = playerRadius
 	} else if radius < 0 && g != nil && g.m != nil && actorIdx >= 0 && actorIdx < len(g.m.Things) {
-		radius = monsterRadius(g.m.Things[actorIdx].Type)
+		radius = g.monsterRadius(g.m.Things[actorIdx].Type)
 	} else if radius < 0 {
 		radius = 0
 	}
