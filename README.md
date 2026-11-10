@@ -186,7 +186,7 @@ FreeDM supplies deathmatch arenas; the two Freedoom phases supply campaigns.
 See [free games, licenses, and server installation](docs/free-games.md).
 For demos and live sessions, use matching base WADs and add-ons on every instance.
 
-Source builds require **Go 1.26.6 or newer** and a Doom WAD. Linux also needs
+Source builds require **Go 1.27.3 or newer** and a Doom WAD. Linux also needs
 the usual X11, OpenGL, and audio development dependencies. On Debian/Ubuntu:
 
 ```bash
