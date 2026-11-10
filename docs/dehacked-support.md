@@ -245,7 +245,7 @@ external patch files. Patched checkpoints older than version 47 must be replayed
 from the map start; unpatched saves retain the usual compatibility window. A mismatch is rejected before installing the snapshot or
 changing RNG in either host. Network sessions are explicitly unavailable for
 patched games until resolved-definition negotiation exists. The authority
-compatibility ID is `gd-doom-authority-dev-36` for the new checkpoint format.
+compatibility ID is `gd-doom-authority-dev-37` for the new checkpoint format.
 
 Focused Go tests cover actor properties, state roots, code-pointer RNG classes,
 zero-tic/infinite/null states, recursion limits, loader order/includes, launcher
@@ -344,9 +344,62 @@ using `scripts/combine_dehacked_sunlust30.py --baseline DIR --save DIR
 verifier, binary, input and reference identities, complete command/checkpoint
 coverage and matching native exit summaries.
 
+## Patched co-op campaign verification
+
+The full patched co-op campaign verifier uses the unchanged J4C/Kinetic Sunlust
+D2All recordings (`slallk45115` and `slallj45115`), the archive's documented MAP26
+start fix and the original Sunlust patch. `--patched` loads that exact patch
+explicitly in both engines, excluding unrelated IWAD patches. The native Doom II
+reference covers 652,981 two-player command frames per recording: 612,159 active,
+40,582 intermission and 240 story-screen frames, all 32 maps, eight player deaths
+and both players' rebirths at subsequent map starts. Its 191 checkpoint positions
+cover 80 active, 96 intermission and fifteen story-screen states.
+
+```sh
+python3 -B scripts/verify_boom_community_coop_campaign.py \
+  --iwad /path/to/doom2.wad --reference /path/to/instrumented/dsda-doom \
+  --patched --out /tmp/gddoom-patched-coop-campaign
+```
+
+The default matrix runs both recordings continuously and with cold save/keyframe
+restores. For parallel runs, select one `--case` and `--mode` in each separate
+output directory; `scripts/combine_patched_coop_campaign.py DIR1 ... DIR6 --out
+results.json` requires six complete passing reports with identical source,
+verifier and capture binaries, matching per-recording references, complete
+original-command coverage and all observed checkpoints. An incomplete matrix or
+diagnostic prefix cannot become a full-suite receipt. Baseline map/phase snapshots
+are exported for diagnosis; reported comparisons always replay from command one.
+The movie ends in MAP30 intermission, so it does not cover that map's finale.
+
+All six complete replays pass against DSDA 0.27.5: both original console
+recordings, each continuous and with cold saves/keyframes. The
+[combined receipt](dehacked-coop-campaign-results.json) pins the current Go
+source, verifier, capture binary, original inputs and native reference hashes.
+It records 3,917,886 command-frame comparisons, 3,672,954 active-world rows and
+764 cold restores, including intermissions, story screens, player deaths and
+subsequent-map rebirths. Each replay covers all 32 maps and five story screens.
+No replacement or appended commands are included. This establishes offline
+patched co-op demo parity for this campaign; live patched network play still
+requires definition negotiation.
+
+The MAP22 investigation corrected generic monster retargeting after a player's
+death. The next walk frame must be installed before `A_Chase`; a successful
+direct player reacquisition then returns without movement, chase RNG, or
+clearing `JUSTATTACKED`. This also applies when attacks, pain or raise sequences
+enter a run frame. Unit regressions and a 394-frame native post-death window
+cover the walk and attack-expiry cases. The simulation compatibility ID advances
+to `gd-doom-authority-dev-37` for this behavior change.
+
+For native diagnosis, `GD_COOP_CAPTURE_FROM_COMMAND=N` suppresses earlier trace
+output while still executing every original command. Indexed full rows can be
+written with `GD_COOP_CANONICAL_OUT`. Official verifiers scrub diagnostic window
+and continuation settings, pin the native observer/binary, and replay from
+command one. Regenerated full reference traces are byte-identical with the
+window setting absent.
+
 ## Next integration milestone
 
 Expand projectile/effect and player/weapon state consumers, sprite/frame/resource
-changes and the remaining flag semantics. Then broaden original patched-demo
-and campaign coverage, including finales reached by original recordings.
-Network definition negotiation remains separate work.
+changes and the remaining flag semantics. Broader patched campaigns and finales
+reached by original recordings remain useful coverage. Live network definition
+negotiation remains separate from offline co-op demo playback.

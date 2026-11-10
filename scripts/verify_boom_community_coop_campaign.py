@@ -4,7 +4,7 @@
 Inputs are hash-pinned and commands are never replaced or extended. Reference
 captures are cached with input, executable, observer and trace hashes. Stop a GD
 replay at its first difference rather than continuing a desynchronized campaign.
-Sunlust's patched MAP30 requires DeHackEd support beyond the Boom-only milestone.
+Use --patched to load the exact original Sunlust patch in the Go runtime too.
 Use --through for an explicitly bounded diagnostic; it never claims full parity.
 """
 import argparse
@@ -202,7 +202,8 @@ def reference_identity(exe, iwad, wad, fix, demo, deh):
     return dict(line_state=True, executable=digest(exe), iwad=digest(iwad), wad=digest(wad),
                 fix=digest(fix), demo=digest(demo), deh=digest(deh),
                 observers={name: digest(ROOT / 'scripts/visual_compare' / name) for name in
-                           ['dsda_coop_demo_probe.inc', 'dsda_intermission_probe.inc', 'dsda_finale_probe.inc']},
+                           ['dsda_coop_demo_probe.inc', 'dsda_rng_demo_probe.inc', 'dsda_intermission_probe.inc', 'dsda_finale_probe.inc']},
+                noautoload=True,
                 installer=digest(ROOT / 'scripts/verify_boom_transfers.py'))
 
 
@@ -238,6 +239,8 @@ def main():
     parser.add_argument('--case', choices=CASES, action='append')
     parser.add_argument('--mode', choices=['baseline', 'save', 'keyframe'], action='append')
     parser.add_argument('--timeout', type=int, default=43200)
+    parser.add_argument('--patched', action='store_true', help='load the original Sunlust gameplay/text patch in both engines')
+    parser.add_argument('--reference-only', action='store_true', help='capture/audit native references without claiming Go parity')
     parser.add_argument('--through', type=int,
                         help='diagnostic original-command prefix; never full-campaign evidence')
     args = parser.parse_args()
@@ -245,7 +248,7 @@ def main():
         parser.error('--through must select a nonempty, strictly partial original recording')
     out = args.out.resolve(); out.mkdir(parents=True, exist_ok=True)
     exe = args.reference.resolve() if args.reference else build_reference(args.reference_source, out, args.cmake_arg)
-    env = {k: v for k, v in os.environ.items() if not k.startswith(('GD_COOP_', 'GD_DSDA_', 'GD_DEBUG_'))}
+    env = {k: v for k, v in os.environ.items() if not k.startswith(('GD_COOP_', 'GD_DSDA_', 'GD_DEBUG_', 'GD_DEHACKED_', 'GD_RNG_'))}
     env.update(SDL_AUDIODRIVER='dummy', GD_COOP_CAMPAIGN='1', GD_COOP_COMBAT_ONLY='1',
                GD_COOP_COMPACT='1', GD_COOP_LINES='1', GD_COOP_COLD_RESTORE='1')
     source = source_digest()
@@ -254,6 +257,11 @@ def main():
     selected_modes = list(dict.fromkeys(args.mode or ['baseline', 'save', 'keyframe']))
     requested = {name + '_' + mode for name in selected_cases for mode in selected_modes}
     results = {}
+    binary = out / 'campaign.test'
+    if not args.reference_only:
+        run(['go', 'test', '-c', '-tags', 'integration', '-o', binary,
+             './internal/doomruntime'], out / 'build.log', env)
+    reference_binary = digest(exe)
     for name in selected_cases:
         folder = out / name; folder.mkdir(exist_ok=True)
         wad = fetch(folder, 'sunlust.zip', *WADS['sunlust'])
@@ -263,6 +271,12 @@ def main():
         demo = fetch(folder, Path(ARCHIVE).name, ARCHIVE, ARCHIVE_SHA, name + '.lmp')
         deh = folder / 'sunlust.deh'
         audit_inputs(wad, fix, demo, CASES[name], deh)
+        case_env = dict(env)
+        if args.patched:
+            # Match -nodeh -deh exactly: load this unchanged original patch,
+            # independently of any IWAD's unrelated embedded patch.
+            case_env.update(GD_DEHACKED_CAPTURE='1', GD_DEHACKED_NO_EMBEDDED='1',
+                            GD_DEHACKED_FILES=str(deh))
         merged = folder / 'merged.wad'; merge_wads([args.iwad.resolve(), wad, fix], merged)
         expected = {kind: folder / ('dsda-' + kind + '.csv') for kind in ['world', 'phase']}
         identity = reference_identity(exe, args.iwad, wad, fix, demo, deh)
@@ -273,8 +287,12 @@ def main():
                      for kind, path in expected.items()))
         if not valid:
             manifest.unlink(missing_ok=True)
+            # Shared immutable reference files may be hard-linked into mode
+            # directories. Replace stale captures instead of truncating them.
+            for path in expected.values():
+                path.unlink(missing_ok=True)
             run(['xvfb-run', '-a', exe, '-iwad', args.iwad.resolve(), '-file', wad, fix,
-                 '-timedemo', demo, '-nodeh', '-deh', deh, '-nosound', '-nodraw',
+                 '-timedemo', demo, '-nodeh', '-deh', deh, '-nosound', '-nodraw', '-noautoload',
                  '-config', folder / 'dsda.cfg'], folder / 'dsda.log',
                 dict(env, GD_DSDA_COOP_OUT=str(expected['world']),
                      GD_DSDA_PHASE_OUT=str(expected['phase'])), timeout=args.timeout)
@@ -283,6 +301,13 @@ def main():
         cov = coverage(expected['phase'])
         if not cov['passed']:
             raise ValueError(f'original reference coverage failed: {cov["checks"]}')
+        if args.reference_only:
+            if digest(exe) != reference_binary or digest(Path(__file__)) != verifier:
+                raise ValueError('reference/verifier changed during native capture')
+            (folder / 'reference-coverage.json').write_text(json.dumps(
+                dict(reference_only=True, identity=identity, coverage=cov), indent=2) + '\n')
+            print(name, 'native reference coverage', cov, flush=True)
+            continue
         commands = args.through or COMMANDS
         suffix = f'-through-{commands}' if args.through else ''
         frames = cov['phases'][0]
@@ -298,7 +323,7 @@ def main():
                     if count != commands:
                         raise ValueError('reference prefix is missing campaign commands')
                     replay_maps = maps
-            if 'MAP30' in replay_maps:
+            if not args.patched and 'MAP30' in replay_maps:
                 raise ValueError('Boom-only diagnostic includes DeHackEd-dependent MAP30')
             expected = prefix
         checkpoints = [tic for tic in cov['checkpoints'] if tic < commands]
@@ -306,7 +331,7 @@ def main():
             actual = {kind: folder / (mode + '-' + kind + suffix + '.csv') for kind in expected}
             for path in actual.values():
                 path.unlink(missing_ok=True)
-            replay_env = dict(env, GD_COOP_WAD=str(merged), GD_COOP_DEMO=str(demo),
+            replay_env = dict(case_env, GD_COOP_WAD=str(merged), GD_COOP_DEMO=str(demo),
                               GD_COOP_OUT=str(actual['world']), GD_COOP_PHASE_OUT=str(actual['phase']),
                               GD_COOP_CHECKPOINT_FORMAT=mode, GD_COOP_CHECKPOINT_TICS=
                               '' if mode == 'baseline' else ','.join(map(str, checkpoints)))
@@ -317,11 +342,10 @@ def main():
             states = folder / 'baseline-states' / source
             if mode == 'baseline':
                 replay_env['GD_COOP_EXPORT_SAVES'] = str(states)
-            execution = capture(['xvfb-run', '-a', 'go', 'test', '-tags', 'integration',
-                                 './internal/doomruntime', '-run', '^TestBoomCoopDemoCapture$',
-                                 '-count=1', '-timeout=' + str(args.timeout) + 's'],
+            execution = capture(['xvfb-run', '-a', binary, '-test.run', '^TestBoomCoopDemoCapture$',
+                                 '-test.count=1', '-test.timeout=' + str(args.timeout) + 's'],
                                 folder / (mode + suffix + '.log'), replay_env, actual, expected, args.timeout)
-            if source_digest() != source or digest(Path(__file__)) != verifier:
+            if source_digest() != source or digest(Path(__file__)) != verifier or digest(exe) != reference_binary:
                 raise ValueError('source/verifier changed during campaign verification; replay this attempt')
             result = dict(passed=False, execution=execution, reference_coverage=cov, inputs=identity,
                           replay=dict(commands=commands, active_frames=frames, maps=replay_maps),
@@ -338,11 +362,13 @@ def main():
             report = dict(passed=complete and all(r['passed'] for r in results.values()),
                           complete=complete, cases=results,
                           source=source, verifier=verifier,
+                          patched=args.patched, capture_sha256=digest(binary),
                           requested_cases=selected_cases, requested_modes=selected_modes,
                           diagnostic_only=bool(args.through),
-                          full_suite=not args.through and len(results) == len(CASES) * 3 and all(r['passed'] for r in results.values()),
+                          full_suite=args.patched and not args.through and len(results) == len(CASES) * 3 and all(r['passed'] for r in results.values()),
                           scope=('Diagnostic original-command prefix; no full-campaign parity claim. '
                                  if args.through else 'Original full two-player Sunlust D2All commands. ') +
+                                ('Original unchanged Sunlust gameplay/text patch enabled in both engines. ' if args.patched else 'Go replay excludes DeHackEd. ') +
                                 'Complete active-world '
                                 'CSV digests and every campaign phase. Cold save/keyframe restores '
                                 'at map/phase boundaries, screen interiors and player deaths/rebirths. '

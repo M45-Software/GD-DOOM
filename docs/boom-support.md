@@ -1832,11 +1832,11 @@ already pinned Sunlust archive; its SHA-256 is
 `3e6954e5898babc5df625e0c070a55539238067cd00fbbdc8caf6b872f7bd443`.
 MAP30 contains 56 Commander Keens and requires Sunlust's gameplay patch.
 The earlier maps' `-nodeh` audit cannot justify excluding it for this movie.
-That dependency is now being addressed on the separate
-[DeHackEd branch](dehacked-support.md), including cross-type `VileChase` and Keen
-flags. This complete co-op movie remains a diagnostic corpus until replayed with
-its original patch; the separate MAP30 solo test does not establish full co-op
-campaign parity. Its commands must not be altered to bypass that dependency.
+That dependency is handled on the separate
+[DeHackEd branch](dehacked-support.md#patched-co-op-campaign-verification), including
+cross-type `VileChase` and Keen flags. Patched full-campaign verification is
+recorded there separately from the historical Boom-only prefix below. The
+original commands and gameplay patch are retained.
 
 For long comparisons, `GD_COOP_COMPACT=1` hashes each complete existing active
 world CSV row, including its newline, with MD5. Both observers retain the command,
@@ -1878,9 +1878,10 @@ Evidence: `/tmp/gddoom-coop-prefix-final/results.json`, aggregating the two
 source/observer-matched console reports.
 
 This prefix reaches MAP14 and contains no player deaths/rebirths. It is **not**
-full-movie coverage. Full campaign playback and real-recorded death/rebirth
-checkpoints remain unverified; patched MAP30 actor behavior is outside this
-Boom-only milestone.
+full-movie coverage. Full patched campaign playback and recorded death/rebirth
+checkpoints belong to the separate
+[DeHackEd campaign verification](dehacked-support.md#patched-co-op-campaign-verification);
+patched MAP30 actor behavior is outside this historical Boom-only milestone.
 DSDA completes MAP30 in the original movie, but its final recorded command is
 still in intermission. It cannot establish original-recording finale playback;
 do not append replacement commands and count them as community demo coverage.
@@ -1896,8 +1897,10 @@ for both players, and 191 checkpoint positions: 80 active, 96 intermission,
 observer and trace hashes, compares traces as streams, and stops GD at the
 first difference. A diagnostic or failed prefix is never counted as full parity.
 `--through N` compares exactly commands 1 through N from the original recording,
-with separately named prefix traces/reports. It refuses DeHackEd-dependent
-MAP30, reports `diagnostic_only: true` and always leaves `full_suite: false`.
+with separately named prefix traces/reports. Without `--patched`, it refuses
+DeHackEd-dependent MAP30. Prefix runs report `diagnostic_only: true` and always
+leave `full_suite: false`. Full patched runs use the original Sunlust patch in
+both engines.
 An interrupted or incomplete requested matrix cannot report `passed: true`.
 
 ```sh

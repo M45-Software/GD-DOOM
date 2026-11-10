@@ -49,7 +49,7 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 		if value := os.Getenv("GD_DEHACKED_FILES"); value != "" {
 			paths = strings.Split(value, ",")
 		}
-		defs, _, err := launchcatalog.LoadDehacked(wf, paths, false)
+		defs, _, err := launchcatalog.LoadDehacked(wf, paths, os.Getenv("GD_DEHACKED_NO_EMBEDDED") == "1")
 		if err != nil {
 			t.Fatal(err)
 		}

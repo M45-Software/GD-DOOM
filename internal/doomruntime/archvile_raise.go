@@ -203,5 +203,5 @@ func (g *game) tickMonsterRaiseOrHeal(i int, th mapdata.Thing) {
 	g.thingResumeChaseNow[i] = true
 	// A raise frame enters RUN1 with its target cleared. A_Chase's direct
 	// P_LookForPlayers reacquisition returns without an attack/chase retry.
-	g.tickGenericMonsterStateWithAttackReacquire(i, th, false)
+	g.tickGenericMonsterState(i, th)
 }

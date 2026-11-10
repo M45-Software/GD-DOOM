@@ -38,6 +38,63 @@ func TestBoomCoopChaseFindsAnotherPlayerAfterLosingSight(t *testing.T) {
 	}
 }
 
+func TestBoomCoopDeadPlayerReacquireAdvancesFrameWithoutChaseMove(t *testing.T) {
+	for _, typ := range []int16{69, 66} {
+		g, first, second := authoritativeTargetsTestGame()
+		g.m.Things[0].Type = typ
+		g.boomMomentumDropoff = true
+		g.opts.GameMode = gameModeCoop
+		g.withAuthoritativePlayer(second, func() {
+			g.setMonsterTargetPlayer(0)
+			g.isDead, g.stats.Health, g.playerMobjHealth = true, 0, -10
+		})
+		g.thingState[0], g.thingStatePhase[0], g.thingStateTics[0] = monsterStateSee, 2, 1
+		g.thingLastLook[0], g.thingThreshold[0], g.thingReactionTics[0] = 0, 0, 0
+		g.thingMoveCount[0], g.thingJustAtk[0] = 9, true
+		x, y := g.thingPosFixed(0, g.m.Things[0])
+		before := doomrand.Capture()
+		g.tickGenericMonsterState(0, g.m.Things[0])
+		if g.monsterTargetPlayerSlot(0) != first.localSlot {
+			t.Fatalf("actor %d did not reacquire the surviving player", typ)
+		}
+		if g.thingStatePhase[0] != 3 || g.thingStateTics[0] != g.monsterSeeStateTicsForPhase(0, typ) {
+			t.Fatalf("actor %d lost its newly-entered walk frame", typ)
+		}
+		nx, ny := g.thingPosFixed(0, g.m.Things[0])
+		if nx != x || ny != y || g.thingMoveCount[0] != 9 || !g.thingJustAtk[0] || !reflect.DeepEqual(before, doomrand.Capture()) {
+			t.Fatalf("actor %d continued chasing after reacquisition", typ)
+		}
+	}
+	t.Cleanup(doomrand.Clear)
+}
+
+func TestBoomCoopDeadPlayerReacquireOnRunEntryPreservesJustAttacked(t *testing.T) {
+	for _, justAttacked := range []bool{false, true} {
+		g, first, second := authoritativeTargetsTestGame()
+		g.m.Things[0].Type = 66
+		g.boomMomentumDropoff = true
+		g.withAuthoritativePlayer(second, func() {
+			g.setMonsterTargetPlayer(0)
+			g.isDead, g.stats.Health, g.playerMobjHealth = true, 0, -10
+		})
+		g.thingState[0], g.thingStatePhase[0], g.thingStateTics[0] = monsterStateSee, 0, 2
+		g.thingResumeChaseNow[0] = true // RUN1 entered after an attack or raise.
+		g.thingLastLook[0], g.thingThreshold[0], g.thingReactionTics[0] = 0, 0, 0
+		g.thingMoveCount[0], g.thingJustAtk[0] = 10, justAttacked
+		x, y := g.thingPosFixed(0, g.m.Things[0])
+		before := doomrand.Capture()
+		g.tickGenericMonsterState(0, g.m.Things[0])
+		nx, ny := g.thingPosFixed(0, g.m.Things[0])
+		if g.monsterTargetPlayerSlot(0) != first.localSlot || g.thingStatePhase[0] != 0 || g.thingStateTics[0] != 2 {
+			t.Fatal("run entry did not retain its frame after player reacquisition")
+		}
+		if nx != x || ny != y || g.thingMoveCount[0] != 10 || g.thingJustAtk[0] != justAttacked || !reflect.DeepEqual(before, doomrand.Capture()) {
+			t.Fatal("run entry performed a second chase after reacquiring the surviving player")
+		}
+	}
+	t.Cleanup(doomrand.Clear)
+}
+
 func TestBoomLoweringPlatCreatesHeadroomForInitiallyTrappedPlayer(t *testing.T) {
 	for _, boom := range []bool{false, true} {
 		t.Run(map[bool]string{false: "vanilla", true: "boom"}[boom], func(t *testing.T) {

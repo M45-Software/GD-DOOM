@@ -3910,7 +3910,7 @@ func TestRunMonsterIdleOrChaseEntryAction_PainResumeLostTargetStopsAfterReacquir
 		p:                 player{x: -128 * fracUnit, y: 0, z: 0},
 	}
 
-	stop, ranChase := g.runMonsterIdleOrChaseEntryAction(0, 9, 0, 0, false)
+	stop, ranChase := g.runMonsterIdleOrChaseEntryAction(0, 9, 0, 0)
 	if !stop || ranChase {
 		t.Fatalf("stop=%v ranChase=%v want stop=true ranChase=false", stop, ranChase)
 	}
@@ -4001,7 +4001,7 @@ func TestRunMonsterIdleOrChaseEntryAction_SpawnWakeContinuesIntoChase(t *testing
 		p:                 player{x: 128 * fracUnit, y: 0, z: 0},
 	}
 
-	stop, ranChase := g.runMonsterIdleOrChaseEntryAction(0, 3002, 0, 0, false)
+	stop, ranChase := g.runMonsterIdleOrChaseEntryAction(0, 3002, 0, 0)
 	if stop || !ranChase {
 		t.Fatalf("stop=%v ranChase=%v want stop=false ranChase=true", stop, ranChase)
 	}

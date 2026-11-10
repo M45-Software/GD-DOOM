@@ -834,10 +834,6 @@ func (g *game) tickThingThinker(i int, th mapdata.Thing) {
 // State-entry actions can run outside P_MobjThinker, without movement or a
 // second countdown decrement (for example A_SpawnFly's initial A_Chase).
 func (g *game) tickGenericMonsterState(i int, th mapdata.Thing) {
-	g.tickGenericMonsterStateWithAttackReacquire(i, th, true)
-}
-
-func (g *game) tickGenericMonsterStateWithAttackReacquire(i int, th mapdata.Thing, allowAttackReacquire bool) {
 	tx, ty := g.thingPosFixed(i, th)
 	targetX, targetY := int64(0), int64(0)
 	dist := int64(0)
@@ -913,7 +909,7 @@ func (g *game) tickGenericMonsterStateWithAttackReacquire(i int, th mapdata.Thin
 
 	ranStateEntryAction := false
 	if resumedFromPain || resumedFromAttack {
-		if stop, ranChase := g.runMonsterIdleOrChaseEntryAction(i, th.Type, tx, ty, resumedFromAttack && allowAttackReacquire); stop {
+		if stop, ranChase := g.runMonsterIdleOrChaseEntryAction(i, th.Type, tx, ty); stop {
 			return
 		} else if ranChase {
 			ranStateEntryAction = true
@@ -921,16 +917,14 @@ func (g *game) tickGenericMonsterStateWithAttackReacquire(i int, th mapdata.Thin
 	}
 
 	if !resumedFromPain && !resumedFromAttack {
-		hadDeadExplicitThingTarget := i < len(g.thingTargetPlayer) && !g.thingTargetPlayer[i] &&
-			i < len(g.thingTargetIdx) && g.thingTargetIdx[i] >= 0 &&
-			g.thingTargetIdx[i] < len(g.thingHP) && g.thingHP[g.thingTargetIdx[i]] <= 0
+		hadLostChaseTarget := g.thingState[i] == monsterStateSee && !g.monsterHasTarget(i)
 		if !g.monsterAdvanceThinkState(i, th.Type, tx, ty, targetX, targetY, dist) {
 			return
 		}
 		// Entering a see frame runs Doom's A_Chase. If it replaced a dead
 		// target via P_LookForPlayers, A_Chase returns immediately; it must
 		// not also take the ordinary chase move below this tic.
-		if hadDeadExplicitThingTarget && i < len(g.thingTargetDirectReacquire) && g.thingTargetDirectReacquire[i] {
+		if hadLostChaseTarget && i < len(g.thingTargetDirectReacquire) && g.thingTargetDirectReacquire[i] {
 			return
 		}
 	}
@@ -1166,22 +1160,17 @@ func (g *game) monsterAdvanceThinkState(i int, typ int16, tx, ty, px, py, dist i
 		}
 		if !g.monsterHasTarget(i) {
 			// P_SetMobjState installs the next see frame (including its full
-			// tics) before running A_Chase. This Hell Knight has an explicit
-			// corpse target: A_Chase then reacquires the player and returns.
+			// tics) before running A_Chase, including when its player or monster
+			// target has died: A_Chase then reacquires a player and returns.
 			// Preserve the newly-entered frame rather than leaving the expired
 			// frame at zero tics and running another A_Chase next tic.
-			deadKnightTarget := i < len(g.thingTargetPlayer) && !g.thingTargetPlayer[i] &&
-				i < len(g.thingTargetIdx) && g.thingTargetIdx[i] >= 0 &&
-				g.thingTargetIdx[i] < len(g.thingHP) && g.thingHP[g.thingTargetIdx[i]] <= 0
-			if deadKnightTarget {
-				if i < len(g.thingStatePhase) {
-					count := len(monsterSeeFrameTics(typ, g.fastMonstersActive()))
-					if count < 1 {
-						count = 1
-					}
-					g.thingStatePhase[i] = (g.thingStatePhase[i] + 1) % count
-					g.thingStateTics[i] = g.monsterSeeStateTicsForPhase(i, typ)
+			if i < len(g.thingStatePhase) {
+				count := len(monsterSeeFrameTics(typ, g.fastMonstersActive()))
+				if count < 1 {
+					count = 1
 				}
+				g.thingStatePhase[i] = (g.thingStatePhase[i] + 1) % count
+				g.thingStateTics[i] = g.monsterSeeStateTicsForPhase(i, typ)
 			}
 			if i >= 0 && i < len(g.thingReactionTics) && g.thingReactionTics[i] > 0 {
 				g.thingReactionTics[i]--
@@ -1429,9 +1418,9 @@ func (g *game) monsterHasTarget(i int) bool {
 	return false
 }
 
-// monsterHasSimulationTarget mirrors Doom's actor->target pointer check. A
-// killed player remains MF_SHOOTABLE, so an already-targeted corpse can still
-// be seen and attacked; only fresh target acquisition requires a live player.
+// monsterHasSimulationTarget retains a player target pointer for attack actions,
+// which can still face a corpse. P_KillMobj clears MF_SHOOTABLE: A_Chase and
+// fresh target acquisition must use monsterHasTarget instead.
 func (g *game) monsterHasSimulationTarget(i int) bool {
 	if g == nil || i < 0 {
 		return false
@@ -1590,7 +1579,7 @@ func (g *game) resetMonsterIdleOrChaseState(i int, typ int16) {
 
 // Entering an idle/see state runs its action once. A_Chase returns immediately
 // after P_LookForPlayers reacquires a target, including entry from a pain frame.
-func (g *game) runMonsterIdleOrChaseEntryAction(i int, typ int16, tx, ty int64, allowJustAttackedReacquire bool) (stop bool, ranChase bool) {
+func (g *game) runMonsterIdleOrChaseEntryAction(i int, typ int16, tx, ty int64) (stop bool, ranChase bool) {
 	if g == nil || i < 0 || i >= len(g.thingState) {
 		return false, false
 	}
@@ -1598,7 +1587,7 @@ func (g *game) runMonsterIdleOrChaseEntryAction(i int, typ int16, tx, ty int64, 
 	case monsterStateSpawn:
 		if g.monsterRunLookState(i, typ, tx, ty) {
 			if i < len(g.thingState) && g.thingState[i] == monsterStateSee {
-				return g.runMonsterIdleOrChaseEntryAction(i, typ, tx, ty, false)
+				return g.runMonsterIdleOrChaseEntryAction(i, typ, tx, ty)
 			}
 			return true, false
 		}
@@ -1624,27 +1613,10 @@ func (g *game) runMonsterIdleOrChaseEntryAction(i int, typ int16, tx, ty int64, 
 			// lost-target/reacquisition branch rather than continue normal chase
 			// movement.
 			if !g.monsterHasTarget(i) {
-				hadDeadExplicitTarget := i < len(g.thingTargetPlayer) && !g.thingTargetPlayer[i] &&
-					i < len(g.thingTargetIdx) && g.thingTargetIdx[i] >= 0 &&
-					g.thingTargetIdx[i] < len(g.thingHP) && g.thingHP[g.thingTargetIdx[i]] <= 0
 				reacquired, continueChase := g.monsterRunLostTargetChaseState(i, typ, tx, ty)
-				if allowJustAttackedReacquire && reacquired && !hadDeadExplicitTarget &&
-					i < len(g.thingJustAtk) && g.thingJustAtk[i] {
-					continue
-				}
-				if !reacquired {
-					return true, false
-				}
-				if !continueChase {
-					if allowJustAttackedReacquire && hadDeadExplicitTarget {
-						// P_LookForPlayers was reached from the run-state action at
-						// attack expiry. A_Chase returns immediately after reacquiring
-						// a target; the ordinary chase code must wait until next tic.
-						return true, false
-					}
-					if allowJustAttackedReacquire {
-						return false, false
-					}
+				if !reacquired || !continueChase {
+					// Direct P_LookForPlayers reacquisition always returns from
+					// A_Chase, including attack, pain and raise entry actions.
 					return true, false
 				}
 				continue

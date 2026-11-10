@@ -116,6 +116,9 @@ static void GD_CoopDemoFrame(void)
  int line_state=getenv("GD_COOP_LINES")!=NULL;
  FILE *destination;char *row=NULL;size_t row_size=0;
  if(first<0)first=gametic;
+ // Diagnostic output window only: still execute every original command.
+ // Official campaign verifiers scrub this environment variable.
+ if(getenv("GD_COOP_CAPTURE_FROM_COMMAND") && gametic-first+1<atoi(getenv("GD_COOP_CAPTURE_FROM_COMMAND"))){last=gametic;GD_CoopDiagnosticLimit(gametic-first+1);return;}
  if(gametic!=last)GD_CampaignPhaseFrame(gametic-first+1);
  int slot,i;thinker_t *it=NULL;
  if(path && demoplayback && getenv("GD_COOP_FINALE") && gametic!=last) {
