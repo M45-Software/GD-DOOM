@@ -54,7 +54,7 @@ func (a *Authority) captureSharedAuthorityReplica() (authorityReplica, error) {
 	}
 	r := authorityReplica{
 		Version: authorityReplicaVersion, Map: g.m.Name, MapHash: mapHash,
-		WADHash: g.opts.WADHash, Tic: a.Tic(), Game: captureGameSaveState(g),
+		WADHash: g.opts.WADHash, DefinitionDigest: definitionDigest(g.opts), Tic: a.Tic(), Game: captureGameSaveState(g),
 		ThingBlockOrder:       append([]int64(nil), g.thingBlockOrder...),
 		ThingTelefragTick:     append([]int(nil), g.thingTelefragTick...),
 		ThingTargetPlayerSlot: append([]int(nil), g.thingTargetPlayerSlot...),

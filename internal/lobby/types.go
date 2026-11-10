@@ -27,11 +27,12 @@ type State struct {
 }
 
 type Pack struct {
-	ID        string     `json:"id"`
-	Name      string     `json:"name"`
-	WADHashes []string   `json:"wad_hashes"`
-	Maps      []string   `json:"maps"`
-	Files     []PackFile `json:"files,omitempty"`
+	DefinitionDigest string     `json:"definition_digest,omitempty"`
+	ID               string     `json:"id"`
+	Name             string     `json:"name"`
+	WADHashes        []string   `json:"wad_hashes"`
+	Maps             []string   `json:"maps"`
+	Files            []PackFile `json:"files,omitempty"`
 }
 
 // PackFile describes one entry in the exact ordered WAD stack. Downloadable

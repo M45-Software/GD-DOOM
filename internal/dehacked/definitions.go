@@ -11,6 +11,7 @@ import (
 	"maps"
 	"reflect"
 	"slices"
+	"sync"
 )
 
 const (
@@ -123,11 +124,15 @@ type Snapshot struct {
 	Misc    Misc
 }
 
-type Definitions struct{ data Snapshot }
+type Definitions struct {
+	data       Snapshot
+	digestOnce sync.Once
+	digest     string
+}
 
 // Vanilla returns a fresh copy of the original Doom 1.9 definitions.
 func Vanilla() *Definitions {
-	return &Definitions{cloneSnapshot(Snapshot{
+	return &Definitions{data: cloneSnapshot(Snapshot{
 		Things: vanillaThings[:], States: vanillaStates[:], Weapons: vanillaWeapons[:],
 		Ammo: vanillaAmmo[:], Sounds: vanillaSounds[:], Sprites: vanillaSprites[:],
 		Music: vanillaMusic[:], Strings: vanillaStrings, Cheats: vanillaCheats,
@@ -239,11 +244,19 @@ func (d *Definitions) Misc() Misc { return d.data.Misc }
 // Digest identifies all resolved definition data. Encoding is length-delimited,
 // sorts map keys, and preserves arbitrary legacy string bytes (including invalid
 // UTF-8), so comments and patch filenames do not change the definition identity.
+// Nil identifies an unpatched runtime with an empty digest. Immutable results
+// are cached for per-tick authority baselines and concurrent discovery callers.
 func (d *Definitions) Digest() string {
-	h := sha256.New()
-	h.Write([]byte("gddoom-dehacked-definitions-v1\x00"))
-	digestValue(h, reflect.ValueOf(d.data))
-	return hex.EncodeToString(h.Sum(nil))
+	if d == nil {
+		return ""
+	}
+	d.digestOnce.Do(func() {
+		h := sha256.New()
+		h.Write([]byte("gddoom-dehacked-definitions-v1\x00"))
+		digestValue(h, reflect.ValueOf(d.data))
+		d.digest = hex.EncodeToString(h.Sum(nil))
+	})
+	return d.digest
 }
 
 func digestValue(h hash.Hash, v reflect.Value) {

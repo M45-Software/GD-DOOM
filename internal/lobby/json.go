@@ -14,6 +14,7 @@ import (
 // The game manifest's JSON representation participates in its compatibility
 // hash. Keep the lobby's snake_case wire representation separate from it.
 type manifestJSON struct {
+	DefinitionDigest string   `json:"definition_digest,omitempty"`
 	Simulation       string   `json:"simulation"`
 	WADHashes        []string `json:"wad_hashes"`
 	Map              string   `json:"map"`
@@ -36,7 +37,7 @@ func (room Room) MarshalJSON() ([]byte, error) {
 		roomJSON
 		Manifest manifestJSON `json:"manifest"`
 	}{roomJSON(room), manifestJSON{
-		Simulation: m.Simulation, WADHashes: m.WADHashes, Map: m.Map, Mode: m.Mode, Skill: m.Skill,
+		Simulation: m.Simulation, DefinitionDigest: m.DefinitionDigest, WADHashes: m.WADHashes, Map: m.Map, Mode: m.Mode, Skill: m.Skill,
 		NoMonsters: m.NoMonsters, FastMonsters: m.FastMonsters, RespawnMonsters: m.RespawnMonsters,
 		FriendlyFire: m.FriendlyFire, RespawnDelayTics: m.RespawnDelayTics, FragLimit: m.FragLimit, TimeLimitTics: m.TimeLimitTics,
 	}})
@@ -53,7 +54,7 @@ func (room *Room) UnmarshalJSON(data []byte) error {
 	m := wire.Manifest
 	result := Room(wire.roomJSON)
 	result.Manifest = netgame.CompatibilityManifest{
-		Simulation: m.Simulation, WADHashes: m.WADHashes, Map: m.Map, Mode: m.Mode, Skill: m.Skill,
+		Simulation: m.Simulation, DefinitionDigest: m.DefinitionDigest, WADHashes: m.WADHashes, Map: m.Map, Mode: m.Mode, Skill: m.Skill,
 		NoMonsters: m.NoMonsters, FastMonsters: m.FastMonsters, RespawnMonsters: m.RespawnMonsters,
 		FriendlyFire: m.FriendlyFire, RespawnDelayTics: m.RespawnDelayTics, FragLimit: m.FragLimit, TimeLimitTics: m.TimeLimitTics,
 	}

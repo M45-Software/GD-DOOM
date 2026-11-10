@@ -243,9 +243,9 @@ and persistent actor flags;
 loading requires the same definitions to be loaded again. Saves do not bundle
 external patch files. Patched checkpoints older than version 47 must be replayed
 from the map start; unpatched saves retain the usual compatibility window. A mismatch is rejected before installing the snapshot or
-changing RNG in either host. Network sessions are explicitly unavailable for
-patched games until resolved-definition negotiation exists. The authority
-compatibility ID is `gd-doom-authority-dev-37` for the new checkpoint format.
+changing RNG in either host. Authoritative network sessions also require the
+same locally loaded definition identity, as described below. Legacy peer-driven
+sessions continue to reject patches.
 
 Focused Go tests cover actor properties, state roots, code-pointer RNG classes,
 zero-tic/infinite/null states, recursion limits, loader order/includes, launcher
@@ -373,14 +373,14 @@ The movie ends in MAP30 intermission, so it does not cover that map's finale.
 
 All six complete replays pass against DSDA 0.27.5: both original console
 recordings, each continuous and with cold saves/keyframes. The
-[combined receipt](dehacked-coop-campaign-results.json) pins the current Go
+[combined receipt](dehacked-coop-campaign-results.json) pins the verified Go
 source, verifier, capture binary, original inputs and native reference hashes.
 It records 3,917,886 command-frame comparisons, 3,672,954 active-world rows and
 764 cold restores, including intermissions, story screens, player deaths and
 subsequent-map rebirths. Each replay covers all 32 maps and five story screens.
 No replacement or appended commands are included. This establishes offline
-patched co-op demo parity for this campaign; live patched network play still
-requires definition negotiation.
+patched co-op demo parity for this campaign. Live definition negotiation is
+verified separately below; this campaign receipt retains its original source pin.
 
 The MAP22 investigation corrected generic monster retargeting after a player's
 death. The next walk frame must be installed before `A_Chase`; a successful
@@ -397,9 +397,55 @@ and continuation settings, pin the native observer/binary, and replay from
 command one. Regenerated full reference traces are byte-identical with the
 window setting absent.
 
+## Live patched co-op definition negotiation
+
+Authoritative servers and clients negotiate a resolved `DefinitionDigest` in
+addition to engine version, ordered WAD hashes, map and rules. Discovery compares
+the locally loaded definitions; player and spectator joins reject a mismatch
+before admission. The digest includes explicit field writes and all resolved
+strings/states/actor definitions, preserving the runtime's distinction between
+an explicit default and an unwritten field. Comments and filenames do not affect
+it. Empty means no applied patch; it does not mean "accept the server's patch."
+No patches or local paths are supplied by the remote server.
+
+```sh
+# Server and client load the same ordered WADs and external patch stack.
+go run ./cmd/gdserver -wad DOOM2.WAD -file maps.wad -deh monsters.deh
+# Use the server address printed at startup.
+go run . -wad DOOM2.WAD -file maps.wad -deh monsters.deh -connect 127.0.0.1:6671
+```
+
+Both launchers and `gdserver` apply embedded DEHACKED lumps first, then repeated
+or comma-separated `-deh` paths. `-nodeh` skips embedded patches while retaining
+explicit patches. External includes retain the existing relative-path rules.
+Unsupported definitions fail before the server starts listening. Definitions
+are immutable and their digest is cached safely for concurrent discovery and
+per-tick snapshots.
+
+The verified identity is retained through reconnects and map changes. Snapshot
+baselines independently carry and validate it before modifying the client world;
+rebuilds preserve the same local definitions. The authority compatibility ID is
+`gd-doom-authority-dev-38`, and baseline version 3 includes the identity in its
+generated binary schema. Older engines must update before joining. Save version
+47 and keyframe version 34 are unchanged.
+
+Managed room catalogs and uploaded WAD stacks derive their embedded definition
+identity locally and preserve it through pack metadata, room JSON and worker
+verification. Managed rooms do not distribute or configure external patch files;
+use embedded patches for those rooms, or configure a direct server and load the
+external patches independently on each client. The legacy peer/tic-stream
+protocol still rejects patches because it has no definition negotiation.
+
+Regression coverage includes matching/equivalent/mismatched patch admission,
+players and spectators, browser discovery, a real TCP/WebSocket two-player co-op
+server, embedded/external/include ordering and `-nodeh`, reconnecting to the same
+body/inventory, menu installation, patched snapshot state and rejection before
+RNG changes, campaign rebuilds, and catalog/upload/room JSON identities. These
+live checks do not retag the earlier DSDA campaign evidence.
+
 ## Next integration milestone
 
 Expand projectile/effect and player/weapon state consumers, sprite/frame/resource
 changes and the remaining flag semantics. Broader patched campaigns and finales
-reached by original recordings remain useful coverage. Live network definition
-negotiation remains separate from offline co-op demo playback.
+reached by original recordings remain useful coverage. Longer live patched co-op
+campaigns under packet loss and map changes are separate from offline demo parity.

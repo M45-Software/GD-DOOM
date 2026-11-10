@@ -8,6 +8,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
+	"gddoom/internal/dehacked"
 	"gddoom/internal/launchcatalog"
 	"gddoom/internal/netgame"
 	"gddoom/internal/runtimecfg"
@@ -57,10 +58,10 @@ func configureAuthorityBrowser(opts *runtimecfg.Options, paths []string, configP
 	opts.OnAuthorityServersChanged = func(entries []runtimecfg.AuthorityServerEntry) error {
 		return saveAuthorityServers(configPath, cleanAuthorityServers(entries))
 	}
-	opts.AuthorityDiscover = authorityDiscoverer(paths)
+	opts.AuthorityDiscover = authorityDiscoverer(paths, opts.DehackedDefinitions)
 }
 
-func authorityDiscoverer(paths []string) func(context.Context, string) (runtimecfg.AuthorityServerInfo, error) {
+func authorityDiscoverer(paths []string, defs *dehacked.Definitions) func(context.Context, string) (runtimecfg.AuthorityServerInfo, error) {
 	hashes, hashErr := launchcatalog.HashWADStackSHA256(append([]string(nil), paths...))
 	return func(ctx context.Context, address string) (runtimecfg.AuthorityServerInfo, error) {
 		info := runtimecfg.AuthorityServerInfo{Players: -1, PlayerLimit: -1, Spectators: -1}
@@ -106,13 +107,14 @@ func authorityDiscoverer(paths []string) func(context.Context, string) (runtimec
 		}
 		local := info.Manifest
 		local.Simulation, local.WADHashes = netgame.SimulationVersion, hashes
+		local.DefinitionDigest = defs.Digest()
 		localKey, err := local.Key()
 		if err != nil {
 			return info, err
 		}
 		info.Compatible = localKey == serverKey
 		if !info.Compatible {
-			info.CompatibilityError = "Requires matching engine and loaded WADs"
+			info.CompatibilityError = "Requires matching engine, loaded WADs and DeHackEd definitions"
 		}
 		return info, nil
 	}

@@ -11,6 +11,7 @@ import (
 	"testing"
 	"time"
 
+	"gddoom/internal/dehacked"
 	"gddoom/internal/demo"
 	"gddoom/internal/doomruntime"
 	"gddoom/internal/launchcatalog"
@@ -126,6 +127,13 @@ func startResumeCutProxy(t *testing.T, target string) (string, <-chan resumeProx
 }
 
 func TestAuthorityLaunchResumesRealBodyAfterTCPPathLoss(t *testing.T) {
+	testAuthorityLaunchResume(t, nil)
+}
+func TestPatchedAuthorityLaunchResumesRealBodyAfterTCPPathLoss(t *testing.T) {
+	testAuthorityLaunchResume(t, liveTestDefinitions(t, "Thing 2\nHit points = 123\n"))
+}
+func testAuthorityLaunchResume(t *testing.T, defs *dehacked.Definitions) {
+	t.Helper()
 	file, paths, err := openWADStack(filepath.Join("..", "..", "DOOM1.WAD"), nil)
 	if err != nil {
 		t.Fatal(err)
@@ -134,14 +142,14 @@ func TestAuthorityLaunchResumesRealBodyAfterTCPPathLoss(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	manifest := netgame.CompatibilityManifest{Simulation: netgame.SimulationVersion, WADHashes: hashes, Map: "E1M1", Mode: "coop", Skill: 3, NoMonsters: true, RespawnDelayTics: 35}
+	manifest := netgame.CompatibilityManifest{DefinitionDigest: defs.Digest(), Simulation: netgame.SimulationVersion, WADHashes: hashes, Map: "E1M1", Mode: "coop", Skill: 3, NoMonsters: true, RespawnDelayTics: 35}
 	key, _ := manifest.Key()
 	content, _ := manifest.ContentKey()
 	m, err := mapdata.LoadMap(file, "E1M1")
 	if err != nil {
 		t.Fatal(err)
 	}
-	authority, err := doomruntime.NewAuthority(m, doomruntime.Options{GameMode: "coop", SkillLevel: 3, NoMonsters: true, WADHash: content})
+	authority, err := doomruntime.NewAuthority(m, doomruntime.Options{DehackedDefinitions: defs, GameMode: "coop", SkillLevel: 3, NoMonsters: true, WADHash: content})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -173,7 +181,7 @@ func TestAuthorityLaunchResumesRealBodyAfterTCPPathLoss(t *testing.T) {
 		}
 	})
 	address, joins, queries := startResumeCutProxy(t, listener.Addr().String())
-	opts := runtimecfg.Options{}
+	opts := runtimecfg.Options{DehackedDefinitions: defs}
 	client, joined, err := connectAuthority(ctx, authorityLaunch{Address: address, Name: "resume-integration"}, paths, file, &opts)
 	if err != nil {
 		t.Fatal(err)
@@ -226,6 +234,9 @@ func TestAuthorityLaunchResumesRealBodyAfterTCPPathLoss(t *testing.T) {
 	}
 	if resumed.Generation != 2 || resumed.Welcome.Epoch != welcome.Epoch || resumed.Welcome.PlayerID != welcome.PlayerID || resumed.Welcome.ResumeToken == welcome.ResumeToken || queries.Load() != 2 {
 		t.Fatalf("app did not freshly discover/resume original slot: generation=%d epoch=%d player=%d queries=%d status=%+v", resumed.Generation, resumed.Welcome.Epoch, resumed.Welcome.PlayerID, queries.Load(), client.Status())
+	}
+	if resumed.Manifest.DefinitionDigest != defs.Digest() {
+		t.Fatal("resume lost negotiated definitions")
 	}
 	second := <-joins
 	if second.hello.ResumeToken != welcome.ResumeToken || second.hello.Compatibility != key {

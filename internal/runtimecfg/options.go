@@ -259,6 +259,8 @@ type VoiceSettings struct {
 
 type Options struct {
 	DehackedDefinitions *dehacked.Definitions
+	// AuthorityDefinitionDigest is the locally verified definition identity from the handshake.
+	AuthorityDefinitionDigest string
 
 	BoomGameOptions *demo.GameOptions
 	// Headless suppresses device-backed audio and render asset preparation for

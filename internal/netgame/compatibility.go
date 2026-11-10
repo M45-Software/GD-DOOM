@@ -11,13 +11,14 @@ import (
 
 // SimulationVersion changes whenever authority physics, rules, or baseline
 // interpretation changes incompatibly. Transport framing has its own version.
-const SimulationVersion = "gd-doom-authority-dev-37"
+const SimulationVersion = "gd-doom-authority-dev-38"
 
 // CompatibilityManifest names content by digest, never by local filesystem path.
 // WADHashes is ordered: changing add-on load order changes the match identity.
 type CompatibilityManifest struct {
 	Simulation       string
 	WADHashes        []string
+	DefinitionDigest string `json:",omitempty"`
 	Map              string
 	Mode             string
 	Skill            int
@@ -35,6 +36,12 @@ func (m CompatibilityManifest) Key() (string, error) {
 		(m.Mode != "coop" && m.Mode != "deathmatch") || m.Skill < 1 || m.Skill > 5 ||
 		len(m.WADHashes) == 0 || len(m.WADHashes) > 64 || m.FragLimit < 0 || m.FragLimit > math.MaxInt32 {
 		return "", fmt.Errorf("invalid multiplayer compatibility manifest")
+	}
+	if m.DefinitionDigest != "" {
+		b, err := hex.DecodeString(m.DefinitionDigest)
+		if err != nil || len(b) != sha256.Size || m.DefinitionDigest != hex.EncodeToString(b) {
+			return "", fmt.Errorf("invalid definition SHA-256 digest")
+		}
 	}
 	for _, h := range m.WADHashes {
 		b, err := hex.DecodeString(h)
@@ -70,9 +77,10 @@ func (m CompatibilityManifest) ContentKey() (string, error) {
 		return "", err
 	}
 	data, err := json.Marshal(struct {
-		Simulation string
-		WADHashes  []string
-	}{m.Simulation, m.WADHashes})
+		Simulation       string
+		WADHashes        []string
+		DefinitionDigest string `json:",omitempty"`
+	}{m.Simulation, m.WADHashes, m.DefinitionDigest})
 	if err != nil {
 		return "", err
 	}

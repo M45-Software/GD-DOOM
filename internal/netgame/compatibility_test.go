@@ -28,3 +28,26 @@ func TestCompatibilityIncludesOrderedContentRulesAndSimulation(t *testing.T) {
 		}
 	}
 }
+
+func TestDefinitionIdentityBindsHandshakeAndMapIndependentContent(t *testing.T) {
+	m := discoveryTestManifest()
+	plain, _ := m.Key()
+	plainContent, _ := m.ContentKey()
+	m.DefinitionDigest = fmt.Sprintf("%x", sha256.Sum256([]byte("patched definitions")))
+	patched, _ := m.Key()
+	content, _ := m.ContentKey()
+	if patched == plain || content == plainContent {
+		t.Fatal("patch identity omitted")
+	}
+	m.Map = "MAP02"
+	nextContent, _ := m.ContentKey()
+	if nextContent != content {
+		t.Fatal("map transition changed definition content identity")
+	}
+	for _, bad := range []string{"bad", string(make([]byte, 64)), "ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF"} {
+		m.DefinitionDigest = bad
+		if _, err := m.Key(); err == nil {
+			t.Fatal("invalid definition digest accepted")
+		}
+	}
+}

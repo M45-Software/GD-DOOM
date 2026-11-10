@@ -12,7 +12,7 @@ import (
 	"github.com/zeebo/blake3"
 )
 
-const authorityReplicaVersion = 2
+const authorityReplicaVersion = 3
 
 // MaxAuthoritySnapshotBytes includes framing, binary payload, and checksum.
 const MaxAuthoritySnapshotBytes = 8 << 20
@@ -31,6 +31,7 @@ type authorityReplica struct {
 	Map                   mapdata.MapName
 	MapHash               [32]byte
 	WADHash               string
+	DefinitionDigest      string
 	Viewer                byte
 	Tic                   uint32
 	Game                  gameSaveState
@@ -132,7 +133,7 @@ func decodeAuthorityReplica(data []byte) (authorityReplica, error) {
 }
 
 func validateAuthorityReplica(g *game, r authorityReplica) error {
-	if g == nil || g.m == nil || r.Version != authorityReplicaVersion || r.Map != g.m.Name || r.WADHash != g.opts.WADHash {
+	if g == nil || g.m == nil || r.Version != authorityReplicaVersion || r.Map != g.m.Name || r.WADHash != g.opts.WADHash || r.DefinitionDigest != definitionDigest(g.opts) {
 		return fmt.Errorf("authority baseline does not match loaded content")
 	}
 	hash, err := authorityMapHash(g)

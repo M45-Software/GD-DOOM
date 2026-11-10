@@ -22,7 +22,7 @@ func TestAuthorityBrowserStatusDoesNotJoinAndReportsCompatibility(t *testing.T) 
 		}
 		t.Run(name, func(t *testing.T) {
 			f := newAuthorityJoinFixture(t, mismatch)
-			discover := authorityDiscoverer(f.paths)
+			discover := authorityDiscoverer(f.paths, nil)
 			ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 			defer cancel()
 			info, err := discover(ctx, f.address)
@@ -42,7 +42,7 @@ func TestAuthorityBrowserStatusDoesNotJoinAndReportsCompatibility(t *testing.T) 
 				}
 				return
 			}
-			joined, err := authorityJoiner(f.paths, f.file)(ctx, runtimecfg.AuthorityJoinRequest{Address: f.address, Name: "browser-test"})
+			joined, err := authorityJoiner(f.paths, f.file, nil)(ctx, runtimecfg.AuthorityJoinRequest{Address: f.address, Name: "browser-test"})
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -102,7 +102,7 @@ func TestAuthorityBrowserFallsBackToLegacyQuery(t *testing.T) {
 	}()
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
-	info, err := authorityDiscoverer(f.paths)(ctx, listener.Addr().String())
+	info, err := authorityDiscoverer(f.paths, nil)(ctx, listener.Addr().String())
 	if err != nil {
 		t.Fatal(err)
 	}

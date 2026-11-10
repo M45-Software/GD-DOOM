@@ -21,6 +21,7 @@ import (
 	"time"
 
 	"gddoom/internal/doomruntime"
+	"gddoom/internal/launchcatalog"
 	"gddoom/internal/mapdata"
 	"gddoom/internal/netgame"
 	"gddoom/internal/render/doomtex"
@@ -55,6 +56,9 @@ func run(ctx context.Context, args []string, out, errOut io.Writer) error {
 	tlsKey := fs.String("tls-key", "", "PEM key for TLS TCP, HTTPS/WSS, and WebTransport listeners")
 	base := fs.String("wad", "DOOM1.WAD", "base WAD")
 	addons := fs.String("file", "", "ordered comma-separated add-on WADs")
+	var dehPaths launchcatalog.DehackedPaths
+	fs.Var(&dehPaths, "deh", "ordered external DeHackEd/BEX patches; repeatable or comma-separated")
+	noEmbeddedDeh := fs.Bool("nodeh", false, "skip embedded DEHACKED lumps")
 	mapName := fs.String("map", "E1M1", "starting map")
 	mode := fs.String("mode", "coop", "game mode: coop or deathmatch")
 	skill := fs.Int("skill", 3, "skill 1..5")
@@ -123,12 +127,22 @@ func run(ctx context.Context, args []string, out, errOut io.Writer) error {
 		hash := sha256.Sum256(data)
 		hashes = append(hashes, hex.EncodeToString(hash[:]))
 	}
-	manifest := netgame.CompatibilityManifest{Simulation: netgame.SimulationVersion, WADHashes: hashes, Map: strings.ToUpper(*mapName), Mode: *mode, Skill: *skill, NoMonsters: *noMonsters, FastMonsters: *fastMonsters, RespawnMonsters: *respawnMonsters, FriendlyFire: *friendlyFire, RespawnDelayTics: 35, FragLimit: *fragLimit, TimeLimitTics: uint32(*timeLimit) * netgame.TickRate}
+	file := wad.Merge(files...)
+	defs, diagnostics, err := launchcatalog.LoadDehacked(file, []string(dehPaths), *noEmbeddedDeh)
+	for _, diagnostic := range diagnostics {
+		fmt.Fprintln(errOut, diagnostic.Error())
+	}
+	if err != nil {
+		return err
+	}
+	if err := doomruntime.ValidateDehackedDefinitions(defs); err != nil {
+		return err
+	}
+	manifest := netgame.CompatibilityManifest{DefinitionDigest: defs.Digest(), Simulation: netgame.SimulationVersion, WADHashes: hashes, Map: strings.ToUpper(*mapName), Mode: *mode, Skill: *skill, NoMonsters: *noMonsters, FastMonsters: *fastMonsters, RespawnMonsters: *respawnMonsters, FriendlyFire: *friendlyFire, RespawnDelayTics: 35, FragLimit: *fragLimit, TimeLimitTics: uint32(*timeLimit) * netgame.TickRate}
 	compat, err := manifest.Key()
 	if err != nil {
 		return err
 	}
-	file := wad.Merge(files...)
 	m, err := mapdata.LoadMap(file, mapdata.MapName(manifest.Map))
 	if err != nil {
 		return err
@@ -141,7 +155,7 @@ func run(ctx context.Context, args []string, out, errOut io.Writer) error {
 	if err != nil {
 		return err
 	}
-	authority, err := doomruntime.NewAuthority(m, doomruntime.Options{BoomSwitchPairs: tables.Switches, GameMode: *mode, SkillLevel: *skill, NoMonsters: *noMonsters, FastMonsters: *fastMonsters, RespawnMonsters: *respawnMonsters, WADHash: contentKey, SFXVolume: 1})
+	authority, err := doomruntime.NewAuthority(m, doomruntime.Options{DehackedDefinitions: defs, BoomSwitchPairs: tables.Switches, GameMode: *mode, SkillLevel: *skill, NoMonsters: *noMonsters, FastMonsters: *fastMonsters, RespawnMonsters: *respawnMonsters, WADHash: contentKey, SFXVolume: 1})
 	if err != nil {
 		return err
 	}

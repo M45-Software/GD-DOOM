@@ -11,6 +11,7 @@ import (
 	"testing"
 	"time"
 
+	"gddoom/internal/dehacked"
 	"gddoom/internal/doomruntime"
 	"gddoom/internal/launchcatalog"
 	"gddoom/internal/mapdata"
@@ -29,6 +30,11 @@ type authorityJoinFixture struct {
 
 func newAuthorityJoinFixture(t *testing.T, mismatch bool) authorityJoinFixture {
 	t.Helper()
+	return newPatchedAuthorityJoinFixture(t, mismatch, nil)
+}
+
+func newPatchedAuthorityJoinFixture(t *testing.T, mismatch bool, defs *dehacked.Definitions) authorityJoinFixture {
+	t.Helper()
 	file, paths, err := openWADStack(filepath.Join("..", "..", "DOOM1.WAD"), nil)
 	if err != nil {
 		t.Fatal(err)
@@ -40,7 +46,7 @@ func newAuthorityJoinFixture(t *testing.T, mismatch bool) authorityJoinFixture {
 	if mismatch {
 		hashes[0] = strings.Repeat("ab", 32)
 	}
-	manifest := netgame.CompatibilityManifest{Simulation: netgame.SimulationVersion, WADHashes: hashes, Map: "E1M2", Mode: "coop", Skill: 4, NoMonsters: true, RespawnDelayTics: 35}
+	manifest := netgame.CompatibilityManifest{DefinitionDigest: defs.Digest(), Simulation: netgame.SimulationVersion, WADHashes: hashes, Map: "E1M2", Mode: "coop", Skill: 4, NoMonsters: true, RespawnDelayTics: 35}
 	key, err := manifest.Key()
 	if err != nil {
 		t.Fatal(err)
@@ -50,7 +56,7 @@ func newAuthorityJoinFixture(t *testing.T, mismatch bool) authorityJoinFixture {
 	if err != nil {
 		t.Fatal(err)
 	}
-	a, err := doomruntime.NewAuthority(m, doomruntime.Options{GameMode: "coop", SkillLevel: 4, NoMonsters: true, WADHash: content})
+	a, err := doomruntime.NewAuthority(m, doomruntime.Options{DehackedDefinitions: defs, GameMode: "coop", SkillLevel: 4, NoMonsters: true, WADHash: content})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -116,7 +122,7 @@ func TestAuthorityJoinerLoadedWADLeaveAndRejoin(t *testing.T) {
 		t.Fatal(err)
 	}
 	paths := append([]string(nil), f.paths...)
-	join := authorityJoiner(paths, f.file)
+	join := authorityJoiner(paths, f.file, nil)
 	paths[0] = filepath.Join(t.TempDir(), "not-the-loaded-wad.wad")
 	// Options remain owned by the game loop. The callback prepares a result;
 	// loading a server map must not mutate the already running local game.
@@ -206,7 +212,7 @@ func TestAuthorityJoinerRejectsCanceledAndMismatchedAttemptsWithoutSlot(t *testi
 			if !mismatch {
 				cancel()
 			}
-			result, err := authorityJoiner(f.paths, f.file)(ctx, runtimecfg.AuthorityJoinRequest{Address: address, Name: "rejected"})
+			result, err := authorityJoiner(f.paths, f.file, nil)(ctx, runtimecfg.AuthorityJoinRequest{Address: address, Name: "rejected"})
 			if err == nil || result.Client != nil || result.Map != nil || result.MapLoader != nil {
 				t.Fatal("failed join returned a usable or partially owned session")
 			}
@@ -247,7 +253,7 @@ func TestAuthorityJoinerRetainsLoadedContentIdentityAfterDiskChange(t *testing.T
 	if err != nil {
 		t.Fatal(err)
 	}
-	join := authorityJoiner([]string{path}, loaded)
+	join := authorityJoiner([]string{path}, loaded, nil)
 	// A long-running game may outlive its source file. Neither its advertised
 	// content identity nor later map loading may switch to these new disk bytes.
 	if err := os.WriteFile(path, []byte("replaced after the game loaded the WAD"), 0600); err != nil {
@@ -293,7 +299,7 @@ func TestAuthorityJoinerCancelsBlockedDiscovery(t *testing.T) {
 	defer cancel()
 	done := make(chan error, 1)
 	go func() {
-		result, err := authorityJoiner(paths, file)(ctx, runtimecfg.AuthorityJoinRequest{Address: listener.Addr().String()})
+		result, err := authorityJoiner(paths, file, nil)(ctx, runtimecfg.AuthorityJoinRequest{Address: listener.Addr().String()})
 		if result.Client != nil {
 			err = errors.New("canceled discovery returned a client")
 		}

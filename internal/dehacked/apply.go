@@ -13,7 +13,7 @@ func (d *Definitions) Apply(patches ...*Patch) (*Definitions, error) {
 	if d == nil || len(d.data.Things) != NumThings || len(d.data.States) != NumStates {
 		return nil, fmt.Errorf("DeHackEd definitions must start from Vanilla()")
 	}
-	next := &Definitions{cloneSnapshot(d.data)}
+	next := &Definitions{data: cloneSnapshot(d.data)}
 	for _, patch := range patches {
 		if patch == nil {
 			return nil, fmt.Errorf("cannot apply a nil DeHackEd patch")

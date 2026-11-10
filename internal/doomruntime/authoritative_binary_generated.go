@@ -10,7 +10,7 @@ import (
 	"strconv"
 )
 
-var authorityBinarySchemaFingerprint = [16]byte{0xd0, 0xb4, 0x3d, 0xc7, 0x29, 0x41, 0x63, 0x18, 0x91, 0x7c, 0x08, 0x9d, 0x90, 0x20, 0xcb, 0x2c}
+var authorityBinarySchemaFingerprint = [16]byte{0x9e, 0x3f, 0xa4, 0x38, 0x25, 0x61, 0x7d, 0xf8, 0x0e, 0x01, 0xa7, 0x27, 0xfd, 0xf8, 0x19, 0xd1}
 
 func (w *authorityBinaryWriter) writedoomruntime_AuthorityRules(v *AuthorityRules) {
 	if w.err != nil {
@@ -54,6 +54,7 @@ func (w *authorityBinaryWriter) writedoomruntime_authorityReplica(v *authorityRe
 	w.string(string(v.Map))
 	w.raw(v.MapHash[:])
 	w.string(string(v.WADHash))
+	w.string(string(v.DefinitionDigest))
 	w.byte(byte(v.Viewer))
 	w.unsigned(uint64(v.Tic))
 	w.writedoomruntime_gameSaveState(&v.Game)
@@ -162,6 +163,7 @@ func (r *authorityBinaryReader) readdoomruntime_authorityReplica(v *authorityRep
 	v.Map = mapdata.MapName(r.string())
 	copy(v.MapHash[:], r.raw(32))
 	v.WADHash = string(r.string())
+	v.DefinitionDigest = string(r.string())
 	v.Viewer = uint8(r.byte())
 	v.Tic = uint32(r.unsigned(32))
 	r.readdoomruntime_gameSaveState(&v.Game)

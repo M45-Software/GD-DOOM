@@ -250,6 +250,8 @@ See the [relay, voice, controls, and cheats reference](docs/usage.md).
 
 Authoritative co-op/deathmatch is available through `cmd/gdserver` and the
 `-connect` client option, with prediction, reconnects, chat and spectators.
+Supported DeHackEd patches also work in authoritative sessions when both sides
+load matching definitions; see [patched co-op setup](docs/dehacked-support.md#live-patched-co-op-definition-negotiation).
 In desktop and browser games, open **Esc → Multiplayer**. **Find Game** opens
 the live room list; **Create Game** starts a room of your own. **Player Setup**
 contains your name and player/spectator preference. **Servers** opens

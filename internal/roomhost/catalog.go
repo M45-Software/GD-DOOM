@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"gddoom/internal/launchcatalog"
 	"gddoom/internal/lobby"
 	"gddoom/internal/mapdata"
 	"gddoom/internal/wad"
@@ -109,6 +110,11 @@ func inspectCatalog(catalog Catalog, base string) ([]ContentPack, error) {
 			files = append(files, file)
 		}
 		merged := wad.Merge(files...)
+		defs, _, err := launchcatalog.LoadDehacked(merged, nil, false)
+		if err != nil {
+			return nil, fmt.Errorf("pack %q: %w", entry.ID, err)
+		}
+		pack.Pack.DefinitionDigest = defs.Digest()
 		names, err := uniqueMapNames(merged)
 		if err != nil {
 			return nil, err

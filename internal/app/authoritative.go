@@ -9,6 +9,7 @@ import (
 	"strings"
 	"sync"
 
+	"gddoom/internal/dehacked"
 	"gddoom/internal/launchcatalog"
 	"gddoom/internal/mapdata"
 	"gddoom/internal/netgame"
@@ -19,6 +20,7 @@ import (
 type authorityLaunch struct {
 	Address, Name string
 	Spectator     bool
+	Definitions   *dehacked.Definitions
 }
 
 // Retain a successful HTTPS fallback, so discovery, join and reconnection do
@@ -113,12 +115,13 @@ func dialAuthorityWithHashes(ctx context.Context, cfg authorityLaunch, hashes []
 		// Use our own simulation/content identity. Server metadata selects rules,
 		// never a filesystem path or unverified replacement for the local WADs.
 		manifest.Simulation, manifest.WADHashes = netgame.SimulationVersion, hashes
+		manifest.DefinitionDigest = cfg.Definitions.Digest()
 		key, err := manifest.Key()
 		if err != nil {
 			return netgame.CompatibilityManifest{}, err
 		}
 		if key != serverKey {
-			return netgame.CompatibilityManifest{}, fmt.Errorf("server requires matching engine and WADs in the same load order")
+			return netgame.CompatibilityManifest{}, fmt.Errorf("server requires matching engine, WADs in the same load order, and DeHackEd definitions")
 		}
 		return manifest, nil
 	}
@@ -190,7 +193,7 @@ func dialAuthorityWithHashes(ctx context.Context, cfg authorityLaunch, hashes []
 
 // authorityJoiner captures only immutable loaded content; each join receives its
 // own connector and lifetime context, so failed or canceled attempts can retry.
-func authorityJoiner(paths []string, file *wad.File) func(context.Context, runtimecfg.AuthorityJoinRequest) (runtimecfg.AuthorityJoinResult, error) {
+func authorityJoiner(paths []string, file *wad.File, defs *dehacked.Definitions) func(context.Context, runtimecfg.AuthorityJoinRequest) (runtimecfg.AuthorityJoinResult, error) {
 	paths = append([]string(nil), paths...)
 	// Keep the loaded stack's identity fixed for this game, even if the files
 	// are replaced on disk before a later menu join.
@@ -210,11 +213,12 @@ func authorityJoiner(paths []string, file *wad.File) func(context.Context, runti
 		if request.Name == "" {
 			request.Name = "Player"
 		}
-		return dialAuthorityWithHashes(ctx, authorityLaunch{Address: request.Address, Name: request.Name, Spectator: request.Spectator}, hashes, file)
+		return dialAuthorityWithHashes(ctx, authorityLaunch{Address: request.Address, Name: request.Name, Spectator: request.Spectator, Definitions: defs}, hashes, file)
 	}
 }
 
 func connectAuthority(ctx context.Context, cfg authorityLaunch, paths []string, file *wad.File, opts *runtimecfg.Options) (*netgame.ReconnectingClient, *mapdata.Map, error) {
+	cfg.Definitions = opts.DehackedDefinitions
 	result, err := dialAuthority(ctx, cfg, paths, file)
 	if err != nil {
 		return nil, nil, err
@@ -232,6 +236,7 @@ func connectAuthority(ctx context.Context, cfg authorityLaunch, paths []string, 
 	opts.GameMode, opts.SkillLevel = manifest.Mode, manifest.Skill
 	opts.NoMonsters, opts.FastMonsters, opts.RespawnMonsters = manifest.NoMonsters, manifest.FastMonsters, manifest.RespawnMonsters
 	opts.WADHash = content
+	opts.AuthorityDefinitionDigest = manifest.DefinitionDigest
 	opts.PlayerSlot = int(client.Welcome().PlayerID)
 	opts.AuthorityClient, opts.AuthorityMapLoader = client, result.MapLoader
 	return client, result.Map, nil

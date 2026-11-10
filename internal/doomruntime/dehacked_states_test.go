@@ -186,19 +186,12 @@ func TestDehackedNativeSaveAndNetworkBoundary(t *testing.T) {
 	if !reflect.DeepEqual(before, doomrand.Capture()) {
 		t.Fatal("rejected native load altered RNG")
 	}
-	if _, err := NewAuthority(m, opts); err == nil {
-		t.Fatal("patched authority accepted without definition negotiation")
+	if _, err := NewAuthority(m, opts); err != nil {
+		t.Fatalf("patched authority rejected: %v", err)
 	}
 	sg := &sessionGame{opts: opts}
-	if sg.multiplayerMenuAvailable() {
-		t.Fatal("patched session exposed multiplayer")
-	}
-	sg.beginAuthorityJoin()
-	if !strings.Contains(sg.multiplayer.status, "DEHACKED") {
-		t.Fatal("patched menu join did not explain limitation")
-	}
 	if err := sg.installAuthorityJoin(runtimecfg.AuthorityJoinResult{}); err == nil || !strings.Contains(err.Error(), "DeHackEd") {
-		t.Fatal("patched direct join not rejected")
+		t.Fatal("patched direct join accepted absent definition identity")
 	}
 	t.Cleanup(doomrand.Clear)
 }

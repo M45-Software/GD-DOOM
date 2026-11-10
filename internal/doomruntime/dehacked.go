@@ -18,7 +18,7 @@ type actorDefinition map[string]int32
 
 // newGameWithDefinitions validates before map initialization and RNG changes.
 // Launchers install the same immutable set in Options so rebuilds and campaign
-// transitions retain it. Network sessions require further compatibility work.
+// transitions retain it. Authoritative clients verify the same definition digest.
 func newGameWithDefinitions(m *mapdata.Map, opts Options, defs *dehacked.Definitions) (*game, error) {
 	actors, err := compileActorDefinitions(defs)
 	if err != nil {
@@ -254,8 +254,11 @@ func ValidateDehackedOptions(opts Options) error {
 	return validateDehackedNetworkOptions(opts)
 }
 func validateDehackedNetworkOptions(opts Options) error {
-	if opts.DehackedDefinitions != nil && (opts.CoopPeers != nil || opts.LiveTicSource != nil || opts.LiveTicSink != nil || opts.AuthorityClient != nil) {
-		return fmt.Errorf("DeHackEd network sessions are not supported yet")
+	if opts.DehackedDefinitions != nil && (opts.CoopPeers != nil || opts.LiveTicSource != nil || opts.LiveTicSink != nil) {
+		return fmt.Errorf("DeHackEd peer sessions do not negotiate definitions; use an authoritative server")
+	}
+	if opts.AuthorityClient != nil && opts.AuthorityDefinitionDigest != definitionDigest(opts) {
+		return fmt.Errorf("DeHackEd definitions do not match the negotiated authority session")
 	}
 	return nil
 }

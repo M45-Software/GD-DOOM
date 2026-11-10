@@ -1559,7 +1559,7 @@ func RunParse(args []string, stdout io.Writer, stderr io.Writer) int {
 			return 1
 		}
 		if !broadcastFlagSet && !watchFlagSet && resolvedDemoPath == "" && resolvedRecordDemoPath == "" && resolvedDemoTracePath == "" {
-			opts.AuthorityJoin = authorityJoiner(wadPaths, wf)
+			opts.AuthorityJoin = authorityJoiner(wadPaths, wf, opts.DehackedDefinitions)
 			opts.AuthorityJoinDefaults = joinDefaults
 			configureAuthorityBrowser(&opts, wadPaths, configPath)
 			if err := configureAuthorityLobby(&opts, wadPaths, lobbyURL); err != nil {
@@ -2473,7 +2473,7 @@ func buildRenderBundle(resolvedWADPath string, cfg renderBuildConfig, stderr io.
 		return nm, next, nil
 	}
 	if cfg.demoPath == "" && cfg.recordDemoPath == "" && cfg.demoTracePath == "" {
-		opts.AuthorityJoin = authorityJoiner(wadPaths, wf)
+		opts.AuthorityJoin = authorityJoiner(wadPaths, wf, opts.DehackedDefinitions)
 		opts.AuthorityJoinDefaults = cfg.authorityJoinDefaults
 		configureAuthorityBrowser(&opts, wadPaths, cfg.configPath)
 		if err := configureAuthorityLobby(&opts, wadPaths, cfg.authorityLobbyURL); err != nil {

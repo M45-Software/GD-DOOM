@@ -89,6 +89,12 @@ func ValidatePack(pack Pack) error {
 	if !validID(pack.ID) || !validName(pack.Name) || len(pack.WADHashes) == 0 || len(pack.WADHashes) > 64 || len(pack.Maps) == 0 || len(pack.Maps) > MaxMaps {
 		return errors.New("invalid lobby content pack")
 	}
+	if pack.DefinitionDigest != "" {
+		data, err := hex.DecodeString(pack.DefinitionDigest)
+		if err != nil || len(data) != 32 || pack.DefinitionDigest != strings.ToLower(pack.DefinitionDigest) {
+			return errors.New("content pack requires a lowercase definition SHA-256 digest")
+		}
+	}
 	for _, hash := range pack.WADHashes {
 		data, err := hex.DecodeString(hash)
 		if err != nil || len(data) != 32 || hash != strings.ToLower(hash) {
@@ -138,7 +144,7 @@ func ValidateSettings(settings Settings, pack Pack) (netgame.CompatibilityManife
 		return netgame.CompatibilityManifest{}, errors.New("match requires a map from the selected content pack")
 	}
 	manifest := netgame.CompatibilityManifest{
-		Simulation: netgame.SimulationVersion, WADHashes: slices.Clone(pack.WADHashes), Map: settings.Map,
+		Simulation: netgame.SimulationVersion, DefinitionDigest: pack.DefinitionDigest, WADHashes: slices.Clone(pack.WADHashes), Map: settings.Map,
 		Mode: settings.Mode, Skill: settings.Skill, NoMonsters: settings.NoMonsters,
 		FastMonsters: settings.FastMonsters, RespawnMonsters: settings.RespawnMonsters, FriendlyFire: settings.FriendlyFire,
 		RespawnDelayTics: netgame.TickRate, FragLimit: settings.FragLimit, TimeLimitTics: uint32(settings.TimeLimitSeconds) * netgame.TickRate,
