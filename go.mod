@@ -12,7 +12,7 @@ require (
 	github.com/gen2brain/raylib-go/raylib v0.60.1
 	github.com/hajimehoshi/ebiten/v2 v2.10.6
 	github.com/klauspost/compress v1.20.4
-	github.com/quic-go/quic-go v0.64.1 // webtransport-go v0.13.0 does not support the v0.65 HTTPStream API.
+	github.com/quic-go/quic-go v0.65.0 // webtransport-go v0.13.0 does not support the v0.65 HTTPStream API.
 	github.com/quic-go/webtransport-go v0.13.0
 	github.com/remeh/sizedwaitgroup v1.0.0
 	github.com/sinshu/go-meltysynth v0.1.2
