@@ -2168,6 +2168,22 @@ GD_BENCH_IWAD=/path/to/DOOM2.WAD GD_BENCH_DIR=/path/to/inputs \
   -bench '^BenchmarkSpeedOfDoomMAP32$' -benchtime=1x -count=3 ./internal/app
 ```
 
+## Original MAP30 finale recording
+
+The archived Sunlust `sl30-5219.lmp` continues past the MAP30 exit. With the
+original embedded Sunlust patch, DSDA-Doom 0.27.5 consumes 113,960 commands.
+Of these, 109,871 are in combat, 1,492 in intermission, 1,040 in finale text
+and 1,557 in the cast sequence. The LMP ends during the first cast member.
+The verifier compares every active world row and every command phase. Its
+two cold replay modes restore a save or keyframe at the first, middle and
+last command of each of the four segments. The original LMP, WAD and patch
+are pinned by hash. [Original MAP30 demo](https://dsdarchive.com/files/demos/sunlust/105304/sl30-5219.zip).
+
+```sh
+python3 scripts/verify_boom_recorded_finale.py --iwad /path/to/DOOM2.WAD \
+  --reference /path/to/instrumented/dsda-doom --out /tmp/gddoom-recorded-finale --jobs 3
+```
+
 ## Remaining work
 
 The next milestones are:
@@ -2184,6 +2200,7 @@ The next milestones are:
    their starting map. Another search inspected 38 WAD and TeamTNT releases
    and 67 idgames archives. The original two-player Boom 2.00 recording in
    TeamTNT's Dawning stayed on MAP01 for all 86,114 commands on DSDA-Doom.
+   Dawning uses LMP version 200. GD-DOOM's Boom reader accepts versions 201 and 202.
    An original unpatched multi-map campaign remains an input dependency.
    [Dawning release](https://www.gamers.org/pub/idgames/themes/TeamTNT/boom/dawning.zip),
    [Ruinbros recording](https://github.com/fabiangreffrath/woof/issues/463)
