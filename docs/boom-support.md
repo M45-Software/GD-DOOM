@@ -2162,8 +2162,8 @@ matched DSDA with insurance on and off. The 17 distinct archive recordings
 used for the campaign, single-map and benchmark runs contain zero pause
 commands across all occupied player slots. Their long-running replays use
 the integrated gameplay sources preceding this pause fix. The full Go suite,
-Surge in all three modes, and both Sunlust MAP01–10 recordings in all three
-modes also passed on the pause-corrected revision.
+Surge, Speed of Doom and both Sunlust MAP01–10 recordings also passed in
+all three modes on the pause-corrected revision.
 
 ```sh
 python3 scripts/verify_boom_rebirth.py --case recorded_pause \
@@ -2185,7 +2185,8 @@ puff entered state 93 instead of the native state 95 after the other player
 punched. BOOM’s last attack range belongs to the world. Switching the active
 player previously replaced that range with the player’s earlier value.
 Revision `988067e` keeps the range in the world and its save state. The full
-Go suite passed. Both consoles matched DSDA on every active world row and
+Go suite and the 18 existing Sunlust and Speed of Doom co-op comparisons
+passed. Both Swim With the Whales consoles matched DSDA on every active world row and
 command phase in continuous playback and with cold saves and keyframes. Each
 cold run restored ten checkpoints. The original exit tally matched, with six
 kills for player one and two for player two. Both players used the fist and
@@ -2279,8 +2280,10 @@ The next milestones are:
    and 67 idgames archives. The original two-player Boom 2.00 recording in
    TeamTNT's Dawning stayed on MAP01 for all 86,114 commands on DSDA-Doom.
    Dawning uses LMP version 200. GD-DOOM's Boom reader accepts versions 201 and 202.
-   A separate idgames search checked 905 releases, including the 1998–2005
-   Doom and Doom II source-port level directories. The four-player Boom 2.01
+   A separate idgames search checked 2,564 releases. It covered 1998–2005
+   Doom and Doom II level directories, including source-port levels and
+   TeamTNT releases. The two co-op finds were Dawning and CoDead II.
+   The four-player Boom 2.01
    demo in CoDead II plays 43,608 tics on MAP01, spends 1,736 in intermission
    and ends six tics into MAP02. Its author designed it as a single-map
    capture-the-flag game. [CoDead II release and readme](https://www.gamers.org/pub/idgames/levels/doom2/deathmatch/Ports/a-c/codead2.zip).
