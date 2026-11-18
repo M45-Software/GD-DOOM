@@ -2150,6 +2150,12 @@ Counts in the table are per recording and per replay mode.
 | Sunlust MAP02 `sl02m225` | Continuous, cold save, cold keyframe | 5,086 active tics, including arch-vile resurrection and the exit totals. Both cold replays restored eight checkpoints. |
 | Six community co-op recordings on Sunlust MAP31/MAP32 and Speed of Doom MAP01/MAP02 | Continuous, cold save, cold keyframe | All 18 comparisons matched the original phase rows, active world state and exit totals. |
 
+At `6e28691`, both players' original recordings of the full patched Sunlust
+campaign also matched across all 32 maps. Each recording ran continuously,
+from cold saves and from cold keyframes. The six runs compared 3,917,886
+command frames and restored 764 checkpoints.
+[Campaign inputs and verifier](dehacked-support.md#patched-co-op-campaign-verification)
+
 Revision `aa89eef` carries forward a recorded-pause fix from the earlier BOOM
 checkout. DSDA-Doom freezes level time and advances the BOOM RNG clock for
 each paused command. A 1,000-command encounter now matches through two recorded
