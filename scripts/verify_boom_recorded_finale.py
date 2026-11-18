@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Replay the original sl30-5219 fight, intermission and cast against DSDA."""
 import argparse
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import csv
 import json
 import os
@@ -48,9 +49,13 @@ def main():
     parser.add_argument('--reference', type=Path, required=True)
     parser.add_argument('--out', type=Path, required=True)
     parser.add_argument('--timeout', type=int, default=14400)
+    parser.add_argument('--jobs', type=int, choices=(1, 2, 3), default=1,
+                        help='maximum concurrent replays, each with separate trace files')
     args = parser.parse_args()
     iwad, exe, out = args.iwad.resolve(), args.reference.resolve(), args.out.resolve()
     out.mkdir(parents=True, exist_ok=True)
+    result_file = out / 'results.json'
+    result_file.unlink(missing_ok=True)
     if digest(iwad) != IWAD_SHA:
         parser.error('use the original Doom II 1.9 IWAD')
     wad = fetch(out, 'sunlust.zip', *WADS['sunlust'])
@@ -64,7 +69,12 @@ def main():
     merged = out / 'merged.wad'
     merge_wads([iwad, wad], merged)
     source = source_digest()
-    verifier = digest(Path(__file__))
+    helper_names = ('verify_boom_recorded_finale', 'verify_boom_community_coop_campaign',
+                    'verify_boom_full_combat', 'verify_boom_demos',
+                    'verify_boom_sod_campaign', 'verify_boom_transfers')
+    def verifier_hashes():
+        return {name: digest(ROOT / 'scripts' / (name + '.py')) for name in helper_names}
+    verifiers = verifier_hashes()
     env = {k: v for k, v in os.environ.items()
            if not k.startswith(('GD_COOP_', 'GD_DSDA_', 'GD_DEHACKED_', 'GD_RNG_', 'GD_DEBUG_'))}
     env.update(SDL_AUDIODRIVER='dummy', GD_COOP_CAMPAIGN='1', GD_COOP_COMPACT='1',
@@ -88,10 +98,10 @@ def main():
     binary = out / 'campaign.test'
     run(['go', 'test', '-c', '-tags', 'integration', '-o', binary, './internal/doomruntime'],
         out / 'build.log', env)
-    report = dict(passed=False, source=source, verifier=verifier, binary=digest(binary),
+    report = dict(passed=False, source=source, verifiers=verifiers, binary=digest(binary),
                   inputs=inputs, observers=observers, commands=COMMANDS, segments=SEGMENTS,
                   cold_checkpoints=checkpoints, cases={})
-    for mode in ('baseline', 'save', 'keyframe'):
+    def replay_mode(mode):
         actual = {kind: out / f'{mode}-{kind}.csv' for kind in reference}
         for path in actual.values():
             path.unlink(missing_ok=True)
@@ -108,14 +118,22 @@ def main():
             for kind, rows in [('phase', COMMANDS), ('world', SEGMENTS[1][0])]:
                 case[kind] = compare_complete(actual[kind], reference[kind], rows)
             case['passed'] = case['world']['passed'] and case['phase']['passed']
-        if source_digest() != source or digest(Path(__file__)) != verifier:
+        if source_digest() != source or verifier_hashes() != verifiers:
             raise ValueError('sources changed during replay')
-        report['cases'][mode] = case
-        report['passed'] = len(report['cases']) == 3 and all(c['passed'] for c in report['cases'].values())
-        (out / 'results.json').write_text(json.dumps(report, indent=2) + '\n')
-        print(mode, execution, flush=True)
-        if not case['passed']:
-            raise SystemExit(1)
+        return case
+
+    modes = ('baseline', 'save', 'keyframe')
+    with ThreadPoolExecutor(max_workers=args.jobs) as pool:
+        futures = {pool.submit(replay_mode, mode): mode for mode in modes}
+        for future in as_completed(futures):
+            mode = futures[future]
+            case = report['cases'][mode] = future.result()
+            report['passed'] = len(report['cases']) == len(modes) and all(
+                c['passed'] for c in report['cases'].values())
+            result_file.write_text(json.dumps(report, indent=2) + '\n')
+            print(mode, case['execution'], flush=True)
+    if not report['passed']:
+        raise SystemExit(1)
 
 
 if __name__ == '__main__':
