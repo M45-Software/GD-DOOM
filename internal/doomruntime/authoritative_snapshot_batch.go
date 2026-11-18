@@ -91,7 +91,6 @@ func applyReplicaViewerToSave(s *gameSaveState, p authorityReplicaPlayer) {
 	s.PlayerViewZ = p.PlayerViewZ
 	s.CheatLevel, s.Invulnerable, s.NoClip = p.CheatLevel, p.Invulnerable, p.NoClip
 	s.Inventory = p.Inventory
-	s.LastAttackRange = p.LastAttackRange
 	s.AlwaysRun, s.AutoWeaponSwitch = p.AlwaysRun, p.AutoWeaponSwitch
 	s.WeaponRefire, s.WeaponAttackDown = p.WeaponRefire, p.WeaponAttackDown
 	s.WeaponState, s.WeaponStateTics = int(p.WeaponState), p.WeaponStateTics

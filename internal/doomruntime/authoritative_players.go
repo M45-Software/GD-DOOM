@@ -18,7 +18,6 @@ import (
 type authoritativePlayerState struct {
 	p                           player
 	currentMoveCmd              moveCmd
-	lastAttackRange             int64
 	localSlot                   int
 	localPlayerThingIndex       int
 	playerBlockOrder            int64
@@ -83,7 +82,6 @@ func (g *game) captureAuthoritativePlayer() authoritativePlayerState {
 	state := authoritativePlayerState{
 		p:                           g.p,
 		currentMoveCmd:              g.currentMoveCmd,
-		lastAttackRange:             g.lastAttackRange,
 		localSlot:                   g.localSlot,
 		localPlayerThingIndex:       g.localPlayerThingIndex,
 		playerBlockOrder:            g.playerBlockOrder,
@@ -148,7 +146,6 @@ func (g *game) captureAuthoritativePlayer() authoritativePlayerState {
 func (g *game) applyAuthoritativePlayer(state authoritativePlayerState) {
 	g.p = state.p
 	g.currentMoveCmd = state.currentMoveCmd
-	g.lastAttackRange = state.lastAttackRange
 	g.localSlot = state.localSlot
 	g.localPlayerThingIndex = state.localPlayerThingIndex
 	g.playerBlockOrder = state.playerBlockOrder

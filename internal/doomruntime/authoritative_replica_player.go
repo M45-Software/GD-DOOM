@@ -7,7 +7,7 @@ type authorityReplicaPlayer struct {
 	TeleportedThisTic           bool
 	P                           playerSaveState
 	CurrentMoveCmd              replicaMoveCommand
-	LastAttackRange             int64
+	LastAttackRange             int64 // Reserved in the player wire format. The game save owns the range.
 	LocalSlot                   int
 	LocalPlayerThingIndex       int
 	PlayerBlockOrder            int64
@@ -77,7 +77,6 @@ func captureReplicaPlayer(p authoritativePlayerState) authorityReplicaPlayer {
 		TeleportedThisTic:           p.p.teleportedThisTic,
 		P:                           capturePlayerSaveState(p.p),
 		CurrentMoveCmd:              replicaMoveCommand{Forward: p.currentMoveCmd.forward, Side: p.currentMoveCmd.side, TurnRaw: p.currentMoveCmd.turnRaw, Turn: p.currentMoveCmd.turn, WeaponSlot: p.currentMoveCmd.weaponSlot, Run: p.currentMoveCmd.run},
-		LastAttackRange:             p.lastAttackRange,
 		LocalSlot:                   p.localSlot,
 		LocalPlayerThingIndex:       p.localPlayerThingIndex,
 		PlayerBlockOrder:            p.playerBlockOrder,
@@ -141,7 +140,6 @@ func restoreReplicaPlayer(p authorityReplicaPlayer) authoritativePlayerState {
 		authorityPlayerThinkerOrder: p.AuthorityPlayerThinkerOrder,
 		p:                           restorePlayerSaveState(p.P),
 		currentMoveCmd:              moveCmd{forward: p.CurrentMoveCmd.Forward, side: p.CurrentMoveCmd.Side, turnRaw: p.CurrentMoveCmd.TurnRaw, turn: p.CurrentMoveCmd.Turn, weaponSlot: p.CurrentMoveCmd.WeaponSlot, run: p.CurrentMoveCmd.Run},
-		lastAttackRange:             p.LastAttackRange,
 		localSlot:                   p.LocalSlot,
 		localPlayerThingIndex:       p.LocalPlayerThingIndex,
 		playerBlockOrder:            p.PlayerBlockOrder,

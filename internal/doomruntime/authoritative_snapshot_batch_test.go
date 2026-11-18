@@ -20,7 +20,7 @@ func TestAuthoritySnapshotViewerOverlayMatchesActivatedSave(t *testing.T) {
 	p.prevPX, p.prevPY, p.prevAngle, p.playerViewZ = 11, 22, 33, 44
 	p.cheatLevel, p.invulnerable, p.noClip = 2, true, true
 	p.inventory.BlueKey, p.inventory.LightAmpTics = true, 91
-	p.lastAttackRange = 55
+	a.g.lastAttackRange = 55
 	p.alwaysRun, p.autoWeaponSwitch = true, false
 	p.weaponRefire, p.weaponAttackDown = true, false
 	p.weaponState, p.weaponStateTics = weaponPspriteState(12), 13
@@ -150,5 +150,38 @@ func BenchmarkAuthoritySnapshotBroadcast(b *testing.B) {
 				}
 			})
 		})
+	}
+}
+
+func TestAuthorityPlayersShareAttackRangeWithWorldThinkers(t *testing.T) {
+	a := testAuthority(t)
+	for _, slot := range []byte{1, 2} {
+		if err := a.AddPlayer(slot); err != nil {
+			t.Fatal(err)
+		}
+	}
+	a.g.lastAttackRange = 2048 * fracUnit
+	a.g.withAuthoritativePlayer(a.players[2], func() {
+		if a.g.lastAttackRange != 2048*fracUnit {
+			t.Fatal("activating a player changed the world's previous aim range")
+		}
+		// A punch by this player can affect a later Revenant tracer puff.
+		a.g.lastAttackRange = 64 * fracUnit
+	})
+	if a.g.lastAttackRange != 64*fracUnit {
+		t.Fatal("returning to the first player lost the last attack range")
+	}
+	for _, slot := range []byte{1, 2} {
+		raw, err := a.Snapshot(slot)
+		if err != nil {
+			t.Fatal(err)
+		}
+		replica, err := decodeAuthorityReplica(raw)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if replica.Game.LastAttackRange != 64*fracUnit {
+			t.Fatalf("viewer %d snapshot lost the world's last attack range", slot)
+		}
 	}
 }
