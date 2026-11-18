@@ -2182,6 +2182,8 @@ includes those 25. It produced 186 strict matches across 782,366 compared
 tics, with gameplay RNG matching throughout. The original Linux Doom reference
 crashed on the documented E4M8 `U48GLICH` input before GD-DOOM playback.
 Every recording reproduced its published outcome and comparison length.
+The same 25 in-tree demos and 187-recording selection reproduced those results
+after the recording-only pickup fix at `14a9e64`.
 
 The MAP29 recording `LV29-632` contains pause commands at positions 1,532 and
 1,533 (counting from one). All 14,407 tics matched. A separate replay of
@@ -2305,7 +2307,7 @@ The archived Sunlust `sl30-5219.lmp` continues past the MAP30 exit. With the
 original embedded Sunlust patch, DSDA-Doom 0.27.5 consumes 113,960 commands.
 Of these, 109,871 are in combat, 1,492 in intermission, 1,040 in finale text
 and 1,557 in the cast sequence. The LMP ends during the first cast member.
-At `a9582e3`, GD-DOOM matched all 113,960 commands and all 109,871 active
+At `a9582e3` and again at `988067e`, GD-DOOM matched all 113,960 commands and all 109,871 active
 world rows in continuous playback, after 12 cold saves and after 12 cold
 keyframes. [Trace counts, comparisons and input hashes](boom-recorded-finale-results.json).
 The verifier compares every active world row and every command phase. Its
