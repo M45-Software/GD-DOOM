@@ -2192,8 +2192,10 @@ punched. BOOM’s last attack range belongs to the world. Switching the active
 player previously replaced that range with the player’s earlier value.
 Revision `988067e` keeps the range in the world and its save state. The full
 Go suite and the 18 existing Sunlust and Speed of Doom co-op comparisons
-passed. The full Surge campaign and both Sunlust MAP01–10 recordings also
-matched in continuous playback and both cold restore modes at this revision.
+passed. The full Surge and Speed of Doom campaigns and both Sunlust
+MAP01–10 recordings also matched in continuous playback and both cold restore
+modes at this revision. Speed of Doom compared 341,051 commands per mode
+and restored 377 checkpoints per cold run.
 Both Swim With the Whales consoles matched DSDA on every active world row and
 command phase in continuous playback and with cold saves and keyframes. Each
 cold run restored ten checkpoints. The original exit tally matched, with six
@@ -2305,6 +2307,14 @@ The next milestones are:
    monsters and lasts 939 commands on MAP06.
    [WAD Archive catalogue](https://archive.org/details/wadarchive) and
    [Hell Ground release](https://www.gamers.org/pub/idgames/levels/doom2/Ports/g-i/hg.zip).
+
+   The Doom Open 2003 report describes four players reaching MAP30 in
+   Doom II. The PrBoom+ maintainers used their `29uv4p_*.lmp` recordings to
+   reproduce a playback stop on MAP26. The tournament lists the exhibition
+   download, but its demo headers and recorded ending remain unverified.
+   [Tournament report](https://web.archive.org/web/20170216003059/http://idoom.cz/doom/lan-akce/doom-open-2003/),
+   [exhibition download listing](https://web.archive.org/web/20170215180640/http://idoom.cz/doom/lan-akce/doom-open-2003-tabulky/)
+   and [PrBoom+ change referencing the recording](https://github.com/coelckers/prboom-plus/commit/bdb502484b6f493cea14ffa0786795d4628374e2).
 
    An original unpatched multi-map campaign remains an input dependency.
    [Dawning release](https://www.gamers.org/pub/idgames/themes/TeamTNT/boom/dawning.zip),
