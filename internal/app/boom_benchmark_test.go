@@ -37,7 +37,13 @@ func BenchmarkSpeedOfDoomMAP32(b *testing.B) {
 			b.Fatalf("%s: got SHA-256 %s, want %s", path, got, want)
 		}
 	}
-	cfg := renderBuildConfig{width: 320, height: 200, importTextures: true, startInMap: true, selectedMap: "MAP32", mapExplicit: true, pwadPaths: []string{pwad}, demoPath: recording, noEmbeddedDeh: true}
+	cfg := renderBuildConfig{
+		width: 320, height: 200,
+		importTextures: true, startInMap: true,
+		selectedMap: "MAP32", mapExplicit: true,
+		pwadPaths: []string{pwad}, demoPath: recording,
+		noEmbeddedDeh: true,
+	}
 	const activeTics = 19520
 	var total, slowestWindow, worstP99 time.Duration
 	b.ResetTimer()
@@ -53,7 +59,7 @@ func BenchmarkSpeedOfDoomMAP32(b *testing.B) {
 		// tic and retain all subsequent simulation intervals.
 		b.StartTimer()
 		prev := time.Now()
-		for i := 0; i < activeTics; {
+		for i, updates := 0, 0; i < activeTics; updates++ {
 			if err := s.Update(); err != nil {
 				s.Close()
 				b.Fatal(err)
@@ -63,7 +69,7 @@ func BenchmarkSpeedOfDoomMAP32(b *testing.B) {
 			if tic == i+1 {
 				samples[i] = now.Sub(prev)
 				i++
-			} else if tic != 0 || i != 0 {
+			} else if tic != 0 || i != 0 || updates >= 35 {
 				s.Close()
 				b.Fatalf("world tic %d after %d measured tics", tic, i)
 			}

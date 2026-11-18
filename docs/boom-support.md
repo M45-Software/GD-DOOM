@@ -2137,12 +2137,19 @@ listener, then verifies that listener's first chunk against the next payload.
 ## Speed of Doom MAP32 simulation throughput
 
 Tatsurd-cacocaco’s original UV-Max recording runs for 20,535 commands.
-The DSDA exit summary records 19,520 level tics, 1,184 monsters counting toward the kill total, 1,200 credited kills and the map's single secret. Three GD-DOOM runs
+The DSDA exit summary records 19,520 level tics, 1,184 monsters counting toward
+the kill total, 1,200 credited kills and the map's single secret. Three GD-DOOM runs
 on a Ryzen 9 7950X averaged **505.81, 525.95 and 585.24 tics/s**, respectively.
 The slowest run averaged **1.977 ms/tic** against a 28.57 ms budget. All three
 consumed the full recording with zero draws. These are whole-run averages
 including the ending intermission. The timer starts at playback and excludes
 map loading. Rendering, tracing and cold restores were disabled.
+
+The gameplay-only benchmark times every consecutive window of 35 tics in
+the fight. All three trials sustained 35 tics/s. Their slowest windows took
+173.3, 148.5 and 134.2 ms against a 1,000 ms budget. They averaged 551.2,
+572.9 and 578.6 gameplay tics/s respectively. The highest 99th-percentile
+single-tic time across the three trials was 4.380 ms.
 
 Extract `SODfinal.wad` and `sd32-917.lmp` from the original archives. The
 LMP’s SHA-256 is `f4806dd992fc53ddb3baf11cb8a43d8b27979532dbea55764f6ee8f54868175d`.
@@ -2154,6 +2161,11 @@ and [MAP32 recording](https://dsdarchive.com/files/demos/sodfinal/66644/sd32-917
 go build -o /tmp/gddoom-bench .
 xvfb-run -a /tmp/gddoom-bench -render=false -nodeh -wad /path/to/DOOM2.WAD \
   -file /path/to/SODfinal.wad -demo /path/to/sd32-917.lmp
+
+# Place SODfinal.wad and sd32-917.lmp together in GD_BENCH_DIR.
+GD_BENCH_IWAD=/path/to/DOOM2.WAD GD_BENCH_DIR=/path/to/inputs \
+  xvfb-run -a go test -tags integration -run '^$' \
+  -bench '^BenchmarkSpeedOfDoomMAP32$' -benchtime=1x -count=3 ./internal/app
 ```
 
 ## Remaining work
@@ -2169,8 +2181,12 @@ The next milestones are:
    with Boom co-op LMPs was Sunlust. That recording requires its gameplay
    patch. The original DOS Boom Ruinbros demo and the Woof Plutonia test demo
    replayed on DSDA for 6,561 and 7,860 commands respectively. Both stayed on
-   their starting map. An original unpatched campaign remains an input
-   dependency. [Ruinbros recording](https://github.com/fabiangreffrath/woof/issues/463)
+   their starting map. Another search inspected 38 WAD and TeamTNT releases
+   and 67 idgames archives. The original two-player Boom 2.00 recording in
+   TeamTNT's Dawning stayed on MAP01 for all 86,114 commands on DSDA-Doom.
+   An original unpatched multi-map campaign remains an input dependency.
+   [Dawning release](https://www.gamers.org/pub/idgames/themes/TeamTNT/boom/dawning.zip),
+   [Ruinbros recording](https://github.com/fabiangreffrath/woof/issues/463)
    and [Plutonia recording](https://github.com/fabiangreffrath/woof/issues/464).
    [Patched campaign evidence](dehacked-support.md#patched-co-op-campaign-verification)
    and [DSDA search parameters](https://dsdarchive.com/api_docs).
