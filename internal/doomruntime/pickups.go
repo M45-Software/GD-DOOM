@@ -514,7 +514,9 @@ func (g *game) applyPickup(typ int16, dropped bool) (string, soundEvent, bool) {
 			}
 		}
 		setReadyWeapon := func(id weaponID) {
-			if !g.autoWeaponSwitch {
+			// An LMP has no field for the local pickup-switch preference.
+			// Both classic demo formats switch when a new weapon is collected.
+			if !g.autoWeaponSwitch && strings.TrimSpace(g.opts.RecordDemoPath) == "" {
 				return
 			}
 			g.queueWeaponSwitch(id)

@@ -2127,6 +2127,28 @@ xvfb-run -a go test -count=200 ./internal/netplay \
   -run '^(TestPlayerPeerTwoWayTicRouting|TestPlayerPeerRosterAfterConcurrentJoinFails|TestRelayAudioLateJoinDoesNotReceiveStaleChunks)$'
 ```
 
+A live Speed of Doom MAP22 recording exposed a weapon pickup difference.
+With the local auto-switch preference off, the recorded inputs first
+produced different ready weapons at command 49. Live play equipped fists
+and playback equipped the chaingun. Vanilla and Boom LMPs have no field for
+this preference. Both recorders now apply the classic switch rule on weapon
+pickup. Ordinary play still uses the player's preference.
+
+The 90-command regression includes a plasma rifle pickup and runs in vanilla,
+automatically detected Boom and explicitly configured Boom. The external check
+records 180 commands on MAP22 with the original Doom II IWAD and Speed of
+Doom WAD. Both new recordings damage three imps. Each reproduces the live
+simulation checksum, player view, actor states and complete RNG snapshot on
+every command. DSDA-Doom 0.27.5 matches all 180 active world rows and all
+180 phase rows for each file, with the default seed and with seed
+`0x80706050` and insurance enabled. The command writes both LMPs, the logs
+and the comparison results. [Input and trace hashes](boom-recording-results.json).
+
+```sh
+python3 scripts/verify_boom_recording.py --iwad /path/to/DOOM2.WAD \
+  --reference /path/to/instrumented/dsda-doom --out /tmp/gddoom-map22-recording
+```
+
 The full Go suite passed. A new peer now receives the handshake, catch-up
 frames and initial roster before other writes. Versioned roster notifications
 keep a delayed join announcement from overwriting newer membership. At
@@ -2301,8 +2323,10 @@ The next milestones are:
    movie with a Boom co-op roster was the patched Sunlust D2All. A second
    search checked all 3,464 distinct downloads linked by non-TAS single-player
    entries in the 4,053-entry movie inventory. All downloads were readable.
-   None contained a Boom co-op recording.
-   DSDA-Doom replayed all 288 monster-enabled recordings outside the two
+   None contained a Boom co-op recording. A recursive pass over the 4,997
+   distinct archives in both inventories checked member signatures, 101 nested
+   ZIPs, 177 embedded WADs and 8,968 LMP members. It found no additional
+   candidate. DSDA-Doom replayed all 288 monster-enabled recordings outside the two
    Sunlust campaign viewpoints. Each reached its recorded end. Of those,
    283 reached one map intermission and five ended before an intermission.
    Eleven continued into the next level for 30–98 commands. None reached a

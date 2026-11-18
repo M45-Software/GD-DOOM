@@ -1,0 +1,67 @@
+{
+  "passed": true,
+  "runtime_source": "076800968dc7ae1ea2bbc83df51bfa876ac3eb88f43da1660ebe6809a525d071",
+  "reference_sha256": "c3b80af776b452366735846a58c5e18d9e35d522f134545f1082f9867163c8ad",
+  "iwad_sha256": "10d67824b11025ddd9198e8cfc87ca335ee6e2d3e63af4180fa9b8a471893255",
+  "wad_sha256": "f985edf85ebe5ed3c8ce72efcdb2ad2e891f3c957ed5981cfd172d3937bf74cc",
+  "results": {
+    "automatic": {
+      "lmp_sha256": "2bd82a3ac5e8dca16feb749be14683f39c555fa5d88041df0a8a82768fe23ebf",
+      "world": {
+        "passed": true,
+        "rows": 180,
+        "matched": 180,
+        "row_counts": {
+          "gd": 180,
+          "dsda": 180,
+          "expected": 180
+        },
+        "failures": [],
+        "gd_hash": "572d266b0e86b4d4d7a4def80dc8281a194075e89da4ce543b173badcab6a031",
+        "dsda_hash": "572d266b0e86b4d4d7a4def80dc8281a194075e89da4ce543b173badcab6a031"
+      },
+      "phase": {
+        "passed": true,
+        "rows": 180,
+        "matched": 180,
+        "row_counts": {
+          "gd": 180,
+          "dsda": 180,
+          "expected": 180
+        },
+        "failures": [],
+        "gd_hash": "f7b83044fe7fa081c3f08ea572e7950e48a6e19dde4bcb25f4cbb085b50c51d6",
+        "dsda_hash": "f7b83044fe7fa081c3f08ea572e7950e48a6e19dde4bcb25f4cbb085b50c51d6"
+      }
+    },
+    "custom": {
+      "lmp_sha256": "e85028830e4700cb76bb15ad722540516d7acdd5a227aebd4a2d9c4ac94b9327",
+      "world": {
+        "passed": true,
+        "rows": 180,
+        "matched": 180,
+        "row_counts": {
+          "gd": 180,
+          "dsda": 180,
+          "expected": 180
+        },
+        "failures": [],
+        "gd_hash": "854a0cad890980ebc45322bef0739aae0a6fdbb60d24e1dae9e1619ef383df86",
+        "dsda_hash": "854a0cad890980ebc45322bef0739aae0a6fdbb60d24e1dae9e1619ef383df86"
+      },
+      "phase": {
+        "passed": true,
+        "rows": 180,
+        "matched": 180,
+        "row_counts": {
+          "gd": 180,
+          "dsda": 180,
+          "expected": 180
+        },
+        "failures": [],
+        "gd_hash": "cd768bc9854bc9e1f5dd98adc761a6d621eee180dfc801d6507d92aac93b250e",
+        "dsda_hash": "cd768bc9854bc9e1f5dd98adc761a6d621eee180dfc801d6507d92aac93b250e"
+      }
+    }
+  }
+}
