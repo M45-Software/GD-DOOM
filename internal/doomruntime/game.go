@@ -3031,7 +3031,7 @@ func (g *game) advanceDemoTic() error {
 		}
 		g.applyRecordedDemoPause(tc)
 		if g.demoPaused {
-			g.tickPausedDemoStatusWidgets()
+			g.tickPausedDemo()
 			g.writeDemoTraceTic(0)
 			g.demoTraceInitialWritten = true
 			return nil
@@ -3079,7 +3079,7 @@ func (g *game) advanceDemoTic() error {
 	}
 	g.applyRecordedDemoPause(tc)
 	if g.demoPaused {
-		g.tickPausedDemoStatusWidgets()
+		g.tickPausedDemo()
 	} else {
 		g.stepGameplayFromDemoTic(tc)
 	}

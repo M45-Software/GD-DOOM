@@ -35,7 +35,11 @@ func (g *game) applyRecordedDemoPause(tc DemoTic) {
 	}
 }
 
-func (g *game) tickPausedDemoStatusWidgets() {
+func (g *game) tickPausedDemo() {
+	// A recorded pause consumes a command and advances Boom gametic - basetic.
+	if g.boomMomentumDropoff {
+		doomrand.AdvanceLogicTic()
+	}
 	// ST_Ticker still advances face state and M_Random while P_PlayerThink
 	// is paused. Damage/bonus decay belongs to the skipped player thinker.
 	damage, bonus := g.statusDamageCount, g.statusBonusCount

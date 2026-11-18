@@ -269,28 +269,7 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 			sg.finale.KillCast()
 		}
 		if checkpoints[tic] {
-			var data []byte
-			var err error
-			if os.Getenv("GD_COOP_CHECKPOINT_FORMAT") == "keyframe" {
-				data, err = sg.marshalNetplayKeyframe()
-			} else {
-				data, err = sg.marshalSaveGame("co-op")
-			}
-			if err != nil {
-				t.Fatal(err)
-			}
-			if os.Getenv("GD_COOP_COLD_RESTORE") != "" {
-				fresh := &sessionGame{opts: opts, nextMap: sg.nextMap, gameFactory: sg.gameFactory}
-				if script.Header.PlayerCount() > 1 {
-					fresh.opts.DemoScript = nil
-				}
-				sg = fresh
-			}
-			if os.Getenv("GD_COOP_CHECKPOINT_FORMAT") == "keyframe" {
-				err = sg.unmarshalNetplayKeyframe(data)
-			} else {
-				err = sg.unmarshalSaveGame(data)
-			}
+			sg, err = reloadRecordedCheckpoint(sg, opts, os.Getenv("GD_COOP_CHECKPOINT_FORMAT") == "keyframe", os.Getenv("GD_COOP_COLD_RESTORE") != "")
 			if err != nil {
 				t.Fatalf("checkpoint %d: %v", tic, err)
 			}
@@ -338,7 +317,9 @@ func TestBoomCoopDemoCapture(t *testing.T) {
 			writeCoopFinaleFields(out, sg, phase)
 			continue
 		}
-		if campaign && g.m.Name == oldMap && g.worldTic == oldWorld {
+		// DSDA emits a level row for each recorded pause after the first world tic.
+		pausedLevel := phase == 0 && g.demoPaused && g.worldTic > 0
+		if campaign && g.m.Name == oldMap && g.worldTic == oldWorld && !pausedLevel {
 			continue
 		}
 		destination := out
@@ -613,4 +594,29 @@ func writeRecordedPhaseFields(out *bufio.Writer, sg *sessionGame, phase int, int
 		}
 	}
 	fmt.Fprintln(out)
+}
+
+func reloadRecordedCheckpoint(sg *sessionGame, opts Options, keyframe, cold bool) (*sessionGame, error) {
+	var data []byte
+	var err error
+	if keyframe {
+		data, err = sg.marshalNetplayKeyframe()
+	} else {
+		data, err = sg.marshalSaveGame("recorded checkpoint")
+	}
+	if err != nil {
+		return nil, err
+	}
+	if cold {
+		if sg.g.coopDemoActive() {
+			opts.DemoScript = nil
+		}
+		sg = &sessionGame{opts: opts, nextMap: sg.nextMap, gameFactory: sg.gameFactory}
+	}
+	if keyframe {
+		err = sg.unmarshalNetplayKeyframe(data)
+	} else {
+		err = sg.unmarshalSaveGame(data)
+	}
+	return sg, err
 }

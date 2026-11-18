@@ -121,6 +121,7 @@ def main():
         cases[f'lethal_use_i{insurance}'] = dict(insurance=insurance, seed=1993, lethal=True, monster=0)
         cases[f'revenant_i{insurance}'] = dict(insurance=insurance, seed=1993, monster=66, hazard=False, tics=2000)
     cases['low_ceiling'] = dict(insurance=1, seed=0, ceiling=64)
+    cases['recorded_pause'] = dict(insurance=1, seed=1993, pause=[5, 11, 49, 55])
     if args.case and set(args.case) - cases.keys():
         parser.error('unknown case')
     out = args.out.resolve()
@@ -153,6 +154,8 @@ def main():
             use = range(200, tics, 200)
         for tic in use:
             data[109 + tic * 4 + 3] = 2
+        for tic in settings.get('pause', []):
+            data[109 + tic * 4 + 3] = 129
         lmp.write_bytes(data)
         for file in ['gd.csv', 'dsda.csv']:
             (folder / file).unlink(missing_ok=True)
@@ -162,10 +165,24 @@ def main():
             dict(env, GD_DSDA_RNG_DEMO_OUT=str(folder / 'dsda.csv')))
         result = compare(folder / 'gd.csv', folder / 'dsda.csv', tics)
         result['coverage'] = coverage(folder / 'dsda.csv', settings.get('held'), settings.get('lethal'))
+        if 'pause' in settings:
+            with (folder / 'dsda.csv').open() as f:
+                rows = list(csv.DictReader(f))
+            toggles = settings['pause']
+            paused = {i for start, stop in zip(toggles[::2], toggles[1::2]) for i in range(start, stop)}
+            frozen = {i for i in range(1, len(rows)) if rows[i]['leveltime'] == rows[i-1]['leveltime']}
+            pause_clock = frozen == paused and all(
+                int(rows[i]['logictic']) == int(rows[i-1]['logictic']) + 1 and
+                rows[i]['seeds'] == rows[i-1]['seeds'] for i in paused)
+            result['coverage']['checks']['recorded_pause_clock'] = pause_clock
+            result['coverage']['passed'] &= pause_clock
         result['passed'] &= result['coverage']['passed']
         result['checkpoint_runs'] = {}
         if not args.no_checkpoints:
             boundaries = checkpoint_boundaries(folder / 'dsda.csv')
+            if 'pause' in settings:
+                boundaries = sorted(set(boundaries) | {tic + offset for tic in settings['pause']
+                                                       for offset in (-1, 0, 1)})
             with (folder / 'dsda.csv').open() as f:
                 reference_rows = list(csv.DictReader(f))
             states = {reference_rows[t]['playerstate'] for t in boundaries}

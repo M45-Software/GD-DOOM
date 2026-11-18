@@ -141,6 +141,6 @@ func ConfigureBoom(seed uint32, insurance bool) { global.ConfigureBoom(seed, ins
 func AdvanceLogicTic()                          { global.logicTic++ }
 func SetLogicTic(tic uint32)                    { global.logicTic = tic }
 
-// LogicTic is the completed-world-tic phase. Snapshots preserve it; loading
-// a Boom level resets it without clearing the RNG streams.
+// LogicTic tracks the Boom level clock, including recorded pause commands.
+// Loading a Boom level resets the clock while preserving its RNG streams.
 func LogicTic() uint32 { return global.logicTic }

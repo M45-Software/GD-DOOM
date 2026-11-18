@@ -88,7 +88,7 @@ func (g *game) advanceCoopDemoTic() error {
 	for _, p := range g.authorityPlayers {
 		if p.localSlot == g.localSlot {
 			if g.demoPaused {
-				g.withAuthoritativePlayer(p, g.tickPausedDemoStatusWidgets)
+				g.withAuthoritativePlayer(p, g.tickPausedDemo)
 			} else {
 				g.withAuthoritativePlayer(p, g.tickStatusWidgets)
 			}

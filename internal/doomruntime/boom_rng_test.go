@@ -173,3 +173,42 @@ func TestBoomOptionDisablesEnvironmentalForces(t *testing.T) {
 		t.Fatal("disabled friction changed movement")
 	}
 }
+
+func TestBoomRecordedPauseAdvancesPhaseWithoutWorldOrGameplayDraws(t *testing.T) {
+	old := doomrand.Capture()
+	defer doomrand.Restore(old)
+	for _, trace := range []bool{false, true} {
+		t.Run(map[bool]string{false: "plain", true: "trace"}[trace], func(t *testing.T) {
+			settings := demo.GameOptions{Seed: 1993, Insurance: true, PlayerBobbing: true}
+			script := &DemoScript{Header: DemoHeader{Version: 202, Skill: 2, Episode: 1, Map: 1, PlayerInGame: [4]bool{true}, BoomOptions: settings.Bytes()}, Tics: []DemoTic{{Buttons: 129}, {}, {Buttons: 129}, {}}}
+			opts := Options{Headless: true, DemoScript: script}
+			if trace {
+				opts.DemoTracePath = t.TempDir() + "/pause.jsonl"
+			}
+			g := newGame(&mapdata.Map{Name: "MAP01", Things: []mapdata.Thing{{Type: 1}}, Sectors: []mapdata.Sector{{CeilingHeight: 128}}}, opts)
+			before := doomrand.Capture()
+			for i := 0; i < 2; i++ {
+				if err := g.advanceDemoTic(); err != nil {
+					t.Fatal(err)
+				}
+				after := doomrand.Capture()
+				if after.LogicTic != uint32(i+1) || g.worldTic != 0 || after.PlayIndex != before.PlayIndex {
+					t.Fatal("pause stopped the Boom clock or advanced the world/RNG")
+				}
+				for cls, seed := range before.Seeds {
+					if cls != int(doomrand.Misc) && after.Seeds[cls] != seed {
+						t.Fatal("pause drew gameplay RNG")
+					}
+				}
+			}
+			for i := 0; i < 2; i++ {
+				if err := g.advanceDemoTic(); err != nil {
+					t.Fatal(err)
+				}
+			}
+			if g.worldTic != 2 || doomrand.LogicTic() != 4 {
+				t.Fatal("resuming the world lost recorded pause time")
+			}
+		})
+	}
+}

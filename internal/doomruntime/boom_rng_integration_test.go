@@ -88,7 +88,9 @@ func TestBoomRNGDemoCapture(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	opts := Options{Headless: true, DemoScript: script, DemoQuitOnComplete: true}
+	opts := Options{Headless: true, DemoScript: script, DemoQuitOnComplete: true, NewGameLoader: func(name string) (*mapdata.Map, error) {
+		return mapdata.LoadMap(wf, mapdata.MapName(name))
+	}}
 	if os.Getenv("GD_DEHACKED_CAPTURE") == "1" {
 		var paths []string
 		if value := os.Getenv("GD_DEHACKED_FILES"); value != "" {
@@ -120,6 +122,7 @@ func TestBoomRNGDemoCapture(t *testing.T) {
 		g = sg.g
 	} else {
 		g = newGame(m, opts)
+		sg = &sessionGame{g: g, rt: g, opts: opts, current: m.Name}
 	}
 	f, err := os.Create(os.Getenv("GD_RNG_OUT"))
 	if err != nil {
@@ -177,31 +180,11 @@ func TestBoomRNGDemoCapture(t *testing.T) {
 			t.Fatal(err)
 		}
 		if checkpoints[tic] {
-			magic, version := saveGameMagic, saveGameVersion
-			if os.Getenv("GD_RNG_CHECKPOINT_FORMAT") == "keyframe" {
-				magic, version = keyframeMagic, keyframeVersion
-			}
-			state := captureGameSaveState(g)
-			if !validBoomSectorTouches(state, len(g.m.Sectors)) {
-				t.Fatalf("invalid membership before checkpoint %d", tic)
-			}
-			rng := doomrand.Capture()
-			blob, err := encodeSnapshot(magic, saveFile{DehackedDigest: definitionDigest(g.opts), Version: version, Game: state, RNG: saveRNGState{Extended: rng, MenuIndex: rng.MenuIndex, PlayIndex: rng.PlayIndex}})
+			sg, err = reloadRecordedCheckpoint(sg, opts, os.Getenv("GD_RNG_CHECKPOINT_FORMAT") == "keyframe", true)
 			if err != nil {
-				t.Fatal(err)
+				t.Fatalf("checkpoint %d: %v", tic, err)
 			}
-			file, err := decodeSnapshot(blob, magic)
-			if err != nil {
-				t.Fatal(err)
-			}
-			loaded := newGame(cloneMapForRestart(g.restartTemplate), g.opts)
-			restoreGameSaveState(loaded, file.Game)
-			loaded.inheritDemoPlayback(g)
-			restoreSavedRNG(file)
-			g = loaded
-			if campaign {
-				sg.g, sg.rt = loaded, loaded
-			}
+			g = sg.g
 			appliedCheckpoints = append(appliedCheckpoints, tic)
 		}
 		if tic == 0 && os.Getenv("GD_RNG_CRUSHED_CORPSE") != "" {
