@@ -379,8 +379,9 @@ It records 3,917,886 command-frame comparisons, 3,672,954 active-world rows and
 764 cold restores, including intermissions, story screens, player deaths and
 subsequent-map rebirths. Each replay covers all 32 maps and five story screens.
 No replacement or appended commands are included. This establishes offline
-patched co-op demo parity for this campaign. Live definition negotiation is
-verified separately below; this campaign receipt retains its original source pin.
+patched co-op demo parity for this campaign. The published receipt covers
+`988067e`, including the shared attack-range fix. Its diagnostic snapshot
+paths are relative to the matrix output directory.
 
 The MAP22 investigation corrected generic monster retargeting after a player's
 death. The next walk frame must be installed before `A_Chase`; a successful

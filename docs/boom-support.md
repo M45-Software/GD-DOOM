@@ -2149,7 +2149,14 @@ python3 scripts/verify_boom_recording.py --iwad /path/to/DOOM2.WAD \
   --reference /path/to/instrumented/dsda-doom --out /tmp/gddoom-map22-recording
 ```
 
-The full Go suite passed. A new peer now receives the handshake, catch-up
+The full Go suite passed at `14a9e64`. Two new 90-command vanilla E1M1
+recordings from `TestNativeRecordedCommandsReplayExactSimulation` also
+matched the instrumented Linux Doom 1.10 reference on every state and gameplay
+RNG check. One used mouse turning and the other added keyboard turning.
+The relay checks passed again at this revision, 200 times each and 15 times
+each under the race detector.
+
+A new peer now receives the handshake, catch-up
 frames and initial roster before other writes. Versioned roster notifications
 keep a delayed join announcement from overwriting newer membership. At
 `c9d6ac6`, a failed handshake also publishes the departing slot to peers that
@@ -2194,8 +2201,9 @@ Counts in the table are per recording and per replay mode.
 | Sunlust MAP02 `sl02m225` | Continuous, cold save, cold keyframe | 5,086 active tics, including arch-vile resurrection and the exit totals. Both cold replays restored eight checkpoints. |
 | Six community co-op recordings on Sunlust MAP31/MAP32 and Speed of Doom MAP01/MAP02 | Continuous, cold save, cold keyframe | All 18 comparisons matched the original phase rows, active world state and exit totals. |
 
-At `6e28691`, both players' original recordings of the full patched Sunlust
-campaign also matched across all 32 maps. Each recording ran continuously,
+Both players' original recordings of the full patched Sunlust campaign matched
+across all 32 maps at `6e28691` and again after the shared attack-range fix
+at `988067e`. Each recording ran continuously,
 from cold saves and from cold keyframes. The six runs compared 3,917,886
 command frames and restored 764 checkpoints.
 [Campaign inputs and verifier](dehacked-support.md#patched-co-op-campaign-verification)
@@ -2271,6 +2279,8 @@ tics/s respectively. The highest 99th-percentile single-tic time was 5.205 ms.
 Revision `988067e` repeated the fight at 499.0, 502.2 and 510.1 gameplay
 tics/s. Its slowest 35-tic windows took 166.8, 151.4 and 154.8 ms. Its
 highest 99th-percentile single-tic time was 4.806 ms.
+At `14a9e64`, the three runs averaged 473.6, 482.3 and 479.8 gameplay
+tics/s. Across those runs the slowest window of 35 tics took 159.2 ms.
 
 Extract `SODfinal.wad` and `sd32-917.lmp` from the original archives. The
 LMP’s SHA-256 is `f4806dd992fc53ddb3baf11cb8a43d8b27979532dbea55764f6ee8f54868175d`.
