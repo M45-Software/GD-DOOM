@@ -2161,7 +2161,9 @@ comparisons and 696 restores. Four two-player recorded-pause cases also
 matched DSDA with insurance on and off. The 17 distinct archive recordings
 used for the campaign, single-map and benchmark runs contain zero pause
 commands across all occupied player slots. Their long-running replays use
-the integrated gameplay sources preceding this pause fix.
+the integrated gameplay sources preceding this pause fix. The full Go suite,
+Surge in all three modes, and both Sunlust MAP01–10 recordings in all three
+modes also passed on the pause-corrected revision.
 
 ```sh
 python3 scripts/verify_boom_rebirth.py --case recorded_pause \
@@ -2228,9 +2230,18 @@ The next milestones are:
    checkpoints. The patched human Sunlust D2All already covers all 32 maps
    from both players' recordings, including cold saves and keyframes.
    The archive search inspected 1,671 DSDA entries with two to four players.
-   Across 250 non-TAS movie or Boom-candidate entries, the only movie entry
-   with Boom co-op LMPs was Sunlust. That recording requires its gameplay
-   patch. The original DOS Boom Ruinbros demo and the Woof Plutonia test demo
+   Every distinct archive linked by a non-TAS entry in that inventory was
+   readable (1,535 archives). The LMP headers identified 319 distinct Boom
+   cooperative recordings, 290 with monsters enabled. The only catalogued
+   movie with a Boom co-op roster was the patched Sunlust D2All. A second
+   search checked 440 plausible archives labelled single-player across 4,053
+   movie entries. None contained a Boom co-op recording.
+   DSDA-Doom replayed all 288 monster-enabled recordings outside the two
+   Sunlust campaign viewpoints. Each reached its recorded end. Of those,
+   283 reached one map intermission and five ended before an intermission.
+   Eleven continued into the next level for 30–98 commands. None reached a
+   second map exit.
+   The original DOS Boom Ruinbros demo and the Woof Plutonia test demo
    replayed on DSDA for 6,561 and 7,860 commands respectively. Both stayed on
    their starting map. Another search inspected 38 WAD and TeamTNT releases
    and 67 idgames archives. The original two-player Boom 2.00 recording in
