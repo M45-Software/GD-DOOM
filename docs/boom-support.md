@@ -2302,9 +2302,14 @@ The next milestones are:
    Its catalogue listed 1,327 publicly downloadable multi-map Doom WADs with
    the Boom engine tag. All 421 distinct indexed demo lumps were identified
    by SHA-256 and their headers checked. None had a Boom co-op roster.
-   An independent search of author notes led to 165 idgames releases and
-   59 exact WAD variants. Hell Ground's DEMO2 has four players but disables
-   monsters and lasts 939 commands on MAP06.
+   A second pass checked 1,196 additional releases with co-op spawns in at
+   least two Doom-format maps. These included 768 Boom-tagged releases outside
+   the first catalogue filter and 428 whose authors described a co-op design.
+   The two passes covered 2,523 distinct WADs and 912 distinct indexed demos.
+   One Boom demo had a co-op roster. Hell Ground's DEMO2 has four players,
+   disables monsters and lasts 939 commands on MAP06. The same recording also
+   turned up in a separate author-note search of 165 idgames releases and 59
+   exact WAD variants.
    [WAD Archive catalogue](https://archive.org/details/wadarchive) and
    [Hell Ground release](https://www.gamers.org/pub/idgames/levels/doom2/Ports/g-i/hg.zip).
 
