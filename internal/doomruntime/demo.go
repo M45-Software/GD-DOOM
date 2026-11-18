@@ -2,6 +2,7 @@ package doomruntime
 
 import (
 	"gddoom/internal/demo"
+	"gddoom/internal/doomrand"
 	"gddoom/internal/mapdata"
 	"strings"
 )
@@ -61,17 +62,25 @@ func SaveDemoScript(path string, script *DemoScript) error {
 }
 
 func BuildRecordedDemo(mapName mapdata.MapName, opts Options, tics []DemoTic) (*DemoScript, error) {
-	skill := normalizeSkillLevel(opts.SkillLevel) - 1
-	if skill < 0 {
-		skill = 0
+	return demo.BuildRecorded(mapName, recordingOptions(opts, opts.BoomGameOptions != nil), tics)
+}
+
+func recordingOptions(opts Options, boom bool) demo.RecordingOptions {
+	rec := demo.RecordingOptions{
+		Skill:        normalizeSkillLevel(opts.SkillLevel) - 1,
+		Deathmatch:   normalizeGameMode(opts.GameMode) == gameModeDeathmatch,
+		FastMonsters: opts.FastMonsters, RespawnMonsters: opts.RespawnMonsters, NoMonsters: opts.NoMonsters,
 	}
-	return demo.BuildRecorded(mapName, demo.RecordingOptions{
-		Skill:           skill,
-		Deathmatch:      normalizeGameMode(opts.GameMode) == gameModeDeathmatch,
-		FastMonsters:    opts.FastMonsters,
-		RespawnMonsters: opts.RespawnMonsters,
-		NoMonsters:      opts.NoMonsters,
-	}, tics)
+	if boom {
+		// With no option block the live simulation enables memory, environmental
+		// forces and bobbing, leaves recoil off, and initializes the default seed.
+		settings := demo.GameOptions{MonstersRemember: true, VariableFriction: true, AllowPushers: true, PlayerBobbing: true, Seed: doomrand.DefaultBoomSeed}
+		if opts.BoomGameOptions != nil {
+			settings = *opts.BoomGameOptions
+		}
+		rec.Boom = &settings
+	}
+	return rec
 }
 
 // runLocalGameplayTic performs G_WriteDemoTiccmd -> G_ReadDemoTiccmd before

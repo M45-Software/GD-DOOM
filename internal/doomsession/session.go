@@ -2,7 +2,6 @@ package doomsession
 
 import (
 	"fmt"
-	"strings"
 
 	"gddoom/internal/demo"
 	"gddoom/internal/doomruntime"
@@ -69,26 +68,14 @@ func RunSession(sess *Session) error {
 		return fmt.Errorf("run ebiten automap: %w", err)
 	}
 	if p := sess.Options().RecordDemoPath; p != "" {
-		rec := sess.EffectiveDemoRecord()
-		opts := sess.Options()
-		skill := opts.SkillLevel - 1
-		if skill < 0 {
-			skill = 0
-		}
-		demoRec, derr := demo.BuildRecorded(sess.StartMapName(), demo.RecordingOptions{
-			Skill:           skill,
-			Deathmatch:      strings.EqualFold(opts.GameMode, "deathmatch"),
-			FastMonsters:    opts.FastMonsters,
-			RespawnMonsters: opts.RespawnMonsters,
-			NoMonsters:      opts.NoMonsters,
-		}, rec)
+		demoRec, derr := sess.RecordedDemo()
 		if derr != nil {
 			return fmt.Errorf("build demo recording: %w", derr)
 		}
 		if werr := demo.Save(p, demoRec); werr != nil {
 			return fmt.Errorf("write demo recording: %w", werr)
 		}
-		fmt.Printf("demo-recorded path=%s tics=%d\n", p, len(rec))
+		fmt.Printf("demo-recorded path=%s tics=%d\n", p, len(demoRec.Tics))
 	}
 	return sess.Err()
 }
@@ -194,11 +181,11 @@ func (s *Session) Err() error {
 	return s.meta.Err()
 }
 
-func (s *Session) EffectiveDemoRecord() []DemoTic {
-	if s == nil || s.meta.EffectiveDemoRecord == nil {
-		return nil
+func (s *Session) RecordedDemo() (*demo.Script, error) {
+	if s == nil || s.meta.RecordedDemo == nil {
+		return nil, fmt.Errorf("session has no recorder")
 	}
-	return s.meta.EffectiveDemoRecord()
+	return s.meta.RecordedDemo()
 }
 
 func (s *Session) Options() Options {

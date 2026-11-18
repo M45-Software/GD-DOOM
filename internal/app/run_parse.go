@@ -1066,19 +1066,7 @@ func RunParse(args []string, stdout io.Writer, stderr io.Writer) int {
 			return 1
 		}
 		if p := picker.Session().Options().RecordDemoPath; p != "" {
-			rec := picker.Session().EffectiveDemoRecord()
-			opts := picker.Session().Options()
-			skill := opts.SkillLevel - 1
-			if skill < 0 {
-				skill = 0
-			}
-			demoRec, derr := demo.BuildRecorded(picker.Session().StartMapName(), demo.RecordingOptions{
-				Skill:           skill,
-				Deathmatch:      strings.EqualFold(opts.GameMode, "deathmatch"),
-				FastMonsters:    opts.FastMonsters,
-				RespawnMonsters: opts.RespawnMonsters,
-				NoMonsters:      opts.NoMonsters,
-			}, rec)
+			demoRec, derr := picker.Session().RecordedDemo()
 			if derr != nil {
 				fmt.Fprintf(stderr, "build demo recording: %v\n", derr)
 				return 1
@@ -1087,7 +1075,7 @@ func RunParse(args []string, stdout io.Writer, stderr io.Writer) int {
 				fmt.Fprintf(stderr, "write demo recording: %v\n", werr)
 				return 1
 			}
-			fmt.Fprintf(stdout, "demo-recorded path=%s tics=%d\n", p, len(rec))
+			fmt.Fprintf(stdout, "demo-recorded path=%s tics=%d\n", p, len(demoRec.Tics))
 		}
 		if err := picker.Session().Err(); err != nil {
 			fmt.Fprintf(stderr, "render: %v\n", err)

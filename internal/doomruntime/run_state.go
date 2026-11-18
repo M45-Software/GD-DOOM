@@ -5,6 +5,7 @@ import (
 	"strings"
 	"sync/atomic"
 
+	"gddoom/internal/demo"
 	"gddoom/internal/gameplay"
 	"gddoom/internal/mapdata"
 	"gddoom/internal/music"
@@ -88,7 +89,8 @@ type sessionGame struct {
 	currentTemplate          *mapdata.Map
 	opts                     Options
 	demoRecord               []DemoTic
-	frozenDemoPath           string          // set by freezeDemoRecord; cleared opts.RecordDemoPath stops new tics
+	frozenDemoPath           string // set by freezeDemoRecord; cleared opts.RecordDemoPath stops new tics
+	demoRecordingOptions     demo.RecordingOptions
 	demoRecordingMap         mapdata.MapName // map name when recording started (for demo header)
 	demoFlushTics            int             // tic count at last flush to disk
 	settings                 gameplay.PersistentSettings
@@ -440,6 +442,7 @@ func (sg *sessionGame) rebuildGameWithPersistentSettings(next *mapdata.Map) {
 	if sg == nil || next == nil {
 		return
 	}
+	sg.collectDemoRecord()
 	sg.capturePersistentSettings()
 	result := gameplay.RebuildRuntime(gameplay.RebuildRequest[Options, *game]{
 		Next:           next,
@@ -685,6 +688,7 @@ func (sg *sessionGame) collectDemoRecord() {
 	}
 	if sg.demoRecordingMap == "" && sg.g.m != nil {
 		sg.demoRecordingMap = sg.g.m.Name
+		sg.demoRecordingOptions = recordingOptions(sg.g.opts, sg.g.boomMomentumDropoff)
 	}
 	sg.demoRecord, sg.g.demoRecord = gameplay.CollectDemoRecord(sg.demoRecord, sg.g.demoRecord)
 }
@@ -703,6 +707,11 @@ func (sg *sessionGame) freezeDemoRecord() {
 	if sg.g != nil {
 		sg.g.opts.RecordDemoPath = ""
 	}
+}
+
+func (sg *sessionGame) recordedDemo() (*demo.Script, error) {
+	tics := sg.effectiveDemoRecord()
+	return demo.BuildRecorded(sg.demoRecordingMap, sg.demoRecordingOptions, tics)
 }
 
 func (sg *sessionGame) effectiveDemoRecord() []DemoTic {

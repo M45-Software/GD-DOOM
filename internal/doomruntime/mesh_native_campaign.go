@@ -33,14 +33,13 @@ type NativeCampaign struct {
 	pausePatches            []levelmesh.Patch
 	complete                bool
 	demoFinished            bool
-	recordingOptions        Options
 	musicLump, musicPending string
 	lastNetworkKeyframe     uint32
 }
 
 func NewNativeCampaign(game *NativeMeshGame, opts Options, next NextMapFunc) *NativeCampaign {
 	opts = applyDefinitionPresentationOptions(opts)
-	c := &NativeCampaign{Game: game, session: &sessionGame{g: game.g, current: game.g.m.Name, opts: opts}, next: next, recordingOptions: opts}
+	c := &NativeCampaign{Game: game, session: &sessionGame{g: game.g, current: game.g.m.Name, opts: opts}, next: next}
 	c.musicLump, _ = music.MapLumpName(string(game.g.m.Name))
 	return c
 }

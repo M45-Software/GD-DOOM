@@ -179,7 +179,7 @@ func NewRuntime(m *mapdata.Map, opts Options, nextMap runtimehost.NextMapFunc) (
 		Err: func() error {
 			return sg.err
 		},
-		EffectiveDemoRecord: sg.effectiveDemoRecord,
+		RecordedDemo: sg.recordedDemo,
 		Options: func() Options {
 			opts := sg.opts
 			if strings.TrimSpace(opts.RecordDemoPath) == "" && strings.TrimSpace(sg.frozenDemoPath) != "" {

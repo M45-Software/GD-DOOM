@@ -38,13 +38,15 @@ type relaySession struct {
 	lastKeyframeTic   uint32
 	backlog           []bufferedFrame
 	lastAudioFormat   []byte
+	rosterVersion     uint64
 }
 
 type relayPeer struct {
-	conn     net.Conn
-	playerID byte
-	mu       sync.Mutex
-	chat     relayViewer // reuse chat throttle logic; conn field unused here
+	conn          net.Conn
+	playerID      byte
+	mu            sync.Mutex
+	rosterVersion uint64      // guarded by mu
+	chat          relayViewer // reuse chat throttle logic; conn field unused here
 }
 
 func (p *relayPeer) allowChatMessage(msg ChatMessage, now time.Time) bool {
@@ -269,6 +271,9 @@ func (s *Server) handlePlayerPeer(conn net.Conn, sessionID uint64, cfg SessionCo
 	}
 
 	peer := &relayPeer{conn: conn, playerID: playerID}
+	// Hold the writer through the hello, catch-up and initial roster. Other
+	// peers may start forwarding as soon as this peer is visible.
+	peer.mu.Lock()
 	sess.peers[peer] = struct{}{}
 	serverCfg := sess.cfg
 	serverCfg.PlayerSlot = int(playerID)
@@ -295,17 +300,21 @@ func (s *Server) handlePlayerPeer(conn net.Conn, sessionID uint64, cfg SessionCo
 		}
 	}
 	roster := s.peerRosterLocked(sess)
+	others := s.otherPeersLocked(sess, peer)
+	sess.rosterVersion++
+	version := sess.rosterVersion
+	peer.rosterVersion = version
 	s.mu.Unlock()
 
 	// Acknowledge with server hello; PlayerSlot carries the assigned ID.
 	if err := writeHello(conn, helloRoleServer, helloFlagGameplayCompactV1, sessionID, serverCfg); err != nil {
+		peer.mu.Unlock()
 		s.removeRelayPeer(sess, peer)
 		_ = conn.Close()
 		return
 	}
 
 	// Send the current keyframe + backlog so the joining peer can catch up.
-	peer.mu.Lock()
 	if len(joinKeyframe) > 0 {
 		if err := writeFrame(conn, frameHeader{
 			Type:   frameTypeKeyframe,
@@ -336,13 +345,9 @@ func (s *Server) handlePlayerPeer(conn net.Conn, sessionID uint64, cfg SessionCo
 	}
 	peer.mu.Unlock()
 
-	// Broadcast updated roster to all other peers.
-	s.mu.Lock()
-	updatedRoster := s.peerRosterLocked(sess)
-	others := s.otherPeersLocked(sess, peer)
-	s.mu.Unlock()
+	// Only peers present at this join receive its roster.
 	for _, other := range others {
-		if err := other.writeRoster(updatedRoster); err != nil {
+		if err := other.writeRoster(roster, version); err != nil {
 			s.removeRelayPeer(sess, other)
 			_ = other.conn.Close()
 		}
@@ -383,11 +388,13 @@ func (s *Server) handlePlayerPeer(conn net.Conn, sessionID uint64, cfg SessionCo
 
 	// Broadcast updated roster after departure.
 	s.mu.Lock()
+	sess.rosterVersion++
+	version = sess.rosterVersion
 	departedRoster := s.peerRosterLocked(sess)
 	remaining := s.otherPeersLocked(sess, nil)
 	s.mu.Unlock()
 	for _, other := range remaining {
-		if err := other.writeRoster(departedRoster); err != nil {
+		if err := other.writeRoster(departedRoster, version); err != nil {
 			s.removeRelayPeer(sess, other)
 			_ = other.conn.Close()
 		}
@@ -519,12 +526,16 @@ func (p *relayPeer) writePeerTicBatch(payload []byte) error {
 	return writeFrame(p.conn, frameHeader{Type: frameTypePeerTicBatch}, payload)
 }
 
-func (p *relayPeer) writeRoster(roster RosterUpdate) error {
+func (p *relayPeer) writeRoster(roster RosterUpdate, version uint64) error {
 	if p == nil {
 		return nil
 	}
 	p.mu.Lock()
 	defer p.mu.Unlock()
+	if version <= p.rosterVersion {
+		return nil
+	}
+	p.rosterVersion = version
 	return writePeerRosterFrame(p.conn, roster)
 }
 

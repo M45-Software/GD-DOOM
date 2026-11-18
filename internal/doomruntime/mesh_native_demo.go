@@ -104,11 +104,7 @@ func (c *NativeCampaign) RecordedDemo() (*demo.Script, string, error) {
 	if len(tics) == 0 {
 		return nil, path, nil
 	}
-	name := sg.demoRecordingMap
-	if name == "" {
-		name = sg.current
-	}
-	script, err := BuildRecordedDemo(name, c.recordingOptions, tics)
+	script, err := sg.recordedDemo()
 	return script, path, err
 }
 func (c *NativeCampaign) RecordingActive() bool {

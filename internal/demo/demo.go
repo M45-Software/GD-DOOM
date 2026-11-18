@@ -68,6 +68,7 @@ func (h Header) PlayerCount() int {
 }
 
 type RecordingOptions struct {
+	Boom            *GameOptions
 	Skill           int
 	Deathmatch      bool
 	FastMonsters    bool
@@ -287,6 +288,15 @@ func HeaderForRecording(mapName mapdata.MapName, opts RecordingOptions) (Header,
 		Fast:          opts.FastMonsters,
 		NoMonsters:    opts.NoMonsters,
 		ConsolePlayer: 0,
+	}
+	if opts.Boom != nil {
+		header.Version = VersionBoom202
+		header.BoomOptions = opts.Boom.Bytes()
+		header.BoomOptions[6], header.BoomOptions[7], header.BoomOptions[8] = boolByte(header.Respawn), boolByte(header.Fast), boolByte(header.NoMonsters)
+		// Commercial Boom demos use episode one (vanilla MAPxx uses zero).
+		if header.Episode == 0 {
+			header.Episode = 1
+		}
 	}
 	header.PlayerInGame[0] = true
 	return header, nil

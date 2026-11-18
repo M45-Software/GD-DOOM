@@ -1187,6 +1187,13 @@ func TestRelayAudioLateJoinDoesNotReceiveStaleChunks(t *testing.T) {
 	}
 	defer ab.Close()
 
+	// Receiving the old chunk on an existing connection proves the relay
+	// processed it before the late viewer joined.
+	early, err := DialRelayAudioViewer(srv.Addr(), b.SessionID(), "abc123")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer early.Close()
 	wantCfg := AudioFormat{
 		Codec:                audioCodecPCM16Mono,
 		BitsPerSample:        16,
@@ -1207,6 +1214,9 @@ func TestRelayAudioLateJoinDoesNotReceiveStaleChunks(t *testing.T) {
 		t.Fatalf("BroadcastAudioChunk() error = %v", err)
 	}
 
+	if _, ok, err := readAudioChunk(t, early); !ok || err != nil {
+		t.Fatalf("early viewer did not receive chunk: %v", err)
+	}
 	v, err := DialRelayAudioViewer(srv.Addr(), b.SessionID(), "abc123")
 	if err != nil {
 		t.Fatalf("DialRelayAudioViewer() error = %v", err)
@@ -1224,11 +1234,14 @@ func TestRelayAudioLateJoinDoesNotReceiveStaleChunks(t *testing.T) {
 		t.Fatalf("PollAudioConfig() = %+v want %+v", gotCfg, wantCfg)
 	}
 
-	time.Sleep(100 * time.Millisecond)
-	if got, ok, err := v.PollAudioChunk(); err != nil && err != io.EOF {
-		t.Fatalf("PollAudioChunk() error = %v", err)
-	} else if ok {
-		t.Fatalf("PollAudioChunk() = %+v want no stale chunk", got)
+	fresh := pcmPayload(wantCfg.PacketSamples, wantCfg.Channels)
+	fresh[0] = 42
+	if err := ab.BroadcastAudioChunk(AudioChunk{Payload: fresh}); err != nil {
+		t.Fatal(err)
+	}
+	got, ok, err := readAudioChunk(t, v)
+	if err != nil || !ok || !bytes.Equal(got.Payload, fresh) {
+		t.Fatalf("late viewer's first chunk was missing or stale: received=%v err=%v", ok, err)
 	}
 }
 

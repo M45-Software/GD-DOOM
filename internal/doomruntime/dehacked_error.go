@@ -26,7 +26,7 @@ func failedDefinitionRuntime(m *mapdata.Map, opts Options, err error) (session.R
 	}
 	return &definitionErrorRuntime{err: err, opts: opts}, runtimehost.Meta{
 		Close: func() {}, Err: func() error { return err }, Options: func() Options { return opts },
-		EffectiveDemoRecord: func() []DemoTic { return nil }, StartMapName: func() mapdata.MapName { return name }, CurrentWorldTic: func() int { return 0 },
+		RecordedDemo: func() (*DemoScript, error) { return nil, err }, StartMapName: func() mapdata.MapName { return name }, CurrentWorldTic: func() int { return 0 },
 		CaptureKeyframe: func() ([]byte, error) { return nil, err }, LoadKeyframe: func([]byte) error { return err },
 	}
 }
