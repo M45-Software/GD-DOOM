@@ -316,14 +316,14 @@ a track through the shared main-version mapping; Doom II additionally supports
 alone. P/R/number and map-letter shortcuts are suppressed during cheat typing.
 `IDDT` cycles the original reveal state and updates the native automap.
 
-Native demo playback accepts a Doom v1.9/v1.10 LMP file or a built-in `DEMO1`
+Native demo playback accepts Doom 1.9/1.10 and Boom 2.01/2.02 LMP files, or a built-in `DEMO1`
 through `DEMO4` lump with `-demo`. The demo header selects its map, skill and
 gameplay rules, and playback exits at the end marker. Commands, pause/rebirth,
 intermissions and map transitions use the shared ticker. `-demo-stop-after-tics`
 and `-demo-exit-on-death` limit playback; `-trace-demo-state` writes the main
 host's per-tic JSONL format, and completion prints its benchmark summary.
 
-`-record-demo PATH` records live commands to a compatible v1.10 LMP. Both hosts
+`-record-demo PATH` writes live commands to a Doom 1.10 or Boom 2.02 LMP according to the starting session. Both hosts
 simulate the exact encoded command, including keyboard turns and weapon changes,
 so recordings replay without angle rounding drift. Native recordings checkpoint
 atomically every ten seconds and flush on quit. Level exits, restart, New Game,

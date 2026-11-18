@@ -159,10 +159,13 @@ recorded paths below are verified; complete Boom compatibility is not claimed.
 - Single-player voodoo dolls: earlier matching starts become physical bodies
   with collision, momentum, player-only walk triggers, pickups and shared
   damage. Their position, health and momentum use existing save fields.
-  Multiplayer voodoo ownership and full combat/death fidelity remain unverified.
-- Single-player Boom 2.01/2.02 demo headers (201/202). Recording remains in the
-  existing vanilla format. Parsing a header does not establish compatibility
-  with all options or Boom combat RNG.
+  The [co-op doll comparisons](#co-op-voodoo-dolls) cover ownership and damage
+  for additional player slots.
+- Playback accepts Boom 2.01 and 2.02 headers. Local single-player recording
+  writes a Boom 2.02 (202) header for a Boom session and a vanilla 110 header
+  for a vanilla session. The recorder captures the starting map, options and
+  initial RNG seed before a level exit or death can freeze the stream.
+  Use `-record-demo path.lmp` for live capture and `-demo path.lmp` for playback.
 
 - Extended triggers for existing movers and lights: 142–145, 147–149, 152,
   156–164, 167–184, 187–188, and 192–196 (42 additional triggers).
@@ -2105,22 +2108,75 @@ pixels and audio remain outside this gameplay comparison. The Go observer also
 reports boss landing markers in their permanent `S_NULL` state. The markers
 remain in every comparison.
 
+## Recording and relay verification
+
+Revision `6e28691` integrates main through `bc7aa83` on Go 1.27.4. The native
+and Ebiten recorders use the same starting-session metadata. A test records
+90 tics of pistol combat with a live imp, freezes the stream, loads the LMP
+from disk, and compares player view height, simulation checksum, actors and
+the complete RNG snapshot on each playback tic. It covers automatic Boom
+map detection with seed 1993 and explicit options with insurance, recoil,
+a nondefault seed and a preserved option byte. Existing vanilla recording
+round trips still pass.
+
+```sh
+xvfb-run -a go test -count=1 ./...
+xvfb-run -a go test -count=1 ./internal/doomruntime \
+  -run 'TestBoomRecordedEncounterReplaysEveryTic|TestNativeRecordedCommandsReplayExactSimulation'
+xvfb-run -a go test -count=200 ./internal/netplay \
+  -run '^(TestPlayerPeerTwoWayTicRouting|TestRelayAudioLateJoinDoesNotReceiveStaleChunks)$'
+```
+
+The full Go suite passed. The relay checks passed 200 repetitions and 15
+repetitions under `-race`. A new peer now receives the handshake, catch-up
+frames and initial roster before other writes. Versioned roster notifications
+keep a delayed join announcement from overwriting newer membership. The audio
+test waits for an existing listener to receive the first chunk, joins a second
+listener, then verifies that listener's first chunk against the next payload.
+
+## Speed of Doom MAP32 simulation throughput
+
+Tatsurd-cacocaco’s original UV-Max recording runs for 20,535 commands.
+The DSDA exit summary records 19,520 level tics, 1,184 monsters counting toward the kill total, 1,200 credited kills and the map's single secret. Three GD-DOOM runs
+on a Ryzen 9 7950X averaged **505.81, 525.95 and 585.24 tics/s**, respectively.
+The slowest run averaged **1.977 ms/tic** against a 28.57 ms budget. All three
+consumed the full recording with zero draws. These are whole-run averages
+including the ending intermission. The timer starts at playback and excludes
+map loading. Rendering, tracing and cold restores were disabled.
+
+Extract `SODfinal.wad` and `sd32-917.lmp` from the original archives. The
+LMP’s SHA-256 is `f4806dd992fc53ddb3baf11cb8a43d8b27979532dbea55764f6ee8f54868175d`.
+Use the audited Doom II IWAD listed above. The PWAD's embedded patch changes
+text. [Speed of Doom WAD](https://dsdarchive.com/files/wads/doom2/2615/sodfinal.zip)
+and [MAP32 recording](https://dsdarchive.com/files/demos/sodfinal/66644/sd32-917.zip).
+
+```sh
+go build -o /tmp/gddoom-bench .
+xvfb-run -a /tmp/gddoom-bench -render=false -nodeh -wad /path/to/DOOM2.WAD \
+  -file /path/to/SODfinal.wad -demo /path/to/sd32-917.lmp
+```
+
 ## Remaining work
 
 The next milestones are:
 
 1. Obtain a complete original Boom multi-map human co-op combat recording without
    gameplay patches, and verify its combat, deaths, exits and cold campaign
-   checkpoints. The existing Sunlust/Speed of Doom human recordings cover
-   individual maps; the bounded Sunlust campaign prefix and generated two-player
-   Surge MAP01–MAP17 route do not replace a complete human co-op campaign.
-   Generated normal/secret campaigns, episodic/MAP30 finales and full-roster
-   checkpoints already have DSDA comparisons. Native authority save/rollback
-   remains separate from client replication baselines.
-2. Broaden complex-map progression and measure large-fight performance separately
-   from trace generation and cold load overhead. Custom local weapon priorities
-   already have DSDA comparisons. GL nodes and mixer-wide sound parity remain
-   separate follow-up work.
+   checkpoints. The patched human Sunlust D2All already covers all 32 maps
+   from both players' recordings, including cold saves and keyframes.
+   The archive search inspected 1,671 DSDA entries with two to four players.
+   Across 250 non-TAS movie or Boom-candidate entries, the only movie entry
+   with Boom co-op LMPs was Sunlust. That recording requires its gameplay
+   patch. The original DOS Boom Ruinbros demo and the Woof Plutonia test demo
+   replayed on DSDA for 6,561 and 7,860 commands respectively. Both stayed on
+   their starting map. An original unpatched campaign remains an input
+   dependency. [Ruinbros recording](https://github.com/fabiangreffrath/woof/issues/463)
+   and [Plutonia recording](https://github.com/fabiangreffrath/woof/issues/464).
+   [Patched campaign evidence](dehacked-support.md#patched-co-op-campaign-verification)
+   and [DSDA search parameters](https://dsdarchive.com/api_docs).
+2. Extend progression and performance coverage beyond the recorded MAP32
+   fight, including Okuplok. GL nodes and mixer-wide sound parity are
+   separate follow-ups.
 3. Broaden original combat-campaign coverage beyond full Surge and Speed of Doom
    and the Sunlust MAP01–10 routes. Keep movement, combat, lifecycle, movers and
    cold restores as regressions, and add other map sets and recorded episodic or

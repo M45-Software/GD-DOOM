@@ -29,8 +29,8 @@ Frequently used options:
 - `-no-monsters` disables monster spawns.
 - `-crt-effect` and `-texture-anim-crossfade-frames=N` enable extra visual polish in Source Port mode.
 - `-map=E1M1` or `-map=MAP01` starts on a specific map.
-- `-record-demo=out.lmp` records a Doom v1.10 demo from live play.
-- `-demo=path/to/demo.lmp` plays back a Doom v1.10 demo and exits when playback ends.
+- `-record-demo=out.lmp` records live single-player input using Doom 1.10 or Boom 2.02 according to the session rules.
+- `-demo=path/to/demo.lmp` plays back a Doom or Boom demo and exits at its end marker.
 - `-trace-demo-state=path.jsonl` writes a detailed tick-by-tick state log during demo playback.
 - `-broadcast[=ADDR]` starts a live session for watchers, defaulting to `127.0.0.1:6670`.
 - `-watch[=ADDR] -watch-session=N` joins a relay session as a viewer.
