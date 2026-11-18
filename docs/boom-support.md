@@ -2140,6 +2140,13 @@ listener, then verifies that listener's first chunk against the next payload.
 The three relay tests repeated successfully at `988067e`, with 200 runs each
 in the normal build and 15 each under the race detector.
 
+The pull-request checks also passed locally at `5a73f5f` on Go 1.27.4.
+The 60-second per-package test command passed all 44 packages with tests.
+The other 13 packages had no test files. `govulncheck` v1.6.0 found zero
+vulnerabilities in imported packages or called code. It reported one
+module-level advisory for the unused `golang.org/x/crypto/openpgp` package.
+[Go CI](../.github/workflows/ci.yml) and [dependency check](../.github/workflows/govulncheck.yml).
+
 At `988067e`, the vanilla trace comparison matched all 25 in-tree demos.
 The [published 187-recording selection](../demos/vanilla-boom-regression-results.json)
 includes those 25. It produced 186 strict matches across 782,366 compared
