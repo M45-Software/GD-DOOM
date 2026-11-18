@@ -2185,6 +2185,13 @@ Every recording reproduced its published outcome and comparison length.
 The same 25 in-tree demos and 187-recording selection reproduced those results
 after the recording-only pickup fix at `14a9e64`.
 
+The separate full COMPET-N audit at `6e28691` stopped after 3,563 of 4,646
+recordings, covering 28,602,081 of 30,112,793 input tics. All completed
+recordings reproduced their expected classifications. There were 3,540 strict
+matches, seven matches with known differences in an inactive crusher field,
+and 16 documented reference-engine exclusions. The remaining 1,083 recordings
+were unverified in this run.
+
 The MAP29 recording `LV29-632` contains pause commands at positions 1,532 and
 1,533 (counting from one). All 14,407 tics matched. A separate replay of
 `LV27-045` matched all 2,244 tics and gameplay RNG, including the MAP27
@@ -2338,7 +2345,10 @@ The next milestones are:
    None contained a Boom co-op recording. A recursive pass over the 4,997
    distinct archives in both inventories checked member signatures, 101 nested
    ZIPs, 177 embedded WADs and 8,968 LMP members. It found no additional
-   candidate. DSDA-Doom replayed all 288 monster-enabled recordings outside the two
+   candidate. The 58 additional archives listed only as tool-assisted contained
+   81 LMPs. All five Boom co-op streams were single-map entries in packages
+   that identified the runs as tool-assisted.
+   DSDA-Doom replayed all 288 monster-enabled recordings outside the two
    Sunlust campaign viewpoints. Each reached its recorded end. Of those,
    283 reached one map intermission and five ended before an intermission.
    Eleven continued into the next level for 30–98 commands. None reached a
