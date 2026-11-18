@@ -1,6 +1,6 @@
 # GD-DOOM browser audio patch
 
-This is `github.com/ebitengine/oto/v3` **v3.5.0**, copied from the Go module
+This is `github.com/ebitengine/oto/v3` **v3.5.1**, copied from the Go module
 distribution. The Apache 2.0 license and upstream source headers are preserved.
 The unused `example/` program is omitted. Native platform implementations and
 the upstream mixer are unchanged.
