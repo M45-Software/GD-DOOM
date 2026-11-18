@@ -2144,6 +2144,7 @@ Counts in the table are per recording and per replay mode.
 | Original recording | Replay modes | Commands or active tics checked |
 | --- | --- | --- |
 | Surge UV-Max campaign | Continuous, cold save, cold keyframe | 114,375 commands, including 112,976 active tics. Each cold replay restored 166 checkpoints. |
+| Speed of Doom 32-map UV-Max campaign | Continuous, cold save, cold keyframe | 341,051 commands, including 339,681 active tics. Each cold replay restored 377 checkpoints. |
 | Sunlust MAP01–10 `slep1o546` and `sle1x344` | Continuous, cold save, cold keyframe | 12,995 and 8,702 commands. Each cold replay restored 53 checkpoints. |
 | Sunlust MAP01 `sl01-124` and `sl01-126` | Continuous | 2,972 and 3,024 active tics, including the native exit totals. |
 | Sunlust MAP02 `sl02m225` | Continuous, cold save, cold keyframe | 5,086 active tics, including arch-vile resurrection and the exit totals. Both cold replays restored eight checkpoints. |
@@ -2180,10 +2181,10 @@ including the ending intermission. The timer starts at playback and excludes
 map loading. Rendering, tracing and cold restores were disabled.
 
 The gameplay-only benchmark times every consecutive window of 35 tics in
-the fight. All three trials sustained 35 tics/s. Their slowest windows took
-173.3, 148.5 and 134.2 ms against a 1,000 ms budget. They averaged 551.2,
-572.9 and 578.6 gameplay tics/s respectively. The highest 99th-percentile
-single-tic time across the three trials was 4.380 ms.
+the fight. At `aa89eef`, with the replay audits also running, all three trials
+sustained 35 tics/s. Their slowest windows took 185.6, 172.8 and 159.9 ms
+against a 1,000 ms budget. They averaged 426.9, 455.5 and 457.8 gameplay
+tics/s respectively. The highest 99th-percentile single-tic time was 5.205 ms.
 
 Extract `SODfinal.wad` and `sd32-917.lmp` from the original archives. The
 LMP’s SHA-256 is `f4806dd992fc53ddb3baf11cb8a43d8b27979532dbea55764f6ee8f54868175d`.
@@ -2251,6 +2252,10 @@ The next milestones are:
    recording contains no cast-finale continuation. Death/rebirth checkpoints,
    generated normal/secret transitions and the complete MAP02 crusher/resurrection
    route already have DSDA comparisons.
+4. Support maps that ship an empty `BLOCKMAP`. SlaughterMAX MAP30 supplies a
+   zero-byte lump. DSDA-Doom loads it and plays 3,391 original commands through
+   27 finale-text tics. GD-DOOM currently stops at map load with
+   `BLOCKMAP too small: 0 words`. [SlaughterMAX recording](https://dsdarchive.com/files/demos/smax/89782/smax30m134.zip).
 
 Unusual interactions beyond the fixtures remain unverified. Maps may load
 while unsupported actions behave incorrectly.
