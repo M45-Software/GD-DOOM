@@ -2138,6 +2138,36 @@ and 15 repetitions under the race detector. The audio
 test waits for an existing listener to receive the first chunk, joins a second
 listener, then verifies that listener's first chunk against the next payload.
 
+The following archive regressions passed after integrating `bc7aa83`.
+Counts in the table are per recording and per replay mode.
+
+| Original recording | Replay modes | Commands or active tics checked |
+| --- | --- | --- |
+| Surge UV-Max campaign | Continuous, cold save, cold keyframe | 114,375 commands, including 112,976 active tics. Each cold replay restored 166 checkpoints. |
+| Sunlust MAP01–10 `slep1o546` and `sle1x344` | Continuous, cold save, cold keyframe | 12,995 and 8,702 commands. Each cold replay restored 53 checkpoints. |
+| Sunlust MAP01 `sl01-124` and `sl01-126` | Continuous | 2,972 and 3,024 active tics, including the native exit totals. |
+| Sunlust MAP02 `sl02m225` | Continuous, cold save, cold keyframe | 5,086 active tics, including arch-vile resurrection and the exit totals. Both cold replays restored eight checkpoints. |
+| Six community co-op recordings on Sunlust MAP31/MAP32 and Speed of Doom MAP01/MAP02 | Continuous, cold save, cold keyframe | All 18 comparisons matched the original phase rows, active world state and exit totals. |
+
+Revision `aa89eef` carries forward a recorded-pause fix from the earlier BOOM
+checkout. DSDA-Doom freezes level time and advances the BOOM RNG clock for
+each paused command. A 1,000-command encounter now matches through two recorded
+pauses and subsequent deaths and rebirths. The save and keyframe replays each
+reloaded 43 checkpoints. The RNG verifier now uses the session's save loader,
+which restores both the recorded cursor and the pause state.
+All 36 runs in the expanded rebirth suite passed, covering 38,400 command
+comparisons and 696 restores. Four two-player recorded-pause cases also
+matched DSDA with insurance on and off. The 17 distinct archive recordings
+used for the campaign, single-map and benchmark runs contain zero pause
+commands across all occupied player slots. Their long-running replays use
+the integrated gameplay sources preceding this pause fix.
+
+```sh
+python3 scripts/verify_boom_rebirth.py --case recorded_pause \
+  --iwad /path/to/DOOM2.WAD --reference /path/to/instrumented/dsda-doom \
+  --out /tmp/gddoom-recorded-pause
+```
+
 ## Speed of Doom MAP32 simulation throughput
 
 Tatsurd-cacocaco’s original UV-Max recording runs for 20,535 commands.
