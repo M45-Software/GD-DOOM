@@ -2124,13 +2124,17 @@ xvfb-run -a go test -count=1 ./...
 xvfb-run -a go test -count=1 ./internal/doomruntime \
   -run 'TestBoomRecordedEncounterReplaysEveryTic|TestNativeRecordedCommandsReplayExactSimulation'
 xvfb-run -a go test -count=200 ./internal/netplay \
-  -run '^(TestPlayerPeerTwoWayTicRouting|TestRelayAudioLateJoinDoesNotReceiveStaleChunks)$'
+  -run '^(TestPlayerPeerTwoWayTicRouting|TestPlayerPeerRosterAfterConcurrentJoinFails|TestRelayAudioLateJoinDoesNotReceiveStaleChunks)$'
 ```
 
-The full Go suite passed. The relay checks passed 200 repetitions and 15
-repetitions under `-race`. A new peer now receives the handshake, catch-up
+The full Go suite passed. A new peer now receives the handshake, catch-up
 frames and initial roster before other writes. Versioned roster notifications
-keep a delayed join announcement from overwriting newer membership. The audio
+keep a delayed join announcement from overwriting newer membership. At
+`c9d6ac6`, a failed handshake also publishes the departing slot to peers that
+joined while it was pending. A regression holds the hello write open, joins a
+third player, closes the partially connected player and verifies the third
+player receives slots 1 and 3. All three relay checks passed 200 repetitions
+and 15 repetitions under the race detector. The audio
 test waits for an existing listener to receive the first chunk, joins a second
 listener, then verifies that listener's first chunk against the next payload.
 
