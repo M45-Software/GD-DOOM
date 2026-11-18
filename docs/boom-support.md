@@ -2137,6 +2137,21 @@ player receives slots 1 and 3. All three relay checks passed 200 repetitions
 and 15 repetitions under the race detector. The audio
 test waits for an existing listener to receive the first chunk, joins a second
 listener, then verifies that listener's first chunk against the next payload.
+The three relay tests repeated successfully at `988067e`, with 200 runs each
+in the normal build and 15 each under the race detector.
+
+At `988067e`, the vanilla trace comparison matched all 25 in-tree demos.
+The [published 187-recording selection](../demos/vanilla-boom-regression-results.json)
+includes those 25. It produced 186 strict matches across 782,366 compared
+tics, with gameplay RNG matching throughout. The original Linux Doom reference
+crashed on the documented E4M8 `U48GLICH` input before GD-DOOM playback.
+Every recording reproduced its published outcome and comparison length.
+
+The MAP29 recording `LV29-632` contains pause commands at positions 1,532 and
+1,533 (counting from one). All 14,407 tics matched. A separate replay of
+`LV27-045` matched all 2,244 tics and gameplay RNG, including the MAP27
+timed-door countdown. The [vanilla replay instructions](../demos/COMPET-N.md)
+describe the required IWADs, pinned demo files and comparison policy.
 
 The following archive regressions passed after integrating `bc7aa83`.
 Counts in the table are per recording and per replay mode.
