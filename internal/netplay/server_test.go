@@ -6,6 +6,7 @@ import (
 	"errors"
 	"io"
 	"net"
+	"slices"
 	"testing"
 	"time"
 
@@ -672,4 +673,38 @@ func TestPlayerPeerRosterOnDisconnect(t *testing.T) {
 	if len(roster.PlayerIDs) != 1 || roster.PlayerIDs[0] != 1 {
 		t.Fatalf("roster after disconnect = %v want [1]", roster.PlayerIDs)
 	}
+}
+
+func TestPlayerPeerRosterAfterConcurrentJoinFails(t *testing.T) {
+	srv, err := ListenServer("127.0.0.1:0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer srv.Close()
+	host, sid, _ := dialPeer(t, srv.Addr(), 0, 1)
+	defer host.Close()
+	readPeerFrame(t, host)
+
+	// Keep slot 2 in its handshake while slot 3 receives its initial roster.
+	server, pending := net.Pipe()
+	defer pending.Close()
+	go srv.handlePlayerPeer(server, sid, SessionConfig{PlayerSlot: 2}, helloFlagGameplayCompactV1)
+	_ = pending.SetReadDeadline(time.Now().Add(2 * time.Second))
+	if _, err := io.ReadFull(pending, make([]byte, 1)); err != nil {
+		t.Fatal(err)
+	}
+	joined, _, _ := dialPeer(t, srv.Addr(), sid, 3)
+	defer joined.Close()
+	checkRoster := func(want []byte) {
+		t.Helper()
+		h, p := readPeerFrame(t, joined)
+		roster, err := unmarshalRosterUpdatePayload(p)
+		slices.Sort(roster.PlayerIDs)
+		if err != nil || h.Type != frameTypeRosterUpdate || !slices.Equal(roster.PlayerIDs, want) {
+			t.Fatalf("frame %d roster %v, want %v: %v", h.Type, roster.PlayerIDs, want, err)
+		}
+	}
+	checkRoster([]byte{1, 2, 3})
+	_ = pending.Close()
+	checkRoster([]byte{1, 3})
 }

@@ -305,12 +305,11 @@ func (s *Server) handlePlayerPeer(conn net.Conn, sessionID uint64, cfg SessionCo
 	version := sess.rosterVersion
 	peer.rosterVersion = version
 	s.mu.Unlock()
+	defer s.disconnectRelayPeer(sess, peer)
 
 	// Acknowledge with server hello; PlayerSlot carries the assigned ID.
 	if err := writeHello(conn, helloRoleServer, helloFlagGameplayCompactV1, sessionID, serverCfg); err != nil {
 		peer.mu.Unlock()
-		s.removeRelayPeer(sess, peer)
-		_ = conn.Close()
 		return
 	}
 
@@ -323,35 +322,24 @@ func (s *Server) handlePlayerPeer(conn net.Conn, sessionID uint64, cfg SessionCo
 			Tic:    joinKeyframeTic,
 		}, joinKeyframe); err != nil {
 			peer.mu.Unlock()
-			s.removeRelayPeer(sess, peer)
-			_ = conn.Close()
 			return
 		}
 	}
 	for _, f := range joinBacklog {
 		if err := writeFrame(conn, f.header, f.payload); err != nil {
 			peer.mu.Unlock()
-			s.removeRelayPeer(sess, peer)
-			_ = conn.Close()
 			return
 		}
 	}
 	// Send current roster to the joining peer.
 	if err := writePeerRosterFrame(conn, roster); err != nil {
 		peer.mu.Unlock()
-		s.removeRelayPeer(sess, peer)
-		_ = conn.Close()
 		return
 	}
 	peer.mu.Unlock()
 
 	// Only peers present at this join receive its roster.
-	for _, other := range others {
-		if err := other.writeRoster(roster, version); err != nil {
-			s.removeRelayPeer(sess, other)
-			_ = other.conn.Close()
-		}
-	}
+	broadcastPeerRoster(others, roster, version)
 
 	// Read loop: fan out this peer's tics/chat to all other peers.
 	for {
@@ -380,23 +368,6 @@ func (s *Server) handlePlayerPeer(conn net.Conn, sessionID uint64, cfg SessionCo
 		case frameTypeDesyncRequest:
 			// Push the latest keyframe as mandatory to the requesting peer.
 			s.sendKeyframeToPeer(sess, peer)
-		}
-	}
-
-	s.removeRelayPeer(sess, peer)
-	_ = conn.Close()
-
-	// Broadcast updated roster after departure.
-	s.mu.Lock()
-	sess.rosterVersion++
-	version = sess.rosterVersion
-	departedRoster := s.peerRosterLocked(sess)
-	remaining := s.otherPeersLocked(sess, nil)
-	s.mu.Unlock()
-	for _, other := range remaining {
-		if err := other.writeRoster(departedRoster, version); err != nil {
-			s.removeRelayPeer(sess, other)
-			_ = other.conn.Close()
 		}
 	}
 }
@@ -440,7 +411,6 @@ func (s *Server) forwardPeerTicBatch(sess *relaySession, sender *relayPeer, payl
 	s.mu.Unlock()
 	for _, other := range others {
 		if err := other.writePeerTicBatch(payload); err != nil {
-			s.removeRelayPeer(sess, other)
 			_ = other.conn.Close()
 		}
 	}
@@ -461,7 +431,6 @@ func (s *Server) forwardPeerChat(sess *relaySession, sender *relayPeer, header f
 	s.mu.Unlock()
 	for _, p := range all {
 		if err := p.writeChat(header, payload); err != nil {
-			s.removeRelayPeer(sess, p)
 			_ = p.conn.Close()
 		}
 	}
@@ -501,14 +470,28 @@ func (s *Server) sendKeyframeToPeer(sess *relaySession, peer *relayPeer) {
 	peer.mu.Unlock()
 }
 
-func (s *Server) removeRelayPeer(sess *relaySession, peer *relayPeer) {
-	if s == nil || sess == nil || peer == nil {
+// The connection handler owns membership for the full lifetime of a join.
+func (s *Server) disconnectRelayPeer(sess *relaySession, peer *relayPeer) {
+	_ = peer.conn.Close()
+	s.mu.Lock()
+	if s.sessions[sess.id] != sess {
+		s.mu.Unlock()
 		return
 	}
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	if cur := s.sessions[sess.id]; cur == sess {
-		delete(sess.peers, peer)
+	delete(sess.peers, peer)
+	sess.rosterVersion++
+	version := sess.rosterVersion
+	roster := s.peerRosterLocked(sess)
+	remaining := s.otherPeersLocked(sess, nil)
+	s.mu.Unlock()
+	broadcastPeerRoster(remaining, roster, version)
+}
+
+func broadcastPeerRoster(peers []*relayPeer, roster RosterUpdate, version uint64) {
+	for _, p := range peers {
+		if err := p.writeRoster(roster, version); err != nil {
+			_ = p.conn.Close()
+		}
 	}
 }
 
