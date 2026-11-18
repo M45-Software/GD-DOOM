@@ -2186,7 +2186,9 @@ punched. BOOM’s last attack range belongs to the world. Switching the active
 player previously replaced that range with the player’s earlier value.
 Revision `988067e` keeps the range in the world and its save state. The full
 Go suite and the 18 existing Sunlust and Speed of Doom co-op comparisons
-passed. Both Swim With the Whales consoles matched DSDA on every active world row and
+passed. The full Surge campaign and both Sunlust MAP01–10 recordings also
+matched in continuous playback and both cold restore modes at this revision.
+Both Swim With the Whales consoles matched DSDA on every active world row and
 command phase in continuous playback and with cold saves and keyframes. Each
 cold run restored ten checkpoints. The original exit tally matched, with six
 kills for player one and two for player two. Both players used the fist and
@@ -2267,8 +2269,9 @@ The next milestones are:
    readable (1,535 archives). The LMP headers identified 319 distinct Boom
    cooperative recordings, 290 with monsters enabled. The only catalogued
    movie with a Boom co-op roster was the patched Sunlust D2All. A second
-   search checked 440 plausible archives labelled single-player across 4,053
-   movie entries. None contained a Boom co-op recording.
+   search checked all 3,464 distinct downloads linked by non-TAS single-player
+   entries in the 4,053-entry movie inventory. All downloads were readable.
+   None contained a Boom co-op recording.
    DSDA-Doom replayed all 288 monster-enabled recordings outside the two
    Sunlust campaign viewpoints. Each reached its recorded end. Of those,
    283 reached one map intermission and five ended before an intermission.
@@ -2287,6 +2290,16 @@ The next milestones are:
    demo in CoDead II plays 43,608 tics on MAP01, spends 1,736 in intermission
    and ends six tics into MAP02. Its author designed it as a single-map
    capture-the-flag game. [CoDead II release and readme](https://www.gamers.org/pub/idgames/levels/doom2/deathmatch/Ports/a-c/codead2.zip).
+   The WAD Archive search also checked recordings embedded in level releases.
+   Its catalogue listed 1,327 publicly downloadable multi-map Doom WADs with
+   the Boom engine tag. All 421 distinct indexed demo lumps were identified
+   by SHA-256 and their headers checked. None had a Boom co-op roster.
+   An independent search of author notes led to 165 idgames releases and
+   59 exact WAD variants. Hell Ground's DEMO2 has four players but disables
+   monsters and lasts 939 commands on MAP06.
+   [WAD Archive catalogue](https://archive.org/details/wadarchive) and
+   [Hell Ground release](https://www.gamers.org/pub/idgames/levels/doom2/Ports/g-i/hg.zip).
+
    An original unpatched multi-map campaign remains an input dependency.
    [Dawning release](https://www.gamers.org/pub/idgames/themes/TeamTNT/boom/dawning.zip),
    [Ruinbros recording](https://github.com/fabiangreffrath/woof/issues/463)
