@@ -1,0 +1,190 @@
+{
+  "passed": true,
+  "source": "ad3d60c77384695410e5241d7145783ebf34856ed1f8dce4c8769c0e63667e97",
+  "verifiers": {
+    "verify_boom_recorded_finale": "dfe111548cd923ca3a87aefbc0b957727b5d61bbcb74528fdbd83e5fd644f292",
+    "verify_boom_community_coop_campaign": "380c5e6d8d82532f4cad1b2486a0f247dd952e64ff9804564df0f40ceb7775c0",
+    "verify_boom_full_combat": "dcfaf25c88e9d37de256ab4c3a3ad9985a53eb1407c7189a32c183e3b435f525",
+    "verify_boom_demos": "0dbb897bc827f350814e2abe7ec5632cc7c004b2a46a30d01b2b682754b0baf1",
+    "verify_boom_sod_campaign": "a10a24a8fef3e6a34a21be922f7892f86f904dda48d9893b2d4a99ed74c6dc81",
+    "verify_boom_transfers": "263701fc218e952a6ced8f2978806f9d76834d662d99a402b28f4fd637ac630b"
+  },
+  "binary": "a742421493643de8e0e8f0a2104e942c3216637602e2c3f3ce398abb28e5caf2",
+  "inputs": {
+    "dsda-doom": "c3b80af776b452366735846a58c5e18d9e35d522f134545f1082f9867163c8ad",
+    "DOOM2.WAD": "10d67824b11025ddd9198e8cfc87ca335ee6e2d3e63af4180fa9b8a471893255",
+    "sunlust.wad": "6a90becf56040896fd2876a29f60a7a528d9802b081e0a1cc7d7cc65d546a964",
+    "sl30-5219.lmp": "bb875c536cc6268f59bb2ba9ab17d124b189dc6c88ecae5264afc4ec923eda99",
+    "sunlust.deh": "91f46075aea96dc191573d846e291f2e6cc5bf01abea64ceddca3fb60f94e0a1"
+  },
+  "observers": {
+    "dsda_dehacked_probe.inc": "385b2a951db131d08b6a9fe982c603aa47d80d36b57569cd3d50da5054f30835",
+    "dsda_weapons_probe.inc": "91fb35fc51f939831e9c07190220d809878a09b62e18a6801acb7478e55b1c78",
+    "dsda_probe.inc": "2c72a6aaaf660bce0ce3d541eb60989252a354bb6d43a9f976d9cc865f7c8f61",
+    "dsda_finale_probe.inc": "4f9602cf14a05340ee7c205bc492f502c13e6af1ba8a77b750b8cac79bb56c04",
+    "dsda_rng_demo_probe.inc": "0d82fb0beb48cce1599ed2ae8dca8f51d254357c138c50b3dc1ecea80e055d86",
+    "dsda_legacy_probe.inc": "8faab7433f31c8556177cf749d566dcff5de73bb1c597fc5e1c307efaf303cfc",
+    "dsda_manual_probe.inc": "6b2993324ad51734d2508dbb3af7e94ea31963793211ce6ec8a18fcf8ddbde5a",
+    "dsda_generalized_probe.inc": "47f03650e5fb3d8d658acecb3cbb81a1535c13a31a250dff515cf7e8a462b92d",
+    "dsda_voodoo_lifecycle_probe.inc": "1d22276a1b2cca00eaa39ea12d1502984f4bad8c820c5f1e241047e033f55347",
+    "dsda_teleport_probe.inc": "ca4628471e8d880a4d7d1f25414d4037a593685f95a72473cac5ee0fde23372d",
+    "dsda_lock_probe.inc": "474ea85923991ff0f29129a557c892fe7ba178d86bd535138a74d5a7989dfff9",
+    "dsda_sector_sound_probe.inc": "eaffddf5edd8336953e9c479ae3c4233814e050435ec7ebb180ecea66571687e",
+    "dsda_intermission_probe.inc": "92dbea31947c5391307d3c6b6d31be1e410219a8fe9471ab796e9e67b8868334",
+    "dsda_environment_probe.inc": "57f24afa062b5e59c7985688229299a81d56a98e0a2b1489a7966dad53b8f587",
+    "dsda_coop_demo_probe.inc": "2ca735e452d64835eb69ffb2c423bccfcbd51a245db7ec7a6793ef8053115f5b"
+  },
+  "commands": 113960,
+  "segments": [
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      109871,
+      1,
+      0
+    ],
+    [
+      111363,
+      2,
+      0
+    ],
+    [
+      112403,
+      2,
+      2
+    ]
+  ],
+  "cold_checkpoints": [
+    0,
+    54935,
+    109870,
+    109871,
+    110617,
+    111362,
+    111363,
+    111883,
+    112402,
+    112403,
+    113181,
+    113959
+  ],
+  "cases": {
+    "baseline": {
+      "passed": true,
+      "execution": {
+        "returncode": 0,
+        "first_difference": null,
+        "matched_lines": {
+          "world": 109872,
+          "phase": 113961
+        },
+        "elapsed_seconds": 4601.2564883830055
+      },
+      "phase": {
+        "passed": true,
+        "rows": 113960,
+        "matched": 113960,
+        "row_counts": {
+          "gd": 113960,
+          "dsda": 113960,
+          "expected": 113960
+        },
+        "failures": [],
+        "gd_hash": "dfdd7b3a95723d30ae059f555d0f0ec8007fcc9c93e9a0747d4e8d6a5296cfcf",
+        "dsda_hash": "dfdd7b3a95723d30ae059f555d0f0ec8007fcc9c93e9a0747d4e8d6a5296cfcf"
+      },
+      "world": {
+        "passed": true,
+        "rows": 109871,
+        "matched": 109871,
+        "row_counts": {
+          "gd": 109871,
+          "dsda": 109871,
+          "expected": 109871
+        },
+        "failures": [],
+        "gd_hash": "632323217823c2eaebd742a8fa6225be97637eff084cb865d54abac53d4990bd",
+        "dsda_hash": "632323217823c2eaebd742a8fa6225be97637eff084cb865d54abac53d4990bd"
+      }
+    },
+    "keyframe": {
+      "passed": true,
+      "execution": {
+        "returncode": 0,
+        "first_difference": null,
+        "matched_lines": {
+          "world": 109872,
+          "phase": 113961
+        },
+        "elapsed_seconds": 4896.587356447999
+      },
+      "phase": {
+        "passed": true,
+        "rows": 113960,
+        "matched": 113960,
+        "row_counts": {
+          "gd": 113960,
+          "dsda": 113960,
+          "expected": 113960
+        },
+        "failures": [],
+        "gd_hash": "dfdd7b3a95723d30ae059f555d0f0ec8007fcc9c93e9a0747d4e8d6a5296cfcf",
+        "dsda_hash": "dfdd7b3a95723d30ae059f555d0f0ec8007fcc9c93e9a0747d4e8d6a5296cfcf"
+      },
+      "world": {
+        "passed": true,
+        "rows": 109871,
+        "matched": 109871,
+        "row_counts": {
+          "gd": 109871,
+          "dsda": 109871,
+          "expected": 109871
+        },
+        "failures": [],
+        "gd_hash": "632323217823c2eaebd742a8fa6225be97637eff084cb865d54abac53d4990bd",
+        "dsda_hash": "632323217823c2eaebd742a8fa6225be97637eff084cb865d54abac53d4990bd"
+      }
+    },
+    "save": {
+      "passed": true,
+      "execution": {
+        "returncode": 0,
+        "first_difference": null,
+        "matched_lines": {
+          "world": 109872,
+          "phase": 113961
+        },
+        "elapsed_seconds": 4908.406031064995
+      },
+      "phase": {
+        "passed": true,
+        "rows": 113960,
+        "matched": 113960,
+        "row_counts": {
+          "gd": 113960,
+          "dsda": 113960,
+          "expected": 113960
+        },
+        "failures": [],
+        "gd_hash": "dfdd7b3a95723d30ae059f555d0f0ec8007fcc9c93e9a0747d4e8d6a5296cfcf",
+        "dsda_hash": "dfdd7b3a95723d30ae059f555d0f0ec8007fcc9c93e9a0747d4e8d6a5296cfcf"
+      },
+      "world": {
+        "passed": true,
+        "rows": 109871,
+        "matched": 109871,
+        "row_counts": {
+          "gd": 109871,
+          "dsda": 109871,
+          "expected": 109871
+        },
+        "failures": [],
+        "gd_hash": "632323217823c2eaebd742a8fa6225be97637eff084cb865d54abac53d4990bd",
+        "dsda_hash": "632323217823c2eaebd742a8fa6225be97637eff084cb865d54abac53d4990bd"
+      }
+    }
+  }
+}

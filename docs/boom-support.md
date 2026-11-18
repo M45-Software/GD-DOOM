@@ -2171,6 +2171,32 @@ python3 scripts/verify_boom_rebirth.py --case recorded_pause \
   --out /tmp/gddoom-recorded-pause
 ```
 
+## Unpatched co-op combat across a map exit
+
+4shockblast and GarrettChan recorded both viewpoints of their UV-Max run on
+Swim With the Whales MAP01. The recording continues through the 59-command
+intermission and into MAP02 for 98 and 97 commands respectively. The WAD’s
+embedded patch contains strings only. Both engines ran with patches disabled.
+[Original player recordings](https://dsdarchive.com/files/demos/swtw/61831/sw01mc028.zip)
+and [original WAD](https://dsdarchive.com/files/wads/doom2/2755/swtw.zip).
+
+At `aa89eef`, all six replays first diverged at command 581. A Revenant tracer
+puff entered state 93 instead of the native state 95 after the other player
+punched. BOOM’s last attack range belongs to the world. Switching the active
+player previously replaced that range with the player’s earlier value.
+Revision `988067e` keeps the range in the world and its save state. The full
+Go suite passed. Both consoles matched DSDA on every active world row and
+command phase in continuous playback and with cold saves and keyframes. Each
+cold run restored ten checkpoints. The original exit tally matched, with six
+kills for player one and two for player two. Both players used the fist and
+pistol. The recordings end during MAP02.
+
+```sh
+python3 scripts/verify_boom_community_coop.py --iwad /path/to/DOOM2.WAD \
+  --reference /path/to/instrumented/dsda-doom --case sw01b028 --case sw01g028 \
+  --out /tmp/gddoom-swtw-coop
+```
+
 ## Speed of Doom MAP32 simulation throughput
 
 Tatsurd-cacocaco’s original UV-Max recording runs for 20,535 commands.
@@ -2187,6 +2213,9 @@ the fight. At `aa89eef`, with the replay audits also running, all three trials
 sustained 35 tics/s. Their slowest windows took 185.6, 172.8 and 159.9 ms
 against a 1,000 ms budget. They averaged 426.9, 455.5 and 457.8 gameplay
 tics/s respectively. The highest 99th-percentile single-tic time was 5.205 ms.
+Revision `988067e` repeated the fight at 499.0, 502.2 and 510.1 gameplay
+tics/s. Its slowest 35-tic windows took 166.8, 151.4 and 154.8 ms. Its
+highest 99th-percentile single-tic time was 4.806 ms.
 
 Extract `SODfinal.wad` and `sd32-917.lmp` from the original archives. The
 LMP’s SHA-256 is `f4806dd992fc53ddb3baf11cb8a43d8b27979532dbea55764f6ee8f54868175d`.
@@ -2211,6 +2240,9 @@ The archived Sunlust `sl30-5219.lmp` continues past the MAP30 exit. With the
 original embedded Sunlust patch, DSDA-Doom 0.27.5 consumes 113,960 commands.
 Of these, 109,871 are in combat, 1,492 in intermission, 1,040 in finale text
 and 1,557 in the cast sequence. The LMP ends during the first cast member.
+At `a9582e3`, GD-DOOM matched all 113,960 commands and all 109,871 active
+world rows in continuous playback, after 12 cold saves and after 12 cold
+keyframes. [Trace counts, comparisons and input hashes](boom-recorded-finale-results.json).
 The verifier compares every active world row and every command phase. Its
 two cold replay modes restore a save or keyframe at the first, middle and
 last command of each of the four segments. The original LMP, WAD and patch
@@ -2247,6 +2279,11 @@ The next milestones are:
    and 67 idgames archives. The original two-player Boom 2.00 recording in
    TeamTNT's Dawning stayed on MAP01 for all 86,114 commands on DSDA-Doom.
    Dawning uses LMP version 200. GD-DOOM's Boom reader accepts versions 201 and 202.
+   A separate idgames search checked 905 releases, including the 1998–2005
+   Doom and Doom II source-port level directories. The four-player Boom 2.01
+   demo in CoDead II plays 43,608 tics on MAP01, spends 1,736 in intermission
+   and ends six tics into MAP02. Its author designed it as a single-map
+   capture-the-flag game. [CoDead II release and readme](https://www.gamers.org/pub/idgames/levels/doom2/deathmatch/Ports/a-c/codead2.zip).
    An original unpatched multi-map campaign remains an input dependency.
    [Dawning release](https://www.gamers.org/pub/idgames/themes/TeamTNT/boom/dawning.zip),
    [Ruinbros recording](https://github.com/fabiangreffrath/woof/issues/463)
@@ -2258,9 +2295,9 @@ The next milestones are:
    separate follow-ups.
 3. Broaden original combat-campaign coverage beyond full Surge and Speed of Doom
    and the Sunlust MAP01–10 routes. Keep movement, combat, lifecycle, movers and
-   cold restores as regressions, and add other map sets and recorded episodic or
-   endgame finale commands. Speed of Doom reaches MAP30 intermission; its
-   recording contains no cast-finale continuation. Death/rebirth checkpoints,
+   cold restores as regressions. The original Sunlust MAP30 recording now covers
+   entry into the cast and its first member. More cast members and an original
+   episodic ending would extend that coverage. Death/rebirth checkpoints,
    generated normal/secret transitions and the complete MAP02 crusher/resurrection
    route already have DSDA comparisons.
 4. Support maps that ship an empty `BLOCKMAP`. SlaughterMAX MAP30 supplies a
@@ -2275,7 +2312,7 @@ The no-monsters comparisons establish the recorded movement/progression paths,
 not full combat RNG parity, every map route, or large-fight performance. The map
 audit detects unknown specials; it does not detect every unsupported interaction.
 
-These changes use multiplayer simulation ID `gd-doom-authority-dev-34`.
+The integrated branch uses multiplayer simulation ID `gd-doom-authority-dev-39`.
 Deploy matching clients and servers. Save 45/keyframe 32 preserve actor
 collision-link ordering; save 44/keyframe 31 preserve effect teleport angles.
 Chainsaw ray endpoint truncation changes combat simulation without adding saved fields.
