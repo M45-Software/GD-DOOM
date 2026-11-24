@@ -11,7 +11,7 @@ require (
 	github.com/dustin/go-humanize v1.1.0
 	github.com/gen2brain/raylib-go/raylib v0.60.1
 	github.com/hajimehoshi/ebiten/v2 v2.10.6
-	github.com/klauspost/compress v1.20.4
+	github.com/klauspost/compress v1.20.5
 	github.com/quic-go/quic-go v0.64.1 // webtransport-go v0.13.0 does not support the v0.65 HTTPStream API.
 	github.com/quic-go/webtransport-go v0.13.0
 	github.com/remeh/sizedwaitgroup v1.0.0
